@@ -142,9 +142,10 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="40" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BVy-Ha-eGN">
-                                                <rect key="frame" x="90" y="0.0" width="50" height="50"/>
-                                                <color key="backgroundColor" red="0.83921568629999999" green="0.2788930711" blue="0.17335831209999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                <state key="normal" title="t"/>
+                                                <rect key="frame" x="104" y="14" width="22" height="22"/>
+                                                <state key="normal" image="drawer-ico">
+                                                    <color key="titleColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
                                                 <connections>
                                                     <action selector="loginWithSoicalAccounts:" destination="BYZ-38-t0r" eventType="touchUpInside" id="rAP-LJ-bPG"/>
                                                 </connections>
@@ -293,7 +294,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="727" y="378"/>
+            <point key="canvasLocation" x="727" y="288"/>
         </scene>
         <!--Forget Password View Controller-->
         <scene sceneID="84A-Xr-GhF">
@@ -1794,6 +1795,7 @@
     <resources>
         <image name="camera" width="72" height="72"/>
         <image name="control_hangup" width="72" height="72"/>
+        <image name="drawer-ico" width="22" height="17"/>
         <image name="effects" width="72" height="72"/>
         <image name="mic" width="72" height="72"/>
         <image name="mic disabled" width="72" height="72"/>

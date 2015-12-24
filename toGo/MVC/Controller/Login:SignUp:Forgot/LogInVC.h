@@ -14,6 +14,9 @@
 #import <GooglePlus/GooglePlus.h>
 #import <GoogleOpenSource/GoogleOpenSource.h>
 @interface LogInVC : UIViewController <AuthorizationDelegate, ooVooAccount, SocialDelegate, GPPSignInDelegate>
+
+//@property (nonatomic,strong) IBOutlet TWTRLogInButton *twLoginView;
+
 @property (weak, nonatomic) IBOutlet UIView *signUpUIView;
 @property (weak, nonatomic) IBOutlet UILabel *signUplabel;
 @property (weak, nonatomic) IBOutlet UILabel *doNotHaveAccountLabel;

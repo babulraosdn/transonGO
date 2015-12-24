@@ -48,6 +48,25 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
+    //[FBSDKAccessToken setCurrentAccessToken:nil];
+//    
+//    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/permissions" parameters:nil
+//                                       HTTPMethod:@"DELETE"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
+//        // ...
+//    }];
+//    
+//    FBSDKLoginManager *MANAGER  = [FBSDKLoginManager new];
+//    [MANAGER logOut];
+    
+    FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+    
+    if ( [FBSDKAccessToken currentAccessToken] ){
+        [login logOut];
+    }
+    
+    [FBSDKAccessToken setCurrentAccessToken:nil];
+    [FBSDKProfile setCurrentProfile:nil];
+    
     UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:@"LoginViewController"]];
     appDelegate.window.rootViewController = contentNavigationController;
 }

@@ -1,4 +1,4 @@
-//
+  //
 //  LogInVC.m
 //  ooVooSdkSampleShow
 //
@@ -31,7 +31,8 @@
 
 #import <ooVooSDK/ooVooPushService.h>
 
-
+#import <TwitterKit/TwitterKit.h>
+#import <Twitter/Twitter.h>
 
 @interface LogInVC ()<UITextFieldDelegate> {
     AppDelegate  *appDelegate;
@@ -54,6 +55,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    
+    
+
+    
     // Do any additional setup after loading the view.
     self.title = NSLOCALIZEDSTRING(@"TOGO");
     self.view.backgroundColor = [UIColor backgroundColor];
@@ -82,6 +87,14 @@
     [self setFonts];
     
     [self registerForKeyboardNotifications];
+    
+    
+//    [[Twitter sharedInstance] startWithConsumerKey:@"your_key"
+//     
+//                                    consumerSecret:@"your_secret"];
+    
+    
+    
     
 }
 -(void)viewDidLayoutSubviews{
@@ -386,10 +399,38 @@
     
 }
 
+-(IBAction)twitterLogin:(id)sender
+{
+    
+    [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error){
+        if (session)
+        {
+             [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID]
+                                                       completion:^(TWTRUser *user,
+                                                                    NSError *error)
+              {
+                  // handle the response or error
+                  if (![error isEqual:nil]) {
+                      NSLog(@"Twitter info   -> user = %@ ",user.description);
+                      NSMutableDictionary *dict =[[NSMutableDictionary alloc]init];
+                      [dict setValue:user.userID forKey:@"id"];
+                      [dict setValue:user.name forKey:@"name"];
+                      [dict setValue:user.screenName forKey:@"screenName"];
+                      NSLog(@"User Description is %@",dict);
+                      
+                  } else {
+                  }
+              }];
+             
+         } else {
+             NSLog(@"error: %@", [error localizedDescription]);
+         }
+     }];
+    
+}
+
 -(IBAction)loginWithSoicalAccounts:(id)sender{
     
-    [SVProgressHUD dismiss];
-    //[SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"Please wait...")]];
     UIButton *selectedButton = (UIButton *)sender;
     if (selectedButton.tag ==1) {
         //facebook
@@ -398,7 +439,38 @@
     }
     else if (selectedButton.tag ==2) {
         //twitter
-        [socialView twitterLogin];
+        //[socialView twitterLogin];
+        [[Twitter sharedInstance] logOut];
+        [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error)
+         {
+             if (session)
+             {
+                 
+                 [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID]
+                                                           completion:^(TWTRUser *user,
+                                                                        NSError *error)
+                  {
+                      // handle the response or error
+                      if (![error isEqual:nil]) {
+                          
+                          NSLog(@"Twitter info   -> user = %@ ",user.description);
+                          {
+                              NSMutableDictionary *dict =[[NSMutableDictionary alloc]init];
+                              [dict setValue:user.userID forKey:@"id"];
+                              [dict setValue:user.name forKey:@"name"];
+                              [dict setValue:user.screenName forKey:@"screenName"];
+                              NSLog(@"User Description is %@",dict);
+                          }
+                          [self createSidePanel];
+                          
+                      } else {
+                      }
+                  }];
+                 
+             } else {
+                 NSLog(@"error: %@", [error localizedDescription]);
+             }
+         }];
     }
     else if (selectedButton.tag ==3) {
         //linkedIn
@@ -408,7 +480,6 @@
         //google plus
         [self  performSelector:@selector(googleButtonClicked:) withObject:nil afterDelay:0.5];
     }
-        
 }
 
 
@@ -436,7 +507,6 @@
             }
         }];
     }
-    
 }
 
 
@@ -452,6 +522,8 @@
              if (error) {
                  [SVProgressHUD dismiss];
              }else{
+                 
+                 [self createSidePanel];
                  dispatch_async(dispatch_get_main_queue(), ^{
                      /*
                       {

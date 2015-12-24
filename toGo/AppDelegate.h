@@ -13,6 +13,7 @@
 #import "Headers.h"
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <TwitterKit/TwitterKit.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 {

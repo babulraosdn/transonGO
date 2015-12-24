@@ -49,8 +49,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
+        
+    [Fabric with:@[[Crashlytics class], [Twitter class]]];
+
     
-    [Fabric with:@[[Crashlytics class]]];
     [self subscribePushNotifications:application];
     
     self.sdk = [ooVooClient sharedInstance];

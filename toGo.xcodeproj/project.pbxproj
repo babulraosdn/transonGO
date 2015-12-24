@@ -87,6 +87,9 @@
 		ED8B52171C1EF07900CA7306 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED8B52161C1EF07900CA7306 /* SystemConfiguration.framework */; };
 		ED8B52191C1EF07E00CA7306 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED8B52181C1EF07E00CA7306 /* UIKit.framework */; };
 		ED8B521B1C1EF08300CA7306 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED8B521A1C1EF08300CA7306 /* VideoToolbox.framework */; };
+		ED9CCDD11C2BBCD100FA2C5A /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED9CCDCE1C2BBCD100FA2C5A /* TwitterKit.framework */; settings = {ASSET_TAGS = (); }; };
+		ED9CCDD21C2BBCD100FA2C5A /* TwitterKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ED9CCDCF1C2BBCD100FA2C5A /* TwitterKitResources.bundle */; settings = {ASSET_TAGS = (); }; };
+		ED9CCDD31C2BBCD100FA2C5A /* TwitterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED9CCDD01C2BBCD100FA2C5A /* TwitterCore.framework */; settings = {ASSET_TAGS = (); }; };
 		EDCC77FC1C2BB489005A9607 /* ooVooSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDCC77FB1C2BB489005A9607 /* ooVooSDK.framework */; settings = {ASSET_TAGS = (); }; };
 		EDFD7E061C27C68100E4FEEB /* UIButton+toGo.m in Sources */ = {isa = PBXBuildFile; fileRef = EDFD7DF61C27C68100E4FEEB /* UIButton+toGo.m */; settings = {ASSET_TAGS = (); }; };
 		EDFD7E071C27C68100E4FEEB /* UIColor+toGo.m in Sources */ = {isa = PBXBuildFile; fileRef = EDFD7DF91C27C68100E4FEEB /* UIColor+toGo.m */; settings = {ASSET_TAGS = (); }; };
@@ -250,6 +253,9 @@
 		ED8B52161C1EF07900CA7306 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		ED8B52181C1EF07E00CA7306 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		ED8B521A1C1EF08300CA7306 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		ED9CCDCE1C2BBCD100FA2C5A /* TwitterKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterKit.framework; sourceTree = "<group>"; };
+		ED9CCDCF1C2BBCD100FA2C5A /* TwitterKitResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TwitterKitResources.bundle; sourceTree = "<group>"; };
+		ED9CCDD01C2BBCD100FA2C5A /* TwitterCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterCore.framework; sourceTree = "<group>"; };
 		EDCC77FB1C2BB489005A9607 /* ooVooSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ooVooSDK.framework; sourceTree = "<group>"; };
 		EDFD7DF51C27C68100E4FEEB /* UIButton+toGo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+toGo.h"; sourceTree = "<group>"; };
 		EDFD7DF61C27C68100E4FEEB /* UIButton+toGo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+toGo.m"; sourceTree = "<group>"; };
@@ -288,6 +294,7 @@
 				ED437C091C1FDD1100DB68E0 /* GooglePlus.framework in Frameworks */,
 				ED8B52191C1EF07E00CA7306 /* UIKit.framework in Frameworks */,
 				ED8B52171C1EF07900CA7306 /* SystemConfiguration.framework in Frameworks */,
+				ED9CCDD31C2BBCD100FA2C5A /* TwitterCore.framework in Frameworks */,
 				ED8B52131C1EF06800CA7306 /* QuartzCore.framework in Frameworks */,
 				ED8B52111C1EF06200CA7306 /* OpenGLES.framework in Frameworks */,
 				ED8B520F1C1EF05C00CA7306 /* MobileCoreServices.framework in Frameworks */,
@@ -301,6 +308,7 @@
 				ED8B51FD1C1EF02D00CA7306 /* AVFoundation.framework in Frameworks */,
 				ED8B51F71C1EF01F00CA7306 /* AssetsLibrary.framework in Frameworks */,
 				ED8B51F51C1EF01900CA7306 /* Accelerate.framework in Frameworks */,
+				ED9CCDD11C2BBCD100FA2C5A /* TwitterKit.framework in Frameworks */,
 				ED8B51F31C1EF01300CA7306 /* libc++.tbd in Frameworks */,
 				ED8B51F11C1EF00D00CA7306 /* libz.tbd in Frameworks */,
 				ED437C071C1FDD1100DB68E0 /* GoogleOpenSource.framework in Frameworks */,
@@ -508,6 +516,7 @@
 		ED4159921C2AC7AB00491CE7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				ED9CCDCD1C2BBCCB00FA2C5A /* Twitter */,
 				ED4159931C2AC7AB00491CE7 /* facebook */,
 			);
 			path = Frameworks;
@@ -849,6 +858,16 @@
 			path = VideoFrame;
 			sourceTree = "<group>";
 		};
+		ED9CCDCD1C2BBCCB00FA2C5A /* Twitter */ = {
+			isa = PBXGroup;
+			children = (
+				ED9CCDCE1C2BBCD100FA2C5A /* TwitterKit.framework */,
+				ED9CCDCF1C2BBCD100FA2C5A /* TwitterKitResources.bundle */,
+				ED9CCDD01C2BBCD100FA2C5A /* TwitterCore.framework */,
+			);
+			path = Twitter;
+			sourceTree = "<group>";
+		};
 		EDCC77FA1C2BB489005A9607 /* ooVoo */ = {
 			isa = PBXGroup;
 			children = (
@@ -942,6 +961,7 @@
 				ED8B515B1C1EEF7000CA7306 /* Resources */,
 				AEF0C9F26F95962ED00C0CE3 /* Copy Pods Resources */,
 				ED437C031C1FDCA000DB68E0 /* ShellScript */,
+				ED9CCDC61C2BBC7800FA2C5A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1039,6 +1059,7 @@
 				ED8B51DD1C1EEFED00CA7306 /* video incoming call rev.mp3 in Resources */,
 				ED437C081C1FDD1100DB68E0 /* GooglePlus.bundle in Resources */,
 				ED8B516D1C1EEF7000CA7306 /* Assets.xcassets in Resources */,
+				ED9CCDD21C2BBCD100FA2C5A /* TwitterKitResources.bundle in Resources */,
 				ED1B7EC21C2AA3AB00C49026 /* Localizable.strings in Resources */,
 				ED8B51DC1C1EEFED00CA7306 /* CallLine.mp3 in Resources */,
 				EDFD7E0E1C27CB5400E4FEEB /* Main_ooVoo.storyboard in Resources */,
@@ -1106,6 +1127,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "./Fabric.framework/run ad38358d59fa857b1e9d67bb6133e4b89f9edbf7 2de836b95a0c8201597851886a2f9860cdfcf1d4ca671ad98cad5ab5d30c8ccc";
+		};
+		ED9CCDC61C2BBC7800FA2C5A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run e1bdd121e120bdc31eaac02cc63c81006dc2e487 14e4c4099ce6d9fad827978f2143c79cb2a290dd174f9a7349d28c7de8fea6e5";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1332,6 +1366,7 @@
 					"$(PROJECT_DIR)/toGo",
 					"$(PROJECT_DIR)/toGo/Frameworks/facebook",
 					"$(PROJECT_DIR)/ooVoo",
+					"$(PROJECT_DIR)/toGo/Frameworks/Twitter",
 				);
 				INFOPLIST_FILE = toGo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -1354,6 +1389,7 @@
 					"$(PROJECT_DIR)/toGo",
 					"$(PROJECT_DIR)/toGo/Frameworks/facebook",
 					"$(PROJECT_DIR)/ooVoo",
+					"$(PROJECT_DIR)/toGo/Frameworks/Twitter",
 				);
 				INFOPLIST_FILE = toGo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

@@ -1,18 +1,18 @@
 {
-  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "A2C3DD72C521E9038CE61FC6D14BF049C564E270",
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "4D3006D74E1F56234C69FBE96588D66F5F7ED2DA",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
     "4719fa03-bbf6-48ab-9488-6dfe48edbdd9++8620" : {
 
     }
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "4719fa03-bbf6-48ab-9488-6dfe48edbdd9++8620" : 0,
-    "A2C3DD72C521E9038CE61FC6D14BF049C564E270" : 0
+    "4D3006D74E1F56234C69FBE96588D66F5F7ED2DA" : 0,
+    "4719fa03-bbf6-48ab-9488-6dfe48edbdd9++8620" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "C91BFC74-9E8C-4A52-9686-3B633A396369",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "4719fa03-bbf6-48ab-9488-6dfe48edbdd9++8620" : "..\/..\/Template_iOS\/Template_iOSsvn",
-    "A2C3DD72C521E9038CE61FC6D14BF049C564E270" : "toGo\/"
+    "4D3006D74E1F56234C69FBE96588D66F5F7ED2DA" : "toGo\/",
+    "4719fa03-bbf6-48ab-9488-6dfe48edbdd9++8620" : "..\/..\/Template_iOS\/Template_iOSsvn"
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "toGo",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
@@ -26,7 +26,7 @@
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/babulraosdn\/transonGO.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "A2C3DD72C521E9038CE61FC6D14BF049C564E270"
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "4D3006D74E1F56234C69FBE96588D66F5F7ED2DA"
     }
   ]
 }
