@@ -24,6 +24,13 @@
 		ED1B7EF81C2AA48600C49026 /* SocialView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED1B7EE91C2AA48600C49026 /* SocialView.m */; settings = {ASSET_TAGS = (); }; };
 		ED1B7EFD1C2AA4A900C49026 /* Headers.m in Sources */ = {isa = PBXBuildFile; fileRef = ED1B7EFC1C2AA4A900C49026 /* Headers.m */; settings = {ASSET_TAGS = (); }; };
 		ED1B7F001C2AA50E00C49026 /* LogInVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED1B7EFF1C2AA50E00C49026 /* LogInVC.m */; settings = {ASSET_TAGS = (); }; };
+		ED2F28061C310E3B003D8C82 /* UIView+toGo.m in Sources */ = {isa = PBXBuildFile; fileRef = ED2F28051C310E3B003D8C82 /* UIView+toGo.m */; settings = {ASSET_TAGS = (); }; };
+		ED2F280A1C311B89003D8C82 /* TakeTourView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED2F28091C311B89003D8C82 /* TakeTourView.m */; settings = {ASSET_TAGS = (); }; };
+		ED2F28181C31629A003D8C82 /* ProfileViewEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED2F28171C31629A003D8C82 /* ProfileViewEditViewController.m */; settings = {ASSET_TAGS = (); }; };
+		ED2F281C1C3162E8003D8C82 /* ProfileViewEditUpdateCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ED2F281B1C3162E8003D8C82 /* ProfileViewEditUpdateCell.m */; settings = {ASSET_TAGS = (); }; };
+		ED2F28201C3164B3003D8C82 /* AlertViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = ED2F281F1C3164B3003D8C82 /* AlertViewCustom.m */; settings = {ASSET_TAGS = (); }; };
+		ED2F28221C316591003D8C82 /* ProfileViewEditUpdateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ED2F28211C316591003D8C82 /* ProfileViewEditUpdateCell.xib */; settings = {ASSET_TAGS = (); }; };
+		ED2F28261C316E57003D8C82 /* ProfileInfoObject.m in Sources */ = {isa = PBXBuildFile; fileRef = ED2F28251C316E57003D8C82 /* ProfileInfoObject.m */; settings = {ASSET_TAGS = (); }; };
 		ED4159961C2AC7BF00491CE7 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED4159941C2AC7BF00491CE7 /* FBSDKCoreKit.framework */; settings = {ASSET_TAGS = (); }; };
 		ED4159971C2AC7BF00491CE7 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED4159951C2AC7BF00491CE7 /* FBSDKLoginKit.framework */; settings = {ASSET_TAGS = (); }; };
 		ED437BFD1C1FD94800DB68E0 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = ED437BE91C1FD94800DB68E0 /* Utility.m */; settings = {ASSET_TAGS = (); }; };
@@ -157,6 +164,19 @@
 		ED1B7EFC1C2AA4A900C49026 /* Headers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Headers.m; sourceTree = "<group>"; };
 		ED1B7EFE1C2AA50E00C49026 /* LogInVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogInVC.h; sourceTree = "<group>"; };
 		ED1B7EFF1C2AA50E00C49026 /* LogInVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogInVC.m; sourceTree = "<group>"; };
+		ED2F28041C310E3B003D8C82 /* UIView+toGo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+toGo.h"; sourceTree = "<group>"; };
+		ED2F28051C310E3B003D8C82 /* UIView+toGo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+toGo.m"; sourceTree = "<group>"; };
+		ED2F28081C311B89003D8C82 /* TakeTourView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TakeTourView.h; sourceTree = "<group>"; };
+		ED2F28091C311B89003D8C82 /* TakeTourView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TakeTourView.m; sourceTree = "<group>"; };
+		ED2F28161C31629A003D8C82 /* ProfileViewEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewEditViewController.h; sourceTree = "<group>"; };
+		ED2F28171C31629A003D8C82 /* ProfileViewEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewEditViewController.m; sourceTree = "<group>"; };
+		ED2F281A1C3162E8003D8C82 /* ProfileViewEditUpdateCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewEditUpdateCell.h; sourceTree = "<group>"; };
+		ED2F281B1C3162E8003D8C82 /* ProfileViewEditUpdateCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewEditUpdateCell.m; sourceTree = "<group>"; };
+		ED2F281E1C3164B3003D8C82 /* AlertViewCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertViewCustom.h; sourceTree = "<group>"; };
+		ED2F281F1C3164B3003D8C82 /* AlertViewCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertViewCustom.m; sourceTree = "<group>"; };
+		ED2F28211C316591003D8C82 /* ProfileViewEditUpdateCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileViewEditUpdateCell.xib; sourceTree = "<group>"; };
+		ED2F28241C316E57003D8C82 /* ProfileInfoObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileInfoObject.h; sourceTree = "<group>"; };
+		ED2F28251C316E57003D8C82 /* ProfileInfoObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileInfoObject.m; sourceTree = "<group>"; };
 		ED4159941C2AC7BF00491CE7 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		ED4159951C2AC7BF00491CE7 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		ED437BE81C1FD94800DB68E0 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
@@ -381,9 +401,9 @@
 		ED1B7EC31C2AA48600C49026 /* MVC */ = {
 			isa = PBXGroup;
 			children = (
-				ED1B7EC41C2AA48600C49026 /* Controller */,
 				ED1B7EE01C2AA48600C49026 /* Model */,
 				ED1B7EEA1C2AA48600C49026 /* View */,
+				ED1B7EC41C2AA48600C49026 /* Controller */,
 			);
 			path = MVC;
 			sourceTree = "<group>";
@@ -391,10 +411,11 @@
 		ED1B7EC41C2AA48600C49026 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				ED2F28151C316258003D8C82 /* ProfileUpdate */,
+				ED1B7ED41C2AA48600C49026 /* Login:SignUp:Forgot */,
 				ED1B7EC51C2AA48600C49026 /* BaseViewController */,
 				ED1B7ECE1C2AA48600C49026 /* ContactsList */,
 				ED1B7ED11C2AA48600C49026 /* DashboardView */,
-				ED1B7ED41C2AA48600C49026 /* Login:SignUp:Forgot */,
 				ED1B7EDD1C2AA48600C49026 /* SlideMenu */,
 			);
 			path = Controller;
@@ -462,6 +483,7 @@
 		ED1B7EE01C2AA48600C49026 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				ED2F28231C316E3B003D8C82 /* ProfileInfo */,
 				ED1B7EE11C2AA48600C49026 /* CustomValidations */,
 				ED1B7EE41C2AA48600C49026 /* DropDownViews */,
 				ED1B7EE71C2AA48600C49026 /* SocialViews */,
@@ -499,6 +521,9 @@
 		ED1B7EEA1C2AA48600C49026 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				ED2F281D1C3164B3003D8C82 /* AlertViewCustom */,
+				ED2F28191C3162C5003D8C82 /* ProfileViewCustomCell */,
+				ED2F28071C311B82003D8C82 /* TourView */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -511,6 +536,61 @@
 				ED1B7EFC1C2AA4A900C49026 /* Headers.m */,
 			);
 			path = Constants;
+			sourceTree = "<group>";
+		};
+		ED2F28031C310DF5003D8C82 /* UIView */ = {
+			isa = PBXGroup;
+			children = (
+				ED2F28041C310E3B003D8C82 /* UIView+toGo.h */,
+				ED2F28051C310E3B003D8C82 /* UIView+toGo.m */,
+			);
+			path = UIView;
+			sourceTree = "<group>";
+		};
+		ED2F28071C311B82003D8C82 /* TourView */ = {
+			isa = PBXGroup;
+			children = (
+				ED2F28081C311B89003D8C82 /* TakeTourView.h */,
+				ED2F28091C311B89003D8C82 /* TakeTourView.m */,
+			);
+			path = TourView;
+			sourceTree = "<group>";
+		};
+		ED2F28151C316258003D8C82 /* ProfileUpdate */ = {
+			isa = PBXGroup;
+			children = (
+				ED2F28161C31629A003D8C82 /* ProfileViewEditViewController.h */,
+				ED2F28171C31629A003D8C82 /* ProfileViewEditViewController.m */,
+			);
+			path = ProfileUpdate;
+			sourceTree = "<group>";
+		};
+		ED2F28191C3162C5003D8C82 /* ProfileViewCustomCell */ = {
+			isa = PBXGroup;
+			children = (
+				ED2F281A1C3162E8003D8C82 /* ProfileViewEditUpdateCell.h */,
+				ED2F281B1C3162E8003D8C82 /* ProfileViewEditUpdateCell.m */,
+				ED2F28211C316591003D8C82 /* ProfileViewEditUpdateCell.xib */,
+			);
+			path = ProfileViewCustomCell;
+			sourceTree = "<group>";
+		};
+		ED2F281D1C3164B3003D8C82 /* AlertViewCustom */ = {
+			isa = PBXGroup;
+			children = (
+				ED2F281E1C3164B3003D8C82 /* AlertViewCustom.h */,
+				ED2F281F1C3164B3003D8C82 /* AlertViewCustom.m */,
+			);
+			path = AlertViewCustom;
+			sourceTree = "<group>";
+		};
+		ED2F28231C316E3B003D8C82 /* ProfileInfo */ = {
+			isa = PBXGroup;
+			children = (
+				ED2F28241C316E57003D8C82 /* ProfileInfoObject.h */,
+				ED2F28251C316E57003D8C82 /* ProfileInfoObject.m */,
+			);
+			path = ProfileInfo;
 			sourceTree = "<group>";
 		};
 		ED4159921C2AC7AB00491CE7 /* Frameworks */ = {
@@ -534,6 +614,7 @@
 		ED437BD41C1FD94800DB68E0 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				ED2F28031C310DF5003D8C82 /* UIView */,
 				EDFD7E131C27CBED00E4FEEB /* NSString */,
 				EDFD7DF41C27C68100E4FEEB /* UIButton */,
 				EDFD7DF71C27C68100E4FEEB /* UIColor */,
@@ -1059,6 +1140,7 @@
 				ED8B51DD1C1EEFED00CA7306 /* video incoming call rev.mp3 in Resources */,
 				ED437C081C1FDD1100DB68E0 /* GooglePlus.bundle in Resources */,
 				ED8B516D1C1EEF7000CA7306 /* Assets.xcassets in Resources */,
+				ED2F28221C316591003D8C82 /* ProfileViewEditUpdateCell.xib in Resources */,
 				ED9CCDD21C2BBCD100FA2C5A /* TwitterKitResources.bundle in Resources */,
 				ED1B7EC21C2AA3AB00C49026 /* Localizable.strings in Resources */,
 				ED8B51DC1C1EEFED00CA7306 /* CallLine.mp3 in Resources */,
@@ -1158,12 +1240,16 @@
 				ED8B51E71C1EEFED00CA7306 /* InternetActivityVC.m in Sources */,
 				EDFD7E081C27C68100E4FEEB /* UIFont+Font.m in Sources */,
 				ED1B7EED1C2AA48600C49026 /* LoginBaseViewController.m in Sources */,
+				ED2F28261C316E57003D8C82 /* ProfileInfoObject.m in Sources */,
 				ED8B51DE1C1EEFED00CA7306 /* CustomToolbarVC.m in Sources */,
+				ED2F281C1C3162E8003D8C82 /* ProfileViewEditUpdateCell.m in Sources */,
 				ED1B7EEC1C2AA48600C49026 /* ForgetPasswordBaseViewController.m in Sources */,
+				ED2F28201C3164B3003D8C82 /* AlertViewCustom.m in Sources */,
 				ED1B7F001C2AA50E00C49026 /* LogInVC.m in Sources */,
 				ED8B51E01C1EEFED00CA7306 /* UIActionSheet+Extensions.m in Sources */,
 				EDFD7E161C27CBED00E4FEEB /* NSString+Extensions.m in Sources */,
 				ED8B51D71C1EEFED00CA7306 /* ActiveUserManager.m in Sources */,
+				ED2F28181C31629A003D8C82 /* ProfileViewEditViewController.m in Sources */,
 				ED8B51E61C1EEFED00CA7306 /* ParticipentCell.m in Sources */,
 				ED8B51E11C1EEFED00CA7306 /* UIView-Extensions.m in Sources */,
 				ED437C021C1FD98200DB68E0 /* Application.m in Sources */,
@@ -1180,6 +1266,7 @@
 				ED8B51EF1C1EEFED00CA7306 /* VideoFrameUser.m in Sources */,
 				ED1B7EF81C2AA48600C49026 /* SocialView.m in Sources */,
 				ED1B7EEF1C2AA48600C49026 /* ContactsListViewController.m in Sources */,
+				ED2F280A1C311B89003D8C82 /* TakeTourView.m in Sources */,
 				ED8B51DA1C1EEFED00CA7306 /* BaseVideoConferenceVC.m in Sources */,
 				EDFD7E061C27C68100E4FEEB /* UIButton+toGo.m in Sources */,
 				ED8B51DF1C1EEFED00CA7306 /* NSData+Base64.m in Sources */,
@@ -1192,6 +1279,7 @@
 				ED8B51ED1C1EEFED00CA7306 /* UserDefaults.m in Sources */,
 				EDFD7E091C27C68100E4FEEB /* UIImage+Image.m in Sources */,
 				ED1B7EF61C2AA48600C49026 /* CustomTextFieldDelegate.m in Sources */,
+				ED2F28061C310E3B003D8C82 /* UIView+toGo.m in Sources */,
 				ED8B51651C1EEF7000CA7306 /* AppDelegate.m in Sources */,
 				ED8B51621C1EEF7000CA7306 /* main.m in Sources */,
 				ED1B7EF11C2AA48600C49026 /* ForgetPasswordViewController.m in Sources */,

@@ -1,4 +1,4 @@
-  //
+           //
 //  LogInVC.m
 //  ooVooSdkSampleShow
 //
@@ -296,6 +296,12 @@
 
 - (IBAction)act_LogIn:(id)sender {
     
+    AlertViewCustom *alertView = [[AlertViewCustom alloc]init];
+    UIView *viewIs = [alertView showAlertViewWithMessage:@"Please confirm the Registration by clicking the verification link on email" headingLabel:@"Confirm Registration" confirmButtonName:@"Confirm" cancelButtonName:@"Cancel" viewIs:self.view];
+    //[self.view addSubview:viewIs]; //Alert View Custom
+    //[App_Delegate takeTour];//Take a Tour
+    
+    
     if ([self isUserIdEmpty])
         return;
     
@@ -323,6 +329,21 @@
                      }
                  }];
 }
+
+
+-(void)popUpButtonClicked:(UIButton *)sender{
+   
+    if (sender.tag == 1) {
+        //Confirm Button
+        NSLog(@"Confirm Selected");
+    }
+    else if (sender.tag == 2) {
+        //Cancel Button
+        NSLog(@"Cancel Selected");
+        [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
+    }
+}
+
 
 
 #pragma mark - private methods

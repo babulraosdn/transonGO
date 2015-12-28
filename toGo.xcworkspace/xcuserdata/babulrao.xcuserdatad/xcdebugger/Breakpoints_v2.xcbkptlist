@@ -106,7 +106,7 @@
                   moduleName = "toGo"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/babulrao/DayUsers/babulrao/Official/Projects/toGo/toGo/toGo/WebServiceCall/WebServiceCall.m"
-                  timestampString = "472642137.542082"
+                  timestampString = "473000369.039483"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "61"
@@ -121,7 +121,7 @@
                   moduleName = "toGo"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/babulrao/DayUsers/babulrao/Official/Projects/toGo/toGo/toGo/WebServiceCall/WebServiceCall.m"
-                  timestampString = "472642137.542337"
+                  timestampString = "473000369.039824"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "0"
@@ -136,7 +136,7 @@
                   moduleName = "toGo"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/babulrao/DayUsers/babulrao/Official/Projects/toGo/toGo/toGo/WebServiceCall/WebServiceCall.m"
-                  timestampString = "472642137.542593"
+                  timestampString = "473000369.040078"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "0"
@@ -179,11 +179,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "toGo/MVC/Controller/Login:SignUp:Forgot/LogInVC.m"
-            timestampString = "472640618.784586"
+            timestampString = "472990219.502495"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "526"
-            endingLineNumber = "526"
+            startingLineNumber = "547"
+            endingLineNumber = "547"
             landmarkName = "-fetchUserFacebookCredential"
             landmarkType = "5">
          </BreakpointContent>
@@ -195,11 +195,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "toGo/MVC/Controller/Login:SignUp:Forgot/LogInVC.m"
-            timestampString = "472640618.784586"
+            timestampString = "472990219.502495"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "737"
-            endingLineNumber = "737"
+            startingLineNumber = "758"
+            endingLineNumber = "758"
             landmarkName = "-finishedWithAuth:error:"
             landmarkType = "5">
          </BreakpointContent>
@@ -211,11 +211,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "toGo/MVC/Controller/Login:SignUp:Forgot/LogInVC.m"
-            timestampString = "472640618.784586"
+            timestampString = "472990219.502495"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "503"
-            endingLineNumber = "503"
+            startingLineNumber = "524"
+            endingLineNumber = "524"
             landmarkName = "-btnFacebookSigninClicked"
             landmarkType = "5">
          </BreakpointContent>
@@ -227,11 +227,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "toGo/MVC/Controller/Login:SignUp:Forgot/LogInVC.m"
-            timestampString = "472640618.784586"
+            timestampString = "472990219.502495"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "509"
-            endingLineNumber = "509"
+            startingLineNumber = "530"
+            endingLineNumber = "530"
             landmarkName = "-btnFacebookSigninClicked"
             landmarkType = "5">
          </BreakpointContent>
@@ -243,11 +243,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "toGo/MVC/Controller/Login:SignUp:Forgot/LogInVC.m"
-            timestampString = "472640618.784586"
+            timestampString = "472990219.502495"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "519"
-            endingLineNumber = "519"
+            startingLineNumber = "540"
+            endingLineNumber = "540"
             landmarkName = "-fetchUserFacebookCredential"
             landmarkType = "5">
          </BreakpointContent>
@@ -259,11 +259,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "toGo/MVC/Controller/Login:SignUp:Forgot/LogInVC.m"
-            timestampString = "472640618.784586"
+            timestampString = "472990219.502495"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "495"
-            endingLineNumber = "495"
+            startingLineNumber = "516"
+            endingLineNumber = "516"
             landmarkName = "-btnFacebookSigninClicked"
             landmarkType = "5">
          </BreakpointContent>
@@ -275,11 +275,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "toGo/MVC/Controller/Login:SignUp:Forgot/LogInVC.m"
-            timestampString = "472640618.784586"
+            timestampString = "472990219.502495"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "520"
-            endingLineNumber = "520"
+            startingLineNumber = "541"
+            endingLineNumber = "541"
             landmarkName = "-fetchUserFacebookCredential"
             landmarkType = "5">
          </BreakpointContent>
@@ -297,6 +297,70 @@
             startingLineNumber = "61"
             endingLineNumber = "61"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "toGo/MVC/Controller/Login:SignUp:Forgot/LogInVC.m"
+            timestampString = "473000116.652404"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "301"
+            endingLineNumber = "301"
+            landmarkName = "-act_LogIn:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "toGo/MVC/View/TourView/TakeTourView.m"
+            timestampString = "472990219.502495"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "+startTakeTourForExistUser"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "toGo/MVC/Controller/ProfileUpdate/ProfileViewEditViewController.m"
+            timestampString = "473002145.398401"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "-tableView:cellForRowAtIndexPath:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "toGo/MVC/Controller/ProfileUpdate/ProfileViewEditViewController.m"
+            timestampString = "473002145.398401"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
+            landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

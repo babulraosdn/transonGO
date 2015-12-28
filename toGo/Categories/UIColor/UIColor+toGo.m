@@ -48,6 +48,17 @@
     return color;
 }
 
++ (UIColor *)textColorBlackColor{
+    static UIColor *color=nil;
+    if (!color) color = [UIColor TEXT_BLACK_COLOR];
+    return color;
+}
+
++ (UIColor *)textColorWhiteColor{
+    static UIColor *color=nil;
+    if (!color) color = [UIColor TEXT_WHITE_COLOR];
+    return color;
+}
 
 @end
 

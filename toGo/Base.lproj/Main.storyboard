@@ -70,6 +70,7 @@
                                         </state>
                                         <connections>
                                             <action selector="act_LogIn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ole-ar-jby"/>
+                                            <segue destination="DFE-5m-4Nd" kind="push" id="W4j-Dq-kUO"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Forgot password?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2f4-Io-hDr">
@@ -294,7 +295,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="727" y="288"/>
+            <point key="canvasLocation" x="706" y="287"/>
         </scene>
         <!--Forget Password View Controller-->
         <scene sceneID="84A-Xr-GhF">
@@ -819,10 +820,10 @@
             </objects>
             <point key="canvasLocation" x="1496" y="244"/>
         </scene>
-        <!--Contacts List View Controller-->
+        <!--Profile View Edit View Controller-->
         <scene sceneID="tLx-7f-B9A">
             <objects>
-                <viewController storyboardIdentifier="ContactsListViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="DFE-5m-4Nd" customClass="ContactsListViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ContactsListViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="DFE-5m-4Nd" customClass="ProfileViewEditViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="W10-l8-1af"/>
                         <viewControllerLayoutGuide type="bottom" id="iv9-sM-SAt"/>
@@ -831,12 +832,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="screenBg" translatesAutoresizingMaskIntoConstraints="NO" id="d2v-Ig-nAW">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="d2v-Ig-nAW">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="lwk-pw-Gko">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="dataSource" destination="DFE-5m-4Nd" id="uls-QN-2Yu"/>
                                     <outlet property="delegate" destination="DFE-5m-4Nd" id="L1D-3K-lEu"/>
@@ -848,15 +849,16 @@
                             <constraint firstItem="lwk-pw-Gko" firstAttribute="leading" secondItem="Mi0-H7-W2L" secondAttribute="leading" id="23o-OY-gah"/>
                             <constraint firstItem="iv9-sM-SAt" firstAttribute="top" secondItem="d2v-Ig-nAW" secondAttribute="bottom" id="2OV-Ph-P9r"/>
                             <constraint firstItem="d2v-Ig-nAW" firstAttribute="top" secondItem="Mi0-H7-W2L" secondAttribute="top" id="2zV-Aq-xAZ"/>
-                            <constraint firstItem="lwk-pw-Gko" firstAttribute="top" secondItem="Mi0-H7-W2L" secondAttribute="top" id="9dC-Ke-5EQ"/>
+                            <constraint firstItem="lwk-pw-Gko" firstAttribute="top" secondItem="Mi0-H7-W2L" secondAttribute="top" constant="64" id="9dC-Ke-5EQ"/>
                             <constraint firstItem="iv9-sM-SAt" firstAttribute="top" secondItem="lwk-pw-Gko" secondAttribute="bottom" id="Pdw-N1-RA3"/>
                             <constraint firstAttribute="trailing" secondItem="lwk-pw-Gko" secondAttribute="trailing" id="QJ0-tn-ecL"/>
                             <constraint firstAttribute="trailing" secondItem="d2v-Ig-nAW" secondAttribute="trailing" id="fvu-oO-wJ9"/>
                             <constraint firstItem="d2v-Ig-nAW" firstAttribute="leading" secondItem="Mi0-H7-W2L" secondAttribute="leading" id="vAd-9i-pvP"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="gqt-9I-saG"/>
                     <connections>
-                        <outlet property="tblView" destination="lwk-pw-Gko" id="6wp-wN-xeW"/>
+                        <outlet property="tblView" destination="lwk-pw-Gko" id="13B-RF-3Lx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ucR-YZ-YPk" userLabel="First Responder" sceneMemberID="firstResponder"/>

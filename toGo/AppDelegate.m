@@ -566,4 +566,13 @@
 
 #pragma mark Google_Plus END
 
+
+-(void)takeTour
+{
+    NSString *curentVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    curentVersion = [curentVersion stringByReplacingOccurrencesOfString:@"." withString:@""];
+    [TakeTourView launchTakeTourViewWithNewVersion:YES];
+}
+
 @end
+

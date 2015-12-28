@@ -27,5 +27,8 @@
 @property(nonatomic,strong)NSMutableArray *callingUsers;
 
 -(void)subscribePushNotifications : (UIApplication *)application;
+
+-(void)takeTour;
+
 @end
 
