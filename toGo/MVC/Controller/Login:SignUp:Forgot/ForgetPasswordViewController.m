@@ -12,6 +12,9 @@
 @interface ForgetPasswordViewController (){
     
 }
+@property (weak, nonatomic) IBOutlet UITextField *emailTextField;
+@property (weak, nonatomic) IBOutlet UIButton *submitButton;
+@property (weak, nonatomic) IBOutlet UILabel *displaylabel;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @end
 
@@ -95,7 +98,7 @@
 
 -(void)setPadding{
     self.emailTextField.leftViewMode=UITextFieldViewModeAlways;
-    self.emailTextField.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"USER_ID_PADDING_IMAGE") frame:CGRectMake(10, 0, 17, 17)];
+    self.emailTextField.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"EMAIL_PADDING_IMAGE") frame:CGRectMake(10, 3, 20, 13)];
 }
 
 -(void)setColors{

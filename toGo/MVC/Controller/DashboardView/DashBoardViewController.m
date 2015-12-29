@@ -8,7 +8,7 @@
 
 #import "DashBoardViewController.h"
 #import "AppDelegate.h"
-#import <TheSidebarController/TheSidebarController.h>
+
 @interface DashBoardViewController (){
     AppDelegate  *appDelegate;
 }
@@ -23,31 +23,18 @@
     
     appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
     
+    self.title = NSLOCALIZEDSTRING(@"TOGO");
+    self.view.backgroundColor = [UIColor backgroundColor];
+    
+    [self setSlideMenuButtonFornavigation];
 //    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Show" style:UIBarButtonItemStyleDone target:self action:@selector(test)];
 //    self.navigationController.navigationItem.leftBarButtonItem = anotherButton;
 
     
-    UIImage *img1=[UIImage imageNamed:@"drawer-ico"];
-    CGRect frameimg1 = CGRectMake(0, 0, img1.size.width, img1.size.height);
-    UIButton *backBtn=[[UIButton alloc]initWithFrame:frameimg1];
-    [backBtn setBackgroundImage:img1 forState:UIControlStateNormal];
-    [backBtn addTarget:self action:@selector(navigationBarLeftButtonClicked)
-      forControlEvents:UIControlEventTouchUpInside];
-    [backBtn setShowsTouchWhenHighlighted:YES];
-    UIBarButtonItem *barButton=[[UIBarButtonItem alloc]initWithCustomView:backBtn];
-    self.navigationItem.leftBarButtonItem=barButton;
+    
  
 }
 
-- (void)navigationBarLeftButtonClicked {
-    
-    
-    if(self.sidebarController.sidebarIsPresenting){
-        [self.sidebarController dismissSidebarViewController];
-    }else{
-        [self.sidebarController presentLeftSidebarViewControllerWithStyle:0];
-    }
-}
 
 
 - (void)didReceiveMemoryWarning {

@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SignUpBaseViewController.h"
 #import "Headers.h"
 
-@interface SignUpViewController : SignUpBaseViewController
-//@property (retain, nonatomic) CustomTextFieldDelegate *textFieldDelegate;
+@interface SignUpViewController : BaseViewController
+
 @end

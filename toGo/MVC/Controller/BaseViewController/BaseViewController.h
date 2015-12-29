@@ -10,7 +10,7 @@
 #import "Headers.h"
 #import "AppDelegate.h"
 @interface BaseViewController : UIViewController
-
+-(void)setSlideMenuButtonFornavigation;
 -(void)setCustomBackButtonForNavigation;
 -(void)navigateToLoginView;
 @end

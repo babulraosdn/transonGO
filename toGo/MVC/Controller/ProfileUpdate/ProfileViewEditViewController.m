@@ -21,6 +21,7 @@
 
 -(void)viewDidLoad{
     [super viewDidLoad];
+    self.title = NSLOCALIZEDSTRING(@"TOGO");
     self.view.backgroundColor = [UIColor backgroundColor];
     self.namesArray = [[NSMutableArray alloc]initWithObjects:@"Email",@"Password",@"Name",@"Address",@"Phone Number",@"Description",@"Bank Account Information",@"My Languages", nil];
 }

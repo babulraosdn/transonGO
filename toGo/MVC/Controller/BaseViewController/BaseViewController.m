@@ -7,7 +7,7 @@
 //
 
 #import "BaseViewController.h"
-#import "LoginViewController.h"
+
 @interface BaseViewController ()
 
 @end
@@ -27,7 +27,20 @@
     // Do any additional setup after loading the view.
 }
 
+-(void)setSlideMenuButtonFornavigation{
+    UIImage *img1=[UIImage imageNamed:@"drawer-ico"];
+    CGRect frameimg1 = CGRectMake(0, 0, img1.size.width, img1.size.height);
+    UIButton *backBtn=[[UIButton alloc]initWithFrame:frameimg1];
+    [backBtn setBackgroundImage:img1 forState:UIControlStateNormal];
+    [backBtn addTarget:self action:@selector(navigationBarLeftButtonClicked)
+      forControlEvents:UIControlEventTouchUpInside];
+    [backBtn setShowsTouchWhenHighlighted:YES];
+    UIBarButtonItem *barButton=[[UIBarButtonItem alloc]initWithCustomView:backBtn];
+    self.navigationItem.leftBarButtonItem=barButton;
+}
+
 -(void)setCustomBackButtonForNavigation{
+    
     
     UIImage *img1=[UIImage imageNamed:@"back-arrow.png"];
     CGRect frameimg1 = CGRectMake(0, 0, img1.size.width, img1.size.height);
@@ -38,6 +51,15 @@
     //[backBtn setShowsTouchWhenHighlighted:YES];
     UIBarButtonItem *barButton=[[UIBarButtonItem alloc]initWithCustomView:backBtn];
     self.navigationItem.leftBarButtonItem=barButton;
+}
+
+- (void)navigationBarLeftButtonClicked {
+    
+    if(self.sidebarController.sidebarIsPresenting){
+        [self.sidebarController dismissSidebarViewController];
+    }else{
+        [self.sidebarController presentLeftSidebarViewControllerWithStyle:0];
+    }
 }
 
 -(void)backButtonPressed{

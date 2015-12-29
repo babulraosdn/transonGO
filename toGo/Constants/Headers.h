@@ -27,6 +27,8 @@
 #import "AlertViewCustom.h"
 #import "TakeTourView.h"
 
+#import "BaseViewController.h"
+#import <TheSidebarController/TheSidebarController.h>
 @interface Headers : NSObject
 
 @end

@@ -7,9 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-//#import "BaseViewController.h"
-#import "ForgetPasswordBaseViewController.h"
 #import "Headers.h"
-@interface ForgetPasswordViewController : ForgetPasswordBaseViewController
+@interface ForgetPasswordViewController : BaseViewController
 @property (retain, nonatomic) CustomTextFieldDelegate *textFieldDelegate;;
 @end

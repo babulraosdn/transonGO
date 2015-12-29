@@ -9,6 +9,14 @@
 #import <UIKit/UIKit.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
+
+
+
+@interface SlideMenuCell : UITableViewCell
+@property(nonatomic,weak) IBOutlet UIImageView *displayImageView;
+@property(nonatomic,weak) IBOutlet UILabel *displayLabel;
+@end
+
 @interface SlideMenuViewController : UIViewController
 
 

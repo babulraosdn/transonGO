@@ -46,7 +46,22 @@
 @property(nonatomic,readwrite)BOOL isChecked;
 @property (weak, nonatomic) IBOutlet UIImageView *rememberMeImageView;
 
-- (IBAction)rememberMeButtonPressed:(id)sender;
+
+@property (weak, nonatomic) IBOutlet UIView *signUpUIView;
+@property (weak, nonatomic) IBOutlet UILabel *signUplabel;
+@property (weak, nonatomic) IBOutlet UILabel *doNotHaveAccountLabel;
+@property (weak, nonatomic) IBOutlet UILabel *connectWithLabel;
+@property (weak, nonatomic) IBOutlet UILabel *orlabel;
+@property (weak, nonatomic) IBOutlet UIButton *forgotPasswordButton;
+@property (weak, nonatomic) IBOutlet UILabel *forgotPasswordLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *logoImageView;
+
+@property (weak, nonatomic) IBOutlet UIView *viewAuthorization_Container;
+@property (weak, nonatomic) IBOutlet UITextField *txt_userId;
+@property (weak, nonatomic) IBOutlet UITextField *txtDisplayName;
+@property (weak, nonatomic) IBOutlet UIButton *loginButton;
+
+- (IBAction)act_LogIn:(id)sender;
 -(IBAction)loginWithSoicalAccounts:(id)sender;
 @end
 
@@ -62,14 +77,7 @@
     // Do any additional setup after loading the view.
     self.title = NSLOCALIZEDSTRING(@"TOGO");
     self.view.backgroundColor = [UIColor backgroundColor];
-    
-    
-//    scrollView.pagingEnabled = YES;
-//    scrollView.showsHorizontalScrollIndicator = NO;
-//    scrollView.showsVerticalScrollIndicator = NO;
-//    scrollView.scrollsToTop = NO;
-
-    
+   
     
     appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
     
@@ -80,6 +88,7 @@
     socialView.delegate=self;
     
     //[self setKeyBoardReturntypesAndDelegates];
+    [self setLabelButtonNames];
     [self setPlaceHolders];
     [self setRoundCorners];
     [self setPadding];
@@ -98,6 +107,7 @@
     
 }
 -(void)viewDidLayoutSubviews{
+    _scrollView.scrollEnabled =  YES;
     _scrollView.contentSize=CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-64);
 
 }
@@ -148,10 +158,17 @@
     */
 }
 
+-(void)setLabelButtonNames{
+    self.forgotPasswordLabel.text = NSLOCALIZEDSTRING(@"FORGET_PASSWORD");
+    self.signUplabel.text = NSLOCALIZEDSTRING(@"SIGNUP");
+    self.orlabel.text = NSLOCALIZEDSTRING(@"OR");
+    self.connectWithLabel.text = NSLOCALIZEDSTRING(@"COONNECT_WITH");
+    [self.loginButton setTitle:NSLOCALIZEDSTRING(@"LOGIN") forState:UIControlStateNormal];
+}
+
 -(void)setPlaceHolders{
     self.txt_userId.placeholder = NSLOCALIZEDSTRING(@"USER_ID");
     self.txtDisplayName.placeholder = NSLOCALIZEDSTRING(@"PASSWORD");
-    [self.loginButton setTitle:NSLOCALIZEDSTRING(@"LOGIN") forState:UIControlStateNormal];
 }
 
 -(void)setRoundCorners{
@@ -162,17 +179,17 @@
 
 -(void)setPadding{
     self.txt_userId.leftViewMode=UITextFieldViewModeAlways;
-    self.txt_userId.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"USER_ID_PADDING_IMAGE") frame:CGRectMake(10, 0, 17, 17)];
+    self.txt_userId.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"USER_ID_PADDING_IMAGE") frame:CGRectMake(10, 0, 16, 16)];
     
     self.txtDisplayName.leftViewMode=UITextFieldViewModeAlways;
-    self.txtDisplayName.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"PASSWORD_PADDING_IMAGE") frame:CGRectMake(10, 0, 17, 17)];
+    self.txtDisplayName.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"PASSWORD_PADDING_IMAGE") frame:CGRectMake(10, 0, 15, 20)];
 }
 
 -(void)setColors{
     self.orlabel.textColor = [UIColor buttonBackgroundColor];
     self.connectWithLabel.textColor = [UIColor lightGrayConnectWithColor];
     self.loginButton.backgroundColor  = [UIColor buttonBackgroundColor];
-    self.signUplabel.textColor = [UIColor blueSignUpColor];
+    self.signUplabel.textColor = [UIColor textColorBlackColor];
 }
 
 -(void)setFonts{
@@ -386,7 +403,8 @@
 //        
 //        else
 //        {
-           [self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
+        [self createSidePanel];
+           //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
 //        }
        
     }else{
@@ -861,22 +879,6 @@
     
 }
 
-- (IBAction)rememberMeButtonPressed:(id)sender {
-    
-    [self.view endEditing:YES];
-    
-    if (!_isChecked) {
-        [Utility_Shared_Instance writeStringUserPreference:@"remember" value:@"yes"];
-        _rememberMeImageView.image=[UIImage checkedBoxImage];
-        _isChecked=YES;
-    }
-    else{
-        [Utility_Shared_Instance clearStringFromUserPreference:@"remember"];
-        [Utility_Shared_Instance writeStringUserPreference:@"remember" value:@"no"];
-        _rememberMeImageView.image=[UIImage uncheckBoxImage];
-        _isChecked=NO;
-    }
-}
 
 #pragma Mark UITextField Delegate Methods
 

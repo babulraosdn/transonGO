@@ -10,10 +10,15 @@
 #import "Headers.h"
 #import "AppDelegate.h"
 
+@implementation SlideMenuCell
+@end
+
 @interface SlideMenuViewController ()<UITableViewDataSource,UITableViewDelegate>{
     AppDelegate *appDelegate;
 }
 @property(nonatomic,weak) IBOutlet UITableView *tblView;
+@property(nonatomic,strong) NSMutableArray *namesArray;
+@property(nonatomic,strong) NSMutableArray *imagesArray;
 @end
 
 @implementation SlideMenuViewController
@@ -21,11 +26,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.view.backgroundColor = [UIColor backgroundColor];
     appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
+    self.namesArray = [[NSMutableArray alloc]initWithObjects:NSLOCALIZEDSTRING(@"PROFILE"),NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION"),NSLOCALIZEDSTRING(@"CALL_HISTORY"),NSLOCALIZEDSTRING(@"PURCHASES"),NSLOCALIZEDSTRING(@"FAVORITE_INTERPRETER"),NSLOCALIZEDSTRING(@"SETTINGS"), nil];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return self.namesArray.count;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -34,15 +41,8 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    UITableViewCell *cell  = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    if (cell == nil) {
-        
-        cell  = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
-    }
-    
-    cell.textLabel.text = @"My Cell";
-    
-    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    SlideMenuCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SlideMenuCell"];
+    cell.displayLabel.text = [self.namesArray objectAtIndex:indexPath.row];
     return cell;
 }
 
