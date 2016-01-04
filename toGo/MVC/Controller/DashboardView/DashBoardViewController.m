@@ -26,13 +26,7 @@
     self.title = NSLOCALIZEDSTRING(@"TOGO");
     self.view.backgroundColor = [UIColor backgroundColor];
     
-    [self setSlideMenuButtonFornavigation];
-//    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:@"Show" style:UIBarButtonItemStyleDone target:self action:@selector(test)];
-//    self.navigationController.navigationItem.leftBarButtonItem = anotherButton;
-
-    
-    
- 
+    //[self setSlideMenuButtonFornavigation];
 }
 
 

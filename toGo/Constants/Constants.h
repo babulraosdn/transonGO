@@ -43,6 +43,12 @@ Stuff; \
 _Pragma("clang diagnostic pop") \
 } while (0)
 
+//********************  Social   ****************************************
+#pragma mark Social Calls
+#define LinkedIn_RedirectURL          @"http://www.testapp.com/testapp"
+#define LinkedIn_clientId             @"77i5uwp6x5esku"
+#define LinkedIn_clientSecret         @"ncAH3CMsDpVRgqg1"
+
 #define GooglePlusClientID            @"506861358610-uc2of0fda4oh8meq6jvs9m4l5sbf8qcm.apps.googleusercontent.com"
 #define ApplicationOpenGoogleAuthNotification @"ApplicationOpenGoogleAuthNotification"
 
@@ -52,35 +58,51 @@ _Pragma("clang diagnostic pop") \
 #define kLocation @"user_location"
 #define kEmail @"email"
 
+//********************  WebService   ****************************************
 #pragma mark WebService Calls
-#define BASE_URL @"https://mymoneytrax.com/webservices/"
-#define LOGIN @"login"
+#define BASE_URL @"http://172.10.55.110:3000/"
+#define LOGIN @"authenticate"
 #define SIGNUP @"signup"
-#define FORGOTPASSWORD @"forgetpassword"
+#define FORGOTPASSWORD @"forgot"
 
+
+//********************  ooVoo App Details   ****************************************
+#pragma mark ooVoo App Details
 #define ooVooAppID @"12349983355077"
 
-#pragma mark LinkedIn Calls
-#define LinkedIn_RedirectURL          @"http://www.testapp.com/testapp"
-#define LinkedIn_clientId             @"77i5uwp6x5esku"
-#define LinkedIn_clientSecret         @"ncAH3CMsDpVRgqg1"
 
-
+//********************  Image Names   ****************************************
 #pragma mark Image Names
 #define SLIDE_IMAGE             @"slide-menu-button-icon"
 #define ACCOUNT_IMAGE           @"account"
 
 
-//Colors RGB
-
+//********************  Colors CODES  ****************************************
+#pragma mark Colors Codes
 #define BLACK_COLOR @""
 #define WHITE_COLOR @""
 #define GRAY_COLOR @"848484"
 #define DARK_ORANGE @"2551400"
 
+//********************  Strings Constants   ****************************************
+#pragma mark Strings Constants
 #define FACEBOOK @"facebbok"
 #define TWITTER @"twitter"
 #define LINKEDIN @"linkedin"
 #define GOOGLE_PLUS @"google plus"
+
+#pragma mark WebService Strings Constants
+#define INTERPRETER @"interpreter"
+#define CUSTOMER @"customer"
+
+//********************  WebService Parameters   ****************************************
+#pragma mark WebService Parameters
+#define USERNAME @"username"
+#define EMAIL @"email"
+#define PASSWORD @"password"
+#define TYPE @"type"
+#define CODE @"code"
+
+
 
 #endif

@@ -27,7 +27,6 @@
     self.title = NSLOCALIZEDSTRING(@"TOGO");
     self.view.backgroundColor = [UIColor backgroundColor];
     [self setCustomBackButtonForNavigation];
-    //[self setKeyBoardReturntypesAndDelegates];
     [self setPlaceHolders];
     [self setRoundCorners];
     [self setPadding];
@@ -69,20 +68,6 @@
     UIEdgeInsets contentInsets = UIEdgeInsetsZero;
     self.scrollView.contentInset = contentInsets;
     self.scrollView.scrollIndicatorInsets = contentInsets;
-}
-
--(void)setKeyBoardReturntypesAndDelegates{
-    
-    /*
-    self.emailTextField.returnKeyType = UIReturnKeyGo;
-    if (!self.textFieldDelegate) {
-        self.textFieldDelegate = [[CustomTextFieldDelegate alloc]init];
-        self.textFieldDelegate.owner =  self;
-    }
-    self.emailTextField.delegate=self.textFieldDelegate;
-    self.textFieldDelegate.selector = @selector(webServiceCall:);
-    self.textFieldDelegate.owner =  self;
-    */
 }
 
 -(void)setPlaceHolders{
@@ -131,14 +116,13 @@
         //WEB Service CODE
         NSMutableDictionary *forgetPasswordDict=[NSMutableDictionary new];
         [forgetPasswordDict setValue:self.emailTextField.text forKey:NSLOCALIZEDSTRING(@"EMAIL")];
-        NSString *payload = [Utility_Shared_Instance preparePayloadForDictionary:forgetPasswordDict];
-        [Web_Service_Call serviceCall:payload webServicename:FORGOTPASSWORD SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+        [Web_Service_Call serviceCall:forgetPasswordDict webServicename:FORGOTPASSWORD SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
             //NSDictionary *dict=responseObject;
         } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
         }];
         
         [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                            withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(@"FORGET_PASSWORD_SUCCESS")]
+                                            withMessage:NSLOCALIZEDSTRING(@"FORGET_PASSWORD_SUCCESS")
                                                  inView:self
                                               withStyle:UIAlertControllerStyleAlert];
         

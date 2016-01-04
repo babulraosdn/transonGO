@@ -10,6 +10,12 @@
 
 @implementation UIImage (Image)
 
++ (UIImage *)navigationBarImage{
+    static UIImage *image=nil;
+    if (!image) image = [UIImage imageNamed:NAVIGATION_BAR];
+    return image;
+}
+
 + (UIImage *)checkedBoxImage{
     static UIImage *image=nil;
     if (!image) image = [UIImage imageNamed:CHECK_BOX_CHEKE];
@@ -22,12 +28,17 @@
     return image;
 }
 
-+ (UIImage *)navigationBarImage{
++ (UIImage *)radioOffImage{
     static UIImage *image=nil;
-    if (!image) image = [UIImage imageNamed:NAVIGATION_BAR];
+    if (!image) image = [UIImage imageNamed:RADIO_OFF];
     return image;
 }
 
++ (UIImage *)radioONImage{
+    static UIImage *image=nil;
+    if (!image) image = [UIImage imageNamed:RADIO_ON];
+    return image;
+}
 
 + (UIImage *)setColor:(UIColor *)color frame:(CGRect)frame{
     UIView *colorView = [[UIView alloc] initWithFrame:frame];

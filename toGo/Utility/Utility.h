@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Constants.h"
 #import "Reachability.h"
-
+#import "Headers.h"
 @protocol UtilityProtocol <NSObject>
 typedef void (^getImageData)(NSData *data);
 typedef void (^getImage)(UIImage *image);
@@ -26,8 +26,6 @@ typedef void (^getImage)(UIImage *image);
 +(Utility *)sharedInstance;
 
 - (BOOL)validateEmailWithString:(NSString*)emailAddress;
-
--(NSString*)preparePayloadForDictionary:(NSDictionary*)dictionary;
 
 -(void)showAlertViewWithTitle:(NSString*)title withMessage:(NSString*)message inView:(UIViewController *)viewController withStyle:(UIAlertControllerStyle)alertStyle;
 -(UIViewController *)getControllerForIdentifier:(NSString *)controllerIdentifier;

@@ -45,7 +45,7 @@
                              [alert dismissViewControllerAnimated:YES completion:nil];
                          }];
     [alert addAction:ok];
-    [viewController presentViewController:alert animated:YES completion:nil];
+    [App_Delegate.window.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
 -(UIViewController *)getControllerForIdentifier:(NSString *)controllerIdentifier {
@@ -106,18 +106,6 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info{
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
     [delegate dismissViewControllerAnimated:YES completion:nil];
-}
-
-
--(NSString*)preparePayloadForDictionary:(NSDictionary*)dictionary{
-    NSError *error = nil;
-    NSData *jsonData2 = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:&error];
-    if (error) {
-        NSLog(@"error%@",[error localizedDescription]);
-    }
-    NSString *jsonString = [[NSString alloc] initWithData:jsonData2 encoding:NSUTF8StringEncoding];
-    NSLog(@"jsonData as string:\n%@", jsonString);
-    return jsonString;
 }
 
 -(NSString *)checkForNullString:(id)string

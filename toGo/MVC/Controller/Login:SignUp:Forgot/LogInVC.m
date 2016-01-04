@@ -15,7 +15,7 @@
 //#import "SettingBundle.h"
 #import "UserDefaults.h"
 #import "AppDelegate.h"
-
+#import "SlideMenuViewController.h"
 
 #define User_isInVideoView @"User_isInVideoView"
 
@@ -38,10 +38,9 @@
     AppDelegate  *appDelegate;
     SocialView *socialView;
     __weak IBOutlet UIActivityIndicatorView *spinner;
-    
+    NSMutableDictionary *loginDictionary;
     UITextField *activeField;
 }
-
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property(nonatomic,readwrite)BOOL isChecked;
 @property (weak, nonatomic) IBOutlet UIImageView *rememberMeImageView;
@@ -69,25 +68,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    
-    
-
-    
     // Do any additional setup after loading the view.
     self.title = NSLOCALIZEDSTRING(@"TOGO");
     self.view.backgroundColor = [UIColor backgroundColor];
    
-    
-    appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
-    
-    self.sdk = [ooVooClient sharedInstance];
-    self.sdk.Account.delegate = self;
-    
-    socialView=[SocialView new];
-    socialView.delegate=self;
-    
-    //[self setKeyBoardReturntypesAndDelegates];
+    [self allocationsAndStaticText];
+    [self registerForKeyboardNotifications];
     [self setLabelButtonNames];
     [self setPlaceHolders];
     [self setRoundCorners];
@@ -95,15 +81,7 @@
     [self setColors];
     [self setFonts];
     
-    [self registerForKeyboardNotifications];
-    
-    
-//    [[Twitter sharedInstance] startWithConsumerKey:@"your_key"
-//     
-//                                    consumerSecret:@"your_secret"];
-    
-    
-    
+    [self setNeedsStatusBarAppearanceUpdate];
     
 }
 -(void)viewDidLayoutSubviews{
@@ -111,6 +89,17 @@
     _scrollView.contentSize=CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-64);
 
 }
+
+-(void)allocationsAndStaticText{
+    
+    loginDictionary = [NSMutableDictionary new];
+    appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
+    self.sdk = [ooVooClient sharedInstance];
+    self.sdk.Account.delegate = self;
+    socialView=[SocialView new];
+    socialView.delegate=self;
+}
+
 - (void)registerForKeyboardNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -124,8 +113,6 @@
 
 -(void)keyboardWasShown:(NSNotification*)notification
 {
-    
-    
     NSDictionary *info = [notification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.view.frame.origin.x,self.view.frame.origin.y, kbSize.height+100, 0);
@@ -139,23 +126,6 @@
     UIEdgeInsets contentInsets = UIEdgeInsetsZero;
     self.scrollView.contentInset = contentInsets;
     self.scrollView.scrollIndicatorInsets = contentInsets;
-}
-
-
--(void)setKeyBoardReturntypesAndDelegates{
-    /*
-    self.txt_userId.tag=0;
-    self.txtDisplayName.tag=1;
-    if (!self.textFieldDelegate) {
-        self.textFieldDelegate = [[CustomTextFieldDelegate alloc]init];
-        self.textFieldDelegate.owner =  self;
-    }
-    self.txt_userId.returnKeyType    = UIReturnKeyNext;
-    self.txtDisplayName.returnKeyType = UIReturnKeyGo;
-    self.txt_userId.delegate=self.textFieldDelegate;
-    self.txtDisplayName.delegate=self.textFieldDelegate;
-    self.textFieldDelegate.selector = @selector(onLogin:);
-    */
 }
 
 -(void)setLabelButtonNames{
@@ -207,8 +177,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
-    _txt_userId.text = [self randomUser];
-    _txtDisplayName.text=[self returnSavedDisplayname];
+    //_txt_userId.text = [self randomUser];
+    //_txtDisplayName.text=[self returnSavedDisplayname];
     [self autorize];
     
    
@@ -318,25 +288,59 @@
     //[self.view addSubview:viewIs]; //Alert View Custom
     //[App_Delegate takeTour];//Take a Tour
     
+    if (self.txt_userId.text.length<1)
+        [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                            withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(self.txt_userId.placeholder)]
+                                                 inView:self
+                                              withStyle:UIAlertControllerStyleAlert];
+    else if (self.txtDisplayName.text.length<1)
+        [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                            withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(self.txtDisplayName.placeholder)]
+                                                 inView:self
+                                              withStyle:UIAlertControllerStyleAlert];
     
-    if ([self isUserIdEmpty])
-        return;
+    else{
+        [self loginWebServiceCall];
+    }
+}
+
+-(void)loginWebServiceCall{
     
+    [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"Please wait...")]];
+    
+    [loginDictionary setObject:self.txtDisplayName.text forKey:PASSWORD];
+    [loginDictionary setObject:self.txt_userId.text forKey:EMAIL];
+    [loginDictionary setObject:@"Obaid@123" forKey:PASSWORD];
+    [loginDictionary setObject:@"obaidr@yopmail.com" forKey:EMAIL];
+
+    [Web_Service_Call serviceCall:loginDictionary webServicename:LOGIN SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+        NSDictionary *responseDict=responseObject;
+        [SVProgressHUD dismiss];
+         ///int codeIs = [[responseDict objectForKey:CODE] intValue];
+        //if (codeIs == 200)
+        {
+            //[self ooVooLogin];
+            [self createSidePanel];
+        }
+        
+    } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
+        [SVProgressHUD dismiss];
+    }];
+}
+
+-(void)ooVooLogin{
     [UserDefaults setObject:_txt_userId.text ForKey:UserDefault_UserId];
-    [UserDefaults setObject:_txtDisplayName.text ForKey:UserDefault_DisplayName];
-    
+    [UserDefaults setObject:_txt_userId.text ForKey:UserDefault_DisplayName];
     //[sender setEnabled:false];
     [spinner startAnimating];
     
-   
-
     [self.sdk.Account login:self.txt_userId.text
                  completion:^(SdkResult *result) {
                      NSLog(@"result code=%d result description %@", result.Result, result.description);
                      [spinner stopAnimating];
                      if (result.Result != sdk_error_OK){
                          [[[UIAlertView alloc] initWithTitle:@"Login Error" message:result.description delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
-                          [self.loginButton setEnabled:true];
+                         [self.loginButton setEnabled:true];
                      }
                      else
                      {
@@ -346,7 +350,6 @@
                      }
                  }];
 }
-
 
 -(void)popUpButtonClicked:(UIButton *)sender{
    
@@ -364,29 +367,6 @@
 
 
 #pragma mark - private methods
-
-- (BOOL)isUserIdEmpty {
-
-    // removing white space from start and end
-    if ([[self.txt_userId.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"UserId Missing" message:@"Please enter userId " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-        [alert show];
-
-        self.txt_userId.text = @"";
-
-        return true;
-    }
-
-    if (self.txt_userId.text.length < 6) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Characters Missing" message:@"UserId Must contain at least 6 characters " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-        [alert show];
-
-        return true;
-    }
-
-    return false;
-}
-
 
 - (void)onLogin:(BOOL)error {
     if (!error) {
@@ -866,8 +846,9 @@
 
 -(void)createSidePanel{
     
-    
-    
+    SlideMenuViewController *slideMenu = [Utility_Shared_Instance getControllerForIdentifier:@"DashBoardViewController"];
+    [self.navigationController pushViewController:slideMenu animated:YES];
+    /*
     UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:@"DashBoardViewController"]];
     
     
@@ -876,6 +857,7 @@
                                                                                rightSidebarViewController:nil];
     
     appDelegate.window.rootViewController = sidebarController;
+    */
     
 }
 
@@ -895,5 +877,8 @@
     return YES;
 }
 
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
+}
 
 @end
