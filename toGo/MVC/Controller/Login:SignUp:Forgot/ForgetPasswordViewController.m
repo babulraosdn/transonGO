@@ -83,7 +83,7 @@
 
 -(void)setPadding{
     self.emailTextField.leftViewMode=UITextFieldViewModeAlways;
-    self.emailTextField.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"EMAIL_PADDING_IMAGE") frame:CGRectMake(10, 3, 20, 13)];
+    self.emailTextField.leftView=[Utility_Shared_Instance setImageViewPadding:EMAIL_PADDING_IMAGE frame:CGRectMake(10, 3, 20, 13)];
 }
 
 -(void)setColors{

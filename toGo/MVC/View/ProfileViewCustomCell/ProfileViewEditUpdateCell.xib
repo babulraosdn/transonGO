@@ -32,6 +32,7 @@
                         <textInputTraits key="textInputTraits"/>
                     </textField>
                 </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </tableViewCellContentView>
             <connections>
                 <outlet property="descriptionTextField" destination="TEB-Dk-ILk" id="jzw-XT-Mzo"/>

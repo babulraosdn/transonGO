@@ -40,6 +40,13 @@
     return image;
 }
 
++ (UIImage *)defaultPicImage{
+    static UIImage *image=nil;
+    if (!image) image = [UIImage imageNamed:DEFAULT_PIC];
+    return image;
+}
+
+
 + (UIImage *)setColor:(UIColor *)color frame:(CGRect)frame{
     UIView *colorView = [[UIView alloc] initWithFrame:frame];
     colorView.backgroundColor = color;

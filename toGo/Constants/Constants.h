@@ -52,57 +52,78 @@ _Pragma("clang diagnostic pop") \
 #define GooglePlusClientID            @"506861358610-uc2of0fda4oh8meq6jvs9m4l5sbf8qcm.apps.googleusercontent.com"
 #define ApplicationOpenGoogleAuthNotification @"ApplicationOpenGoogleAuthNotification"
 
-#define FacebookAPI_Key               @"1634906070093280"
-#define kPublicProfile @"public_profile"
-#define kBirthday @"user_birthday"
-#define kLocation @"user_location"
-#define kEmail @"email"
+#define FacebookAPI_Key             @"1634906070093280"
+#define kPublicProfile              @"public_profile"
+#define kBirthday                   @"user_birthday"
+#define kLocation                   @"user_location"
+#define kEmail                      @"email"
 
 //********************  WebService   ****************************************
 #pragma mark WebService Calls
-#define BASE_URL @"http://172.10.55.110:3000/"
-#define LOGIN @"authenticate"
-#define SIGNUP @"signup"
-#define FORGOTPASSWORD @"forgot"
+#define BASE_URL                    @"http://172.10.55.110:3000/"
+#define LOGIN                       @"authenticate"
+#define SIGNUP                      @"signup"
+#define FORGOTPASSWORD              @"forgot"
 
 
 //********************  ooVoo App Details   ****************************************
 #pragma mark ooVoo App Details
-#define ooVooAppID @"12349983355077"
+#define ooVooAppID                  @"12349983355077"
 
 
 //********************  Image Names   ****************************************
 #pragma mark Image Names
-#define SLIDE_IMAGE             @"slide-menu-button-icon"
-#define ACCOUNT_IMAGE           @"account"
-
+#define SLIDE_IMAGE                 @"drawer-ico"
+#define LOGOUT_IMAGE                @"logout_iPhone"
+#define BACK_IMAGE                  @"back_icon_iPhone"
+#define ACCOUNT_IMAGE               @"account"
+#define EMAIL_PADDING_IMAGE         @"email_icon_iPhone"
+#define USER_ID_PADDING_IMAGE       @"user_icon_iPhone"
+#define PASSWORD_PADDING_IMAGE      @"password_icon_iPhone"
+#define DEFAULT_PIC_IMAGE           @"default_pic_iPhone"
+//SlideMenu
+#define CALL_HISTORY_IMAGE          @"call_history_icon_iPhone"
+#define FAV_INTERPRETER_IMAGE       @"fav_interpreter_icon_iPhone"
+#define ORDER_INTERPRETER_IMAGE     @"order_interpreter_iPhone"
+#define PROFILE_IMAGE               @"profile_icon_iPhone"
+#define PURCHASE_IMAGE              @"purchase_icon_iPhone"
+#define SETTINGS_IMAGE              @"Settings_icon_iPhone"
+///
 
 //********************  Colors CODES  ****************************************
 #pragma mark Colors Codes
-#define BLACK_COLOR @""
-#define WHITE_COLOR @""
-#define GRAY_COLOR @"848484"
-#define DARK_ORANGE @"2551400"
+#define BLACK_COLOR                 @""
+#define WHITE_COLOR                 @""
+#define GRAY_COLOR                  @"848484"
+#define DARK_ORANGE                 @"2551400"
 
 //********************  Strings Constants   ****************************************
 #pragma mark Strings Constants
-#define FACEBOOK @"facebbok"
-#define TWITTER @"twitter"
-#define LINKEDIN @"linkedin"
-#define GOOGLE_PLUS @"google plus"
+#define FACEBOOK                    @"facebbok"
+#define TWITTER                     @"twitter"
+#define LINKEDIN                    @"linkedin"
+#define GOOGLE_PLUS                 @"google plus"
 
 #pragma mark WebService Strings Constants
-#define INTERPRETER @"interpreter"
-#define CUSTOMER @"customer"
+#define INTERPRETER                 @"interpreter"
+#define CUSTOMER                    @"customer"
 
 //********************  WebService Parameters   ****************************************
 #pragma mark WebService Parameters
-#define USERNAME @"username"
-#define EMAIL @"email"
-#define PASSWORD @"password"
-#define TYPE @"type"
-#define CODE @"code"
+#define USERNAME                    @"username"
+#define EMAIL                       @"email"
+#define PASSWORD                    @"password"
+#define TYPE                        @"type"
+#define CODE                        @"code"
 
+//********************  ViewConroller Names  ****************************************
+#define PROFILE_VIEW_CONTROLLER                 @"ProfileViewEditViewController"
+#define LOGIN_VIEW_CONTROLLER                   @"LoginViewController"
+#define DASHBOARD_USER_VIEW_CONTROLLER          @"DashBoardViewController"
+#define DASHBOARD_INTERPRETER_VIEW_CONTROLLER   @"DashboardInterpreterViewController"
+#define SETTINGS_VIEW_CONTROLLER                @"SettingsViewController"
+#define SLIDE_MENU_VIEW_CONTROLLER              @"SlideMenuViewController"
+#define FEEDBACK_LIST_VIEW_CONTROLLER           @"FeedBackListViewController"
 
 
 #endif

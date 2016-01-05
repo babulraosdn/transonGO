@@ -18,7 +18,8 @@
 }
 @property(nonatomic,weak) IBOutlet UITableView *tblView;
 @property(nonatomic,strong) NSMutableArray *namesArray;
-@property(nonatomic,strong) NSMutableArray *imagesArray;
+@property(nonatomic,strong) NSMutableArray *imagesNamesArray;
+@property(nonatomic,strong) NSMutableArray *colorCodesArray;
 @end
 
 @implementation SlideMenuViewController
@@ -26,11 +27,34 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor = [UIColor backgroundColor];
+    self.view.backgroundColor = [UIColor slideMenuBackgroundColor];//This changes the statusbar Color
+    self.tblView.backgroundColor = [UIColor slideMenuBackgroundColor];//This is table view back goring color
     appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
-    self.namesArray = [[NSMutableArray alloc]initWithObjects:NSLOCALIZEDSTRING(@"PROFILE"),NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION"),NSLOCALIZEDSTRING(@"CALL_HISTORY"),NSLOCALIZEDSTRING(@"PURCHASES"),NSLOCALIZEDSTRING(@"FAVORITE_INTERPRETER"),NSLOCALIZEDSTRING(@"SETTINGS"), nil];
+    self.namesArray = [[NSMutableArray alloc]initWithObjects:
+                       NSLOCALIZEDSTRING(@"PROFILE"),
+                       NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION"),
+                       NSLOCALIZEDSTRING(@"CALL_HISTORY"),
+                       NSLOCALIZEDSTRING(@"PURCHASES"),
+                       NSLOCALIZEDSTRING(@"FAVORITE_INTERPRETER"),
+                       NSLOCALIZEDSTRING(@"SETTINGS"), nil];
+    self.imagesNamesArray = [[NSMutableArray alloc]initWithObjects:
+                       PROFILE_IMAGE,
+                       ORDER_INTERPRETER_IMAGE,
+                       CALL_HISTORY_IMAGE,
+                       PURCHASE_IMAGE,
+                       FAV_INTERPRETER_IMAGE,
+                       SETTINGS_IMAGE, nil];
+    self.colorCodesArray = [[NSMutableArray alloc]initWithObjects:
+                            [UIColor slideMenuBackgroundColorRow1],
+                            [UIColor slideMenuBackgroundColorRow2],
+                            [UIColor slideMenuBackgroundColorRow3],
+                            [UIColor slideMenuBackgroundColorRow4],
+                            [UIColor slideMenuBackgroundColorRow5],
+                            [UIColor slideMenuBackgroundColorRow6], nil];
+    
 }
 
+#pragma Mark TableView Delegate Methods
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.namesArray.count;
 }
@@ -42,7 +66,9 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     SlideMenuCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SlideMenuCell"];
+    cell.displayImageView.image = [UIImage imageNamed:[self.imagesNamesArray objectAtIndex:indexPath.row]];
     cell.displayLabel.text = [self.namesArray objectAtIndex:indexPath.row];
+    cell.contentView.backgroundColor = [self.colorCodesArray objectAtIndex:indexPath.row];
     return cell;
 }
 
@@ -58,17 +84,43 @@
 //    FBSDKLoginManager *MANAGER  = [FBSDKLoginManager new];
 //    [MANAGER logOut];
     
-    FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
-    
-    if ( [FBSDKAccessToken currentAccessToken] ){
-        [login logOut];
+    self.sidebarController.delegate = nil;
+    [self.sidebarController dismissSidebarViewController];
+    NSString *selectedRowString = [self.namesArray objectAtIndex:indexPath.row];
+    UINavigationController *contentNaviationController;
+    if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"PROFILE")]){
+        contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:PROFILE_VIEW_CONTROLLER]];
+        self.sidebarController.contentViewController = contentNaviationController ;
     }
-    
-    [FBSDKAccessToken setCurrentAccessToken:nil];
-    [FBSDKProfile setCurrentProfile:nil];
-    
-    UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:@"LoginViewController"]];
-    appDelegate.window.rootViewController = contentNavigationController;
+    else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION")]){
+        
+    }
+    else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"CALL_HISTORY")]){
+        
+    }
+    else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"PURCHASES")]){
+        
+    }
+    else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"FAVORITE_INTERPRETER")]){
+        
+    }
+    else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"SETTINGS")]){
+        
+        contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:SETTINGS_VIEW_CONTROLLER]];
+        self.sidebarController.contentViewController = contentNaviationController ;
+        return;
+        
+        FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+        if ( [FBSDKAccessToken currentAccessToken] ){
+            [login logOut];
+        }
+        
+        [FBSDKAccessToken setCurrentAccessToken:nil];
+        [FBSDKProfile setCurrentProfile:nil];
+        
+        UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:@"LoginViewController"]];
+        appDelegate.window.rootViewController = contentNavigationController;
+    }
 }
 
 - (void)didReceiveMemoryWarning {

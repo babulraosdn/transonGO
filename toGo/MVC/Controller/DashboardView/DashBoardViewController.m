@@ -12,7 +12,20 @@
 @interface DashBoardViewController (){
     AppDelegate  *appDelegate;
 }
-
+@property (weak, nonatomic) IBOutlet UIButton *provideFeedBackButton;
+@property (weak, nonatomic) IBOutlet UIButton *viewPurchaseHistoryButton;
+@property (weak, nonatomic) IBOutlet UIButton *manageMyProfileButton;
+@property (weak, nonatomic) IBOutlet UIButton *orderInterpretationButton;
+@property (weak, nonatomic) IBOutlet UILabel *emailIDDetailLabel;
+@property (weak, nonatomic) IBOutlet UILabel *emailIDLabel;
+@property (weak, nonatomic) IBOutlet UILabel *myLanguageDetailLabel;
+@property (weak, nonatomic) IBOutlet UILabel *myLanguageLabel;
+@property (weak, nonatomic) IBOutlet UITextView *descriptionTextView;
+@property (weak, nonatomic) IBOutlet UILabel *countryLabel;
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *headerLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *defaultImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *defaultPicBackgroundImageView;
 @end
 
 @implementation DashBoardViewController
@@ -26,9 +39,9 @@
     self.title = NSLOCALIZEDSTRING(@"TOGO");
     self.view.backgroundColor = [UIColor backgroundColor];
     
-    //[self setSlideMenuButtonFornavigation];
+    [self setSlideMenuButtonFornavigation];
+    [self setLogoutButtonForNavigation];
 }
-
 
 
 - (void)didReceiveMemoryWarning {

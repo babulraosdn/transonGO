@@ -93,6 +93,9 @@
 		ED9CCDD11C2BBCD100FA2C5A /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED9CCDCE1C2BBCD100FA2C5A /* TwitterKit.framework */; settings = {ASSET_TAGS = (); }; };
 		ED9CCDD21C2BBCD100FA2C5A /* TwitterKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ED9CCDCF1C2BBCD100FA2C5A /* TwitterKitResources.bundle */; settings = {ASSET_TAGS = (); }; };
 		ED9CCDD31C2BBCD100FA2C5A /* TwitterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED9CCDD01C2BBCD100FA2C5A /* TwitterCore.framework */; settings = {ASSET_TAGS = (); }; };
+		EDA374791C3BBDAF00288BA2 /* DashboardInterpreterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EDA374781C3BBDAF00288BA2 /* DashboardInterpreterViewController.m */; settings = {ASSET_TAGS = (); }; };
+		EDAFD9C71C3BD8CE008442A1 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EDAFD9C61C3BD8CE008442A1 /* SettingsViewController.m */; settings = {ASSET_TAGS = (); }; };
+		EDAFD9CB1C3BDA06008442A1 /* FeedBackListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EDAFD9CA1C3BDA06008442A1 /* FeedBackListViewController.m */; settings = {ASSET_TAGS = (); }; };
 		EDCC77FC1C2BB489005A9607 /* ooVooSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDCC77FB1C2BB489005A9607 /* ooVooSDK.framework */; settings = {ASSET_TAGS = (); }; };
 		EDE22E641C3A9B3900923ADF /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EDE22E541C3A9B3900923ADF /* Roboto-Black.ttf */; settings = {ASSET_TAGS = (); }; };
 		EDE22E651C3A9B3900923ADF /* Roboto-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EDE22E551C3A9B3900923ADF /* Roboto-BlackItalic.ttf */; settings = {ASSET_TAGS = (); }; };
@@ -280,6 +283,12 @@
 		ED9CCDCE1C2BBCD100FA2C5A /* TwitterKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterKit.framework; sourceTree = "<group>"; };
 		ED9CCDCF1C2BBCD100FA2C5A /* TwitterKitResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TwitterKitResources.bundle; sourceTree = "<group>"; };
 		ED9CCDD01C2BBCD100FA2C5A /* TwitterCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterCore.framework; sourceTree = "<group>"; };
+		EDA374771C3BBDAF00288BA2 /* DashboardInterpreterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashboardInterpreterViewController.h; sourceTree = "<group>"; };
+		EDA374781C3BBDAF00288BA2 /* DashboardInterpreterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashboardInterpreterViewController.m; sourceTree = "<group>"; };
+		EDAFD9C51C3BD8CE008442A1 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		EDAFD9C61C3BD8CE008442A1 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		EDAFD9C91C3BDA05008442A1 /* FeedBackListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedBackListViewController.h; sourceTree = "<group>"; };
+		EDAFD9CA1C3BDA06008442A1 /* FeedBackListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedBackListViewController.m; sourceTree = "<group>"; };
 		EDCC77FB1C2BB489005A9607 /* ooVooSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ooVooSDK.framework; sourceTree = "<group>"; };
 		EDE22E541C3A9B3900923ADF /* Roboto-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Black.ttf"; sourceTree = "<group>"; };
 		EDE22E551C3A9B3900923ADF /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-BlackItalic.ttf"; sourceTree = "<group>"; };
@@ -432,11 +441,14 @@
 			isa = PBXGroup;
 			children = (
 				ED1B7EC51C2AA48600C49026 /* BaseViewController */,
-				ED2F28151C316258003D8C82 /* ProfileUpdate */,
 				ED1B7ED41C2AA48600C49026 /* Login:SignUp:Forgot */,
-				ED1B7ECE1C2AA48600C49026 /* ContactsList */,
-				ED1B7ED11C2AA48600C49026 /* DashboardView */,
 				ED1B7EDD1C2AA48600C49026 /* SlideMenu */,
+				EDA374761C3BBD9700288BA2 /* DashBoard_Interpreter */,
+				ED1B7ED11C2AA48600C49026 /* DashboardView */,
+				ED2F28151C316258003D8C82 /* ProfileUpdate */,
+				EDAFD9C81C3BD9EA008442A1 /* FeedBackList */,
+				EDAFD9C41C3BD8C0008442A1 /* Settings */,
+				ED1B7ECE1C2AA48600C49026 /* ContactsList */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -962,6 +974,33 @@
 			path = Twitter;
 			sourceTree = "<group>";
 		};
+		EDA374761C3BBD9700288BA2 /* DashBoard_Interpreter */ = {
+			isa = PBXGroup;
+			children = (
+				EDA374771C3BBDAF00288BA2 /* DashboardInterpreterViewController.h */,
+				EDA374781C3BBDAF00288BA2 /* DashboardInterpreterViewController.m */,
+			);
+			path = DashBoard_Interpreter;
+			sourceTree = "<group>";
+		};
+		EDAFD9C41C3BD8C0008442A1 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				EDAFD9C51C3BD8CE008442A1 /* SettingsViewController.h */,
+				EDAFD9C61C3BD8CE008442A1 /* SettingsViewController.m */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		EDAFD9C81C3BD9EA008442A1 /* FeedBackList */ = {
+			isa = PBXGroup;
+			children = (
+				EDAFD9C91C3BDA05008442A1 /* FeedBackListViewController.h */,
+				EDAFD9CA1C3BDA06008442A1 /* FeedBackListViewController.m */,
+			);
+			path = FeedBackList;
+			sourceTree = "<group>";
+		};
 		EDCC77FA1C2BB489005A9607 /* ooVoo */ = {
 			isa = PBXGroup;
 			children = (
@@ -1301,6 +1340,7 @@
 				ED8B51E21C1EEFED00CA7306 /* UserVideoPanel.m in Sources */,
 				EDFD7E0B1C27C68100E4FEEB /* UITextField+toGo.m in Sources */,
 				ED8B51EC1C1EEFED00CA7306 /* TableListVC.m in Sources */,
+				EDAFD9C71C3BD8CE008442A1 /* SettingsViewController.m in Sources */,
 				ED1B7EF01C2AA48600C49026 /* DashBoardViewController.m in Sources */,
 				ED8B51EA1C1EEFED00CA7306 /* MessageManager.m in Sources */,
 				EDFD7E121C27CB8B00E4FEEB /* FileLogger.m in Sources */,
@@ -1347,7 +1387,9 @@
 				ED2F28061C310E3B003D8C82 /* UIView+toGo.m in Sources */,
 				ED8B51651C1EEF7000CA7306 /* AppDelegate.m in Sources */,
 				ED8B51621C1EEF7000CA7306 /* main.m in Sources */,
+				EDAFD9CB1C3BDA06008442A1 /* FeedBackListViewController.m in Sources */,
 				ED1B7EF11C2AA48600C49026 /* ForgetPasswordViewController.m in Sources */,
+				EDA374791C3BBDAF00288BA2 /* DashboardInterpreterViewController.m in Sources */,
 				ED8B51E31C1EEFED00CA7306 /* UserVideoPanelRender.m in Sources */,
 				ED8B51E91C1EEFED00CA7306 /* MenuConferenceVC.m in Sources */,
 			);

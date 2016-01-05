@@ -112,16 +112,16 @@
 
 -(void)setPadding{
     self.usernameTextField.leftViewMode=UITextFieldViewModeAlways;
-    self.usernameTextField.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"USER_ID_PADDING_IMAGE") frame:CGRectMake(10, 1, 16, 16)];
+    self.usernameTextField.leftView=[Utility_Shared_Instance setImageViewPadding:USER_ID_PADDING_IMAGE frame:CGRectMake(10, 1, 16, 16)];
     
     self.emaillTextField.leftViewMode=UITextFieldViewModeAlways;
-    self.emaillTextField.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"EMAIL_PADDING_IMAGE") frame:CGRectMake(10, 3, 20, 13)];
+    self.emaillTextField.leftView=[Utility_Shared_Instance setImageViewPadding:EMAIL_PADDING_IMAGE frame:CGRectMake(10, 3, 20, 13)];
     
     self.passwordTextField.leftViewMode=UITextFieldViewModeAlways;
-    self.passwordTextField.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"PASSWORD_PADDING_IMAGE") frame:CGRectMake(10, -3, 15, 20)];
+    self.passwordTextField.leftView=[Utility_Shared_Instance setImageViewPadding:PASSWORD_PADDING_IMAGE frame:CGRectMake(10, -3, 15, 20)];
     
     self.confirmpasswordTextField.leftViewMode=UITextFieldViewModeAlways;
-    self.confirmpasswordTextField.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"PASSWORD_PADDING_IMAGE") frame:CGRectMake(10, -1, 15, 20)];
+    self.confirmpasswordTextField.leftView=[Utility_Shared_Instance setImageViewPadding:PASSWORD_PADDING_IMAGE frame:CGRectMake(10, -1, 15, 20)];
 }
 
 -(void)setColors{

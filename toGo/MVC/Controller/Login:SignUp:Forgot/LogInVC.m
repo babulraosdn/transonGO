@@ -149,10 +149,10 @@
 
 -(void)setPadding{
     self.txt_userId.leftViewMode=UITextFieldViewModeAlways;
-    self.txt_userId.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"USER_ID_PADDING_IMAGE") frame:CGRectMake(10, 0, 16, 16)];
+    self.txt_userId.leftView=[Utility_Shared_Instance setImageViewPadding:USER_ID_PADDING_IMAGE frame:CGRectMake(10, 0, 16, 16)];
     
     self.txtDisplayName.leftViewMode=UITextFieldViewModeAlways;
-    self.txtDisplayName.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"PASSWORD_PADDING_IMAGE") frame:CGRectMake(10, 0, 15, 20)];
+    self.txtDisplayName.leftView=[Utility_Shared_Instance setImageViewPadding:PASSWORD_PADDING_IMAGE frame:CGRectMake(10, 0, 15, 20)];
 }
 
 -(void)setColors{
@@ -283,6 +283,10 @@
 
 - (IBAction)act_LogIn:(id)sender {
     
+    [self createSidePanel];
+    return;
+    
+    
     AlertViewCustom *alertView = [[AlertViewCustom alloc]init];
     UIView *viewIs = [alertView showAlertViewWithMessage:@"Please confirm the Registration by clicking the verification link on email" headingLabel:@"Confirm Registration" confirmButtonName:@"Confirm" cancelButtonName:@"Cancel" viewIs:self.view];
     //[self.view addSubview:viewIs]; //Alert View Custom
@@ -300,6 +304,7 @@
                                               withStyle:UIAlertControllerStyleAlert];
     
     else{
+        [self.view endEditing:YES];
         [self loginWebServiceCall];
     }
 }
@@ -319,8 +324,7 @@
          ///int codeIs = [[responseDict objectForKey:CODE] intValue];
         //if (codeIs == 200)
         {
-            //[self ooVooLogin];
-            [self createSidePanel];
+            [self ooVooLogin];
         }
         
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
@@ -445,7 +449,6 @@
              NSLog(@"error: %@", [error localizedDescription]);
          }
      }];
-    
 }
 
 -(IBAction)loginWithSoicalAccounts:(id)sender{
@@ -845,11 +848,9 @@
 
 
 -(void)createSidePanel{
+
     
-    SlideMenuViewController *slideMenu = [Utility_Shared_Instance getControllerForIdentifier:@"DashBoardViewController"];
-    [self.navigationController pushViewController:slideMenu animated:YES];
-    /*
-    UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:@"DashBoardViewController"]];
+    UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_INTERPRETER_VIEW_CONTROLLER]];//DashBoardViewController
     
     
     TheSidebarController *sidebarController = [[TheSidebarController alloc] initWithContentViewController:contentNavigationController
@@ -857,7 +858,7 @@
                                                                                rightSidebarViewController:nil];
     
     appDelegate.window.rootViewController = sidebarController;
-    */
+    
     
 }
 
