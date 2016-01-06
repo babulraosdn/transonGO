@@ -33,8 +33,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = NSLOCALIZEDSTRING(@"TOGO");
-    self.view.backgroundColor = [UIColor backgroundColor];
+
     [self allocationsAndStaticText];
     [self registerForKeyboardNotifications];
     [self setCustomBackButtonForNavigation];
@@ -132,8 +131,11 @@
 }
 
 -(void)setFonts{
+    self.registerAsLabel.font = [UIFont normalSize];
+    self.interpreterLabel.font = [UIFont smallBig];
+    self.customerLabel.font = [UIFont smallBig];
+    self.submitButton.titleLabel.font = [UIFont largeSize];
 }
-
 
 
 -(IBAction)webServiceCall:(id)sender {
@@ -179,10 +181,10 @@
 
 -(void)signUpWebServiceCall{
 
-    [signUpDictionary setObject:self.usernameTextField.text forKey:USERNAME];
-    [signUpDictionary setObject:self.passwordTextField.text forKey:PASSWORD];
-    [signUpDictionary setObject:self.emaillTextField.text forKey:EMAIL];
-    [signUpDictionary setObject:typeString forKey:TYPE];
+    [signUpDictionary setObject:self.usernameTextField.text forKey:KUSERNAME_W];
+    [signUpDictionary setObject:self.passwordTextField.text forKey:KPASSWORD_W];
+    [signUpDictionary setObject:self.emaillTextField.text forKey:KEMAIL_W];
+    [signUpDictionary setObject:typeString forKey:KTYPE_W];
     
     [Web_Service_Call serviceCall:signUpDictionary webServicename:SIGNUP SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         NSDictionary *dict=responseObject;

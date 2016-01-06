@@ -1,4 +1,4 @@
-           //
+            //
 //  LogInVC.m
 //  ooVooSdkSampleShow
 //
@@ -69,8 +69,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = NSLOCALIZEDSTRING(@"TOGO");
-    self.view.backgroundColor = [UIColor backgroundColor];
    
     [self allocationsAndStaticText];
     [self registerForKeyboardNotifications];
@@ -163,7 +161,11 @@
 }
 
 -(void)setFonts{
-    
+    self.forgotPasswordLabel.font = [UIFont small];
+    self.signUplabel.font = [UIFont small];
+    self.orlabel.font = [UIFont smaller];
+    self.connectWithLabel.font = [UIFont largeSizeThin];
+    self.loginButton.titleLabel.font = [UIFont largeSize];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -313,10 +315,10 @@
     
     [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"Please wait...")]];
     
-    [loginDictionary setObject:self.txtDisplayName.text forKey:PASSWORD];
-    [loginDictionary setObject:self.txt_userId.text forKey:EMAIL];
-    [loginDictionary setObject:@"Obaid@123" forKey:PASSWORD];
-    [loginDictionary setObject:@"obaidr@yopmail.com" forKey:EMAIL];
+    [loginDictionary setObject:self.txtDisplayName.text forKey:KPASSWORD_W];
+    [loginDictionary setObject:self.txt_userId.text forKey:KEMAIL_W];
+    [loginDictionary setObject:@"Obaid@123" forKey:KPASSWORD_W];
+    [loginDictionary setObject:@"obaidr@yopmail.com" forKey:KEMAIL_W];
 
     [Web_Service_Call serviceCall:loginDictionary webServicename:LOGIN SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         NSDictionary *responseDict=responseObject;

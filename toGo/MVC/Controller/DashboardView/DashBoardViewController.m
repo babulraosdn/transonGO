@@ -7,11 +7,8 @@
 //
 
 #import "DashBoardViewController.h"
-#import "AppDelegate.h"
 
-@interface DashBoardViewController (){
-    AppDelegate  *appDelegate;
-}
+@interface DashBoardViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *provideFeedBackButton;
 @property (weak, nonatomic) IBOutlet UIButton *viewPurchaseHistoryButton;
 @property (weak, nonatomic) IBOutlet UIButton *manageMyProfileButton;
@@ -33,11 +30,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
-    
-    self.title = NSLOCALIZEDSTRING(@"TOGO");
-    self.view.backgroundColor = [UIColor backgroundColor];
     
     [self setSlideMenuButtonFornavigation];
     [self setLogoutButtonForNavigation];

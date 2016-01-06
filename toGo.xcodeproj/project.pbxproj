@@ -21,6 +21,8 @@
 		ED1B7EF81C2AA48600C49026 /* SocialView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED1B7EE91C2AA48600C49026 /* SocialView.m */; settings = {ASSET_TAGS = (); }; };
 		ED1B7EFD1C2AA4A900C49026 /* Headers.m in Sources */ = {isa = PBXBuildFile; fileRef = ED1B7EFC1C2AA4A900C49026 /* Headers.m */; settings = {ASSET_TAGS = (); }; };
 		ED1B7F001C2AA50E00C49026 /* LogInVC.m in Sources */ = {isa = PBXBuildFile; fileRef = ED1B7EFF1C2AA50E00C49026 /* LogInVC.m */; settings = {ASSET_TAGS = (); }; };
+		ED1FF0591C3CCD4B0048BAD8 /* ProfileImageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ED1FF0571C3CCD4B0048BAD8 /* ProfileImageTableViewCell.m */; settings = {ASSET_TAGS = (); }; };
+		ED1FF05A1C3CCD4B0048BAD8 /* ProfileImageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ED1FF0581C3CCD4B0048BAD8 /* ProfileImageTableViewCell.xib */; settings = {ASSET_TAGS = (); }; };
 		ED2F28061C310E3B003D8C82 /* UIView+toGo.m in Sources */ = {isa = PBXBuildFile; fileRef = ED2F28051C310E3B003D8C82 /* UIView+toGo.m */; settings = {ASSET_TAGS = (); }; };
 		ED2F280A1C311B89003D8C82 /* TakeTourView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED2F28091C311B89003D8C82 /* TakeTourView.m */; settings = {ASSET_TAGS = (); }; };
 		ED2F28181C31629A003D8C82 /* ProfileViewEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED2F28171C31629A003D8C82 /* ProfileViewEditViewController.m */; settings = {ASSET_TAGS = (); }; };
@@ -97,6 +99,7 @@
 		EDAFD9C71C3BD8CE008442A1 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EDAFD9C61C3BD8CE008442A1 /* SettingsViewController.m */; settings = {ASSET_TAGS = (); }; };
 		EDAFD9CB1C3BDA06008442A1 /* FeedBackListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EDAFD9CA1C3BDA06008442A1 /* FeedBackListViewController.m */; settings = {ASSET_TAGS = (); }; };
 		EDCC77FC1C2BB489005A9607 /* ooVooSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDCC77FB1C2BB489005A9607 /* ooVooSDK.framework */; settings = {ASSET_TAGS = (); }; };
+		EDDF16E61C3D4B64006E4DD7 /* MyLanguagesView.m in Sources */ = {isa = PBXBuildFile; fileRef = EDDF16E51C3D4B64006E4DD7 /* MyLanguagesView.m */; settings = {ASSET_TAGS = (); }; };
 		EDE22E641C3A9B3900923ADF /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EDE22E541C3A9B3900923ADF /* Roboto-Black.ttf */; settings = {ASSET_TAGS = (); }; };
 		EDE22E651C3A9B3900923ADF /* Roboto-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EDE22E551C3A9B3900923ADF /* Roboto-BlackItalic.ttf */; settings = {ASSET_TAGS = (); }; };
 		EDE22E661C3A9B3900923ADF /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EDE22E561C3A9B3900923ADF /* Roboto-Bold.ttf */; settings = {ASSET_TAGS = (); }; };
@@ -172,6 +175,9 @@
 		ED1B7EFC1C2AA4A900C49026 /* Headers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Headers.m; sourceTree = "<group>"; };
 		ED1B7EFE1C2AA50E00C49026 /* LogInVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogInVC.h; sourceTree = "<group>"; };
 		ED1B7EFF1C2AA50E00C49026 /* LogInVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogInVC.m; sourceTree = "<group>"; };
+		ED1FF0561C3CCD4B0048BAD8 /* ProfileImageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileImageTableViewCell.h; sourceTree = "<group>"; };
+		ED1FF0571C3CCD4B0048BAD8 /* ProfileImageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileImageTableViewCell.m; sourceTree = "<group>"; };
+		ED1FF0581C3CCD4B0048BAD8 /* ProfileImageTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileImageTableViewCell.xib; sourceTree = "<group>"; };
 		ED2F28041C310E3B003D8C82 /* UIView+toGo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+toGo.h"; sourceTree = "<group>"; };
 		ED2F28051C310E3B003D8C82 /* UIView+toGo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+toGo.m"; sourceTree = "<group>"; };
 		ED2F28081C311B89003D8C82 /* TakeTourView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TakeTourView.h; sourceTree = "<group>"; };
@@ -290,6 +296,8 @@
 		EDAFD9C91C3BDA05008442A1 /* FeedBackListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedBackListViewController.h; sourceTree = "<group>"; };
 		EDAFD9CA1C3BDA06008442A1 /* FeedBackListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedBackListViewController.m; sourceTree = "<group>"; };
 		EDCC77FB1C2BB489005A9607 /* ooVooSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ooVooSDK.framework; sourceTree = "<group>"; };
+		EDDF16E41C3D4B64006E4DD7 /* MyLanguagesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLanguagesView.h; sourceTree = "<group>"; };
+		EDDF16E51C3D4B64006E4DD7 /* MyLanguagesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLanguagesView.m; sourceTree = "<group>"; };
 		EDE22E541C3A9B3900923ADF /* Roboto-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Black.ttf"; sourceTree = "<group>"; };
 		EDE22E551C3A9B3900923ADF /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-BlackItalic.ttf"; sourceTree = "<group>"; };
 		EDE22E561C3A9B3900923ADF /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
@@ -545,6 +553,7 @@
 		ED1B7EEA1C2AA48600C49026 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				EDDF16E31C3D4B4D006E4DD7 /* MyLanguagesView */,
 				ED2F281D1C3164B3003D8C82 /* AlertViewCustom */,
 				ED2F28191C3162C5003D8C82 /* ProfileViewCustomCell */,
 				ED2F28071C311B82003D8C82 /* TourView */,
@@ -595,6 +604,9 @@
 				ED2F281A1C3162E8003D8C82 /* ProfileViewEditUpdateCell.h */,
 				ED2F281B1C3162E8003D8C82 /* ProfileViewEditUpdateCell.m */,
 				ED2F28211C316591003D8C82 /* ProfileViewEditUpdateCell.xib */,
+				ED1FF0561C3CCD4B0048BAD8 /* ProfileImageTableViewCell.h */,
+				ED1FF0571C3CCD4B0048BAD8 /* ProfileImageTableViewCell.m */,
+				ED1FF0581C3CCD4B0048BAD8 /* ProfileImageTableViewCell.xib */,
 			);
 			path = ProfileViewCustomCell;
 			sourceTree = "<group>";
@@ -1009,6 +1021,15 @@
 			path = ooVoo;
 			sourceTree = "<group>";
 		};
+		EDDF16E31C3D4B4D006E4DD7 /* MyLanguagesView */ = {
+			isa = PBXGroup;
+			children = (
+				EDDF16E41C3D4B64006E4DD7 /* MyLanguagesView.h */,
+				EDDF16E51C3D4B64006E4DD7 /* MyLanguagesView.m */,
+			);
+			path = MyLanguagesView;
+			sourceTree = "<group>";
+		};
 		EDE22E511C3A9B3900923ADF /* Assests */ = {
 			isa = PBXGroup;
 			children = (
@@ -1236,6 +1257,7 @@
 				ED08F1BC1C324A0F005569E9 /* Assets.xcassets in Resources */,
 				ED437C081C1FDD1100DB68E0 /* GooglePlus.bundle in Resources */,
 				ED2F28221C316591003D8C82 /* ProfileViewEditUpdateCell.xib in Resources */,
+				ED1FF05A1C3CCD4B0048BAD8 /* ProfileImageTableViewCell.xib in Resources */,
 				EDE22E681C3A9B3900923ADF /* Roboto-BoldCondensedItalic.ttf in Resources */,
 				ED9CCDD21C2BBCD100FA2C5A /* TwitterKitResources.bundle in Resources */,
 				EDE22E671C3A9B3900923ADF /* Roboto-BoldCondensed.ttf in Resources */,
@@ -1350,6 +1372,7 @@
 				ED2F28261C316E57003D8C82 /* ProfileInfoObject.m in Sources */,
 				ED8B51DE1C1EEFED00CA7306 /* CustomToolbarVC.m in Sources */,
 				ED2F281C1C3162E8003D8C82 /* ProfileViewEditUpdateCell.m in Sources */,
+				ED1FF0591C3CCD4B0048BAD8 /* ProfileImageTableViewCell.m in Sources */,
 				ED2F28201C3164B3003D8C82 /* AlertViewCustom.m in Sources */,
 				ED1B7F001C2AA50E00C49026 /* LogInVC.m in Sources */,
 				ED8B51E01C1EEFED00CA7306 /* UIActionSheet+Extensions.m in Sources */,
@@ -1370,6 +1393,7 @@
 				ED1B7EF31C2AA48600C49026 /* SignUpViewController.m in Sources */,
 				ED8B51E51C1EEFED00CA7306 /* InfoViewController.m in Sources */,
 				ED8B51EF1C1EEFED00CA7306 /* VideoFrameUser.m in Sources */,
+				EDDF16E61C3D4B64006E4DD7 /* MyLanguagesView.m in Sources */,
 				ED1B7EF81C2AA48600C49026 /* SocialView.m in Sources */,
 				ED1B7EEF1C2AA48600C49026 /* ContactsListViewController.m in Sources */,
 				ED2F280A1C311B89003D8C82 /* TakeTourView.m in Sources */,

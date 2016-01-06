@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "Headers.h"
-#import "AppDelegate.h"
-@interface BaseViewController : UIViewController
+
+@class AppDelegate;
+
+@interface BaseViewController : UIViewController{
+    AppDelegate  *appDelegate;
+}
 -(void)setSlideMenuButtonFornavigation;
 -(void)setLogoutButtonForNavigation;
 -(void)setCustomBackButtonForNavigation;

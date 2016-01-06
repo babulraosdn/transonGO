@@ -23,16 +23,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    self.title = NSLOCALIZEDSTRING(@"TOGO");
-    self.view.backgroundColor = [UIColor backgroundColor];
+
     [self setCustomBackButtonForNavigation];
+    [self setLabelButtonNames];
     [self setPlaceHolders];
     [self setRoundCorners];
     [self setPadding];
     [self setColors];
     [self setFonts];
-    
     [self registerForKeyboardNotifications];
     
 }
@@ -72,6 +70,9 @@
 
 -(void)setPlaceHolders{
     self.emailTextField.placeholder= NSLOCALIZEDSTRING(@"EMAIL");
+}
+
+-(void)setLabelButtonNames{
     self.displaylabel.text = NSLOCALIZEDSTRING(@"FILL_YOUR_EMAIL_ID_FORGOT_PASSWORD_SCREEN_TEXT");
     [self.submitButton setTitle:NSLOCALIZEDSTRING(@"SEND_EMAIL") forState:UIControlStateNormal];
 }
@@ -92,6 +93,8 @@
 }
 
 -(void)setFonts{
+    self.displaylabel.font = [UIFont normalSize];
+    self.submitButton.titleLabel.font = [UIFont largeSize];
 }
 
 

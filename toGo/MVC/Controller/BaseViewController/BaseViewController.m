@@ -16,7 +16,6 @@
 
 -(void)navigateToLoginView{
 
-    AppDelegate *appDelegate=(AppDelegate *)[[UIApplication sharedApplication]delegate];
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:LOGIN_VIEW_CONTROLLER]];
     appDelegate.window.rootViewController=navController;
     
@@ -27,6 +26,9 @@
     // Do any additional setup after loading the view.
     self.title = NSLOCALIZEDSTRING(@"TOGO");
     self.view.backgroundColor = [UIColor backgroundColor];
+    appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
+     [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName : [UIFont normalSize]}];
+     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor textColorWhiteColor]}];
 }
 
 -(void)setSlideMenuButtonFornavigation{

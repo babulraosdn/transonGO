@@ -13,5 +13,5 @@
 @property(nonatomic,weak) IBOutlet UITextField *descriptionTextField;
 @property(nonatomic,weak) IBOutlet UITextView *descriptionTextView;
 @property(nonatomic,weak) IBOutlet UIButton *editButton;
-@property(nonatomic,weak) IBOutlet UIButton *saveButton;
+@property(nonatomic,weak) IBOutlet UIImageView *editImageView;
 @end

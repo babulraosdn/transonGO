@@ -66,6 +66,18 @@
     return color;
 }
 
++ (UIColor *)textColorLightBrownColor{
+    static UIColor *color=nil;
+    if (!color) color = [UIColor LIGHT_BROWN_COLOR];
+    return color;
+}
+
++ (UIColor *)textColorDarkYellowColor{
+    static UIColor *color=nil;
+    if (!color) color = [UIColor DARK_YELLOW_COLOR];
+    return color;
+}
+
 + (UIColor *)slideMenuBackgroundColorRow1{
     static UIColor *color=nil;
     if (!color) color = [UIColor SLIDE_COLOR_ROW_1];

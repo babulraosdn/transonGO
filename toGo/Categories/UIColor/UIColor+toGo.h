@@ -17,6 +17,8 @@
 #define DARK_BACKGROUND_COLOR colorWithRed:190.0/255.0 green:179.0/255.0 blue:155.0/255.0 alpha:1.0
 #define TEXT_BLACK_COLOR colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:1.0
 #define TEXT_WHITE_COLOR colorWithRed:255.0/255.0 green:255.0/255.0 blue:255.0/255.0 alpha:1.0
+#define LIGHT_BROWN_COLOR colorWithRed:157.0/255.0 green:122.0/255.0 blue:84.0/255.0 alpha:1.0
+#define DARK_YELLOW_COLOR colorWithRed:224.0/255.0 green:147.0/255.0 blue:40.0/255.0 alpha:1.0
 
 
 #define SLIDE_COLOR_ROW_1 colorWithRed:180.0/255.0 green:149.0/255.0 blue:110.0/255.0 alpha:1.0
@@ -36,6 +38,8 @@
 + (UIColor *)darkBackgroundColor;
 + (UIColor *)textColorBlackColor;
 + (UIColor *)textColorWhiteColor;
++ (UIColor *)textColorLightBrownColor;
++ (UIColor *)textColorDarkYellowColor;
 
 + (UIColor *)slideMenuBackgroundColorRow1;
 + (UIColor *)slideMenuBackgroundColorRow2;

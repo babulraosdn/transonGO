@@ -110,11 +110,11 @@ _Pragma("clang diagnostic pop") \
 
 //********************  WebService Parameters   ****************************************
 #pragma mark WebService Parameters
-#define USERNAME                    @"username"
-#define EMAIL                       @"email"
-#define PASSWORD                    @"password"
-#define TYPE                        @"type"
-#define CODE                        @"code"
+#define KUSERNAME_W                    @"username"
+#define KEMAIL_W                       @"email"
+#define KPASSWORD_W                    @"password"
+#define KTYPE_W                        @"type"
+#define KCODE_W                        @"code"
 
 //********************  ViewConroller Names  ****************************************
 #define PROFILE_VIEW_CONTROLLER                 @"ProfileViewEditViewController"
@@ -125,5 +125,10 @@ _Pragma("clang diagnostic pop") \
 #define SLIDE_MENU_VIEW_CONTROLLER              @"SlideMenuViewController"
 #define FEEDBACK_LIST_VIEW_CONTROLLER           @"FeedBackListViewController"
 
-
+//********************  Font Names   ****************************************
+#define KFontFamily_ROBOTO_REGULAR                        @"Roboto-Regular"
+#define KFontFamily_ROBOTO_LIGHT                          @"Roboto-Light"
+#define KFontFamily_ROBOTO_BOLD                           @"Roboto-Bold"
+#define KFontFamily_ROBOTO_MEDIUM                         @"Roboto-Medium"
+#define KFontFamily_ROBOTO_THIN                           @"Roboto-Thin"
 #endif

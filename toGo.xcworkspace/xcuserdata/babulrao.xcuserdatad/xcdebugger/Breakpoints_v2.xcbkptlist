@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "toGo/MVC/Controller/BaseViewController/BaseViewController.m"
-            timestampString = "473678713.296074"
+            timestampString = "473756874.799058"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "57"
-            endingLineNumber = "57"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
             landmarkName = "-setCustomBackButtonForNavigation"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "toGo/MVC/Controller/BaseViewController/BaseViewController.m"
-            timestampString = "473678739.85073"
+            timestampString = "473756874.799058"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
+            startingLineNumber = "47"
+            endingLineNumber = "47"
             landmarkName = "-setLogoutButtonForNavigation"
             landmarkType = "5">
          </BreakpointContent>

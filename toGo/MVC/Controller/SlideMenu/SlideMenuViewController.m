@@ -27,7 +27,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.backgroundColor = [UIColor slideMenuBackgroundColor];//This changes the statusbar Color
+    self.view.backgroundColor = [UIColor navigationBarColor];//This changes the statusbar Color
     self.tblView.backgroundColor = [UIColor slideMenuBackgroundColor];//This is table view back goring color
     appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
     self.namesArray = [[NSMutableArray alloc]initWithObjects:
@@ -68,6 +68,7 @@
     SlideMenuCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SlideMenuCell"];
     cell.displayImageView.image = [UIImage imageNamed:[self.imagesNamesArray objectAtIndex:indexPath.row]];
     cell.displayLabel.text = [self.namesArray objectAtIndex:indexPath.row];
+    cell.displayLabel.font = [UIFont smallBig];
     cell.contentView.backgroundColor = [self.colorCodesArray objectAtIndex:indexPath.row];
     return cell;
 }
