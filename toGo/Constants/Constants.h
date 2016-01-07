@@ -58,13 +58,6 @@ _Pragma("clang diagnostic pop") \
 #define kLocation                   @"user_location"
 #define kEmail                      @"email"
 
-//********************  WebService   ****************************************
-#pragma mark WebService Calls
-#define BASE_URL                    @"http://172.10.55.110:3000/"
-#define LOGIN                       @"authenticate"
-#define SIGNUP                      @"signup"
-#define FORGOTPASSWORD              @"forgot"
-
 
 //********************  ooVoo App Details   ****************************************
 #pragma mark ooVoo App Details
@@ -104,17 +97,36 @@ _Pragma("clang diagnostic pop") \
 #define LINKEDIN                    @"linkedin"
 #define GOOGLE_PLUS                 @"google plus"
 
+//********************  WebService Strings Constants  ****************************************
 #pragma mark WebService Strings Constants
 #define INTERPRETER                 @"interpreter"
 #define CUSTOMER                    @"customer"
+#define NORMAL_LOGIN                @"0"
+#define FACEBOOK_LOGIN              @"1"
+#define TWITTER_LOGIN               @"1"
+#define GOOGLE_LOGIN                @"1"
+
+//********************  WebService Names  ****************************************
+#pragma mark WebService Calls
+#define BASE_URL                    @"http://172.10.55.110:3000/"
+#define LOGIN                       @"authenticate"
+#define SIGNUP                      @"signup"
+#define FORGOTPASSWORD              @"forgot"
+#define SOCIAL_LOGIN                @"loginSignUp"
 
 //********************  WebService Parameters   ****************************************
 #pragma mark WebService Parameters
 #define KUSERNAME_W                    @"username"
 #define KEMAIL_W                       @"email"
 #define KPASSWORD_W                    @"password"
-#define KTYPE_W                        @"type"
+#define KTYPE_W                        @"utype"
+#define KLOGIN_TYPE_W                   @"logintype"
+
+//********************  WebService Response Parameters   ****************************************
+#define KSUCCESS                       ((int)200)
 #define KCODE_W                        @"code"
+#define KMESSAGE_W                     @"message"
+
 
 //********************  ViewConroller Names  ****************************************
 #define PROFILE_VIEW_CONTROLLER                 @"ProfileViewEditViewController"

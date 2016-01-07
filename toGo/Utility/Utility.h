@@ -49,4 +49,8 @@ typedef void (^getImage)(UIImage *image);
 -(void) clearStringFromUserPreference:(NSString *) key;
 -(NSString *) readStringUserPreference:(NSString *) key;
 -(void)removeUserDefaults;
+
+#pragma mark Password Validation
+- (BOOL)passwordIsValid:(NSString *)password;
+
 @end

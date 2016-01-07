@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "Headers.h"
+
+@interface ProfileViewEditUpdateCell : UITableViewCell
+@property(nonatomic,weak) IBOutlet UILabel *headerLabel;
+@property(nonatomic,weak) IBOutlet UITextField *descriptionTextField;
+@property(nonatomic,weak) IBOutlet UITextView *descriptionTextView;
+@property(nonatomic,weak) IBOutlet UILabel *descriptionLabel;
+@property(nonatomic,weak) IBOutlet UIButton *editButton;
+@property(nonatomic,weak) IBOutlet UIImageView *editImageView;
+@end
+
 @interface ProfileViewEditViewController : BaseViewController
 
 @end

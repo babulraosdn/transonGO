@@ -116,20 +116,37 @@
         return;
     }
     else{
+        [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"PLEASE_WAIT")]];
         //WEB Service CODE
         NSMutableDictionary *forgetPasswordDict=[NSMutableDictionary new];
-        [forgetPasswordDict setValue:self.emailTextField.text forKey:NSLOCALIZEDSTRING(@"EMAIL")];
+        [forgetPasswordDict setValue:self.emailTextField.text forKey:KEMAIL_W];
         [Web_Service_Call serviceCall:forgetPasswordDict webServicename:FORGOTPASSWORD SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
-            //NSDictionary *dict=responseObject;
+            NSDictionary *responseDict=responseObject;
+            
+            if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
+            {
+                //[self.navigationController popViewControllerAnimated:YES];//Not Working
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [SVProgressHUD dismiss];
+                    [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                        withMessage:[responseDict objectForKey:KMESSAGE_W]
+                                                             inView:self
+                                                          withStyle:UIAlertControllerStyleAlert];
+                    
+                });
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                });
+            }
         } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+                [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                    withMessage:[responseObject objectForKey:KMESSAGE_W]
+                                                         inView:self
+                                                      withStyle:UIAlertControllerStyleAlert];
+            });
         }];
-        
-        [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                            withMessage:NSLOCALIZEDSTRING(@"FORGET_PASSWORD_SUCCESS")
-                                                 inView:self
-                                              withStyle:UIAlertControllerStyleAlert];
-        
-        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 

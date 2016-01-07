@@ -43,13 +43,10 @@
     [self setPadding];
     [self setColors];
     [self setFonts];
-    
-    
 }
 
 -(void)viewDidLayoutSubviews{
-    //_scrollView.contentSize=CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-64);
-    
+
 }
 
 -(void)allocationsAndStaticText{
@@ -157,14 +154,14 @@
                                             withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(@"VALID_EMAILID")]
                                                  inView:self
                                               withStyle:UIAlertControllerStyleAlert];
-    else if (self.passwordTextField.text.length<1)
+    else if (![Utility_Shared_Instance passwordIsValid:self.passwordTextField.text])
         [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                            withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(self.passwordTextField.placeholder)]
+                                            withMessage:NSLOCALIZEDSTRING(@"PASSWORD_VALIDATION")
                                                  inView:self
                                               withStyle:UIAlertControllerStyleAlert];
-    else if (self.confirmpasswordTextField.text.length<1)
+    else if (![Utility_Shared_Instance passwordIsValid:self.confirmpasswordTextField.text])
         [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                            withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(self.confirmpasswordTextField.placeholder)]
+                                            withMessage:NSLOCALIZEDSTRING(@"PASSWORD_VALIDATION")
                                                  inView:self
                                               withStyle:UIAlertControllerStyleAlert];
     else if (![self.confirmpasswordTextField.text isEqualToString:self.passwordTextField.text])
@@ -173,8 +170,9 @@
                                                  inView:self
                                               withStyle:UIAlertControllerStyleAlert];
     
+    
     else{
-        [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"Please wait...")]];
+        [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"PLEASE_WAIT")]];
         [self signUpWebServiceCall];
     }
 }
@@ -187,18 +185,32 @@
     [signUpDictionary setObject:typeString forKey:KTYPE_W];
     
     [Web_Service_Call serviceCall:signUpDictionary webServicename:SIGNUP SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
-        NSDictionary *dict=responseObject;
-        //[self signUpSuccess];
-        [SVProgressHUD dismiss];
-        [self.navigationController popViewControllerAnimated:YES];
+        NSDictionary *responseDict=responseObject;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                withMessage:[responseDict objectForKey:KMESSAGE_W]
+                                                     inView:self
+                                                  withStyle:UIAlertControllerStyleAlert];
+        });
+        
+        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+            
+        }
         
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
-        [SVProgressHUD dismiss];
-        [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                            withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(@"UNKNOWN_ERROR")]
-                                                 inView:self
-                                              withStyle:UIAlertControllerStyleAlert];
-        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                withMessage:[responseObject objectForKey:KMESSAGE_W]
+                                                     inView:self
+                                                  withStyle:UIAlertControllerStyleAlert];
+        });
     }];
 }
 

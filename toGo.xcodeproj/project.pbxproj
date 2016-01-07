@@ -26,9 +26,7 @@
 		ED2F28061C310E3B003D8C82 /* UIView+toGo.m in Sources */ = {isa = PBXBuildFile; fileRef = ED2F28051C310E3B003D8C82 /* UIView+toGo.m */; settings = {ASSET_TAGS = (); }; };
 		ED2F280A1C311B89003D8C82 /* TakeTourView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED2F28091C311B89003D8C82 /* TakeTourView.m */; settings = {ASSET_TAGS = (); }; };
 		ED2F28181C31629A003D8C82 /* ProfileViewEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED2F28171C31629A003D8C82 /* ProfileViewEditViewController.m */; settings = {ASSET_TAGS = (); }; };
-		ED2F281C1C3162E8003D8C82 /* ProfileViewEditUpdateCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ED2F281B1C3162E8003D8C82 /* ProfileViewEditUpdateCell.m */; settings = {ASSET_TAGS = (); }; };
 		ED2F28201C3164B3003D8C82 /* AlertViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = ED2F281F1C3164B3003D8C82 /* AlertViewCustom.m */; settings = {ASSET_TAGS = (); }; };
-		ED2F28221C316591003D8C82 /* ProfileViewEditUpdateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ED2F28211C316591003D8C82 /* ProfileViewEditUpdateCell.xib */; settings = {ASSET_TAGS = (); }; };
 		ED2F28261C316E57003D8C82 /* ProfileInfoObject.m in Sources */ = {isa = PBXBuildFile; fileRef = ED2F28251C316E57003D8C82 /* ProfileInfoObject.m */; settings = {ASSET_TAGS = (); }; };
 		ED4159961C2AC7BF00491CE7 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED4159941C2AC7BF00491CE7 /* FBSDKCoreKit.framework */; settings = {ASSET_TAGS = (); }; };
 		ED4159971C2AC7BF00491CE7 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED4159951C2AC7BF00491CE7 /* FBSDKLoginKit.framework */; settings = {ASSET_TAGS = (); }; };
@@ -184,11 +182,8 @@
 		ED2F28091C311B89003D8C82 /* TakeTourView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TakeTourView.m; sourceTree = "<group>"; };
 		ED2F28161C31629A003D8C82 /* ProfileViewEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewEditViewController.h; sourceTree = "<group>"; };
 		ED2F28171C31629A003D8C82 /* ProfileViewEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewEditViewController.m; sourceTree = "<group>"; };
-		ED2F281A1C3162E8003D8C82 /* ProfileViewEditUpdateCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewEditUpdateCell.h; sourceTree = "<group>"; };
-		ED2F281B1C3162E8003D8C82 /* ProfileViewEditUpdateCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewEditUpdateCell.m; sourceTree = "<group>"; };
 		ED2F281E1C3164B3003D8C82 /* AlertViewCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertViewCustom.h; sourceTree = "<group>"; };
 		ED2F281F1C3164B3003D8C82 /* AlertViewCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertViewCustom.m; sourceTree = "<group>"; };
-		ED2F28211C316591003D8C82 /* ProfileViewEditUpdateCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileViewEditUpdateCell.xib; sourceTree = "<group>"; };
 		ED2F28241C316E57003D8C82 /* ProfileInfoObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileInfoObject.h; sourceTree = "<group>"; };
 		ED2F28251C316E57003D8C82 /* ProfileInfoObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileInfoObject.m; sourceTree = "<group>"; };
 		ED4159941C2AC7BF00491CE7 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
@@ -601,9 +596,6 @@
 		ED2F28191C3162C5003D8C82 /* ProfileViewCustomCell */ = {
 			isa = PBXGroup;
 			children = (
-				ED2F281A1C3162E8003D8C82 /* ProfileViewEditUpdateCell.h */,
-				ED2F281B1C3162E8003D8C82 /* ProfileViewEditUpdateCell.m */,
-				ED2F28211C316591003D8C82 /* ProfileViewEditUpdateCell.xib */,
 				ED1FF0561C3CCD4B0048BAD8 /* ProfileImageTableViewCell.h */,
 				ED1FF0571C3CCD4B0048BAD8 /* ProfileImageTableViewCell.m */,
 				ED1FF0581C3CCD4B0048BAD8 /* ProfileImageTableViewCell.xib */,
@@ -778,7 +770,6 @@
 				ED8B51B41C1EEFED00CA7306 /* FriendsListVC */,
 				ED8B51B71C1EEFED00CA7306 /* InfoVC */,
 				ED8B51BD1C1EEFED00CA7306 /* InternetActivityView */,
-				ED8B51C01C1EEFED00CA7306 /* LogIn */,
 				ED8B51C31C1EEFED00CA7306 /* MenuConferenceVC */,
 				ED8B51C61C1EEFED00CA7306 /* MessageManager */,
 				ED8B51C91C1EEFED00CA7306 /* SettingBundle */,
@@ -905,13 +896,6 @@
 				ED8B51BF1C1EEFED00CA7306 /* InternetActivityVC.m */,
 			);
 			path = InternetActivityView;
-			sourceTree = "<group>";
-		};
-		ED8B51C01C1EEFED00CA7306 /* LogIn */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = LogIn;
 			sourceTree = "<group>";
 		};
 		ED8B51C31C1EEFED00CA7306 /* MenuConferenceVC */ = {
@@ -1256,7 +1240,6 @@
 				EDE22E701C3A9B3900923ADF /* Roboto-MediumItalic.ttf in Resources */,
 				ED08F1BC1C324A0F005569E9 /* Assets.xcassets in Resources */,
 				ED437C081C1FDD1100DB68E0 /* GooglePlus.bundle in Resources */,
-				ED2F28221C316591003D8C82 /* ProfileViewEditUpdateCell.xib in Resources */,
 				ED1FF05A1C3CCD4B0048BAD8 /* ProfileImageTableViewCell.xib in Resources */,
 				EDE22E681C3A9B3900923ADF /* Roboto-BoldCondensedItalic.ttf in Resources */,
 				ED9CCDD21C2BBCD100FA2C5A /* TwitterKitResources.bundle in Resources */,
@@ -1371,7 +1354,6 @@
 				EDFD7E081C27C68100E4FEEB /* UIFont+Font.m in Sources */,
 				ED2F28261C316E57003D8C82 /* ProfileInfoObject.m in Sources */,
 				ED8B51DE1C1EEFED00CA7306 /* CustomToolbarVC.m in Sources */,
-				ED2F281C1C3162E8003D8C82 /* ProfileViewEditUpdateCell.m in Sources */,
 				ED1FF0591C3CCD4B0048BAD8 /* ProfileImageTableViewCell.m in Sources */,
 				ED2F28201C3164B3003D8C82 /* AlertViewCustom.m in Sources */,
 				ED1B7F001C2AA50E00C49026 /* LogInVC.m in Sources */,
@@ -1504,7 +1486,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Gurdev Singh (GGER8UW823)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gurdev Singh (GGER8UW823)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = NO;
@@ -1527,6 +1510,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "4d017fbd-b8ff-4c18-a692-f49606f054ac";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1549,7 +1533,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Gurdev Singh (GGER8UW823)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Gurdev Singh (GGER8UW823)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = NO;
@@ -1565,6 +1550,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PROVISIONING_PROFILE = "4d017fbd-b8ff-4c18-a692-f49606f054ac";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;

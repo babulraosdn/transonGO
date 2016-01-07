@@ -33,6 +33,7 @@
 }
 
 -(void)showAlertViewWithTitle:(NSString*)title withMessage:(NSString*)message inView:(UIViewController *)viewController withStyle:(UIAlertControllerStyle)alertStyle{
+    
     UIAlertController * alert=   [UIAlertController
                                   alertControllerWithTitle:title
                                   message:message
@@ -200,5 +201,23 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info{
     [userDefaults synchronize];
 }
 
+#pragma mark Password Validation
+- (BOOL)isValidString:(NSString *)string
+{
+    return [string rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]].location != NSNotFound &&
+    [string rangeOfCharacterFromSet:[NSCharacterSet lowercaseLetterCharacterSet]].location != NSNotFound &&
+    [string rangeOfCharacterFromSet:[NSCharacterSet decimalDigitCharacterSet]].location != NSNotFound ;
+}
+- (BOOL)passwordIsValid:(NSString *)password {
+    if (![self isValidString:password]) {
+        return NO;
+    }
+    // 1. Upper case.
+    if ([password length] < 6)
+    {
+        return NO;
+    }
+    return YES;
+}
 
 @end

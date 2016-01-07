@@ -40,6 +40,8 @@
     __weak IBOutlet UIActivityIndicatorView *spinner;
     NSMutableDictionary *loginDictionary;
     UITextField *activeField;
+    NSString *userIDString;
+    NSString *passwordString;
 }
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property(nonatomic,readwrite)BOOL isChecked;
@@ -79,12 +81,13 @@
     [self setColors];
     [self setFonts];
     
-    [self setNeedsStatusBarAppearanceUpdate];
-    
 }
 -(void)viewDidLayoutSubviews{
-    _scrollView.scrollEnabled =  YES;
-    _scrollView.contentSize=CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-64);
+    
+    if(IS_IPHONE_4S)
+        _scrollView.contentSize=CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+    else
+        _scrollView.contentSize=CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-64);
 
 }
 
@@ -179,14 +182,17 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
-    //_txt_userId.text = [self randomUser];
-    //_txtDisplayName.text=[self returnSavedDisplayname];
+    _txt_userId.text = [self randomUser];
+    _txtDisplayName.text=[self returnSavedDisplayname];
+    userIDString = _txt_userId.text;
+    passwordString = _txtDisplayName.text;
     [self autorize];
     
    
 }
 - (void)viewDidDisappear:(BOOL)animated {
     self.txt_userId.text = @"";
+    self.txtDisplayName.text = @"";
 }
 
 #pragma mark - Authorization ...
@@ -285,8 +291,8 @@
 
 - (IBAction)act_LogIn:(id)sender {
     
-    [self createSidePanel];
-    return;
+    //[self createSidePanel];
+    //return;
     
     
     AlertViewCustom *alertView = [[AlertViewCustom alloc]init];
@@ -304,58 +310,88 @@
                                             withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(self.txtDisplayName.placeholder)]
                                                  inView:self
                                               withStyle:UIAlertControllerStyleAlert];
-    
     else{
         [self.view endEditing:YES];
-        [self loginWebServiceCall];
+        [self loginWebServiceCall:NORMAL_LOGIN];
     }
 }
 
--(void)loginWebServiceCall{
+-(void)loginWebServiceCall:(NSString *)loginWith{
     
-    [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"Please wait...")]];
+    [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"PLEASE_WAIT")]];
     
-    [loginDictionary setObject:self.txtDisplayName.text forKey:KPASSWORD_W];
-    [loginDictionary setObject:self.txt_userId.text forKey:KEMAIL_W];
-    [loginDictionary setObject:@"Obaid@123" forKey:KPASSWORD_W];
-    [loginDictionary setObject:@"obaidr@yopmail.com" forKey:KEMAIL_W];
-
+    [loginDictionary setObject:userIDString forKey:KEMAIL_W];
+    [loginDictionary setObject:passwordString forKey:KPASSWORD_W];
+    [loginDictionary setObject:loginWith forKey:KLOGIN_TYPE_W];
+    [loginDictionary setObject:userIDString forKey:KUSERNAME_W];
+    [loginDictionary setObject:INTERPRETER forKey:KTYPE_W];
+    
+    
+    //[loginDictionary setObject:@"obaidr@yopmail.com" forKey:KEMAIL_W];
+    //[loginDictionary setObject:@"Obaid@123" forKey:KPASSWORD_W];
+    //[loginDictionary setObject:@"togo-ibq@ice-breakrr.com" forKey:KEMAIL_W];
+    
     [Web_Service_Call serviceCall:loginDictionary webServicename:LOGIN SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+        
         NSDictionary *responseDict=responseObject;
-        [SVProgressHUD dismiss];
-         ///int codeIs = [[responseDict objectForKey:CODE] intValue];
-        //if (codeIs == 200)
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                withMessage:[responseDict objectForKey:KMESSAGE_W]
+                                                     inView:self
+                                                  withStyle:UIAlertControllerStyleAlert];
+        });
+        
+        
+        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
         {
-            [self ooVooLogin];
+            [self createSidePanel];
+            //[self ooVooLogin];
         }
         
+        [self reportAuthStatus];//This is to clear google cookies
+        
+        
+        
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
-        [SVProgressHUD dismiss];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                withMessage:[responseObject objectForKey:KMESSAGE_W]
+                                                     inView:self
+                                                  withStyle:UIAlertControllerStyleAlert];
+        });
     }];
 }
 
 -(void)ooVooLogin{
     [UserDefaults setObject:_txt_userId.text ForKey:UserDefault_UserId];
-    [UserDefaults setObject:_txt_userId.text ForKey:UserDefault_DisplayName];
+    [UserDefaults setObject:_txtDisplayName.text ForKey:UserDefault_DisplayName];
     //[sender setEnabled:false];
-    [spinner startAnimating];
+    //[spinner startAnimating];
     
     [self.sdk.Account login:self.txt_userId.text
                  completion:^(SdkResult *result) {
                      NSLog(@"result code=%d result description %@", result.Result, result.description);
-                     [spinner stopAnimating];
+                     //[spinner stopAnimating];
                      if (result.Result != sdk_error_OK){
-                         [[[UIAlertView alloc] initWithTitle:@"Login Error" message:result.description delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
-                         [self.loginButton setEnabled:true];
+                         [SVProgressHUD dismiss];
+                         [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                             withMessage:@"USERID SHOULD BE MINIUMUM 6 CHARACTERS"
+                                                                  inView:self
+                                                               withStyle:UIAlertControllerStyleAlert];
                      }
                      else
                      {
+                         [SVProgressHUD dismiss];
                          [self onLogin:result.Result];
                          if(![self.sdk.Messaging isConnected])
                              [self.sdk.Messaging connect];
                      }
                  }];
 }
+
 
 -(void)popUpButtonClicked:(UIButton *)sender{
    
@@ -390,7 +426,7 @@
 //        else
 //        {
         [self createSidePanel];
-           //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
+        //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
 //        }
        
     }else{
@@ -484,8 +520,9 @@
                               [dict setValue:user.name forKey:@"name"];
                               [dict setValue:user.screenName forKey:@"screenName"];
                               NSLog(@"User Description is %@",dict);
+                              [self socialLoginSuccess:TWITTER_LOGIN userID:user.screenName password:user.screenName];
                           }
-                          [self createSidePanel];
+                          //[self createSidePanel];
                           
                       } else {
                       }
@@ -536,7 +573,7 @@
 
 - (void)fetchUserFacebookCredential{
     
-    [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"Please wait...")]];
+    [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"PLEASE_WAIT")]];
     
     if ([FBSDKAccessToken currentAccessToken]) {
         
@@ -547,7 +584,10 @@
                  [SVProgressHUD dismiss];
              }else{
                  
-                 [self createSidePanel];
+                 //[self createSidePanel];
+                 [self socialLoginSuccess:FACEBOOK_LOGIN userID:[result objectForKey:@"email"] password:[result objectForKey:@"email"]];
+                 //[SVProgressHUD dismiss];
+                 
                  dispatch_async(dispatch_get_main_queue(), ^{
                      /*
                       {
@@ -565,174 +605,21 @@
                       };
                       }
                      */
-                     [SVProgressHUD dismiss];
                  });
              }
          }];
     }
 }
 
-
-#pragma mark Social Delegate Methods
-
--(void)finishLogin:(NSString *)mediaType responseDict:(NSMutableDictionary *)response showAlerViewController:(BOOL)isPresentAlertVC alertViewContoller:(UIAlertController *)alertViewController
+-(void)socialLoginSuccess:(NSString *)mediaType userID:(NSString *)userID password:(NSString *)password
 {
-    [SVProgressHUD dismiss];
-    
-    if (isPresentAlertVC) {
-        [self presentViewController:alertViewController animated:YES completion:nil];
-        return;
-    }
-    
-    BOOL success;
-    if ([mediaType isEqualToString:FACEBOOK]) {
-        /*
-         {
-         {
-         email = "kbabulenjoy@gmail.com";
-         "first_name" = Babul;
-         id = 1019635601428513;
-         "last_name" = Rao;
-         name = "Babul Rao";
-         profileImage = "https://graph.facebook.com/1019635601428513/picture?type=large&return_ssl_resources=1";
-         }
-         }
-         */
-        success=YES;
-        if ([response objectForKey:@"Error Domain=com.apple.accounts Code=6 \"(null)\""]) {
-            success=NO;
-            if([UIAlertController class]){
-                NSString *alertMessage = NSLOCALIZEDSTRING(@"1. Go to Settings.\n2. Tap Facebook.\n3. Enter your facebook credentials.");
-                UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLOCALIZEDSTRING(@"Facebook Account not Setup") message:alertMessage preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-                    [alertVC dismissViewControllerAnimated:YES completion:nil];
-                }];
-                [alertVC addAction:cancel];
-                UIAlertAction *settings = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-                    [alertVC dismissViewControllerAnimated:YES completion:nil];
-                }];
-                [alertVC addAction:settings];
-                NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
-                paragraphStyle.alignment =  NSTextAlignmentLeft;
-                NSMutableAttributedString *messageText = [[NSMutableAttributedString alloc]initWithString:alertMessage attributes:@{NSParagraphStyleAttributeName:paragraphStyle}];
-                [alertVC setValue:messageText forKey:@"attributedMessage"];
-                [self presentViewController:alertVC animated:YES completion:nil];
-                //[SVProgressHUD dismiss];
-            }
-        }
-    }
-    else if ([mediaType isEqualToString:TWITTER]) {
-        success=YES;
-        /*
-        2015-12-16 12:52:11.976 toGo[4938:99094] good autorization
-        Printing description of response:
-        {
-            contributors = "<null>";
-            coordinates = "<null>";
-            "created_at" = "Wed Dec 16 07:24:55 +0000 2015";
-            entities =     {
-                hashtags =         (
-                );
-                symbols =         (
-                );
-                urls =         (
-                );
-                "user_mentions" =         (
-                );
-            };
-            "favorite_count" = 0;
-            favorited = 0;
-            geo = "<null>";
-            id = 677026602123792384;
-            "id_str" = 677026602123792384;
-            "in_reply_to_screen_name" = "<null>";
-            "in_reply_to_status_id" = "<null>";
-            "in_reply_to_status_id_str" = "<null>";
-            "in_reply_to_user_id" = "<null>";
-            "in_reply_to_user_id_str" = "<null>";
-            "is_quote_status" = 0;
-            lang = en;
-            place = "<null>";
-            "retweet_count" = 0;
-            retweeted = 0;
-            source = "<a href=\"http://www.apple.com\" rel=\"nofollow\">iOS</a>";
-            text = "My new Twitter message.";
-            truncated = 0;
-            user =     {
-                "contributors_enabled" = 0;
-                "created_at" = "Wed Aug 31 21:20:25 +0000 2011";
-                "default_profile" = 1;
-                "default_profile_image" = 0;
-                description = "";
-                entities =         {
-                    description =             {
-                        urls =                 (
-                        );
-                    };
-                };
-                "favourites_count" = 0;
-                "follow_request_sent" = 0;
-                "followers_count" = 40;
-                following = 0;
-                "friends_count" = 93;
-                "geo_enabled" = 0;
-                "has_extended_profile" = 1;
-                id = 365689054;
-                "id_str" = 365689054;
-                "is_translation_enabled" = 0;
-                "is_translator" = 0;
-                lang = en;
-                "listed_count" = 0;
-                location = "Nagpur, Maharashtra";
-                name = "BABUL RAO KOONA";
-                notifications = 0;
-                "profile_background_color" = C0DEED;
-                "profile_background_image_url" = "http://abs.twimg.com/images/themes/theme1/bg.png";
-                "profile_background_image_url_https" = "https://abs.twimg.com/images/themes/theme1/bg.png";
-                "profile_background_tile" = 0;
-                "profile_image_url" = "http://pbs.twimg.com/profile_images/657037520484470785/F9ldUePt_normal.jpg";
-                "profile_image_url_https" = "https://pbs.twimg.com/profile_images/657037520484470785/F9ldUePt_normal.jpg";
-                "profile_link_color" = 0084B4;
-                "profile_sidebar_border_color" = C0DEED;
-                "profile_sidebar_fill_color" = DDEEF6;
-                "profile_text_color" = 333333;
-                "profile_use_background_image" = 1;
-                protected = 0;
-                "screen_name" = "babul_enjoy";
-                "statuses_count" = 2;
-                "time_zone" = "<null>";
-                url = "<null>";
-                "utc_offset" = "<null>";
-                verified = 0;
-            };
-        }
-        */
-    }
-    else if ([mediaType isEqualToString:LINKEDIN]) {
-        success=YES;
-        /*
-         Printing description of response:
-         {
-         emailAddress = "kbabulenjoy@gmail.com";
-         firstName = Babul;
-         id = "phq36KFc-h";
-         lastName = Rao;
-         pictureUrl = "https://media.licdn.com/mpr/mprx/0_I3FrdIwDPduQ4rWHdih7deVTxWoeZ9WHd_17dWWj8uOMbtYebFcpbdj1lFEnRAeXoGLa6aUSwHgz";
-         
-         */
-    }
-    else if ([mediaType isEqualToString:GOOGLE_PLUS]) {
-        success=YES;
-    }
-    
-    if (success) {
-        [self createSidePanel
-         ];
-    }
+    userIDString = userID;
+    passwordString = @"";
+    //[self loginWebServiceCall:mediaType];
+    [self createSidePanel];
 }
 
-
+#pragma mark Social Delegate Methods
 #pragma mark - Google Plus
 
 - (void)googleButtonClicked:(id)sender
@@ -792,10 +679,10 @@
          "locale": "en"
          }
          */
-        
+        [self socialLoginSuccess:TWITTER_LOGIN userID:[proDic objectForKey:@"given_name"] password:[proDic objectForKey:@"given_name"]];
     }
-    [SVProgressHUD dismiss];
-    [self createSidePanel];
+    //[SVProgressHUD dismiss];
+    //[self createSidePanel];
 }
 
 
@@ -880,8 +767,22 @@
     return YES;
 }
 
+-(void)textFieldDidEndEditing:(UITextField *)textField{
+    if (textField == self.txt_userId) {
+        userIDString = self.txt_userId.text;
+    }
+    else if (textField == self.txtDisplayName) {
+        passwordString = self.txtDisplayName.text;
+    }
+}
+
 -(UIStatusBarStyle)preferredStatusBarStyle{
     return UIStatusBarStyleLightContent;
+}
+
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
 }
 
 @end

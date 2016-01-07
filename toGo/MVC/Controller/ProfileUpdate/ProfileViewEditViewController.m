@@ -7,11 +7,13 @@
 //
 
 #import "ProfileViewEditViewController.h"
-#import "ProfileViewEditUpdateCell.h"
-#import "ProfileImageTableViewCell.h"
+	#import "ProfileImageTableViewCell.h"
 #import "Headers.h"
 
 #define HEADER_HEIGHT 140
+
+@implementation ProfileViewEditUpdateCell
+@end
 
 @interface ProfileViewEditViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong) NSMutableArray *namesArray;
@@ -33,13 +35,13 @@
                        NSLOCALIZEDSTRING(@"DESCRIPTION"),
                        NSLOCALIZEDSTRING(@"BANK_ACCOUNT_INFORMATION"),
                        NSLOCALIZEDSTRING(@"MY_LANGUAGES"),NSLOCALIZEDSTRING(@"CERTIFICATES"), nil];
-    self.dataArray = [[NSMutableArray alloc]initWithObjects:@"",@"kat@gmail.com",@"**********",@"KatC",@"CA, Washington, USA",@"07515398752",@"dsasd",@"It's Confidential",@"Spanish, German",@"German certified", nil];
+    self.dataArray = [[NSMutableArray alloc]initWithObjects:@"",@"kat@gmail.com",@"**********",@"KatC",@"CA, Washington, USA dgf gdfgdf gdf dgdfg d7777",@"07515398752",@"dsasdgdfgdfgdgdfgdfgdfgdfggdfgdgdfgdfgdfg 7777",@"It's Confidential",@"Spanish, German",@"German certified", nil];
     [self setSlideMenuButtonFornavigation];
     
-    /*
+    
     self.tblView.estimatedRowHeight = 80;
     self.tblView.rowHeight = UITableViewAutomaticDimension;
-    
+    /*
     [self.tblView setNeedsLayout];
     [self.tblView layoutIfNeeded];
     */
@@ -76,11 +78,23 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    
     if (indexPath.row==0) {
         return HEADER_HEIGHT;
     }
     else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Address"] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Description"]) {
-        return 157;
+        return 80;
+        //return UITableViewAutomaticDimension;
+    }
+    return 70;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row==0) {
+        return HEADER_HEIGHT;
+    }
+    else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Address"] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Description"]) {
+        return 80;;
     }
     return 70;
 }
@@ -99,20 +113,23 @@
     }
     else{
         
-        static NSString *cellIdentifier = @"ProfileViewEditUpdateCell";
-        ProfileViewEditUpdateCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+//        static NSString *cellIdentifier = @"ProfileViewEditUpdateCell";
+//        ProfileViewEditUpdateCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+//        
+//        if (cell == nil) {
+//            NSArray *cellArray = [[NSBundle mainBundle]loadNibNamed:cellIdentifier owner:self options:nil];
+//            cell = [cellArray objectAtIndex:0];
+//        }
         
-        if (cell == nil) {
-            NSArray *cellArray = [[NSBundle mainBundle]loadNibNamed:cellIdentifier owner:self options:nil];
-            cell = [cellArray objectAtIndex:0];
-        }
-        
+        ProfileViewEditUpdateCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ProfileViewEditUpdateCell"];
         cell.descriptionTextView.hidden = YES;
+        cell.descriptionLabel.hidden = YES;
         cell.editImageView.hidden = YES;
         cell.editButton.hidden = YES;
         
         if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"ADDRESS")] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"DESCRIPTION")]) {
             cell.descriptionTextField.hidden = YES;
+            //cell.descriptionLabel.hidden = NO;
             cell.descriptionTextView.hidden = NO;
         }
         
@@ -137,10 +154,9 @@
         ///////////// Text/Data Assigning
         cell.descriptionTextField.text = [self.dataArray objectAtIndex:indexPath.row];
         cell.descriptionTextView.text = [self.dataArray objectAtIndex:indexPath.row];
-        
+        cell.descriptionLabel.text = [self.dataArray objectAtIndex:indexPath.row];
         cell.headerLabel.text = [self.namesArray objectAtIndex:indexPath.row];
         /////////
-        
         
         return cell;
     }

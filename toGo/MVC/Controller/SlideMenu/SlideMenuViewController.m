@@ -30,6 +30,24 @@
     self.view.backgroundColor = [UIColor navigationBarColor];//This changes the statusbar Color
     self.tblView.backgroundColor = [UIColor slideMenuBackgroundColor];//This is table view back goring color
     appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
+    
+    self.namesArray = [[NSMutableArray alloc]initWithObjects:
+                       NSLOCALIZEDSTRING(@"PROFILE"),
+                       NSLOCALIZEDSTRING(@"CALL_HISTORY"),
+                       NSLOCALIZEDSTRING(@"SETTINGS"), nil];
+    self.imagesNamesArray = [[NSMutableArray alloc]initWithObjects:
+                             PROFILE_IMAGE,
+                             CALL_HISTORY_IMAGE,
+                             SETTINGS_IMAGE, nil];
+    self.colorCodesArray = [[NSMutableArray alloc]initWithObjects:
+                            [UIColor slideMenuBackgroundColorRow1],
+                            [UIColor slideMenuBackgroundColorRow2],
+                            [UIColor slideMenuBackgroundColorRow3],
+                            [UIColor slideMenuBackgroundColorRow4],
+                            [UIColor slideMenuBackgroundColorRow5],
+                            [UIColor slideMenuBackgroundColorRow6], nil];
+    
+    /*
     self.namesArray = [[NSMutableArray alloc]initWithObjects:
                        NSLOCALIZEDSTRING(@"PROFILE"),
                        NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION"),
@@ -51,12 +69,13 @@
                             [UIColor slideMenuBackgroundColorRow4],
                             [UIColor slideMenuBackgroundColorRow5],
                             [UIColor slideMenuBackgroundColorRow6], nil];
+    */
     
 }
 
 #pragma Mark TableView Delegate Methods
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.namesArray.count;
+    return 3;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
