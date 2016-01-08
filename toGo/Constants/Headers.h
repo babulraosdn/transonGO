@@ -26,6 +26,7 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "AlertViewCustom.h"
 #import "TakeTourView.h"
+#import "ProfileInfoObject.h"
 
 #import "BaseViewController.h"
 #import <TheSidebarController/TheSidebarController.h>

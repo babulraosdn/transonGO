@@ -77,7 +77,7 @@
 }
 
 - (void)logOutButtonClicked{
-    UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:@"LoginViewController"]];
+    UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:HOME_VIEW_CONTROLLER]];
     App_Delegate.window.rootViewController = contentNavigationController;
 }
 

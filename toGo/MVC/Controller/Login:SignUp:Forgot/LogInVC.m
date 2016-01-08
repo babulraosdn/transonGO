@@ -71,7 +71,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-   
+    [self setCustomBackButtonForNavigation];
     [self allocationsAndStaticText];
     [self registerForKeyboardNotifications];
     [self setLabelButtonNames];
@@ -318,13 +318,11 @@
 
 -(void)loginWebServiceCall:(NSString *)loginWith{
     
-    [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"PLEASE_WAIT")]];
-    
     [loginDictionary setObject:userIDString forKey:KEMAIL_W];
     [loginDictionary setObject:passwordString forKey:KPASSWORD_W];
     [loginDictionary setObject:loginWith forKey:KLOGIN_TYPE_W];
     [loginDictionary setObject:userIDString forKey:KUSERNAME_W];
-    [loginDictionary setObject:INTERPRETER forKey:KTYPE_W];
+    [loginDictionary setObject:[Utility_Shared_Instance checkForNullString:[Utility_Shared_Instance readStringUserPreference:USER_TYPE]] forKey:KTYPE_W];
     
     
     //[loginDictionary setObject:@"obaidr@yopmail.com" forKey:KEMAIL_W];
@@ -343,11 +341,15 @@
                                                   withStyle:UIAlertControllerStyleAlert];
         });
         
-        
-        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
-        {
-            [self createSidePanel];
-            //[self ooVooLogin];
+        if ([responseDict objectForKey:KCODE_W]){
+            if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
+            {
+                if ([responseDict objectForKey:KTOKEN_W]) {
+                    [Utility_Shared_Instance writeStringUserPreference:USER_TOKEN value:[responseDict objectForKey:KTOKEN_W]];
+                }
+                //[self createSidePanel];
+                [self ooVooLogin];
+            }
         }
         
         [self reportAuthStatus];//This is to clear google cookies
@@ -364,6 +366,7 @@
         });
     }];
 }
+
 
 -(void)ooVooLogin{
     [UserDefaults setObject:_txt_userId.text ForKey:UserDefault_UserId];
@@ -392,102 +395,6 @@
                  }];
 }
 
-
--(void)popUpButtonClicked:(UIButton *)sender{
-   
-    if (sender.tag == 1) {
-        //Confirm Button
-        NSLog(@"Confirm Selected");
-    }
-    else if (sender.tag == 2) {
-        //Cancel Button
-        NSLog(@"Cancel Selected");
-        [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
-    }
-}
-
-
-
-#pragma mark - private methods
-
-- (void)onLogin:(BOOL)error {
-    if (!error) {
-        [ActiveUserManager activeUser].userId = self.txt_userId.text;
-        [ActiveUserManager activeUser].displayName = self.txtDisplayName.text;
-//        NSString * uuid = [[NSUUID UUID] UUIDString] ;
-//        NSString * token = [ActiveUserManager activeUser].token;
-//        if(token && token.length > 0){
-//        [self.sdk.PushService subscribe:token deviceUid:uuid completion:^(SdkResult *result){
-//        [ActiveUserManager activeUser].isSubscribed = true;
-//            [self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
-//        }];
-//        }
-//        
-//        else
-//        {
-        [self createSidePanel];
-        //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
-//        }
-       
-    }else{
-        [self.loginButton setEnabled:true];
-    }
-}
-
-- (NSString *)randomUser {
-    
-    if ([UserDefaults getObjectforKey:UserDefault_UserId]) {
-        return [UserDefaults getObjectforKey:UserDefault_UserId];
-    }
-    return @"";
-}
-
-- (NSString *)returnSavedDisplayname {
-    
-    if ([UserDefaults getObjectforKey:UserDefault_DisplayName]) {
-        return [UserDefaults getObjectforKey:UserDefault_DisplayName];
-    }
-    return @"";
-}
-
-#pragma mark - ooVoo Account delegate
-
-- (void)didAccountLogIn:(id<ooVooAccount>)account {
-    
-}
-
-- (void)didAccountLogOut:(id<ooVooAccount>)account {
-    
-}
-
--(IBAction)twitterLogin:(id)sender
-{
-    
-    [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error){
-        if (session)
-        {
-             [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID]
-                                                       completion:^(TWTRUser *user,
-                                                                    NSError *error)
-              {
-                  // handle the response or error
-                  if (![error isEqual:nil]) {
-                      NSLog(@"Twitter info   -> user = %@ ",user.description);
-                      NSMutableDictionary *dict =[[NSMutableDictionary alloc]init];
-                      [dict setValue:user.userID forKey:@"id"];
-                      [dict setValue:user.name forKey:@"name"];
-                      [dict setValue:user.screenName forKey:@"screenName"];
-                      NSLog(@"User Description is %@",dict);
-                      
-                  } else {
-                  }
-              }];
-             
-         } else {
-             NSLog(@"error: %@", [error localizedDescription]);
-         }
-     }];
-}
 
 -(IBAction)loginWithSoicalAccounts:(id)sender{
     
@@ -604,19 +511,51 @@
                       };
                       };
                       }
-                     */
+                      */
                  });
              }
          }];
     }
 }
 
+#pragma mark - twitter Signin
+-(IBAction)twitterLogin:(id)sender
+{
+    
+    [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error){
+        if (session)
+        {
+            [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID]
+                                                      completion:^(TWTRUser *user,
+                                                                   NSError *error)
+             {
+                 // handle the response or error
+                 if (![error isEqual:nil]) {
+                     NSLog(@"Twitter info   -> user = %@ ",user.description);
+                     NSMutableDictionary *dict =[[NSMutableDictionary alloc]init];
+                     [dict setValue:user.userID forKey:@"id"];
+                     [dict setValue:user.name forKey:@"name"];
+                     [dict setValue:user.screenName forKey:@"screenName"];
+                     NSLog(@"User Description is %@",dict);
+                     
+                 } else {
+                 }
+             }];
+            
+        } else {
+            NSLog(@"error: %@", [error localizedDescription]);
+        }
+    }];
+}
+
+
+
 -(void)socialLoginSuccess:(NSString *)mediaType userID:(NSString *)userID password:(NSString *)password
 {
     userIDString = userID;
     passwordString = @"";
-    //[self loginWebServiceCall:mediaType];
-    [self createSidePanel];
+    [self loginWebServiceCall:mediaType];
+    //[self createSidePanel];
 }
 
 #pragma mark Social Delegate Methods
@@ -627,8 +566,10 @@
     //    [self signOut:nil];
     GPPSignIn *signIn = [GPPSignIn sharedInstance];
     signIn.delegate =  self;
+    signIn.shouldFetchGoogleUserEmail = YES;
     [signIn authenticate];
 }
+
 - (IBAction)signOut:(id)sender {
     [[GPPSignIn sharedInstance] signOut];
     
@@ -679,7 +620,7 @@
          "locale": "en"
          }
          */
-        [self socialLoginSuccess:TWITTER_LOGIN userID:[proDic objectForKey:@"given_name"] password:[proDic objectForKey:@"given_name"]];
+        [self socialLoginSuccess:TWITTER_LOGIN userID:[proDic objectForKey:@"email"] password:[proDic objectForKey:@"given_name"]];
     }
     //[SVProgressHUD dismiss];
     //[self createSidePanel];
@@ -737,18 +678,76 @@
 
 
 -(void)createSidePanel{
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_INTERPRETER_VIEW_CONTROLLER]];//DashBoardViewController
+        
+        
+        TheSidebarController *sidebarController = [[TheSidebarController alloc] initWithContentViewController:contentNavigationController
+                                                                                    leftSidebarViewController:[Utility_Shared_Instance getControllerForIdentifier:@"SlideMenuViewController"]
+                                                                                   rightSidebarViewController:nil];
+        
+        appDelegate.window.rootViewController = sidebarController;
+    });
+    
+}
 
+
+-(void)popUpButtonClicked:(UIButton *)sender{
+   
+    if (sender.tag == 1) {
+        //Confirm Button
+        NSLog(@"Confirm Selected");
+    }
+    else if (sender.tag == 2) {
+        //Cancel Button
+        NSLog(@"Cancel Selected");
+        [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
+    }
+}
+
+
+
+#pragma mark - private methods
+
+- (void)onLogin:(BOOL)error {
+    if (!error) {
+        [ActiveUserManager activeUser].userId = self.txt_userId.text;
+        [ActiveUserManager activeUser].displayName = self.txtDisplayName.text;
+//        NSString * uuid = [[NSUUID UUID] UUIDString] ;
+//        NSString * token = [ActiveUserManager activeUser].token;
+//        if(token && token.length > 0){
+//        [self.sdk.PushService subscribe:token deviceUid:uuid completion:^(SdkResult *result){
+//        [ActiveUserManager activeUser].isSubscribed = true;
+//            [self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
+//        }];
+//        }
+//        
+//        else
+//        {
+        [self createSidePanel];
+        //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
+//        }
+       
+    }else{
+        [self.loginButton setEnabled:true];
+    }
+}
+
+- (NSString *)randomUser {
     
-    UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_INTERPRETER_VIEW_CONTROLLER]];//DashBoardViewController
+    if ([UserDefaults getObjectforKey:UserDefault_UserId]) {
+        return [UserDefaults getObjectforKey:UserDefault_UserId];
+    }
+    return @"";
+}
+
+- (NSString *)returnSavedDisplayname {
     
-    
-    TheSidebarController *sidebarController = [[TheSidebarController alloc] initWithContentViewController:contentNavigationController
-                                                                                leftSidebarViewController:[Utility_Shared_Instance getControllerForIdentifier:@"SlideMenuViewController"]
-                                                                               rightSidebarViewController:nil];
-    
-    appDelegate.window.rootViewController = sidebarController;
-    
-    
+    if ([UserDefaults getObjectforKey:UserDefault_DisplayName]) {
+        return [UserDefaults getObjectforKey:UserDefault_DisplayName];
+    }
+    return @"";
 }
 
 
@@ -782,6 +781,19 @@
 
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+}
+
+
+
+
+#pragma mark - ooVoo Account delegate
+
+- (void)didAccountLogIn:(id<ooVooAccount>)account {
+    
+}
+
+- (void)didAccountLogOut:(id<ooVooAccount>)account {
     
 }
 

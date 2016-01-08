@@ -220,4 +220,10 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info{
     return YES;
 }
 
+
+#pragma mark Activity Indicator
+-(void)showProgress{
+    [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"PLEASE_WAIT")]];
+}
+
 @end

@@ -15,6 +15,7 @@
 #import <GoogleOpenSource/GoogleOpenSource.h>
 @interface LogInVC : BaseViewController <AuthorizationDelegate, ooVooAccount, SocialDelegate, GPPSignInDelegate>
 
+
 @property (retain, nonatomic) ooVooClient *sdk;
 
 @end

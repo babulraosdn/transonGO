@@ -95,9 +95,14 @@
     
     ////////////////////////////////////////////
     
+    //[self performSelector:@selector(crashButtonTapped:) withObject:nil afterDelay:0];
     return YES;
 }
 
+
+- (IBAction)crashButtonTapped:(id)sender {
+    [[Crashlytics sharedInstance] crash];
+}
 
 -(void)setUpGooglePlusConfiguration{
     
@@ -397,7 +402,6 @@
     }
     
     alertView=nil;
-    
 }
 
 

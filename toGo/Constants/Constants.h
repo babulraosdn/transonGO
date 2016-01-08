@@ -96,11 +96,13 @@ _Pragma("clang diagnostic pop") \
 #define TWITTER                     @"twitter"
 #define LINKEDIN                    @"linkedin"
 #define GOOGLE_PLUS                 @"google plus"
+#define USER_TYPE                   @"userType"
+#define USER_TOKEN                  @"userToken"
 
 //********************  WebService Strings Constants  ****************************************
 #pragma mark WebService Strings Constants
 #define INTERPRETER                 @"interpreter"
-#define CUSTOMER                    @"customer"
+#define CUSTOMER                    @"user"
 #define NORMAL_LOGIN                @"0"
 #define FACEBOOK_LOGIN              @"1"
 #define TWITTER_LOGIN               @"1"
@@ -108,11 +110,14 @@ _Pragma("clang diagnostic pop") \
 
 //********************  WebService Names  ****************************************
 #pragma mark WebService Calls
-#define BASE_URL                    @"http://172.10.55.110:3000/"
+#define BASE_URL                    @"http://54.153.22.179:3000/"
+//#define BASE_URL                    @"http://172.10.55.110:3000/"
+
 #define LOGIN                       @"authenticate"
 #define SIGNUP                      @"signup"
 #define FORGOTPASSWORD              @"forgot"
 #define SOCIAL_LOGIN                @"loginSignUp"
+#define PROFILE_INFO                @"api/getAgentInfo"
 
 //********************  WebService Parameters   ****************************************
 #pragma mark WebService Parameters
@@ -120,12 +125,15 @@ _Pragma("clang diagnostic pop") \
 #define KEMAIL_W                       @"email"
 #define KPASSWORD_W                    @"password"
 #define KTYPE_W                        @"utype"
-#define KLOGIN_TYPE_W                   @"logintype"
+#define KLOGIN_TYPE_W                  @"logintype"
+#define KAUTHORIZATION_W                        @"Authorization"
+
 
 //********************  WebService Response Parameters   ****************************************
 #define KSUCCESS                       ((int)200)
 #define KCODE_W                        @"code"
 #define KMESSAGE_W                     @"message"
+#define KTOKEN_W                       @"token"
 
 
 //********************  ViewConroller Names  ****************************************
@@ -136,6 +144,8 @@ _Pragma("clang diagnostic pop") \
 #define SETTINGS_VIEW_CONTROLLER                @"SettingsViewController"
 #define SLIDE_MENU_VIEW_CONTROLLER              @"SlideMenuViewController"
 #define FEEDBACK_LIST_VIEW_CONTROLLER           @"FeedBackListViewController"
+#define HOME_VIEW_CONTROLLER           @"HomeViewController"
+
 
 //********************  Font Names   ****************************************
 #define KFontFamily_ROBOTO_REGULAR                        @"Roboto-Regular"

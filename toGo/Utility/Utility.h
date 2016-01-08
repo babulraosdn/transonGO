@@ -53,4 +53,8 @@ typedef void (^getImage)(UIImage *image);
 #pragma mark Password Validation
 - (BOOL)passwordIsValid:(NSString *)password;
 
+
+#pragma mark Activity Indicator
+-(void)showProgress;
+
 @end

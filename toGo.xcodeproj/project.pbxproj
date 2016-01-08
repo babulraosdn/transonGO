@@ -90,6 +90,7 @@
 		ED8B52171C1EF07900CA7306 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED8B52161C1EF07900CA7306 /* SystemConfiguration.framework */; };
 		ED8B52191C1EF07E00CA7306 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED8B52181C1EF07E00CA7306 /* UIKit.framework */; };
 		ED8B521B1C1EF08300CA7306 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED8B521A1C1EF08300CA7306 /* VideoToolbox.framework */; };
+		ED90D3531C3FAFD000D72731 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED90D3521C3FAFD000D72731 /* HomeViewController.m */; settings = {ASSET_TAGS = (); }; };
 		ED9CCDD11C2BBCD100FA2C5A /* TwitterKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED9CCDCE1C2BBCD100FA2C5A /* TwitterKit.framework */; settings = {ASSET_TAGS = (); }; };
 		ED9CCDD21C2BBCD100FA2C5A /* TwitterKitResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ED9CCDCF1C2BBCD100FA2C5A /* TwitterKitResources.bundle */; settings = {ASSET_TAGS = (); }; };
 		ED9CCDD31C2BBCD100FA2C5A /* TwitterCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED9CCDD01C2BBCD100FA2C5A /* TwitterCore.framework */; settings = {ASSET_TAGS = (); }; };
@@ -281,6 +282,8 @@
 		ED8B52161C1EF07900CA7306 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		ED8B52181C1EF07E00CA7306 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		ED8B521A1C1EF08300CA7306 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		ED90D3511C3FAFD000D72731 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
+		ED90D3521C3FAFD000D72731 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		ED9CCDCE1C2BBCD100FA2C5A /* TwitterKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterKit.framework; sourceTree = "<group>"; };
 		ED9CCDCF1C2BBCD100FA2C5A /* TwitterKitResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TwitterKitResources.bundle; sourceTree = "<group>"; };
 		ED9CCDD01C2BBCD100FA2C5A /* TwitterCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TwitterCore.framework; sourceTree = "<group>"; };
@@ -444,6 +447,7 @@
 			isa = PBXGroup;
 			children = (
 				ED1B7EC51C2AA48600C49026 /* BaseViewController */,
+				ED90D3501C3FAFB500D72731 /* HomeView */,
 				ED1B7ED41C2AA48600C49026 /* Login:SignUp:Forgot */,
 				ED1B7EDD1C2AA48600C49026 /* SlideMenu */,
 				EDA374761C3BBD9700288BA2 /* DashBoard_Interpreter */,
@@ -960,6 +964,15 @@
 			path = VideoFrame;
 			sourceTree = "<group>";
 		};
+		ED90D3501C3FAFB500D72731 /* HomeView */ = {
+			isa = PBXGroup;
+			children = (
+				ED90D3511C3FAFD000D72731 /* HomeViewController.h */,
+				ED90D3521C3FAFD000D72731 /* HomeViewController.m */,
+			);
+			path = HomeView;
+			sourceTree = "<group>";
+		};
 		ED9CCDCD1C2BBCCB00FA2C5A /* Twitter */ = {
 			isa = PBXGroup;
 			children = (
@@ -1359,6 +1372,7 @@
 				ED1B7F001C2AA50E00C49026 /* LogInVC.m in Sources */,
 				ED8B51E01C1EEFED00CA7306 /* UIActionSheet+Extensions.m in Sources */,
 				EDFD7E161C27CBED00E4FEEB /* NSString+Extensions.m in Sources */,
+				ED90D3531C3FAFD000D72731 /* HomeViewController.m in Sources */,
 				ED8B51D71C1EEFED00CA7306 /* ActiveUserManager.m in Sources */,
 				ED2F28181C31629A003D8C82 /* ProfileViewEditViewController.m in Sources */,
 				ED8B51E61C1EEFED00CA7306 /* ParticipentCell.m in Sources */,

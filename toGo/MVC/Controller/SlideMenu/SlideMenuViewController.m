@@ -31,6 +31,7 @@
     self.tblView.backgroundColor = [UIColor slideMenuBackgroundColor];//This is table view back goring color
     appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
     
+    /* //Build menu
     self.namesArray = [[NSMutableArray alloc]initWithObjects:
                        NSLOCALIZEDSTRING(@"PROFILE"),
                        NSLOCALIZEDSTRING(@"CALL_HISTORY"),
@@ -46,8 +47,9 @@
                             [UIColor slideMenuBackgroundColorRow4],
                             [UIColor slideMenuBackgroundColorRow5],
                             [UIColor slideMenuBackgroundColorRow6], nil];
+    */
     
-    /*
+    ///*
     self.namesArray = [[NSMutableArray alloc]initWithObjects:
                        NSLOCALIZEDSTRING(@"PROFILE"),
                        NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION"),
@@ -69,13 +71,13 @@
                             [UIColor slideMenuBackgroundColorRow4],
                             [UIColor slideMenuBackgroundColorRow5],
                             [UIColor slideMenuBackgroundColorRow6], nil];
-    */
-    
+    //*/
 }
 
 #pragma Mark TableView Delegate Methods
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 3;
+    //return 3;
+    return self.namesArray.count;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{

@@ -11,7 +11,7 @@
 @interface SignUpViewController ()<UITextFieldDelegate>{
     NSMutableDictionary *signUpDictionary;
     UITextField *activeField;
-    NSString *typeString;
+    
 }
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
 @property (weak,nonatomic) IBOutlet UITextField *emaillTextField;
@@ -51,7 +51,7 @@
 
 -(void)allocationsAndStaticText{
     signUpDictionary = [NSMutableDictionary new];
-    typeString = INTERPRETER;
+    //typeString = INTERPRETER;
 }
 
 - (void)registerForKeyboardNotifications
@@ -182,7 +182,7 @@
     [signUpDictionary setObject:self.usernameTextField.text forKey:KUSERNAME_W];
     [signUpDictionary setObject:self.passwordTextField.text forKey:KPASSWORD_W];
     [signUpDictionary setObject:self.emaillTextField.text forKey:KEMAIL_W];
-    [signUpDictionary setObject:typeString forKey:KTYPE_W];
+    [signUpDictionary setObject:[Utility_Shared_Instance checkForNullString:[Utility_Shared_Instance readStringUserPreference:USER_TYPE]] forKey:KTYPE_W];
     
     [Web_Service_Call serviceCall:signUpDictionary webServicename:SIGNUP SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         NSDictionary *responseDict=responseObject;
@@ -225,13 +225,11 @@
 -(IBAction)interpreterCustomerButtonClicked:(UIButton *)sender{
     if (sender.tag==1) {
         //Interpreter
-        typeString = INTERPRETER;
         self.interpreterImageView.image = [UIImage radioONImage];
         self.customerImageView.image = [UIImage radioOffImage];
     }
     else{
         //Customer
-        typeString = CUSTOMER;
         self.customerImageView.image = [UIImage radioONImage];
         self.interpreterImageView.image = [UIImage radioOffImage];
     }

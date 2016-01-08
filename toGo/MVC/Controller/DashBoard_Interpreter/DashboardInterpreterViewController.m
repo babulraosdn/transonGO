@@ -25,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *defaultPicBackgroundImageView;
 @property (weak, nonatomic) IBOutlet UILabel *headerLabel;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+- (IBAction)profileMgt_CustomerFeedBackButtonPressed:(UIButton *)sender;
 @end
 
 @implementation DashboardInterpreterViewController
@@ -41,7 +42,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
+    
 }
 
 -(void)viewDidLayoutSubviews{
@@ -49,7 +50,6 @@
 }
 
 -(void)setLabelButtonNames{
-    
     self.headerLabel.text = NSLOCALIZEDSTRING(@"DASHBOARD");
     self.noOfCallLabel.text = NSLOCALIZEDSTRING(@"No_OF_CALL");
     self.callMinutesLabel.text = NSLOCALIZEDSTRING(@"CALL_MINUTES");
@@ -83,6 +83,10 @@
     self.customerFeedBackButton.titleLabel.font = [UIFont largeSize];
 }
 
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -98,4 +102,6 @@
 }
 */
 
+- (IBAction)profileMgt_CustomerFeedBackButtonPressed:(UIButton *)sender {
+}
 @end

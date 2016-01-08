@@ -18,6 +18,10 @@
 @property(nonatomic,weak) IBOutlet UIImageView *editImageView;
 @end
 
-@interface ProfileViewEditViewController : BaseViewController
+@interface ProfileViewEditUpdateAnswerCell : UITableViewCell
+@property(nonatomic,weak) IBOutlet UILabel *answerLabel;
+@end
 
+@interface ProfileViewEditViewController : BaseViewController
+@property(nonatomic,readwrite)BOOL isFromDashBoard;
 @end
