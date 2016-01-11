@@ -50,20 +50,38 @@
     */
     
     ///*
-    self.namesArray = [[NSMutableArray alloc]initWithObjects:
-                       NSLOCALIZEDSTRING(@"PROFILE"),
-                       NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION"),
-                       NSLOCALIZEDSTRING(@"CALL_HISTORY"),
-                       NSLOCALIZEDSTRING(@"PURCHASES"),
-                       NSLOCALIZEDSTRING(@"FAVORITE_INTERPRETER"),
-                       NSLOCALIZEDSTRING(@"SETTINGS"), nil];
-    self.imagesNamesArray = [[NSMutableArray alloc]initWithObjects:
-                       PROFILE_IMAGE,
-                       ORDER_INTERPRETER_IMAGE,
-                       CALL_HISTORY_IMAGE,
-                       PURCHASE_IMAGE,
-                       FAV_INTERPRETER_IMAGE,
-                       SETTINGS_IMAGE, nil];
+    
+    if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
+        self.namesArray = [[NSMutableArray alloc]initWithObjects:
+                           NSLOCALIZEDSTRING(@"PROFILE"),
+                           NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION"),
+                           NSLOCALIZEDSTRING(@"CALL_HISTORY"),
+                           NSLOCALIZEDSTRING(@"PURCHASES"),
+                           NSLOCALIZEDSTRING(@"FAVORITE_INTERPRETER"),
+                           NSLOCALIZEDSTRING(@"SETTINGS"), nil];
+        self.imagesNamesArray = [[NSMutableArray alloc]initWithObjects:
+                                 PROFILE_IMAGE,
+                                 ORDER_INTERPRETER_IMAGE,
+                                 CALL_HISTORY_IMAGE,
+                                 PURCHASE_IMAGE,
+                                 FAV_INTERPRETER_IMAGE,
+                                 SETTINGS_IMAGE, nil];
+    }
+    else {
+        self.namesArray = [[NSMutableArray alloc]initWithObjects:
+                           NSLOCALIZEDSTRING(@"PROFILE"),
+                           NSLOCALIZEDSTRING(@"CALL_HISTORY"),
+                           NSLOCALIZEDSTRING(@"REVENUE"),
+                           NSLOCALIZEDSTRING(@"FEEDBACK"),
+                           NSLOCALIZEDSTRING(@"SETTINGS"), nil];
+        self.imagesNamesArray = [[NSMutableArray alloc]initWithObjects:
+                                 PROFILE_IMAGE,
+                                 CALL_HISTORY_IMAGE,
+                                 PROFILE_IMAGE,
+                                 PURCHASE_IMAGE,
+                                 SETTINGS_IMAGE, nil];
+    }
+    
     self.colorCodesArray = [[NSMutableArray alloc]initWithObjects:
                             [UIColor slideMenuBackgroundColorRow1],
                             [UIColor slideMenuBackgroundColorRow2],
@@ -129,7 +147,7 @@
     else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"SETTINGS")]){
         
         contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:SETTINGS_VIEW_CONTROLLER]];
-        self.sidebarController.contentViewController = contentNaviationController ;
+        //self.sidebarController.contentViewController = contentNaviationController ;
         return;
         
         FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];

@@ -184,7 +184,7 @@
     [signUpDictionary setObject:self.emaillTextField.text forKey:KEMAIL_W];
     [signUpDictionary setObject:[Utility_Shared_Instance checkForNullString:[Utility_Shared_Instance readStringUserPreference:USER_TYPE]] forKey:KTYPE_W];
     
-    [Web_Service_Call serviceCall:signUpDictionary webServicename:SIGNUP SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+    [Web_Service_Call serviceCall:signUpDictionary webServicename:SIGNUP_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         NSDictionary *responseDict=responseObject;
         
         dispatch_async(dispatch_get_main_queue(), ^{

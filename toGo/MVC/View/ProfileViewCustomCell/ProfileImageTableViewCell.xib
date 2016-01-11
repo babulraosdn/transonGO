@@ -15,9 +15,8 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="131"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="heZ-LM-IyL">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_profile_iPhone" translatesAutoresizingMaskIntoConstraints="NO" id="heZ-LM-IyL">
                         <rect key="frame" x="108" y="15" width="105" height="105"/>
-                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="105" id="V9F-q6-4pz"/>
                         </constraints>
@@ -56,5 +55,6 @@
     </objects>
     <resources>
         <image name="default_pic_iPhone" width="95" height="95"/>
+        <image name="default_profile_iPhone" width="35" height="35"/>
     </resources>
 </document>

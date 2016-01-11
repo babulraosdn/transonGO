@@ -83,9 +83,51 @@
     self.customerFeedBackButton.titleLabel.font = [UIFont largeSize];
 }
 
+
+
+
+-(void)getDashboardInfo
+{
+    [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"PLEASE_WAIT")]];
+    //WEB Service CODE
+    [Web_Service_Call getProfileInfoServiceCall:[Utility_Shared_Instance checkForNullString:[NSString stringWithFormat:@"%@%@",@"Bearer ",[Utility_Shared_Instance readStringUserPreference:USER_TOKEN]]] webServicename:PROFILE_INFO_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+        NSDictionary *responseDict=responseObject;
+        
+        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+                NSLog(@"dict-->%@",responseDict);
+                NSMutableDictionary *userDict = [responseDict objectForKey:@"user"];
+                //self.profileObject = [ProfileInfoObject new];
+                self.noOfCallDetailLabel.text = [userDict objectForKey:KNO_OF_CALL_W];
+                self.callMinutesDetailLabel.text = [userDict objectForKey:KCALL_MINUTES_W];
+                self.callYtdEarningsDetailLabel.text = [userDict objectForKey:KCALL_YTD_EARNINGS_W];
+                self.interpreterName.text = [userDict objectForKey:KNAME_W];
+                self.descriptionTextView.text = [userDict objectForKey:KDESCRIPTION_W];
+                
+            });
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+            });
+        }
+    } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                withMessage:[responseObject objectForKey:KMESSAGE_W]
+                                                     inView:self
+                                                  withStyle:UIAlertControllerStyleAlert];
+        });
+    }];
+}
+
+
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     
 }
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

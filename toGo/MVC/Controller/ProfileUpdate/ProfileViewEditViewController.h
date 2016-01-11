@@ -19,6 +19,7 @@
 @end
 
 @interface ProfileViewEditUpdateAnswerCell : UITableViewCell
+@property(nonatomic,weak) IBOutlet UILabel *headerLabel;
 @property(nonatomic,weak) IBOutlet UILabel *answerLabel;
 @end
 

@@ -107,17 +107,20 @@ _Pragma("clang diagnostic pop") \
 #define FACEBOOK_LOGIN              @"1"
 #define TWITTER_LOGIN               @"1"
 #define GOOGLE_LOGIN                @"1"
+#define POST_REQUEST                        @"POST"
+#define GET_REQUEST                         @"GET"
+
 
 //********************  WebService Names  ****************************************
 #pragma mark WebService Calls
-#define BASE_URL                    @"http://54.153.22.179:3000/"
-//#define BASE_URL                    @"http://172.10.55.110:3000/"
+//#define BASE_URL                    @"http://54.153.22.179:3000/"
+#define BASE_URL                      @"http://172.10.55.110:3000/"
 
-#define LOGIN                       @"authenticate"
-#define SIGNUP                      @"signup"
-#define FORGOTPASSWORD              @"forgot"
-#define SOCIAL_LOGIN                @"loginSignUp"
-#define PROFILE_INFO                @"api/getAgentInfo"
+#define LOGIN_W                       @"authenticate"
+#define SIGNUP_W                      @"signup"
+#define FORGOTPASSWORD_W              @"forgot"
+#define SOCIAL_LOGIN_W                @"loginSignUp"
+#define PROFILE_INFO_W                @"api/getAgentInfo"
 
 //********************  WebService Parameters   ****************************************
 #pragma mark WebService Parameters
@@ -126,8 +129,26 @@ _Pragma("clang diagnostic pop") \
 #define KPASSWORD_W                    @"password"
 #define KTYPE_W                        @"utype"
 #define KLOGIN_TYPE_W                  @"logintype"
-#define KAUTHORIZATION_W                        @"Authorization"
+#define KAUTHORIZATION_W               @"Authorization"
 
+#define KCERTIFICATES_W                @"certificates"
+#define KBANK_ACCOUNT_INFORMATION_W    @"bankaccountinfo"
+#define KDESCRIPTION_W                 @"description"
+#define KADDRESS_W                     @"address"
+#define KNICKNAME_W                    @"nickname"
+#define KNAME_W                      @"name"
+#define KPASSWORD_W                    @"password"
+#define KMYLANGUAGES_W                 @"mylanguage"
+#define KPHONE_NUMBER_W                @"phone_number"
+
+#define KCOUNTRY_NAME_W                @"countryName"
+#define KLANGUAGE_W                    @"language"
+#define KPROFILE_IMAGE_W               @"profile_img"
+#define KNO_OF_CALL_W                  @"noOfCall"
+#define KCALL_MINUTES_W                @"callMinutes"
+#define KCALL_YTD_EARNINGS_W           @"callYtdEarnings"
+#define KSTATUS_W                      @"status"
+#define K_W                            @""
 
 //********************  WebService Response Parameters   ****************************************
 #define KSUCCESS                       ((int)200)

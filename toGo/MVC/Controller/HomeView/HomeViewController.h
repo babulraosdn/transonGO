@@ -8,5 +8,5 @@
 
 #import <UIKit/UIKit.h>
 #import "Headers.h"
-@interface HomeViewController : BaseViewController
+@interface HomeViewController : UIViewController
 @end

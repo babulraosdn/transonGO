@@ -120,7 +120,7 @@
         //WEB Service CODE
         NSMutableDictionary *forgetPasswordDict=[NSMutableDictionary new];
         [forgetPasswordDict setValue:self.emailTextField.text forKey:KEMAIL_W];
-        [Web_Service_Call serviceCall:forgetPasswordDict webServicename:FORGOTPASSWORD SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+        [Web_Service_Call serviceCall:forgetPasswordDict webServicename:FORGOTPASSWORD_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
             NSDictionary *responseDict=responseObject;
             
             if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)

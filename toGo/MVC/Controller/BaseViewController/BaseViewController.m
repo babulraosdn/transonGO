@@ -29,6 +29,7 @@
     appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
      [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName : [UIFont normalSize]}];
      [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor textColorWhiteColor]}];
+    self.navigationController.navigationBar.translucent = NO;
 }
 
 -(void)setSlideMenuButtonFornavigation{

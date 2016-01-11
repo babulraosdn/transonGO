@@ -291,8 +291,8 @@
 
 - (IBAction)act_LogIn:(id)sender {
     
-    //[self createSidePanel];
-    //return;
+    [self createSidePanel];
+    return;
     
     
     AlertViewCustom *alertView = [[AlertViewCustom alloc]init];
@@ -329,9 +329,10 @@
     //[loginDictionary setObject:@"Obaid@123" forKey:KPASSWORD_W];
     //[loginDictionary setObject:@"togo-ibq@ice-breakrr.com" forKey:KEMAIL_W];
     
-    [Web_Service_Call serviceCall:loginDictionary webServicename:LOGIN SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+    [Web_Service_Call serviceCall:loginDictionary webServicename:LOGIN_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         
         NSDictionary *responseDict=responseObject;
+        
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
@@ -347,8 +348,8 @@
                 if ([responseDict objectForKey:KTOKEN_W]) {
                     [Utility_Shared_Instance writeStringUserPreference:USER_TOKEN value:[responseDict objectForKey:KTOKEN_W]];
                 }
-                //[self createSidePanel];
                 [self ooVooLogin];
+                [self createSidePanel];
             }
         }
         
@@ -679,16 +680,31 @@
 
 -(void)createSidePanel{
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_INTERPRETER_VIEW_CONTROLLER]];//DashBoardViewController
-        
-        
-        TheSidebarController *sidebarController = [[TheSidebarController alloc] initWithContentViewController:contentNavigationController
-                                                                                    leftSidebarViewController:[Utility_Shared_Instance getControllerForIdentifier:@"SlideMenuViewController"]
-                                                                                   rightSidebarViewController:nil];
-        
-        appDelegate.window.rootViewController = sidebarController;
-    });
+    if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_INTERPRETER_VIEW_CONTROLLER]];//DashBoardViewController
+            
+            
+            TheSidebarController *sidebarController = [[TheSidebarController alloc] initWithContentViewController:contentNavigationController
+                                                                                        leftSidebarViewController:[Utility_Shared_Instance getControllerForIdentifier:@"SlideMenuViewController"]
+                                                                                       rightSidebarViewController:nil];
+            
+            appDelegate.window.rootViewController = sidebarController;
+        });
+    }
+    else{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_USER_VIEW_CONTROLLER]];//DashBoardViewController
+            
+            
+            TheSidebarController *sidebarController = [[TheSidebarController alloc] initWithContentViewController:contentNavigationController
+                                                                                        leftSidebarViewController:[Utility_Shared_Instance getControllerForIdentifier:@"SlideMenuViewController"]
+                                                                                       rightSidebarViewController:nil];
+            
+            appDelegate.window.rootViewController = sidebarController;
+        });
+    }
+    
     
 }
 
