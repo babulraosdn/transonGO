@@ -15,6 +15,8 @@
 #define RADIO_OFF @"unselect_iPhone"
 #define RADIO_ON @"select_iPhone"
 #define DEFAULT_PIC DEFAULT_PIC_IMAGE
+#define EDIT_IMAGE EDIT_PEN_IMAGE
+
 
 @interface UIImage (Image)
 + (UIImage *)navigationBarImage;
@@ -23,5 +25,6 @@
 + (UIImage *)radioOffImage;
 + (UIImage *)radioONImage;
 + (UIImage *)defaultPicImage;
++ (UIImage *)editImage;
 + (UIImage *)setColor:(UIColor *)color frame:(CGRect)frame;
 @end

@@ -74,6 +74,8 @@ _Pragma("clang diagnostic pop") \
 #define USER_ID_PADDING_IMAGE       @"user_icon_iPhone"
 #define PASSWORD_PADDING_IMAGE      @"password_icon_iPhone"
 #define DEFAULT_PIC_IMAGE           @"default_pic_iPhone"
+#define EDIT_PEN_IMAGE                  @"Edit_iPhone"
+
 //SlideMenu
 #define CALL_HISTORY_IMAGE          @"call_history_icon_iPhone"
 #define FAV_INTERPRETER_IMAGE       @"fav_interpreter_icon_iPhone"
@@ -113,8 +115,8 @@ _Pragma("clang diagnostic pop") \
 
 //********************  WebService Names  ****************************************
 #pragma mark WebService Calls
-//#define BASE_URL                    @"http://54.153.22.179:3000/"
-#define BASE_URL                      @"http://172.10.55.110:3000/"
+#define BASE_URL                    @"http://54.153.22.179:3000/"
+//#define BASE_URL                      @"http://172.10.55.110:3000/"
 
 #define LOGIN_W                       @"authenticate"
 #define SIGNUP_W                      @"signup"

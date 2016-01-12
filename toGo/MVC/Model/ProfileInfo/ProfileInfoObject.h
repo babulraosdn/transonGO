@@ -12,9 +12,10 @@
 @property(nonatomic,strong) NSString *emailString;
 @property(nonatomic,strong) NSString *passwordString;
 @property(nonatomic,strong) NSString *nameString;
+@property(nonatomic,strong) NSString *nickNameString;
 @property(nonatomic,strong) NSString *addressString;
 @property(nonatomic,strong) NSString *phoneNumberString;
-@property(nonatomic,strong) NSString *descriptionString;
+//@property(nonatomic,strong) NSString *descriptionString;
 @property(nonatomic,strong) NSString *bankAccountInfoString;
 @property(nonatomic,strong) NSString *myLanguagesString;
 @property(nonatomic,strong) NSString *certificatesString;

@@ -46,6 +46,11 @@
     return image;
 }
 
++ (UIImage *)editImage{
+    static UIImage *image=nil;
+    if (!image) image = [UIImage imageNamed:EDIT_IMAGE];
+    return image;
+}
 
 + (UIImage *)setColor:(UIColor *)color frame:(CGRect)frame{
     UIView *colorView = [[UIView alloc] initWithFrame:frame];

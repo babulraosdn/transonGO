@@ -84,8 +84,6 @@
 }
 
 
-
-
 -(void)getDashboardInfo
 {
     [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"PLEASE_WAIT")]];

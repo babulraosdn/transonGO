@@ -9,5 +9,4 @@
 #import <UIKit/UIKit.h>
 
 @interface MyLanguagesView : UIView <UITableViewDataSource,UITableViewDelegate>
-
 @end

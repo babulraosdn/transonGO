@@ -10,14 +10,24 @@
 	#import "ProfileImageTableViewCell.h"
 #import "Headers.h"
 
-#define HEADER_HEIGHT 140
+#define HEADER_HEIGHT 157
+
+#define IMAGE_VIEW_TAG  666
+#define EDIT_BUTTON_TAG 777
+#define LABEL_TAG       888
+#define TEXT_VIEW_TAG   999
+
+
 
 @implementation ProfileViewEditUpdateCell
 @end
 @implementation ProfileViewEditUpdateAnswerCell
 @end
 
-@interface ProfileViewEditViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface ProfileViewEditViewController ()<UITableViewDataSource,UITableViewDelegate>{
+    CGFloat descriptionHeight;
+    UITableViewCell *addressDescriptionCell;
+}
 @property(nonatomic,strong) NSMutableArray *namesArray;
 //@property(nonatomic,strong) NSMutableArray *dataArray;
 @property(nonatomic,strong) IBOutlet UITableView *tblView;
@@ -39,31 +49,55 @@
     
     [self setLogoutButtonForNavigation];
     
-    self.tblView.estimatedRowHeight = 80;
-    self.tblView.rowHeight = UITableViewAutomaticDimension;
+    //[self registerForKeyboardNotifications];
     
-    
-    /*
-    [self.tblView setNeedsLayout];
-    [self.tblView layoutIfNeeded];
-    */
+}
 
+- (void)registerForKeyboardNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+}
+
+
+-(void)keyboardWasShown:(NSNotification*)notification
+{
+    
+    NSDictionary *info = [notification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.view.frame.origin.x,self.view.frame.origin.y, kbSize.height+100, 0);
+    self.tblView.contentInset = contentInsets;
+    self.tblView.scrollIndicatorInsets = contentInsets;
+    self.tblView.contentSize=CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-64);
+    
+}
+
+-(void)keyboardWillBeHidden:(NSNotification *)notification
+{
+    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    self.tblView.contentInset = contentInsets;
+    self.tblView.scrollIndicatorInsets = contentInsets;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     //[Utility_Shared_Instance showProgress];
-    [self getProfileInfo];
+    //[self getProfileInfo];
 }
 
 -(void)allocationsAndStaticText{
+    self.profileObject = [ProfileInfoObject new];
     self.namesArray = [[NSMutableArray alloc]initWithObjects:@"",
                        NSLOCALIZEDSTRING(@"EMAIL"),
                        NSLOCALIZEDSTRING(@"PASSWORD"),
                        NSLOCALIZEDSTRING(@"NAME"),
+                       NSLOCALIZEDSTRING(@"NICK_NAME"),
                        NSLOCALIZEDSTRING(@"ADDRESS"),
                        NSLOCALIZEDSTRING(@"PHONE_NUMBER"),
-                       NSLOCALIZEDSTRING(@"DESCRIPTION"),
                        NSLOCALIZEDSTRING(@"BANK_ACCOUNT_INFORMATION"),
                        NSLOCALIZEDSTRING(@"MY_LANGUAGES"),NSLOCALIZEDSTRING(@"CERTIFICATES"), nil];
     //self.dataArray = [[NSMutableArray alloc]initWithObjects:@"",@"kat@gmail.com",@"Admin@123",@"KatC",@"CA, Washington, USA dgf gdfgdf gdf dgdfg d7777",@"07515398752",@"dsasdgdfgdfgdgdfgdfgdfgdfggdfgdgdfgdfgdfg 7777",@"It's Confidential",@"Spanish, German",@"German certified", nil];
@@ -113,7 +147,8 @@
     }
     else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Address"] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Description"]) {
         //return 100;
-        return UITableViewAutomaticDimension;
+        //return UITableViewAutomaticDimension;
+        return [self heightOfTextViewWithString:@"START  END" withFont:[UIFont normal] andFixedWidth:280]+40;
     }
     return 80;
 }
@@ -123,7 +158,9 @@
         return HEADER_HEIGHT;
     }
     else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Address"] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Description"]) {
-        return 80;;
+        //return 100;
+        //return UITableViewAutomaticDimension;
+        return [self heightOfTextViewWithString:@"START  END" withFont:[UIFont normal] andFixedWidth:280];
     }
     return 70;
 }
@@ -137,43 +174,80 @@
             NSArray *cellArray = [[NSBundle mainBundle]loadNibNamed:cellIdentifier owner:self options:nil];
             cell = [cellArray objectAtIndex:0];
         }
+        cell.nameLabel.text = self.profileObject.nameString;
         cell.contentView.backgroundColor = [UIColor backgroundColor];
         return cell;
     }
     else{
-
         
         if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Address"] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Description"]) {
             
-            NSString *cellIdentifier = @"ProfileViewEditUpdateAnswerCell";
-            ProfileViewEditUpdateAnswerCell *addressDescriptionCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            addressDescriptionCell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"reuse"];
             
+            ///////////// Text/Data/Button Actions Assigning
             if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"ADDRESS")]) {
-                addressDescriptionCell.answerLabel.text = self.profileObject.addressString;
+                //addressDescriptionCell.answerLabel.text = self.profileObject.addressString;
             }
             if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"DESCRIPTION")]) {
-                addressDescriptionCell.answerLabel.text = self.profileObject.descriptionString;
             }
             
-            //@"START asdgaajkgghffsfsdjghjProfileViewEditUpdateCell  ProfileViewEditUpdateCell  ProfileViewEditUpdateCell                             ghjghjghjghjghjghjghjhj ghjghj  middle sdhajksdh kas ProfileViewEditUpdateCell END";
+            if ([addressDescriptionCell viewWithTag:IMAGE_VIEW_TAG]) {
+                [[addressDescriptionCell viewWithTag:IMAGE_VIEW_TAG] removeFromSuperview];
+            }
+            if ([addressDescriptionCell viewWithTag:EDIT_BUTTON_TAG]) {
+                [[addressDescriptionCell viewWithTag:EDIT_BUTTON_TAG] removeFromSuperview];
+            }
+            if ([addressDescriptionCell viewWithTag:LABEL_TAG]) {
+                [[addressDescriptionCell viewWithTag:LABEL_TAG] removeFromSuperview];
+            }
+            if ([addressDescriptionCell viewWithTag:TEXT_VIEW_TAG]) {
+                [[addressDescriptionCell viewWithTag:TEXT_VIEW_TAG] removeFromSuperview];
+            }
             
-            ///////////// Fonts
-            addressDescriptionCell.headerLabel.font = [UIFont normal];
-            addressDescriptionCell.answerLabel.font = [UIFont smallBig];
+            UIImageView *imgViewEdit = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width-37, 15, 12, 12)];
+            imgViewEdit.tag = IMAGE_VIEW_TAG;
+            //imgViewEdit.backgroundColor = [UIColor redColor];
+            imgViewEdit.image = [UIImage editImage];
+            [addressDescriptionCell.contentView addSubview:imgViewEdit];
             
-            ///////////// Text/background Color
-            addressDescriptionCell.answerLabel.textColor = [UIColor textColorLightBrownColor];
+            UIButton *editBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width-50, 5, 40, 40)];
+            editBtn.tag = EDIT_BUTTON_TAG;
+            //editBtn.backgroundColor = [UIColor blackColor];
+            [editBtn addTarget:self action:@selector(editButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            [addressDescriptionCell.contentView addSubview:editBtn];
+
+            
+            UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, self.view.frame.size.width-60, 20)];
+            label.text = [self.namesArray objectAtIndex:indexPath.row];
+            label.tag = LABEL_TAG;
+            //label.backgroundColor = [UIColor redColor];
+            [addressDescriptionCell.contentView addSubview:label];
+            
+            UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(10, 25, self.view.frame.size.width-20, descriptionHeight)];
+            textView.text = @"START  END";
+            textView.tag = TEXT_VIEW_TAG;
+            textView.text = self.profileObject.addressString;
+            [addressDescriptionCell.contentView addSubview:textView];
+            
+            if (self.profileObject.isAddressEdit) {
+                textView.userInteractionEnabled = YES;
+                textView.backgroundColor = [UIColor whiteColor];
+                [textView becomeFirstResponder];
+            }
+            else{
+                textView.userInteractionEnabled = NO;
+                textView.backgroundColor = [UIColor clearColor];
+            }
             addressDescriptionCell.contentView.backgroundColor = [UIColor backgroundColor];
-            ///////////// Text/Data/Button Actions Assigning
-            addressDescriptionCell.headerLabel.text = [self.namesArray objectAtIndex:indexPath.row];
-            
             return addressDescriptionCell;
         }
+        
         ProfileViewEditUpdateCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ProfileViewEditUpdateCell"];
         cell.descriptionTextView.hidden = YES;
         cell.descriptionLabel.hidden = YES;
         cell.editImageView.hidden = YES;
         cell.editButton.hidden = YES;
+        cell.languagesButton.hidden = YES;
         cell.descriptionTextView.userInteractionEnabled = NO;
         cell.descriptionTextField.secureTextEntry = NO;
         ///////////// Styles
@@ -213,13 +287,17 @@
             cell.editImageView.hidden = NO;
             cell.editButton.hidden = NO;
             cell.editButton.tag = indexPath.row;
+            
             if (self.profileObject.isAddressEdit) {
-                cell.descriptionTextView.userInteractionEnabled = YES;
-                [cell.descriptionTextField setBorderStyle:UITextBorderStyleRoundedRect];
+                cell.descriptionTextField.userInteractionEnabled = YES;
+                cell.descriptionTextField.backgroundColor = [UIColor whiteColor];
+                [cell.descriptionTextField becomeFirstResponder];
             }
             else{
-                //[cell.descriptionTextField setBorderStyle:UITextBorderStyleNone];
+                cell.descriptionTextField.userInteractionEnabled = NO;
+                cell.descriptionTextField.backgroundColor = [UIColor clearColor];
             }
+
             cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.addressString];
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"PHONE_NUMBER")]) {
@@ -238,34 +316,67 @@
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"DESCRIPTION")]) {
             cell.descriptionTextField.hidden = YES;
             cell.descriptionTextView.hidden = NO;
-            cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.descriptionString];
+            //cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.descriptionString];
         }
         if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"BANK_ACCOUNT_INFORMATION")]) {
             cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.bankAccountInfoString];
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"MY_LANGUAGES")]) {
-            cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.myLanguagesString];
+            //cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.myLanguagesString];
+            cell.languagesButton.hidden = NO;
+            [cell.languagesButton addTarget:self action:@selector(languagesButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"CERTIFICATES")]) {
             cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.certificatesString];
         }
         ////////
-
-        
         return cell;
     }
     return nil;
 }
 
+- (CGFloat)heightOfTextViewWithString:(NSString *)string
+                             withFont:(UIFont *)font
+                        andFixedWidth:(CGFloat)fixedWidth
+{
+    UITextView *tempTV = [[UITextView alloc]initWithFrame:CGRectMake(0, 0, fixedWidth, 1)];
+    tempTV.text = [string uppercaseString];
+    tempTV.font = font;
+    
+    CGSize newSize = [tempTV sizeThatFits:CGSizeMake(fixedWidth, MAXFLOAT)];
+    CGRect newFrame = tempTV.frame;
+    newFrame.size = CGSizeMake(fmaxf(newSize.width, fixedWidth), newSize.height);
+    tempTV.frame = newFrame;
+    
+    descriptionHeight = tempTV.frame.size.height;;
+    
+    return tempTV.frame.size.height;
+}
+
 -(void)editButtonPressed:(UIButton *)sender{
+    
+    if (sender.tag == EDIT_BUTTON_TAG) {
+        NSIndexPath *indexpath = [NSIndexPath indexPathForRow:4 inSection:0];
+        UITableViewCell *cell = (UITableViewCell *)[self.tblView cellForRowAtIndexPath:indexpath];
+        UITextView *txtView =  (UITextView *)[cell viewWithTag:TEXT_VIEW_TAG];
+        self.profileObject.addressString = txtView.text;
+        if(self.profileObject.isAddressEdit){
+            self.profileObject.isAddressEdit = NO;
+            [self.view endEditing:YES];
+        }
+        else{
+            self.profileObject.isAddressEdit = YES;
+        }
+        [self.tblView reloadData];
+        return;
+    }
     
     NSIndexPath *indexpath = [NSIndexPath indexPathForRow:sender.tag inSection:0];
     ProfileViewEditUpdateCell *cell = [self.tblView cellForRowAtIndexPath:indexpath];
     
     if ([cell.headerLabel.text isEqualToString:NSLOCALIZEDSTRING(@"ADDRESS")]) {
         self.profileObject.isPhoneNumberEdit = NO;
-        self.profileObject.addressString = cell.descriptionTextView.text;
-        if(self.profileObject.addressString){
+        if(self.profileObject.isAddressEdit){
             
             self.profileObject.isAddressEdit = NO;
         }
@@ -323,34 +434,17 @@
         });
     }];
 }
-/*
-{
- 
- 
- 
- 
-    NSURL *url = [NSURL URLWithString:@"http://172.10.55.110:3000/api/getAgentInfo"];
-    //NSURL *url = [NSURL URLWithString:@"http://54.153.22.179:3000/api/getAgentInfo"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    [request setTimeoutInterval:120.0f];
-    [request setHTTPMethod:@"GET"];
-    [request addValue:[Utility_Shared_Instance checkForNullString:[NSString stringWithFormat:@"%@%@",@"Bearer ",[Utility_Shared_Instance readStringUserPreference:USER_TOKEN]]] forHTTPHeaderField:KAUTHORIZATION_W];
-    [request addValue:@"application/json; charset=utf-8"  forHTTPHeaderField:@"Content-Type"];
+
+-(void)languagesButtonPressed{
+   // MyLanguagesView *languagesView = [MyLanguagesView new];
+   // [self.view addSubview:[languagesView myLanguagesView:nil viewIs:self.view]];
     
-    [[[NSURLSession sharedSession] dataTaskWithRequest:request
-                                     completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
-      {
-          [SVProgressHUD dismiss];
-          
-          if (!error)
-          {
-              NSError *errorNIl = nil;
-              NSDictionary *dictResponse =[NSDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&errorNIl]];
-              NSLog(@"dic-->%@",dictResponse.description);
-          }
-          else{
-          }
-      }] resume];
+    MyLanguagesView *languagesView =[[MyLanguagesView alloc]initWithFrame:CGRectZero];
+    
+    [self.view addSubview:languagesView];
+    
+
 }
-*/
+
+
 @end

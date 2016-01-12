@@ -291,8 +291,8 @@
 
 - (IBAction)act_LogIn:(id)sender {
     
-    [self createSidePanel];
-    return;
+    //[self createSidePanel];
+    //return;
     
     
     AlertViewCustom *alertView = [[AlertViewCustom alloc]init];

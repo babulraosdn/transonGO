@@ -15,12 +15,14 @@
 @property(nonatomic,weak) IBOutlet UITextView *descriptionTextView;
 @property(nonatomic,weak) IBOutlet UILabel *descriptionLabel;
 @property(nonatomic,weak) IBOutlet UIButton *editButton;
+@property (weak, nonatomic) IBOutlet UIButton *languagesButton;
 @property(nonatomic,weak) IBOutlet UIImageView *editImageView;
 @end
 
 @interface ProfileViewEditUpdateAnswerCell : UITableViewCell
 @property(nonatomic,weak) IBOutlet UILabel *headerLabel;
 @property(nonatomic,weak) IBOutlet UILabel *answerLabel;
+@property(nonatomic,weak) IBOutlet UITextView *answerTextView;
 @end
 
 @interface ProfileViewEditViewController : BaseViewController

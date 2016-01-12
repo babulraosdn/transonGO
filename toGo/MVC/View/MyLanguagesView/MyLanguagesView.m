@@ -7,25 +7,80 @@
 //
 
 #import "MyLanguagesView.h"
-
+#import "Headers.h"
 @implementation MyLanguagesView
 
 
--(UIView *)myLanguagesView:(NSMutableArray *)dataArray viewIs:(UIView *)currentView{
+-(instancetype)initWithFrame:(CGRect)frame {
     
+    if (self) {
+        self = [super initWithFrame:frame];
+        
+        self.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-64);
+        
+        self.backgroundColor = [UIColor redColor];
+        
+        [self configureUI];
+        
+    }
+    return self;
+}
+
+-(void)configureUI {
     
-    int alertViewHeight = 300;
-    int alertViewWidth = 270;
+    [self addTableView];
+    
+}
+
+-(void)addTableView {
+    
+    int alertViewHeight = self.frame.size.height-30;
+    int alertViewWidth = self.frame.size.width-30;
     
     UIView *mainView = [[UIView alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
     mainView.backgroundColor = [UIColor colorWithRed:14.0/255.0 green:14.0/255.0 blue:14.0/255.0 alpha:0.8];
+    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(self.center.x-(alertViewWidth/2), 30, alertViewWidth, alertViewHeight-30)];
     
-    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(currentView.center.x-(alertViewWidth/2), currentView.center.y-(alertViewHeight/2), alertViewWidth, alertViewHeight)];
+    tableView.delegate = self;
+    tableView.dataSource = self;
+    tableView.backgroundColor = [UIColor redColor];
+    [self addSubview:tableView];
     
     
+    UIButton *closeBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.frame.size.width-50, 10 , 40, 40)];
+    closeBtn.backgroundColor = [UIColor blackColor];
+    [closeBtn addTarget:self action:@selector(closeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    mainView.tag = 999;
+    [self addSubview:closeBtn];
+}
+
+
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return 20;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    [mainView addSubview:tableView];
-    return mainView;
+    return 44;
+}
+
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    
+    UITableViewCell *cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"reuse"];
+    cell.textLabel.text = @"TEST";
+    return cell;
+}
+
+
+
+-(void)closeButtonPressed{
+    [self removeFromSuperview];
 }
 
 /*
