@@ -35,7 +35,7 @@
     // Do any additional setup after loading the view.
 
     [self allocationsAndStaticText];
-    [self registerForKeyboardNotifications];
+    //[self registerForKeyboardNotifications];
     [self setCustomBackButtonForNavigation];
     [self setLabelButtonNames];
     [self setPlaceHolders];

@@ -10,6 +10,7 @@
 #import "Headers.h"
 
 @interface ProfileViewEditUpdateCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UIImageView *dropDownImageView;
 @property(nonatomic,weak) IBOutlet UILabel *headerLabel;
 @property(nonatomic,weak) IBOutlet UITextField *descriptionTextField;
 @property(nonatomic,weak) IBOutlet UITextView *descriptionTextView;

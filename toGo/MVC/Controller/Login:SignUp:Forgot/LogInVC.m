@@ -73,7 +73,6 @@
     // Do any additional setup after loading the view.
     [self setCustomBackButtonForNavigation];
     [self allocationsAndStaticText];
-    [self registerForKeyboardNotifications];
     [self setLabelButtonNames];
     [self setPlaceHolders];
     [self setRoundCorners];
@@ -82,6 +81,8 @@
     [self setFonts];
     
 }
+
+
 -(void)viewDidLayoutSubviews{
     
     if(IS_IPHONE_4S)
@@ -101,33 +102,6 @@
     socialView.delegate=self;
 }
 
-- (void)registerForKeyboardNotifications
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification object:nil];
-}
-
-
--(void)keyboardWasShown:(NSNotification*)notification
-{
-    NSDictionary *info = [notification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.view.frame.origin.x,self.view.frame.origin.y, kbSize.height+100, 0);
-    self.scrollView.contentInset = contentInsets;
-    self.scrollView.scrollIndicatorInsets = contentInsets;
-    
-}
-
--(void)keyboardWillBeHidden:(NSNotification *)notification
-{
-    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-    self.scrollView.contentInset = contentInsets;
-    self.scrollView.scrollIndicatorInsets = contentInsets;
-}
 
 -(void)setLabelButtonNames{
     self.forgotPasswordLabel.text = NSLOCALIZEDSTRING(@"FORGET_PASSWORD");
@@ -182,13 +156,14 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
+    [_scrollView setShowsHorizontalScrollIndicator:NO];
+    [_scrollView setShowsVerticalScrollIndicator:NO];
+    
     _txt_userId.text = [self randomUser];
     _txtDisplayName.text=[self returnSavedDisplayname];
     userIDString = _txt_userId.text;
     passwordString = _txtDisplayName.text;
     [self autorize];
-    
-   
 }
 - (void)viewDidDisappear:(BOOL)animated {
     self.txt_userId.text = @"";
@@ -294,7 +269,6 @@
     //[self createSidePanel];
     //return;
     
-    
     AlertViewCustom *alertView = [[AlertViewCustom alloc]init];
     UIView *viewIs = [alertView showAlertViewWithMessage:@"Please confirm the Registration by clicking the verification link on email" headingLabel:@"Confirm Registration" confirmButtonName:@"Confirm" cancelButtonName:@"Cancel" viewIs:self.view];
     //[self.view addSubview:viewIs]; //Alert View Custom
@@ -324,7 +298,6 @@
     [loginDictionary setObject:userIDString forKey:KUSERNAME_W];
     [loginDictionary setObject:[Utility_Shared_Instance checkForNullString:[Utility_Shared_Instance readStringUserPreference:USER_TYPE]] forKey:KTYPE_W];
     
-    
     //[loginDictionary setObject:@"obaidr@yopmail.com" forKey:KEMAIL_W];
     //[loginDictionary setObject:@"Obaid@123" forKey:KPASSWORD_W];
     //[loginDictionary setObject:@"togo-ibq@ice-breakrr.com" forKey:KEMAIL_W];
@@ -332,8 +305,7 @@
     [Web_Service_Call serviceCall:loginDictionary webServicename:LOGIN_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         
         NSDictionary *responseDict=responseObject;
-        
-        
+
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
             [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
@@ -352,10 +324,7 @@
                 [self createSidePanel];
             }
         }
-        
         [self reportAuthStatus];//This is to clear google cookies
-        
-        
         
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{

@@ -23,6 +23,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *headerLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *defaultImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *defaultPicBackgroundImageView;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+
 @end
 
 @implementation DashBoardViewController
@@ -34,18 +36,30 @@
     [self setSlideMenuButtonFornavigation];
     [self setLogoutButtonForNavigation];
     
+    [self setImages];
     [self setLabelButtonNames];
     [self setRoundCorners];
     [self setColors];
     [self setFonts];
     
+    [_scrollView setShowsHorizontalScrollIndicator:NO];
+    [_scrollView setShowsVerticalScrollIndicator:NO];
 }
 
 -(void)setLabelButtonNames{
-    //self.displaylabel.text = NSLOCALIZEDSTRING(@"FILL_YOUR_EMAIL_ID_FORGOT_PASSWORD_SCREEN_TEXT");
-    //[self.submitButton setTitle:NSLOCALIZEDSTRING(@"SEND_EMAIL") forState:UIControlStateNormal];
+    self.myLanguageLabel.text = NSLOCALIZEDSTRING(@"MY_LANGUAGE");
+    self.emailIDLabel.text = NSLOCALIZEDSTRING(@"EMAIL_ID");
+    [self.orderInterpretationButton setTitle:NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION")  forState: UIControlStateNormal];
+    [self.manageMyProfileButton setTitle:NSLOCALIZEDSTRING(@"MANAGE_MY_PROFILE")  forState: UIControlStateNormal];
+    [self.viewPurchaseHistoryButton setTitle:NSLOCALIZEDSTRING(@"VIEW_PURCHASE_HISTORY")  forState: UIControlStateNormal];
+    [self.provideFeedBackButton setTitle:NSLOCALIZEDSTRING(@"PROVIDE_FEEDBACK")  forState: UIControlStateNormal];
+    
 }
 
+-(void)setImages{
+    [self.manageMyProfileButton setBackgroundImage:[UIImage imageNamed:LIGHT_BUTTON_IMAGE] forState:UIControlStateNormal];
+    [self.viewPurchaseHistoryButton setBackgroundImage:[UIImage imageNamed:LIGHT_BUTTON_IMAGE] forState:UIControlStateNormal];
+}
 -(void)setRoundCorners{
     [UIButton roundedCornerButton:self.orderInterpretationButton];
     [UIButton roundedCornerButton:self.manageMyProfileButton];
@@ -95,13 +109,25 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [SVProgressHUD dismiss];
                 NSLog(@"dict-->%@",responseDict);
-                NSMutableDictionary *userDict = [responseDict objectForKey:@"user"];
-                self.nameLabel.text = [userDict objectForKey:KNAME_W];
-                self.countryLabel.text = [userDict objectForKey:KCOUNTRY_NAME_W];
-                self.myLanguageDetailLabel.text = [userDict objectForKey:KLANGUAGE_W];
-                self.emailIDDetailLabel.text = [userDict objectForKey:KEMAIL_W];
-                self.descriptionTextView.text = [userDict objectForKey:KDESCRIPTION_W];
-                
+             if ([responseDict objectForKey:KDASHBOARD_W]){
+                    NSMutableDictionary *dashBoardDict = [responseDict objectForKey:KDASHBOARD_W];
+                    NSString *idString;
+                    if ([dashBoardDict objectForKey:KID_W])
+                        idString = [dashBoardDict objectForKey:KID_W];
+                    if ([dashBoardDict objectForKey:KNAME_W])
+                        self.nameLabel.text = [dashBoardDict objectForKey:KNAME_W];
+                    if ([dashBoardDict objectForKey:KCOUNTRY_NAME_W])
+                        self.countryLabel.text = [dashBoardDict objectForKey:KCOUNTRY_NAME_W];
+                    if ([dashBoardDict objectForKey:KLANGUAGE_W])
+                        self.myLanguageDetailLabel.text = [dashBoardDict objectForKey:KLANGUAGE_W];
+                    if ([dashBoardDict objectForKey:KEMAIL_W])
+                        self.emailIDDetailLabel.text = [dashBoardDict objectForKey:KEMAIL_W];
+                    if ([dashBoardDict objectForKey:KDESCRIPTION_W])
+                        self.descriptionTextView.text = [dashBoardDict objectForKey:KDESCRIPTION_W];
+                    if ([dashBoardDict objectForKey:KPROFILE_IMAGE_W])
+                        self.defaultImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dashBoardDict objectForKey:KPROFILE_IMAGE_W]]]];
+              }
+
             });
             dispatch_async(dispatch_get_main_queue(), ^{
                 

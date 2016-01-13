@@ -17,9 +17,7 @@
         self = [super initWithFrame:frame];
         
         self.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-64);
-        
-        self.backgroundColor = [UIColor redColor];
-        
+        self.backgroundColor = [UIColor colorWithRed:14.0/255.0 green:14.0/255.0 blue:14.0/255.0 alpha:0.8];
         [self configureUI];
         
     }
@@ -28,6 +26,15 @@
 
 -(void)configureUI {
     
+    if (!self.isCountry&&!self.isState)
+        self.languagesDictionary = [self getLanguagesDictionary];
+    
+    /*
+    NSMutableArray *dictAllKeys=[NSMutableArray arrayWithArray:[self.languagesDictionary allKeys]];
+    NSMutableArray *dictAllValues=[NSMutableArray arrayWithArray:[self.languagesDictionary allValues]];
+    NSMutableArray *keysAndValues=[NSMutableArray arrayWithArray:[dictAllKeys arrayByAddingObjectsFromArray:dictAllValues]];
+    NSMutableArray *test = self.languagesDictionary.copy;
+    */
     [self addTableView];
     
 }
@@ -38,17 +45,18 @@
     int alertViewWidth = self.frame.size.width-30;
     
     UIView *mainView = [[UIView alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
-    mainView.backgroundColor = [UIColor colorWithRed:14.0/255.0 green:14.0/255.0 blue:14.0/255.0 alpha:0.8];
-    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(self.center.x-(alertViewWidth/2), 30, alertViewWidth, alertViewHeight-30)];
+    //mainView.backgroundColor = [UIColor colorWithRed:14.0/255.0 green:14.0/255.0 blue:14.0/255.0 alpha:0.8];
+    self.tblView = [[UITableView alloc]initWithFrame:CGRectMake(self.center.x-(alertViewWidth/2), 30, alertViewWidth, alertViewHeight-30)];
     
-    tableView.delegate = self;
-    tableView.dataSource = self;
-    tableView.backgroundColor = [UIColor redColor];
-    [self addSubview:tableView];
+    self.tblView.delegate = self;
+    self.tblView.dataSource = self;
+    //tableView.backgroundColor = [UIColor redColor];
+    [self addSubview:self.tblView];
     
     
     UIButton *closeBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.frame.size.width-50, 10 , 40, 40)];
-    closeBtn.backgroundColor = [UIColor blackColor];
+    //closeBtn.backgroundColor = [UIColor blackColor];
+    [closeBtn setBackgroundImage:[UIImage closeLanguagesImage] forState:UIControlStateNormal];
     [closeBtn addTarget:self action:@selector(closeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     mainView.tag = 999;
     [self addSubview:closeBtn];
@@ -60,7 +68,10 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 20;
+    if (self.isCountry || self.isState) {
+        return self.countriesStatesArray.count;
+    }
+    return [self.languagesDictionary allValues].count;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -72,15 +83,135 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     
-    UITableViewCell *cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"reuse"];
-    cell.textLabel.text = @"TEST";
+    if (self.isCountry || self.isState) {
+        UITableViewCell *cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"countryState"];
+        cell.textLabel.text = [self.countriesStatesArray objectAtIndex:indexPath.row];
+        if ([self.selectedCountriesStatesArray containsObject:[self.countriesStatesArray objectAtIndex: indexPath.row]]) {
+            [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+        }
+        return cell;
+    }
+    
+    UITableViewCell *cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"languages"];
+    cell.textLabel.text = [[self.languagesDictionary allKeys] objectAtIndex:indexPath.row];
+    if ([self.selectedLanguagesDict objectForKey:[[self.languagesDictionary allValues] objectAtIndex:indexPath.row]]) {
+        [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+    }
+    
     return cell;
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (self.isCountry || self.isState) {
+        if ([self.selectedCountriesStatesArray containsObject:[self.countriesStatesArray objectAtIndex: indexPath.row]]) {
+            [self.selectedCountriesStatesArray removeObject:[self.countriesStatesArray objectAtIndex: indexPath.row]];
+        }
+        else{
+            [self.selectedCountriesStatesArray addObject:[self.countriesStatesArray objectAtIndex: indexPath.row]];
+        }
+    }
+    if ([self.selectedLanguagesDict objectForKey:[[self.languagesDictionary allValues] objectAtIndex:indexPath.row]]) {
+        [self.selectedLanguagesDict removeObjectForKey:[[self.languagesDictionary allValues] objectAtIndex:indexPath.row]];
+    }
+    else{
+        [self.selectedLanguagesDict setObject:[[self.languagesDictionary allKeys] objectAtIndex:indexPath.row] forKey:[[self.languagesDictionary allValues] objectAtIndex:indexPath.row]];
+    }
+    [self.tblView reloadData];
+}
 
 
 -(void)closeButtonPressed{
+    
+    if (self.isCountry) {
+        [self.delegate finishCountrySelection:self.selectedCountriesStatesArray];
+    }
+    if (self.isState) {
+        [self.delegate finishStateSelection:self.selectedCountriesStatesArray];
+    }
+    [self.delegate finishLanguagesSelection:self.selectedLanguagesDict];
     [self removeFromSuperview];
+    //sss
+}
+
+-(NSMutableDictionary *)getLanguagesDictionary
+{
+    
+    self.languagesDictionary = [[NSMutableDictionary alloc]initWithObjectsAndKeys:
+                                @"AF",@"Afrikaans",
+                                @"SQ",@"Albanian",
+                                @"AR",@"Arabic",
+                                @"HY",@"Armenian",
+                                @"EU",@"Basque",
+                                @"BN",@"Bengali",
+                                @"BG",@"Bulgarian",
+                                @"CA",@"Catalan",
+                                @"KM",@"Cambodian",
+                                @"ZH",@"Chinese (Mandarin)",
+                                @"HR",@"Croatian",
+                                @"CS",@"Czech",
+                                @"DA",@"Danish",
+                                @"NL",@"Dutch",
+                                @"EN",@"English",
+                                @"ET",@"Estonian",
+                                @"FJ",@"Fiji",
+                                @"FI",@"Finnish",
+                                @"FR",@"French",
+                                @"KA",@"Georgian",
+                                @"DE",@"German",
+                                @"EL",@"Greek",
+                                @"GU",@"Gujarati",
+                                @"HE",@"Hebrew",
+                                @"HI",@"Hindi",
+                                @"HU",@"Hungarian",
+                                @"IS",@"Icelandic",
+                                @"ID",@"Indonesian",
+                                @"GA",@"Irish",
+                                @"IT",@"Italian",
+                                @"JA",@"Japanese",
+                                @"JW",@"Javanese",
+                                @"KO",@"Korean",
+                                @"LA",@"Latin",
+                                @"LV",@"Latvian",
+                                @"LT",@"Lithuanian",
+                                @"MK",@"Macedonian",
+                                @"MS",@"Malay",
+                                @"ML",@"Malayalam",
+                                @"MT",@"Maltese",
+                                @"MI",@"Maori",
+                                @"MR",@"Marathi",
+                                @"MN",@"Mongolian",
+                                @"NE",@"Nepali",
+                                @"NO",@"Norwegian",
+                                @"FA",@"Persian",
+                                @"PL",@"Polish",
+                                @"PT",@"Portuguese",
+                                @"PA",@"Punjabi",
+                                @"QU",@"Quechua",
+                                @"RO",@"Romanian",
+                                @"RU",@"Russian",
+                                @"SM",@"Samoan",
+                                @"SR",@"Serbian",
+                                @"SK",@"Slovak",
+                                @"SL",@"Slovenian",
+                                @"ES",@"Spanish",
+                                @"SW",@"Swahili",
+                                @"SV",@"Swedish",
+                                @"TA",@"Tamil",
+                                @"TT",@"Tatar",
+                                @"TE",@"Telugu",
+                                @"TH",@"Thai",
+                                @"BO",@"Tibetan",
+                                @"TO",@"Tonga",
+                                @"TR",@"Turkish",
+                                @"UK",@"Ukrainian",
+                                @"UR",@"Urdu",
+                                @"UZ",@"Uzbek",
+                                @"VI",@"Vietnamese",
+                                @"CY",@"Welsh",
+                                @"XH",@"Xhosa",nil];
+    
+    return self.languagesDictionary;
 }
 
 /*

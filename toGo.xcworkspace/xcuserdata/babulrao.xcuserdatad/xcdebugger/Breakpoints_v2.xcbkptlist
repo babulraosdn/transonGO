@@ -4,70 +4,6 @@
    version = "2.0">
    <Breakpoints>
       <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "toGo/WebServiceCall/WebServiceCall.m"
-            timestampString = "474212290.690571"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43"
-            landmarkName = "-serviceCall:webServicename:SuccessfulBlock:FailedCallBack:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "toGo/WebServiceCall/WebServiceCall.m"
-            timestampString = "474212290.690571"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
-            landmarkName = "-serviceCall:webServicename:SuccessfulBlock:FailedCallBack:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "toGo/WebServiceCall/WebServiceCall.m"
-            timestampString = "474212290.690571"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
-            landmarkName = "-serviceCall:webServicename:SuccessfulBlock:FailedCallBack:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "toGo/WebServiceCall/WebServiceCall.m"
-            timestampString = "474212290.690571"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "25"
-            endingLineNumber = "25"
-            landmarkName = "-serviceCall:webServicename:SuccessfulBlock:FailedCallBack:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
          <BreakpointContent
             shouldBeEnabled = "Yes"
@@ -83,13 +19,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "toGo/MVC/Controller/ProfileUpdate/ProfileViewEditViewController.m"
-            timestampString = "474284356.438961"
+            filePath = "toGo/MVC/View/MyLanguagesView/MyLanguagesView.m"
+            timestampString = "474382404.372935"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "232"
-            endingLineNumber = "232"
-            landmarkName = "-tableView:cellForRowAtIndexPath:"
+            startingLineNumber = "106"
+            endingLineNumber = "106"
+            landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -99,26 +35,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "toGo/Categories/UIImage/UIImage+Image.h"
-            timestampString = "474281281.321454"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "18"
-            endingLineNumber = "18">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "toGo/MVC/Controller/ProfileUpdate/ProfileViewEditViewController.m"
-            timestampString = "474287613.290219"
+            timestampString = "474383432.71399"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "361"
-            endingLineNumber = "361"
+            startingLineNumber = "395"
+            endingLineNumber = "395"
             landmarkName = "-editButtonPressed:"
             landmarkType = "5">
          </BreakpointContent>
@@ -126,16 +48,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "toGo/MVC/View/MyLanguagesView/MyLanguagesView.m"
-            timestampString = "474296766.499249"
+            filePath = "toGo/MVC/Controller/ProfileUpdate/ProfileViewEditViewController.m"
+            timestampString = "474383534.771906"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "96"
-            endingLineNumber = "96"
-            landmarkName = "-closeButtonPressed"
+            startingLineNumber = "416"
+            endingLineNumber = "416"
+            landmarkName = "-editButtonPressed:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

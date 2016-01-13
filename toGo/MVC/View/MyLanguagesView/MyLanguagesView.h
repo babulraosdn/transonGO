@@ -6,7 +6,28 @@
 //  Copyright © 2016 smartData. All rights reserved.
 //
 
+
 #import <UIKit/UIKit.h>
 
-@interface MyLanguagesView : UIView <UITableViewDataSource,UITableViewDelegate>
+@protocol MyLanguagesDelegate <NSObject>
+-(void)finishLanguagesSelection:(NSMutableDictionary *)selectedDataArray;
+-(void)finishCountrySelection:(NSMutableArray *)selectedDataArray;
+-(void)finishStateSelection:(NSMutableArray *)selectedLanguagesDict;
+@end
+
+@interface MyLanguagesView : UIView <UITableViewDataSource,UITableViewDelegate>{
+    
+    
+}
+@property(nonatomic,strong) UITableView *tblView;
+@property(nonatomic,strong) NSMutableDictionary *languagesDictionary;
+@property(nonatomic,strong) NSMutableDictionary *selectedLanguagesDict;
+@property(nonatomic,strong) NSMutableArray *selectedCountriesStatesArray;
+@property(nonatomic,strong) NSMutableArray *countriesStatesArray;
+@property(nonatomic,readwrite) BOOL isCountry;
+@property(nonatomic,readwrite) BOOL isState;
+-(NSMutableDictionary *)languagesDictionary;
+
+@property(nonatomic,weak)id <MyLanguagesDelegate> delegate;
+
 @end

@@ -13,7 +13,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *customerFeedBackButton;
 @property (weak, nonatomic) IBOutlet UIButton *profileManagementButton;
 @property (weak, nonatomic) IBOutlet UITextView *descriptionTextView;
-@property (weak, nonatomic) IBOutlet UISwitch *segmentControl;
+@property (weak, nonatomic) IBOutlet UISwitch *switchControl;
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 @property (weak, nonatomic) IBOutlet UILabel *callYtdEarningsDetailLabel;
 @property (weak, nonatomic) IBOutlet UILabel *callYtdEarningslabel;
@@ -37,12 +37,17 @@
     [self setLogoutButtonForNavigation];
     [self setLabelButtonNames];
     [self setRoundCorners];
+    [self setImages];
     [self setColors];
     [self setFonts];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    [self.switchControl addTarget:self action:@selector(changeAvailabilityStatus:) forControlEvents:UIControlEventValueChanged];
+    [self.switchControl setOffImage:[UIImage switchOffImage]];
     
+    [_scrollView setShowsHorizontalScrollIndicator:NO];
+    [_scrollView setShowsVerticalScrollIndicator:NO];
 }
 
 -(void)viewDidLayoutSubviews{
@@ -64,6 +69,9 @@
     [UIButton roundedCornerButton:self.customerFeedBackButton];
 }
 
+-(void)setImages{
+    [self.customerFeedBackButton setBackgroundImage:[UIImage imageNamed:LIGHT_BUTTON_IMAGE] forState:UIControlStateNormal];
+}
 
 -(void)setColors{
     self.descriptionTextView.textColor = [UIColor textColorBlackColor];
@@ -83,7 +91,8 @@
     self.customerFeedBackButton.titleLabel.font = [UIFont largeSize];
 }
 
-
+// 1860 180 1290
+// 9am to 6 PM
 -(void)getDashboardInfo
 {
     [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"PLEASE_WAIT")]];
@@ -96,13 +105,27 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [SVProgressHUD dismiss];
                 NSLog(@"dict-->%@",responseDict);
-                NSMutableDictionary *userDict = [responseDict objectForKey:@"user"];
-                //self.profileObject = [ProfileInfoObject new];
-                self.noOfCallDetailLabel.text = [userDict objectForKey:KNO_OF_CALL_W];
-                self.callMinutesDetailLabel.text = [userDict objectForKey:KCALL_MINUTES_W];
-                self.callYtdEarningsDetailLabel.text = [userDict objectForKey:KCALL_YTD_EARNINGS_W];
-                self.interpreterName.text = [userDict objectForKey:KNAME_W];
-                self.descriptionTextView.text = [userDict objectForKey:KDESCRIPTION_W];
+             if ([responseDict objectForKey:KDASHBOARD_W]){
+                    NSMutableDictionary *dashBoardDict = [responseDict objectForKey:KDASHBOARD_W];
+                    NSString *idString;
+                    NSString *statusString;
+                    if ([dashBoardDict objectForKey:KID_W])
+                        idString = [dashBoardDict objectForKey:KID_W];
+                    if ([dashBoardDict objectForKey:KNAME_W])
+                        self.interpreterName.text = [dashBoardDict objectForKey:KNAME_W];
+                    if ([dashBoardDict objectForKey:KNO_OF_CALL_W])
+                        self.noOfCallDetailLabel.text = [dashBoardDict objectForKey:KNO_OF_CALL_W];
+                    if ([dashBoardDict objectForKey:KCALL_MINUTES_W])
+                        self.callMinutesDetailLabel.text = [dashBoardDict objectForKey:KCALL_MINUTES_W];
+                    if ([dashBoardDict objectForKey:KCALL_YTD_EARNINGS_W])
+                        self.callYtdEarningsDetailLabel.text = [dashBoardDict objectForKey:KCALL_YTD_EARNINGS_W];
+                    if ([dashBoardDict objectForKey:KSTATUS_W])
+                        statusString = [dashBoardDict objectForKey:KSTATUS_W];
+                    if ([dashBoardDict objectForKey:KDESCRIPTION_W])
+                        self.descriptionTextView.text = [dashBoardDict objectForKey:KDESCRIPTION_W];
+                    if ([dashBoardDict objectForKey:KPROFILE_IMAGE_W])
+                        self.defaultImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dashBoardDict objectForKey:KPROFILE_IMAGE_W]]]];
+               }
                 
             });
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -120,6 +143,43 @@
     }];
 }
 
+- (void)changeAvailabilityStatus:(id)sender
+{
+    NSMutableDictionary *statusDict=[NSMutableDictionary new];
+   [statusDict setValue:@"interpreter#obaidr@yopmail.com#1452495888666" forKey:KID_W];
+   [statusDict setValue:@"obaidr@yopmail.com" forKey:KEMAIL_W];
+    
+    BOOL state = [sender isOn];
+    //NSString *rez = state == YES ? @"YES" : @"NO";
+    if (state) {
+        [statusDict setValue:@"true" forKey:KINTERPRETER_AVAILABILITY_W];
+        [self.switchControl setOffImage:[UIImage switchONImage]];
+    }
+    else{
+        [statusDict setValue:@"false" forKey:KINTERPRETER_AVAILABILITY_W];
+        [self.switchControl setOffImage:[UIImage switchOffImage]];
+    }
+    
+   [Web_Service_Call serviceCallWithRequestType:statusDict requestType:POST_REQUEST includeHeader:YES includeBody:NO webServicename:UPDATE_INTERPRETER_STATUS_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+        NSDictionary *responseDict=responseObject;
+        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+                NSLog(@"dict-->%@",responseDict);
+            });
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+            });
+        }
+    } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
+        
+    }];
+}
+
+-(void)updateStatusInterpreter{
+    
+}
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     

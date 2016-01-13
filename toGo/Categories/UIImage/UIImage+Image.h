@@ -24,7 +24,11 @@
 + (UIImage *)uncheckBoxImage;
 + (UIImage *)radioOffImage;
 + (UIImage *)radioONImage;
++ (UIImage *)switchOffImage;
++ (UIImage *)switchONImage;
 + (UIImage *)defaultPicImage;
 + (UIImage *)editImage;
++ (UIImage *)lightButtonImage;
++ (UIImage *)closeLanguagesImage;
 + (UIImage *)setColor:(UIColor *)color frame:(CGRect)frame;
 @end

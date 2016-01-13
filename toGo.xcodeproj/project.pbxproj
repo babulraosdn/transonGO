@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		ED08F1BC1C324A0F005569E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ED08F1BB1C324A0F005569E9 /* Assets.xcassets */; settings = {ASSET_TAGS = (); }; };
+		ED145A561C4612D600A5B211 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED145A511C4612D600A5B211 /* TPKeyboardAvoidingScrollView.m */; settings = {ASSET_TAGS = (); }; };
+		ED145A571C4612D600A5B211 /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED145A531C4612D600A5B211 /* TPKeyboardAvoidingTableView.m */; settings = {ASSET_TAGS = (); }; };
+		ED145A581C4612D600A5B211 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = ED145A551C4612D600A5B211 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; settings = {ASSET_TAGS = (); }; };
 		ED1B7EC21C2AA3AB00C49026 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = ED1B7EC11C2AA3AB00C49026 /* Localizable.strings */; settings = {ASSET_TAGS = (); }; };
 		ED1B7EEB1C2AA48600C49026 /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED1B7EC71C2AA48600C49026 /* BaseViewController.m */; settings = {ASSET_TAGS = (); }; };
 		ED1B7EEF1C2AA48600C49026 /* ContactsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED1B7ED01C2AA48600C49026 /* ContactsListViewController.m */; settings = {ASSET_TAGS = (); }; };
@@ -148,6 +151,12 @@
 		225DC74E3CD6A604E30A9792 /* Pods-toGo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-toGo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-toGo/Pods-toGo.debug.xcconfig"; sourceTree = "<group>"; };
 		5124B52B1DC8B6C374F80798 /* Pods-toGo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-toGo.release.xcconfig"; path = "Pods/Target Support Files/Pods-toGo/Pods-toGo.release.xcconfig"; sourceTree = "<group>"; };
 		ED08F1BB1C324A0F005569E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		ED145A501C4612D600A5B211 /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
+		ED145A511C4612D600A5B211 /* TPKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
+		ED145A521C4612D600A5B211 /* TPKeyboardAvoidingTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingTableView.h; sourceTree = "<group>"; };
+		ED145A531C4612D600A5B211 /* TPKeyboardAvoidingTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingTableView.m; sourceTree = "<group>"; };
+		ED145A541C4612D600A5B211 /* UIScrollView+TPKeyboardAvoidingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+TPKeyboardAvoidingAdditions.h"; sourceTree = "<group>"; };
+		ED145A551C4612D600A5B211 /* UIScrollView+TPKeyboardAvoidingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+TPKeyboardAvoidingAdditions.m"; sourceTree = "<group>"; };
 		ED1B7EC01C2AA3AB00C49026 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		ED1B7EC61C2AA48600C49026 /* BaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
 		ED1B7EC71C2AA48600C49026 /* BaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
@@ -433,6 +442,27 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		ED145A4E1C4612D600A5B211 /* ThirdParty */ = {
+			isa = PBXGroup;
+			children = (
+				ED145A4F1C4612D600A5B211 /* TPKeyboardAvoidingScrollView */,
+			);
+			path = ThirdParty;
+			sourceTree = "<group>";
+		};
+		ED145A4F1C4612D600A5B211 /* TPKeyboardAvoidingScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				ED145A501C4612D600A5B211 /* TPKeyboardAvoidingScrollView.h */,
+				ED145A511C4612D600A5B211 /* TPKeyboardAvoidingScrollView.m */,
+				ED145A521C4612D600A5B211 /* TPKeyboardAvoidingTableView.h */,
+				ED145A531C4612D600A5B211 /* TPKeyboardAvoidingTableView.m */,
+				ED145A541C4612D600A5B211 /* UIScrollView+TPKeyboardAvoidingAdditions.h */,
+				ED145A551C4612D600A5B211 /* UIScrollView+TPKeyboardAvoidingAdditions.m */,
+			);
+			path = TPKeyboardAvoidingScrollView;
+			sourceTree = "<group>";
+		};
 		ED1B7EC31C2AA48600C49026 /* MVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -711,6 +741,7 @@
 		ED8B515F1C1EEF7000CA7306 /* toGo */ = {
 			isa = PBXGroup;
 			children = (
+				ED145A4E1C4612D600A5B211 /* ThirdParty */,
 				EDE22E511C3A9B3900923ADF /* Assests */,
 				ED8B51631C1EEF7000CA7306 /* AppDelegate.h */,
 				ED8B51641C1EEF7000CA7306 /* AppDelegate.m */,
@@ -1364,6 +1395,7 @@
 				EDFD7E121C27CB8B00E4FEEB /* FileLogger.m in Sources */,
 				ED8B51D81C1EEFED00CA7306 /* AlertView.m in Sources */,
 				ED8B51E71C1EEFED00CA7306 /* InternetActivityVC.m in Sources */,
+				ED145A561C4612D600A5B211 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				EDFD7E081C27C68100E4FEEB /* UIFont+Font.m in Sources */,
 				ED2F28261C316E57003D8C82 /* ProfileInfoObject.m in Sources */,
 				ED8B51DE1C1EEFED00CA7306 /* CustomToolbarVC.m in Sources */,
@@ -1386,6 +1418,7 @@
 				ED8B51DB1C1EEFED00CA7306 /* CNMessage.m in Sources */,
 				ED8B51E41C1EEFED00CA7306 /* FriendsListVC.m in Sources */,
 				ED8B51EE1C1EEFED00CA7306 /* VideoConferenceVC.m in Sources */,
+				ED145A571C4612D600A5B211 /* TPKeyboardAvoidingTableView.m in Sources */,
 				ED1B7EF31C2AA48600C49026 /* SignUpViewController.m in Sources */,
 				ED8B51E51C1EEFED00CA7306 /* InfoViewController.m in Sources */,
 				ED8B51EF1C1EEFED00CA7306 /* VideoFrameUser.m in Sources */,
@@ -1402,6 +1435,7 @@
 				EDFD7E071C27C68100E4FEEB /* UIColor+toGo.m in Sources */,
 				ED437BFD1C1FD94800DB68E0 /* Utility.m in Sources */,
 				ED8B51ED1C1EEFED00CA7306 /* UserDefaults.m in Sources */,
+				ED145A581C4612D600A5B211 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
 				EDFD7E091C27C68100E4FEEB /* UIImage+Image.m in Sources */,
 				ED1B7EF61C2AA48600C49026 /* CustomTextFieldDelegate.m in Sources */,
 				ED2F28061C310E3B003D8C82 /* UIView+toGo.m in Sources */,

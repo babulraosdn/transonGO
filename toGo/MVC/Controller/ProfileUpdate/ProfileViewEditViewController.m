@@ -24,7 +24,7 @@
 @implementation ProfileViewEditUpdateAnswerCell
 @end
 
-@interface ProfileViewEditViewController ()<UITableViewDataSource,UITableViewDelegate>{
+@interface ProfileViewEditViewController ()<UITableViewDataSource,UITableViewDelegate,MyLanguagesDelegate>{
     CGFloat descriptionHeight;
     UITableViewCell *addressDescriptionCell;
 }
@@ -32,6 +32,8 @@
 //@property(nonatomic,strong) NSMutableArray *dataArray;
 @property(nonatomic,strong) IBOutlet UITableView *tblView;
 @property(nonatomic,strong) ProfileInfoObject *profileObject;
+
+@property(nonatomic,strong) NSMutableDictionary *selectedLanguagesDict;
 @end
 
 @implementation ProfileViewEditViewController
@@ -49,70 +51,33 @@
     
     [self setLogoutButtonForNavigation];
     
-    //[self registerForKeyboardNotifications];
-    
-}
-
-- (void)registerForKeyboardNotifications
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification object:nil];
-}
-
-
--(void)keyboardWasShown:(NSNotification*)notification
-{
-    
-    NSDictionary *info = [notification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.view.frame.origin.x,self.view.frame.origin.y, kbSize.height+100, 0);
-    self.tblView.contentInset = contentInsets;
-    self.tblView.scrollIndicatorInsets = contentInsets;
-    self.tblView.contentSize=CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-64);
-    
-}
-
--(void)keyboardWillBeHidden:(NSNotification *)notification
-{
-    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-    self.tblView.contentInset = contentInsets;
-    self.tblView.scrollIndicatorInsets = contentInsets;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    //[Utility_Shared_Instance showProgress];
-    //[self getProfileInfo];
+    [self getProfileInfo];
+    [_tblView setShowsHorizontalScrollIndicator:NO];
+    [_tblView setShowsVerticalScrollIndicator:NO];
 }
 
 -(void)allocationsAndStaticText{
     self.profileObject = [ProfileInfoObject new];
+    self.selectedLanguagesDict = [NSMutableDictionary new];
+    if ([Utility_Shared_Instance readStringUserPreference:USER_TYPE]) {
+        
+    }
     self.namesArray = [[NSMutableArray alloc]initWithObjects:@"",
-                       NSLOCALIZEDSTRING(@"EMAIL"),
-                       NSLOCALIZEDSTRING(@"PASSWORD"),
-                       NSLOCALIZEDSTRING(@"NAME"),
                        NSLOCALIZEDSTRING(@"NICK_NAME"),
+                       NSLOCALIZEDSTRING(@"UID"),
+                       NSLOCALIZEDSTRING(@"EMAIL"),
                        NSLOCALIZEDSTRING(@"ADDRESS"),
+                       NSLOCALIZEDSTRING(@"COUNTRY"),
+                       NSLOCALIZEDSTRING(@"STATE"),
+                       NSLOCALIZEDSTRING(@"CITY"),
+                       NSLOCALIZEDSTRING(@"POST_CODE"),
                        NSLOCALIZEDSTRING(@"PHONE_NUMBER"),
-                       NSLOCALIZEDSTRING(@"BANK_ACCOUNT_INFORMATION"),
+                       NSLOCALIZEDSTRING(@"EIN_TaxID"),
                        NSLOCALIZEDSTRING(@"MY_LANGUAGES"),NSLOCALIZEDSTRING(@"CERTIFICATES"), nil];
-    //self.dataArray = [[NSMutableArray alloc]initWithObjects:@"",@"kat@gmail.com",@"Admin@123",@"KatC",@"CA, Washington, USA dgf gdfgdf gdf dgdfg d7777",@"07515398752",@"dsasdgdfgdfgdgdfgdfgdfgdfggdfgdgdfgdfgdfg 7777",@"It's Confidential",@"Spanish, German",@"German certified", nil];
-    /*
-    self.profileObject = [ProfileInfoObject new];
-    self.profileObject.emailString = @"kat@gmail.com";
-    self.profileObject.passwordString = @"Admin@123";
-    self.profileObject.nameString = @"KatC";
-    self.profileObject.addressString = @"CA, USA";
-    self.profileObject.phoneNumberString = @"07515398752";
-    self.profileObject.descriptionString = @"Description is __________";
-    self.profileObject.bankAccountInfoString = @"10598752469";
-    self.profileObject.myLanguagesString = @"Spanish, German";
-    self.profileObject.certificatesString = @"German certified";
-    */
 }
 
 -(UIView*)createProfileImageView{
@@ -250,6 +215,7 @@
         cell.languagesButton.hidden = YES;
         cell.descriptionTextView.userInteractionEnabled = NO;
         cell.descriptionTextField.secureTextEntry = NO;
+        cell.dropDownImageView.hidden = YES;
         ///////////// Styles
         [cell.descriptionTextField setBorderStyle:UITextBorderStyleNone];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -263,6 +229,7 @@
         cell.descriptionTextField.textColor = [UIColor textColorLightBrownColor];
         cell.descriptionTextView.textColor = [UIColor textColorLightBrownColor];
         cell.contentView.backgroundColor = [UIColor backgroundColor];
+        [cell.languagesButton setBackgroundColor:[UIColor buttonBackgroundColor]];
         
         ///////////// Text/Data/Button Actions Assigning
         //cell.descriptionTextField.text = [self.dataArray objectAtIndex:indexPath.row];
@@ -278,9 +245,20 @@
             cell.descriptionTextField.secureTextEntry = YES;
             cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.passwordString];
         }
-        else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"NAME")]) {
-            cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.nameString];
+        else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"NICK_NAME")]) {
+            cell.editImageView.hidden = NO;
+            cell.editButton.hidden = NO;
+            cell.editButton.tag = indexPath.row;
+            if (self.profileObject.isNickNameEdit) {
+                cell.descriptionTextField.enabled = YES;
+                [cell.descriptionTextField setBorderStyle:UITextBorderStyleRoundedRect];
+            }
+            else{
+                cell.descriptionTextField.enabled = NO;
+            }
+            cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.nickNameString];
         }
+        
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"ADDRESS")]) {
             cell.descriptionTextField.hidden = YES;
             cell.descriptionTextView.hidden = NO;
@@ -300,6 +278,60 @@
 
             cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.addressString];
         }
+        else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"COUNTRY")]) {
+            cell.languagesButton.hidden = NO;
+            cell.dropDownImageView.hidden = NO;
+            if ([Utility_Shared_Instance checkForNullString:self.profileObject.countryString].length) {
+                [cell.languagesButton setTitle:self.profileObject.countryString forState:UIControlStateNormal];
+            }
+            else{
+                [cell.languagesButton setTitle:NSLOCALIZEDSTRING(@"COUNTRY") forState:UIControlStateNormal];
+            }
+            
+            [cell.languagesButton addTarget:self action:@selector(countryButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        }
+        else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"STATE")]) {
+            cell.languagesButton.hidden = NO;
+            cell.dropDownImageView.hidden = NO;
+            if ([Utility_Shared_Instance checkForNullString:self.profileObject.stateString].length) {
+                [cell.languagesButton setTitle:self.profileObject.stateString forState:UIControlStateNormal];
+            }
+            else{
+                [cell.languagesButton setTitle:NSLOCALIZEDSTRING(@"STATE") forState:UIControlStateNormal];
+            }
+            
+            [cell.languagesButton addTarget:self action:@selector(stateButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        }
+        else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"CITY")]) {
+            
+            cell.editImageView.hidden = NO;
+            cell.editButton.hidden = NO;
+            cell.editButton.tag = indexPath.row;
+            if (self.profileObject.isCityEdit) {
+                cell.descriptionTextField.enabled = YES;
+                [cell.descriptionTextField setBorderStyle:UITextBorderStyleRoundedRect];
+            }
+            else{
+                cell.descriptionTextField.enabled = NO;
+            }
+            cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.cityString];
+        }
+        else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"POST_CODE")]) {
+            cell.editImageView.hidden = NO;
+            cell.editButton.hidden = NO;
+            cell.editButton.tag = indexPath.row;
+            if (self.profileObject.isPostalCodeEdit) {
+                cell.descriptionTextField.enabled = YES;
+                [cell.descriptionTextField setBorderStyle:UITextBorderStyleRoundedRect];
+            }
+            else{
+                cell.descriptionTextField.enabled = NO;
+            }
+            cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.postalCodeString];
+        }
+        else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"EIN_TaxID")]) {
+            cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.eINtaxIDString];
+        }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"PHONE_NUMBER")]) {
             cell.editImageView.hidden = NO;
             cell.editButton.hidden = NO;
@@ -316,20 +348,25 @@
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"DESCRIPTION")]) {
             cell.descriptionTextField.hidden = YES;
             cell.descriptionTextView.hidden = NO;
-            //cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.descriptionString];
         }
         if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"BANK_ACCOUNT_INFORMATION")]) {
             cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.bankAccountInfoString];
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"MY_LANGUAGES")]) {
-            //cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.myLanguagesString];
             cell.languagesButton.hidden = NO;
+            cell.dropDownImageView.hidden = NO;
+            if ([self.selectedLanguagesDict allValues].count) {
+                [cell.languagesButton setTitle:self.profileObject.myLanguagesString forState:UIControlStateNormal];
+            }
+            else{
+                [cell.languagesButton setTitle:NSLOCALIZEDSTRING(@"MY_LANGUAGES") forState:UIControlStateNormal];
+            }
+            
             [cell.languagesButton addTarget:self action:@selector(languagesButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"CERTIFICATES")]) {
             cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.certificatesString];
         }
-        ////////
         return cell;
     }
     return nil;
@@ -356,6 +393,7 @@
 -(void)editButtonPressed:(UIButton *)sender{
     
     if (sender.tag == EDIT_BUTTON_TAG) {
+        //This Condition is only for Address Edit
         NSIndexPath *indexpath = [NSIndexPath indexPathForRow:4 inSection:0];
         UITableViewCell *cell = (UITableViewCell *)[self.tblView cellForRowAtIndexPath:indexpath];
         UITextView *txtView =  (UITextView *)[cell viewWithTag:TEXT_VIEW_TAG];
@@ -363,6 +401,7 @@
         if(self.profileObject.isAddressEdit){
             self.profileObject.isAddressEdit = NO;
             [self.view endEditing:YES];
+            [self saveProfileInfo];
         }
         else{
             self.profileObject.isAddressEdit = YES;
@@ -376,32 +415,83 @@
     
     if ([cell.headerLabel.text isEqualToString:NSLOCALIZEDSTRING(@"ADDRESS")]) {
         self.profileObject.isPhoneNumberEdit = NO;
+        self.profileObject.isCityEdit = NO;
+        self.profileObject.isPostalCodeEdit = NO;
+        self.profileObject.isNickNameEdit = NO;
         if(self.profileObject.isAddressEdit){
             
             self.profileObject.isAddressEdit = NO;
+            [self saveProfileInfo];
         }
         else{
             self.profileObject.isAddressEdit = YES;
         }
     }
     if ([cell.headerLabel.text isEqualToString:NSLOCALIZEDSTRING(@"PHONE_NUMBER")]) {
+        self.profileObject.isCityEdit = NO;
         self.profileObject.isAddressEdit = NO;
+        self.profileObject.isPostalCodeEdit = NO;
+        self.profileObject.isNickNameEdit = NO;
         self.profileObject.phoneNumberString = cell.descriptionTextField.text;
         if(self.profileObject.isPhoneNumberEdit){
             self.profileObject.isPhoneNumberEdit = NO;
+            [self saveProfileInfo];
         }
         else{
             self.profileObject.isPhoneNumberEdit = YES;
         }
     }
+    if ([cell.headerLabel.text isEqualToString:NSLOCALIZEDSTRING(@"CITY")]) {
+        self.profileObject.isPhoneNumberEdit = NO;
+        self.profileObject.isAddressEdit = NO;
+        self.profileObject.isPostalCodeEdit = NO;
+        self.profileObject.isNickNameEdit = NO;
+        self.profileObject.cityString = cell.descriptionTextField.text;
+        if(self.profileObject.isCityEdit){
+            self.profileObject.isCityEdit = NO;
+            [self saveProfileInfo];
+        }
+        else{
+            self.profileObject.isCityEdit = YES;
+        }
+    }
+    if ([cell.headerLabel.text isEqualToString:NSLOCALIZEDSTRING(@"NICK_NAME")]) {
+        self.profileObject.isPhoneNumberEdit = NO;
+        self.profileObject.isCityEdit = NO;
+        self.profileObject.isAddressEdit = NO;
+        self.profileObject.isPostalCodeEdit = NO;
+        self.profileObject.nickNameString = cell.descriptionTextField.text;
+        if(self.profileObject.isNickNameEdit){
+            self.profileObject.isNickNameEdit = NO;
+            [self saveProfileInfo];
+        }
+        else{
+            self.profileObject.isNickNameEdit = YES;
+        }
+    }
+    if ([cell.headerLabel.text isEqualToString:NSLOCALIZEDSTRING(@"POSTAL_CODE")]) {
+        self.profileObject.isPhoneNumberEdit = NO;
+        self.profileObject.isCityEdit = NO;
+        self.profileObject.isAddressEdit = NO;
+        self.profileObject.isNickNameEdit = NO;
+        self.profileObject.postalCodeString = cell.descriptionTextField.text;
+        if(self.profileObject.isPostalCodeEdit){
+            self.profileObject.isPostalCodeEdit = NO;
+            [self saveProfileInfo];
+        }
+        else{
+            self.profileObject.isPostalCodeEdit = YES;
+        }
+    }
     [self.tblView reloadData];
+    
 }
 
 -(void)getProfileInfo
 {
-    [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"PLEASE_WAIT")]];
+    [Utility_Shared_Instance showProgress];
     //WEB Service CODE
-    [Web_Service_Call getProfileInfoServiceCall:[Utility_Shared_Instance checkForNullString:[NSString stringWithFormat:@"%@%@",@"Bearer ",[Utility_Shared_Instance readStringUserPreference:USER_TOKEN]]] webServicename:PROFILE_INFO_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+    [Web_Service_Call serviceCallWithRequestType:nil requestType:GET_REQUEST includeHeader:YES includeBody:NO webServicename:PROFILE_INFO_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         NSDictionary *responseDict=responseObject;
         
         if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
@@ -411,6 +501,8 @@
                 NSLog(@"dict-->%@",responseDict);
                 NSMutableDictionary *userDict = [responseDict objectForKey:@"user"];
                 self.profileObject = [ProfileInfoObject new];
+                self.profileObject.idString = [userDict objectForKey:KID_W];
+                [Utility_Shared_Instance writeStringUserPreference:KID_W value:[userDict objectForKey:KID_W]];
                 self.profileObject.emailString = [userDict objectForKey:KEMAIL_W];
                 self.profileObject.passwordString = [userDict objectForKey:KPASSWORD_W];
                 self.profileObject.nameString = [userDict objectForKey:KNICKNAME_W];
@@ -425,26 +517,91 @@
             });
         }
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD dismiss];
-            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                                withMessage:[responseObject objectForKey:KMESSAGE_W]
-                                                     inView:self
-                                                  withStyle:UIAlertControllerStyleAlert];
-        });
+        
     }];
+    
 }
 
 -(void)languagesButtonPressed{
-   // MyLanguagesView *languagesView = [MyLanguagesView new];
-   // [self.view addSubview:[languagesView myLanguagesView:nil viewIs:self.view]];
-    
     MyLanguagesView *languagesView =[[MyLanguagesView alloc]initWithFrame:CGRectZero];
-    
+    languagesView.delegate = self;
+    languagesView.selectedLanguagesDict = self.selectedLanguagesDict;
+    [languagesView.tblView reloadData];
     [self.view addSubview:languagesView];
-    
+}
 
+-(void)countryButtonPressed{
+    MyLanguagesView *languagesView =[[MyLanguagesView alloc]initWithFrame:CGRectZero];
+    languagesView.delegate = self;
+    languagesView.isCountry = YES;
+    languagesView.selectedCountriesStatesArray  = [NSMutableArray new];
+    languagesView.countriesStatesArray = [[NSMutableArray alloc]initWithObjects:@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9", nil];
+    [languagesView.tblView reloadData];
+    [self.view addSubview:languagesView];
+}
+
+-(void)stateButtonPressed{
+    MyLanguagesView *languagesView =[[MyLanguagesView alloc]initWithFrame:CGRectZero];
+    languagesView.delegate = self;
+    languagesView.isState = YES;
+    languagesView.selectedCountriesStatesArray  = [NSMutableArray new];
+    languagesView.countriesStatesArray = [[NSMutableArray alloc]initWithObjects:@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9", nil];
+    [languagesView.tblView reloadData];
+    [self.view addSubview:languagesView];
 }
 
 
+-(void)finishLanguagesSelection:(NSMutableDictionary *)selectedLanguagesDict{
+    NSLog(@"selectedlanguages -->%@",[selectedLanguagesDict description]);
+    self.selectedLanguagesDict = selectedLanguagesDict;
+    self.profileObject.myLanguagesString = [[self.selectedLanguagesDict allValues] componentsJoinedByString:@","];
+    [self.tblView reloadData];
+}
+
+-(void)finishCountrySelection:(NSMutableArray *)selectedDataArray{
+    NSLog(@"selectedDataArray -->%@",[selectedDataArray description]);
+    self.profileObject.countryString = [selectedDataArray componentsJoinedByString:@","];
+    [self.tblView reloadData];
+}
+
+-(void)finishStateSelection:(NSMutableArray *)selectedDataArray{
+    NSLog(@"selectedDataArray -->%@",[selectedDataArray description]);
+    self.profileObject.stateString = [selectedDataArray componentsJoinedByString:@","];
+    [self.tblView reloadData];
+}
+
+-(void)saveProfileInfo{
+    [Utility_Shared_Instance showProgress];
+    //WEB Service CODE
+    NSMutableDictionary *saveDict=[NSMutableDictionary new];
+    [saveDict setValue:[Utility_Shared_Instance readStringUserPreference:KID_W] forKey:KID_W];
+    [saveDict setValue:self.profileObject.emailString forKey:KEMAIL_W];
+    [saveDict setValue:self.profileObject.nameString forKey:KNAME_W];
+    [saveDict setValue:self.profileObject.nickNameString forKey:KNICKNAME_W];
+    [saveDict setValue:self.profileObject.phoneNumberString forKey:KPHONE_NUMBER_W];
+    [saveDict setValue:self.profileObject.myLanguagesString forKey:KMYLANGUAGE_W];
+    [saveDict setValue:self.profileObject.addressString forKey:KADDRESS_W];
+    [saveDict setValue:self.profileObject.countryString forKey:KCOUNTRY_W];
+    [saveDict setValue:self.profileObject.stateString forKey:KSTATE_W];
+    [saveDict setValue:self.profileObject.cityString forKey:KCITY_W];
+    [saveDict setValue:self.profileObject.postalCodeString forKey:KPOSTALCODE_W];
+    [saveDict setValue:self.profileObject.eINtaxIDString forKey:KEIN_TAXID_W];
+    
+    [Web_Service_Call serviceCallWithRequestType:saveDict requestType:POST_REQUEST includeHeader:YES includeBody:YES webServicename:UPDATE_PROFILE_INFO_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+        NSDictionary *responseDict=responseObject;
+        
+        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+                NSLog(@"dict-->%@",responseDict);
+            });
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+            });
+        }
+    } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
+        
+    }];
+}
 @end

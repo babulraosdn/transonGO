@@ -40,6 +40,19 @@
     return image;
 }
 
+
++ (UIImage *)switchOffImage{
+    static UIImage *image=nil;
+    if (!image) image = [UIImage imageNamed:SWITCH_OFF_IMAGE];
+    return image;
+}
+
++ (UIImage *)switchONImage{
+    static UIImage *image=nil;
+    if (!image) image = [UIImage imageNamed:SWITCH_ON_IMAGE];
+    return image;
+}
+
 + (UIImage *)defaultPicImage{
     static UIImage *image=nil;
     if (!image) image = [UIImage imageNamed:DEFAULT_PIC];
@@ -51,6 +64,19 @@
     if (!image) image = [UIImage imageNamed:EDIT_IMAGE];
     return image;
 }
+
++ (UIImage *)lightButtonImage{
+    static UIImage *image=nil;
+    if (!image) image = [UIImage imageNamed:LIGHT_BUTTON_IMAGE];
+    return image;
+}
+
++ (UIImage *)closeLanguagesImage{
+    static UIImage *image=nil;
+    if (!image) image = [UIImage imageNamed:CLOSE_LANGUAGES_IMAGE];
+    return image;
+}
+
 
 + (UIImage *)setColor:(UIColor *)color frame:(CGRect)frame{
     UIView *colorView = [[UIView alloc] initWithFrame:frame];

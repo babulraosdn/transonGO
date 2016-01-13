@@ -12,6 +12,7 @@
 @interface ForgetPasswordViewController (){
     
 }
+
 @property (weak, nonatomic) IBOutlet UITextField *emailTextField;
 @property (weak, nonatomic) IBOutlet UIButton *submitButton;
 @property (weak, nonatomic) IBOutlet UILabel *displaylabel;
@@ -31,41 +32,18 @@
     [self setPadding];
     [self setColors];
     [self setFonts];
-    [self registerForKeyboardNotifications];
     
 }
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self viewWillAppear:animated];
+    [_scrollView setShowsHorizontalScrollIndicator:NO];
+    [_scrollView setShowsVerticalScrollIndicator:NO];
+}
+
 -(void)viewDidLayoutSubviews{
     _scrollView.contentSize=CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-64);
     
-}
-- (void)registerForKeyboardNotifications
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification object:nil];
-}
-
-
--(void)keyboardWasShown:(NSNotification*)notification
-{
-    
-    
-    NSDictionary *info = [notification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.view.frame.origin.x,self.view.frame.origin.y, kbSize.height+100, 0);
-    self.scrollView.contentInset = contentInsets;
-    self.scrollView.scrollIndicatorInsets = contentInsets;
-    
-}
-
--(void)keyboardWillBeHidden:(NSNotification *)notification
-{
-    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-    self.scrollView.contentInset = contentInsets;
-    self.scrollView.scrollIndicatorInsets = contentInsets;
 }
 
 -(void)setPlaceHolders{

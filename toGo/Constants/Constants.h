@@ -74,7 +74,13 @@ _Pragma("clang diagnostic pop") \
 #define USER_ID_PADDING_IMAGE       @"user_icon_iPhone"
 #define PASSWORD_PADDING_IMAGE      @"password_icon_iPhone"
 #define DEFAULT_PIC_IMAGE           @"default_pic_iPhone"
-#define EDIT_PEN_IMAGE                  @"Edit_iPhone"
+#define EDIT_PEN_IMAGE              @"Edit_iPhone"
+#define LIGHT_BUTTON_IMAGE           @"light-button"
+#define SWITCH_OFF_IMAGE           @"status-bar-off"
+#define SWITCH_ON_IMAGE           @"status-bar-on"
+#define CLOSE_LANGUAGES_IMAGE           @"close_iPhone"
+
+
 
 //SlideMenu
 #define CALL_HISTORY_IMAGE          @"call_history_icon_iPhone"
@@ -109,20 +115,24 @@ _Pragma("clang diagnostic pop") \
 #define FACEBOOK_LOGIN              @"1"
 #define TWITTER_LOGIN               @"1"
 #define GOOGLE_LOGIN                @"1"
-#define POST_REQUEST                        @"POST"
-#define GET_REQUEST                         @"GET"
+#define POST_REQUEST                @"POST"
+#define GET_REQUEST                 @"GET"
 
 
 //********************  WebService Names  ****************************************
 #pragma mark WebService Calls
-#define BASE_URL                    @"http://54.153.22.179:3000/"
-//#define BASE_URL                      @"http://172.10.55.110:3000/"
+//#define BASE_URL                    @"http://54.153.22.179:3000/"
+#define BASE_URL                      @"http://172.10.55.110:3000/"
 
 #define LOGIN_W                       @"authenticate"
 #define SIGNUP_W                      @"signup"
 #define FORGOTPASSWORD_W              @"forgot"
 #define SOCIAL_LOGIN_W                @"loginSignUp"
 #define PROFILE_INFO_W                @"api/getAgentInfo"
+#define UPDATE_INTERPRETER_STATUS_W   @"api/updateAgentAvailability"
+#define UPDATE_PROFILE_INFO_W                @"api/updateAgentProfile"
+
+
 
 //********************  WebService Parameters   ****************************************
 #pragma mark WebService Parameters
@@ -150,6 +160,15 @@ _Pragma("clang diagnostic pop") \
 #define KCALL_MINUTES_W                @"callMinutes"
 #define KCALL_YTD_EARNINGS_W           @"callYtdEarnings"
 #define KSTATUS_W                      @"status"
+#define KID_W                          @"id"
+#define KINTERPRETER_AVAILABILITY_W    @"interpreter_availability"
+#define KMYLANGUAGE_W                   @"mylanguage"
+#define KCOUNTRY_W                      @"country"
+#define KSTATE_W                       @"state"
+#define KCITY_W                         @"city"
+#define KPOSTALCODE_W                    @"zipcode"
+#define KEIN_TAXID_W                      @"ein_taxId"
+
 #define K_W                            @""
 
 //********************  WebService Response Parameters   ****************************************
@@ -157,6 +176,8 @@ _Pragma("clang diagnostic pop") \
 #define KCODE_W                        @"code"
 #define KMESSAGE_W                     @"message"
 #define KTOKEN_W                       @"token"
+#define KDASHBOARD_W                   @"dashboard"
+
 
 
 //********************  ViewConroller Names  ****************************************
