@@ -197,6 +197,11 @@
         
         if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
         {
+            _usernameTextField.text = @"";
+            _emaillTextField.text= @"";
+            _passwordTextField.text= @"";
+            _confirmpasswordTextField.text= @"";
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.navigationController popViewControllerAnimated:YES];
             });

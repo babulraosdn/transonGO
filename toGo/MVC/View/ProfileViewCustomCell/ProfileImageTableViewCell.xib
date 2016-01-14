@@ -15,20 +15,19 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="157"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_profile_iPhone" translatesAutoresizingMaskIntoConstraints="NO" id="heZ-LM-IyL">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_profile_iPhone" translatesAutoresizingMaskIntoConstraints="NO" id="heZ-LM-IyL">
                         <rect key="frame" x="110" y="18" width="100" height="100"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="100" id="DH0-uW-IGc"/>
                             <constraint firstAttribute="width" constant="100" id="V9F-q6-4pz"/>
+                            <constraint firstAttribute="height" constant="100" id="eeP-7k-ykn"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="DH0-uW-IGc"/>
-                            </mask>
-                        </variation>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_pic_iPhone" translatesAutoresizingMaskIntoConstraints="NO" id="UBu-di-yDA">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_pic_iPhone" translatesAutoresizingMaskIntoConstraints="NO" id="UBu-di-yDA">
                         <rect key="frame" x="113" y="21" width="95" height="95"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="95" id="XsE-Hz-bMR"/>
+                            <constraint firstAttribute="width" constant="95" id="b9J-2i-kz6"/>
+                        </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dsM-JB-T95">
                         <rect key="frame" x="20" y="154" width="280" height="1"/>
@@ -55,17 +54,26 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2cu-6t-cHM">
+                        <rect key="frame" x="88" y="2" width="144" height="132"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="132" id="I6h-kH-Mbc"/>
+                            <constraint firstAttribute="width" constant="144" id="Sh8-As-CeC"/>
+                        </constraints>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottomMargin" secondItem="dsM-JB-T95" secondAttribute="bottom" constant="-7" id="0pB-bw-xvk"/>
                     <constraint firstItem="isj-78-1sd" firstAttribute="top" secondItem="UBu-di-yDA" secondAttribute="bottom" constant="8" symbolic="YES" id="0uP-rG-Pjp"/>
                     <constraint firstItem="dsM-JB-T95" firstAttribute="top" secondItem="isj-78-1sd" secondAttribute="bottom" constant="9" id="8Q9-S6-mVf"/>
                     <constraint firstItem="heZ-LM-IyL" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="10" id="A4N-zA-nSb"/>
+                    <constraint firstItem="2cu-6t-cHM" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="A5c-kI-8yw"/>
                     <constraint firstItem="dsM-JB-T95" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="12" id="OXT-uX-YTN"/>
                     <constraint firstItem="heZ-LM-IyL" firstAttribute="centerY" secondItem="UBu-di-yDA" secondAttribute="centerY" id="S2q-zk-ZBb"/>
                     <constraint firstItem="isj-78-1sd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="YFK-Fs-jhe"/>
                     <constraint firstItem="heZ-LM-IyL" firstAttribute="centerX" secondItem="UBu-di-yDA" secondAttribute="centerX" id="a8l-jv-pUy"/>
                     <constraint firstAttribute="trailingMargin" secondItem="dsM-JB-T95" secondAttribute="trailing" constant="12" id="fLI-i6-ixu"/>
+                    <constraint firstItem="2cu-6t-cHM" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" constant="-10.5" id="hdR-MC-o6s"/>
                     <constraint firstAttribute="trailing" secondItem="isj-78-1sd" secondAttribute="trailing" constant="20" id="ifE-SU-SHp"/>
                     <constraint firstItem="isj-78-1sd" firstAttribute="top" secondItem="heZ-LM-IyL" secondAttribute="bottom" constant="6" id="l37-DL-hms"/>
                     <constraint firstItem="heZ-LM-IyL" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="lTh-z0-EJ3"/>
@@ -84,6 +92,7 @@
                 <outlet property="backgroundImageView" destination="heZ-LM-IyL" id="FF3-wl-LpC"/>
                 <outlet property="nameLabel" destination="isj-78-1sd" id="3nA-aR-BIQ"/>
                 <outlet property="profileImageView" destination="UBu-di-yDA" id="yhF-WM-YTe"/>
+                <outlet property="selectImageButton" destination="2cu-6t-cHM" id="vKX-LD-Jov"/>
             </connections>
             <point key="canvasLocation" x="461" y="268"/>
         </tableViewCell>

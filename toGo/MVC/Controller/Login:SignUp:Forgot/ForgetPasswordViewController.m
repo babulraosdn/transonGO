@@ -103,6 +103,7 @@
             
             if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
             {
+                _emailTextField.text = @"";
                 //[self.navigationController popViewControllerAnimated:YES];//Not Working
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [SVProgressHUD dismiss];

@@ -10,6 +10,7 @@
 
 @interface ProfileInfoObject : NSObject
 @property(nonatomic,strong) NSString *idString;
+@property(nonatomic,strong) NSString *uIdString;
 @property(nonatomic,strong) NSString *emailString;
 @property(nonatomic,strong) NSString *passwordString;
 @property(nonatomic,strong) NSString *nameString;
@@ -19,6 +20,7 @@
 @property(nonatomic,strong) NSString *bankAccountInfoString;
 @property(nonatomic,strong) NSString *myLanguagesString;
 @property(nonatomic,strong) NSString *certificatesString;
+@property(nonatomic,strong) NSString *imageURLString;
 
 @property(nonatomic,strong) NSString *countryString;
 @property(nonatomic,strong) NSString *stateString;
@@ -31,4 +33,5 @@
 @property(nonatomic,readwrite) BOOL isNickNameEdit;
 @property(nonatomic,readwrite) BOOL isCityEdit;
 @property(nonatomic,readwrite) BOOL isPostalCodeEdit;
+
 @end

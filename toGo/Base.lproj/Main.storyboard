@@ -505,14 +505,14 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jur-Yi-ARO">
                                 <rect key="frame" x="0.0" y="63" width="600" height="537"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_profile_iPhone" translatesAutoresizingMaskIntoConstraints="NO" id="PJR-tl-R1c">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_profile_iPhone" translatesAutoresizingMaskIntoConstraints="NO" id="PJR-tl-R1c">
                                         <rect key="frame" x="250" y="10" width="105" height="105"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="105" id="ckc-Qj-zEl"/>
                                             <constraint firstAttribute="width" constant="105" id="yUC-fb-2Bw"/>
                                         </constraints>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_pic_iPhone" translatesAutoresizingMaskIntoConstraints="NO" id="HwY-Lp-gZl">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_pic_iPhone" translatesAutoresizingMaskIntoConstraints="NO" id="HwY-Lp-gZl">
                                         <rect key="frame" x="255" y="15" width="95" height="95"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="95" id="1zw-kg-1wb"/>
@@ -739,15 +739,19 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LZO-qA-JuL">
                                 <rect key="frame" x="0.0" y="62" width="600" height="538"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_profile_iPhone" translatesAutoresizingMaskIntoConstraints="NO" id="Pmg-60-dms">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_profile_iPhone" translatesAutoresizingMaskIntoConstraints="NO" id="Pmg-60-dms">
                                         <rect key="frame" x="22" y="36" width="105" height="105"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="105" id="9Bw-h0-QLq"/>
                                             <constraint firstAttribute="width" constant="105" id="mC9-wB-qjV"/>
                                         </constraints>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_pic_iPhone" translatesAutoresizingMaskIntoConstraints="NO" id="mgS-Dv-WFu">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_pic_iPhone" translatesAutoresizingMaskIntoConstraints="NO" id="mgS-Dv-WFu">
                                         <rect key="frame" x="27" y="41" width="95" height="95"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="95" id="1Mx-St-hiT"/>
+                                            <constraint firstAttribute="width" constant="95" id="4aP-RU-Ohn"/>
+                                        </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="JOHN LEVIS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JDS-PO-3qt">
                                         <rect key="frame" x="27" y="156" width="96" height="21"/>
@@ -1368,7 +1372,7 @@
                                             <outlet property="descriptionTextView" destination="5Nq-iE-FGT" id="zVx-dB-x4D"/>
                                             <outlet property="dropDownImageView" destination="2D0-OV-qkl" id="Yh4-JN-yTD"/>
                                             <outlet property="editButton" destination="MYF-7n-eVl" id="OuH-8o-fdF"/>
-                                            <outlet property="editImageView" destination="LBL-Om-7tA" id="AfT-dL-CwU"/>
+                                            <outlet property="editImageView" destination="LBL-Om-7tA" id="2r2-tA-8C0"/>
                                             <outlet property="headerLabel" destination="FRC-yJ-s4W" id="LGp-Qz-Uvk"/>
                                             <outlet property="languagesButton" destination="Y7L-q5-3Fa" id="JO5-hv-ZKq"/>
                                         </connections>
@@ -2446,13 +2450,13 @@
                                         <rect key="frame" x="150" y="403" width="300" height="60"/>
                                         <subviews>
                                             <button opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="40" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ayg-85-S2c">
-                                                <rect key="frame" x="59" y="3" width="55" height="53"/>
+                                                <rect key="frame" x="94" y="3" width="55" height="53"/>
                                                 <state key="normal" backgroundImage="fb_iPhone"/>
                                                 <connections>
                                                     <action selector="loginWithSoicalAccounts:" destination="n1c-YN-6va" eventType="touchUpInside" id="pbA-Jd-j4p"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="40" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W3g-D7-bNt">
+                                            <button hidden="YES" opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="40" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W3g-D7-bNt">
                                                 <rect key="frame" x="122" y="3" width="55" height="53"/>
                                                 <state key="normal" backgroundImage="tw_iPhone">
                                                     <color key="titleColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -2462,14 +2466,14 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" tag="4" contentMode="scaleToFill" horizontalHuggingPriority="40" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nDg-Cw-Wuc">
-                                                <rect key="frame" x="185" y="3" width="55" height="53"/>
+                                                <rect key="frame" x="158" y="3" width="55" height="53"/>
                                                 <state key="normal" backgroundImage="g+_iPhone"/>
                                                 <connections>
                                                     <action selector="loginWithSoicalAccounts:" destination="n1c-YN-6va" eventType="touchUpInside" id="DaD-o7-X78"/>
                                                 </connections>
                                             </button>
                                             <button hidden="YES" opaque="NO" tag="3" contentMode="scaleToFill" horizontalHuggingPriority="40" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K61-ec-RZz">
-                                                <rect key="frame" x="160" y="0.0" width="50" height="50"/>
+                                                <rect key="frame" x="157" y="0.0" width="50" height="50"/>
                                                 <color key="backgroundColor" red="0.83921568629999999" green="0.2788930711" blue="0.17335831209999999" alpha="1" colorSpace="calibratedRGB"/>
                                                 <state key="normal" title="l"/>
                                                 <connections>

@@ -48,6 +48,9 @@
     
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setShowsVerticalScrollIndicator:NO];
+    
+    [Utility_Shared_Instance showProgress];
+    [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
 }
 
 -(void)viewDidLayoutSubviews{
@@ -146,8 +149,8 @@
 - (void)changeAvailabilityStatus:(id)sender
 {
     NSMutableDictionary *statusDict=[NSMutableDictionary new];
-   [statusDict setValue:@"interpreter#obaidr@yopmail.com#1452495888666" forKey:KID_W];
-   [statusDict setValue:@"obaidr@yopmail.com" forKey:KEMAIL_W];
+   [statusDict setValue:[Utility_Shared_Instance readStringUserPreference:KID_W] forKey:KID_W];
+   [statusDict setValue:[Utility_Shared_Instance readStringUserPreference:KEMAIL_W] forKey:KEMAIL_W];
     
     BOOL state = [sender isOn];
     //NSString *rez = state == YES ? @"YES" : @"NO";
@@ -204,4 +207,40 @@
 
 - (IBAction)profileMgt_CustomerFeedBackButtonPressed:(UIButton *)sender {
 }
+
+
+
+-(void)getProfileInfo
+{
+    //WEB Service CODE
+    [Web_Service_Call serviceCallWithRequestType:nil requestType:GET_REQUEST includeHeader:YES includeBody:NO webServicename:PROFILE_INFO_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+        NSDictionary *responseDict=responseObject;
+        
+        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+                NSLog(@"dict-->%@",responseDict);
+                NSMutableDictionary *userDict = [responseDict objectForKey:@"user"];
+                [Utility_Shared_Instance writeStringUserPreference:KID_W value:[userDict objectForKey:KID_W]];
+                NSDictionary *profileImgDict =  [userDict objectForKey:KPROFILE_IMAGE_W];
+                [Utility_Shared_Instance writeStringUserPreference:KEMAIL_W value:[userDict objectForKey:KEMAIL_W]];
+                NSString *imageURLString = [profileImgDict objectForKey:KURL_W];
+                if (imageURLString.length) {
+                    self.defaultImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURLString]]];
+                    self.defaultImageView.layer.cornerRadius = self.defaultImageView.frame.size.height /2;
+                    self.defaultImageView.layer.masksToBounds = YES;
+                }
+            });
+            
+        }
+    } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+        });
+    }];
+    
+}
+
+
 @end

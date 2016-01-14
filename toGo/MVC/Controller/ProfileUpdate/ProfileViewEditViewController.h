@@ -26,6 +26,6 @@
 @property(nonatomic,weak) IBOutlet UITextView *answerTextView;
 @end
 
-@interface ProfileViewEditViewController : BaseViewController
+@interface ProfileViewEditViewController : BaseViewController<UtilityProtocol>
 @property(nonatomic,readwrite)BOOL isFromDashBoard;
 @end

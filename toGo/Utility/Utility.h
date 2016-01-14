@@ -24,7 +24,6 @@ typedef void (^getImage)(UIImage *image);
 }
 
 +(Utility *)sharedInstance;
-
 - (BOOL)validateEmailWithString:(NSString*)emailAddress;
 
 -(void)showAlertViewWithTitle:(NSString*)title withMessage:(NSString*)message inView:(UIViewController *)viewController withStyle:(UIAlertControllerStyle)alertStyle;

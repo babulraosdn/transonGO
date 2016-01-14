@@ -46,6 +46,11 @@
     [_scrollView setShowsVerticalScrollIndicator:NO];
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:YES];
+    [Utility_Shared_Instance showProgress];
+    [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
+}
 -(void)setLabelButtonNames{
     self.myLanguageLabel.text = NSLOCALIZEDSTRING(@"MY_LANGUAGE");
     self.emailIDLabel.text = NSLOCALIZEDSTRING(@"EMAIL_ID");
@@ -144,6 +149,37 @@
     }];
 }
 
+
+-(void)getProfileInfo
+{
+    //WEB Service CODE
+    [Web_Service_Call serviceCallWithRequestType:nil requestType:GET_REQUEST includeHeader:YES includeBody:NO webServicename:PROFILE_INFO_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+        NSDictionary *responseDict=responseObject;
+        
+        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+                NSLog(@"dict-->%@",responseDict);
+                NSMutableDictionary *userDict = [responseDict objectForKey:@"user"];
+                [Utility_Shared_Instance writeStringUserPreference:KID_W value:[userDict objectForKey:KID_W]];
+                NSDictionary *profileImgDict =  [userDict objectForKey:KPROFILE_IMAGE_W];
+                NSString *imageURLString = [profileImgDict objectForKey:KURL_W];
+                if (imageURLString.length) {
+                    self.defaultImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURLString]]];
+                    self.defaultImageView.layer.cornerRadius = self.defaultImageView.frame.size.height /2;
+                    self.defaultImageView.layer.masksToBounds = YES;
+                }
+            });
+            
+        }
+    } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+        });
+    }];
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

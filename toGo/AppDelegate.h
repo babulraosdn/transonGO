@@ -25,7 +25,7 @@
 @property (strong, nonatomic) UIWindow *window;
 @property (retain, nonatomic) ooVooClient *sdk;
 @property(nonatomic,strong)NSMutableArray *callingUsers;
-
+@property(nonatomic,strong)NSString *emailString;
 -(void)subscribePushNotifications : (UIApplication *)application;
 
 -(void)takeTour;

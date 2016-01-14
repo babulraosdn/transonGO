@@ -104,12 +104,8 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if (self.isCountry || self.isState) {
-        if ([self.selectedCountriesStatesArray containsObject:[self.countriesStatesArray objectAtIndex: indexPath.row]]) {
-            [self.selectedCountriesStatesArray removeObject:[self.countriesStatesArray objectAtIndex: indexPath.row]];
-        }
-        else{
-            [self.selectedCountriesStatesArray addObject:[self.countriesStatesArray objectAtIndex: indexPath.row]];
-        }
+        [self.selectedCountriesStatesArray removeAllObjects];
+        [self.selectedCountriesStatesArray addObject:[self.countriesStatesArray objectAtIndex: indexPath.row]];
     }
     if ([self.selectedLanguagesDict objectForKey:[[self.languagesDictionary allValues] objectAtIndex:indexPath.row]]) {
         [self.selectedLanguagesDict removeObjectForKey:[[self.languagesDictionary allValues] objectAtIndex:indexPath.row]];

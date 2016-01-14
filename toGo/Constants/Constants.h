@@ -79,6 +79,7 @@ _Pragma("clang diagnostic pop") \
 #define SWITCH_OFF_IMAGE           @"status-bar-off"
 #define SWITCH_ON_IMAGE           @"status-bar-on"
 #define CLOSE_LANGUAGES_IMAGE           @"close_iPhone"
+#define CheckOrTick_IMAGE           @"Tick_iPhone"
 
 
 
@@ -121,8 +122,8 @@ _Pragma("clang diagnostic pop") \
 
 //********************  WebService Names  ****************************************
 #pragma mark WebService Calls
-//#define BASE_URL                    @"http://54.153.22.179:3000/"
-#define BASE_URL                      @"http://172.10.55.110:3000/"
+#define BASE_URL                    @"http://54.153.22.179:3000/"      //LIVE URL
+//#define BASE_URL                      @"http://172.10.55.110:3000/"  //Local URL
 
 #define LOGIN_W                       @"authenticate"
 #define SIGNUP_W                      @"signup"
@@ -149,6 +150,8 @@ _Pragma("clang diagnostic pop") \
 #define KADDRESS_W                     @"address"
 #define KNICKNAME_W                    @"nickname"
 #define KNAME_W                      @"name"
+#define KFIRST_NAME_W                      @"first_name"
+#define KLAST_NAME_W                      @"last_name"
 #define KPASSWORD_W                    @"password"
 #define KMYLANGUAGES_W                 @"mylanguage"
 #define KPHONE_NUMBER_W                @"phone_number"
@@ -161,6 +164,7 @@ _Pragma("clang diagnostic pop") \
 #define KCALL_YTD_EARNINGS_W           @"callYtdEarnings"
 #define KSTATUS_W                      @"status"
 #define KID_W                          @"id"
+#define KUID_W                          @"uid"
 #define KINTERPRETER_AVAILABILITY_W    @"interpreter_availability"
 #define KMYLANGUAGE_W                   @"mylanguage"
 #define KCOUNTRY_W                      @"country"
@@ -168,6 +172,7 @@ _Pragma("clang diagnostic pop") \
 #define KCITY_W                         @"city"
 #define KPOSTALCODE_W                    @"zipcode"
 #define KEIN_TAXID_W                      @"ein_taxId"
+#define KURL_W                            @"url"
 
 #define K_W                            @""
 

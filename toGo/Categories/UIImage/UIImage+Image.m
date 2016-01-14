@@ -77,6 +77,11 @@
     return image;
 }
 
++ (UIImage *)CheckOrTickImage{
+    static UIImage *image=nil;
+    if (!image) image = [UIImage imageNamed:CheckOrTick_IMAGE];
+    return image;
+}
 
 + (UIImage *)setColor:(UIColor *)color frame:(CGRect)frame{
     UIView *colorView = [[UIView alloc] initWithFrame:frame];

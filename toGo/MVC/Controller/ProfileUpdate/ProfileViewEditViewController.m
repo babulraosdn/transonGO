@@ -27,6 +27,8 @@
 @interface ProfileViewEditViewController ()<UITableViewDataSource,UITableViewDelegate,MyLanguagesDelegate>{
     CGFloat descriptionHeight;
     UITableViewCell *addressDescriptionCell;
+    
+    UIImage *selectedImage;
 }
 @property(nonatomic,strong) NSMutableArray *namesArray;
 //@property(nonatomic,strong) NSMutableArray *dataArray;
@@ -42,6 +44,12 @@
     [super viewDidLoad];
     self.tblView.backgroundColor = [UIColor backgroundColor];
     
+    
+    
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     [self allocationsAndStaticText];
     
     if(self.isFromDashBoard)
@@ -51,11 +59,8 @@
     
     [self setLogoutButtonForNavigation];
     
-}
-
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [self getProfileInfo];
+    [Utility_Shared_Instance showProgress];
+    [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
     [_tblView setShowsHorizontalScrollIndicator:NO];
     [_tblView setShowsVerticalScrollIndicator:NO];
 }
@@ -139,72 +144,86 @@
             NSArray *cellArray = [[NSBundle mainBundle]loadNibNamed:cellIdentifier owner:self options:nil];
             cell = [cellArray objectAtIndex:0];
         }
+        cell.profileImageView.layer.cornerRadius = cell.profileImageView.frame.size.height /2;
+        cell.profileImageView.layer.masksToBounds = YES;
+        if ([Utility_Shared_Instance checkForNullString:self.profileObject.imageURLString].length) {
+            cell.profileImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.profileObject.imageURLString]]];
+        }
+        if (selectedImage) {
+            cell.profileImageView.image= selectedImage;
+        }
         cell.nameLabel.text = self.profileObject.nameString;
+        [cell.selectImageButton addTarget:self action:@selector(cameraGalleryButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         cell.contentView.backgroundColor = [UIColor backgroundColor];
         return cell;
     }
     else{
         
-        if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Address"] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Description"]) {
-            
-            addressDescriptionCell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"reuse"];
-            
-            ///////////// Text/Data/Button Actions Assigning
-            if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"ADDRESS")]) {
-                //addressDescriptionCell.answerLabel.text = self.profileObject.addressString;
-            }
-            if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"DESCRIPTION")]) {
-            }
-            
-            if ([addressDescriptionCell viewWithTag:IMAGE_VIEW_TAG]) {
-                [[addressDescriptionCell viewWithTag:IMAGE_VIEW_TAG] removeFromSuperview];
-            }
-            if ([addressDescriptionCell viewWithTag:EDIT_BUTTON_TAG]) {
-                [[addressDescriptionCell viewWithTag:EDIT_BUTTON_TAG] removeFromSuperview];
-            }
-            if ([addressDescriptionCell viewWithTag:LABEL_TAG]) {
-                [[addressDescriptionCell viewWithTag:LABEL_TAG] removeFromSuperview];
-            }
-            if ([addressDescriptionCell viewWithTag:TEXT_VIEW_TAG]) {
-                [[addressDescriptionCell viewWithTag:TEXT_VIEW_TAG] removeFromSuperview];
-            }
-            
-            UIImageView *imgViewEdit = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width-37, 15, 12, 12)];
-            imgViewEdit.tag = IMAGE_VIEW_TAG;
-            //imgViewEdit.backgroundColor = [UIColor redColor];
-            imgViewEdit.image = [UIImage editImage];
-            [addressDescriptionCell.contentView addSubview:imgViewEdit];
-            
-            UIButton *editBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width-50, 5, 40, 40)];
-            editBtn.tag = EDIT_BUTTON_TAG;
-            //editBtn.backgroundColor = [UIColor blackColor];
-            [editBtn addTarget:self action:@selector(editButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-            [addressDescriptionCell.contentView addSubview:editBtn];
+        /////////////// Address Cell START///////
+        {
+            if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Address"] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Description"]) {
+                
+                addressDescriptionCell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"reuse"];
+                
+                ///////////// Text/Data/Button Actions Assigning
+                if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"ADDRESS")]) {
+                    //addressDescriptionCell.answerLabel.text = self.profileObject.addressString;
+                }
+                if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"DESCRIPTION")]) {
+                }
+                
+                if ([addressDescriptionCell viewWithTag:IMAGE_VIEW_TAG]) {
+                    [[addressDescriptionCell viewWithTag:IMAGE_VIEW_TAG] removeFromSuperview];
+                }
+                if ([addressDescriptionCell viewWithTag:EDIT_BUTTON_TAG]) {
+                    [[addressDescriptionCell viewWithTag:EDIT_BUTTON_TAG] removeFromSuperview];
+                }
+                if ([addressDescriptionCell viewWithTag:LABEL_TAG]) {
+                    [[addressDescriptionCell viewWithTag:LABEL_TAG] removeFromSuperview];
+                }
+                if ([addressDescriptionCell viewWithTag:TEXT_VIEW_TAG]) {
+                    [[addressDescriptionCell viewWithTag:TEXT_VIEW_TAG] removeFromSuperview];
+                }
+                
+                UIImageView *imgViewEdit = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width-37, 15, 12, 12)];
+                imgViewEdit.tag = IMAGE_VIEW_TAG;
+                //imgViewEdit.backgroundColor = [UIColor redColor];
+                [addressDescriptionCell.contentView addSubview:imgViewEdit];
+                
+                UIButton *editBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width-50, 5, 40, 40)];
+                editBtn.tag = EDIT_BUTTON_TAG;
+                //editBtn.backgroundColor = [UIColor blackColor];
+                [editBtn addTarget:self action:@selector(editButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+                [addressDescriptionCell.contentView addSubview:editBtn];
 
-            
-            UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, self.view.frame.size.width-60, 20)];
-            label.text = [self.namesArray objectAtIndex:indexPath.row];
-            label.tag = LABEL_TAG;
-            //label.backgroundColor = [UIColor redColor];
-            [addressDescriptionCell.contentView addSubview:label];
-            
-            UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(10, 25, self.view.frame.size.width-20, descriptionHeight)];
-            textView.text = @"START  END";
-            textView.tag = TEXT_VIEW_TAG;
-            textView.text = self.profileObject.addressString;
-            [addressDescriptionCell.contentView addSubview:textView];
-            
-            if (self.profileObject.isAddressEdit) {
-                textView.userInteractionEnabled = YES;
-                textView.backgroundColor = [UIColor whiteColor];
-                [textView becomeFirstResponder];
+                
+                UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, self.view.frame.size.width-60, 20)];
+                label.text = [self.namesArray objectAtIndex:indexPath.row];
+                label.tag = LABEL_TAG;
+                //label.backgroundColor = [UIColor redColor];
+                [addressDescriptionCell.contentView addSubview:label];
+                
+                UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(10, 25, self.view.frame.size.width-20, descriptionHeight)];
+                textView.text = @"START  END";
+                textView.tag = TEXT_VIEW_TAG;
+                textView.text = self.profileObject.addressString;
+                [addressDescriptionCell.contentView addSubview:textView];
+                
+                if (self.profileObject.isAddressEdit) {
+                    imgViewEdit.image = [UIImage CheckOrTickImage];
+                    textView.userInteractionEnabled = YES;
+                    textView.backgroundColor = [UIColor whiteColor];
+                    [textView becomeFirstResponder];
+                }
+                else{
+                    imgViewEdit.image = [UIImage editImage];
+                    textView.userInteractionEnabled = NO;
+                    textView.backgroundColor = [UIColor clearColor];
+                }
+                addressDescriptionCell.contentView.backgroundColor = [UIColor backgroundColor];
+                return addressDescriptionCell;
             }
-            else{
-                textView.userInteractionEnabled = NO;
-                textView.backgroundColor = [UIColor clearColor];
-            }
-            addressDescriptionCell.contentView.backgroundColor = [UIColor backgroundColor];
-            return addressDescriptionCell;
+            /////////////// Address Cell END///////
         }
         
         ProfileViewEditUpdateCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ProfileViewEditUpdateCell"];
@@ -216,6 +235,7 @@
         cell.descriptionTextView.userInteractionEnabled = NO;
         cell.descriptionTextField.secureTextEntry = NO;
         cell.dropDownImageView.hidden = YES;
+        cell.editImageView.image = [UIImage editImage];
         ///////////// Styles
         [cell.descriptionTextField setBorderStyle:UITextBorderStyleNone];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -238,7 +258,10 @@
         cell.headerLabel.text = [self.namesArray objectAtIndex:indexPath.row];
         [cell.editButton addTarget:self action:@selector(editButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         /////////
-        if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"EMAIL")]) {
+        if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"UID")]) {
+            cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.uIdString];
+        }
+        else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"EMAIL")]) {
             cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.emailString];
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"PASSWORD")]) {
@@ -250,6 +273,7 @@
             cell.editButton.hidden = NO;
             cell.editButton.tag = indexPath.row;
             if (self.profileObject.isNickNameEdit) {
+                cell.editImageView.image = [UIImage CheckOrTickImage];
                 cell.descriptionTextField.enabled = YES;
                 [cell.descriptionTextField setBorderStyle:UITextBorderStyleRoundedRect];
             }
@@ -267,6 +291,7 @@
             cell.editButton.tag = indexPath.row;
             
             if (self.profileObject.isAddressEdit) {
+                cell.editImageView.image = [UIImage CheckOrTickImage];
                 cell.descriptionTextField.userInteractionEnabled = YES;
                 cell.descriptionTextField.backgroundColor = [UIColor whiteColor];
                 [cell.descriptionTextField becomeFirstResponder];
@@ -308,6 +333,7 @@
             cell.editButton.hidden = NO;
             cell.editButton.tag = indexPath.row;
             if (self.profileObject.isCityEdit) {
+                cell.editImageView.image = [UIImage CheckOrTickImage];
                 cell.descriptionTextField.enabled = YES;
                 [cell.descriptionTextField setBorderStyle:UITextBorderStyleRoundedRect];
             }
@@ -321,6 +347,7 @@
             cell.editButton.hidden = NO;
             cell.editButton.tag = indexPath.row;
             if (self.profileObject.isPostalCodeEdit) {
+                cell.editImageView.image = [UIImage CheckOrTickImage];
                 cell.descriptionTextField.enabled = YES;
                 [cell.descriptionTextField setBorderStyle:UITextBorderStyleRoundedRect];
             }
@@ -337,6 +364,7 @@
             cell.editButton.hidden = NO;
             cell.editButton.tag = indexPath.row;
             if (self.profileObject.isPhoneNumberEdit) {
+                cell.editImageView.image = [UIImage CheckOrTickImage];
                 cell.descriptionTextField.enabled = YES;
                 [cell.descriptionTextField setBorderStyle:UITextBorderStyleRoundedRect];
             }
@@ -366,6 +394,9 @@
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"CERTIFICATES")]) {
             cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.certificatesString];
+            if (![Utility_Shared_Instance checkForNullString:self.profileObject.certificatesString].length) {
+                cell.descriptionTextField.text = NSLOCALIZEDSTRING(@"N/A");
+            }
         }
         return cell;
     }
@@ -489,7 +520,6 @@
 
 -(void)getProfileInfo
 {
-    [Utility_Shared_Instance showProgress];
     //WEB Service CODE
     [Web_Service_Call serviceCallWithRequestType:nil requestType:GET_REQUEST includeHeader:YES includeBody:NO webServicename:PROFILE_INFO_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         NSDictionary *responseDict=responseObject;
@@ -501,23 +531,37 @@
                 NSLog(@"dict-->%@",responseDict);
                 NSMutableDictionary *userDict = [responseDict objectForKey:@"user"];
                 self.profileObject = [ProfileInfoObject new];
+                self.profileObject.uIdString = [userDict objectForKey:KUID_W];
                 self.profileObject.idString = [userDict objectForKey:KID_W];
                 [Utility_Shared_Instance writeStringUserPreference:KID_W value:[userDict objectForKey:KID_W]];
                 self.profileObject.emailString = [userDict objectForKey:KEMAIL_W];
                 self.profileObject.passwordString = [userDict objectForKey:KPASSWORD_W];
-                self.profileObject.nameString = [userDict objectForKey:KNICKNAME_W];
+                self.profileObject.nickNameString = [userDict objectForKey:KNICKNAME_W];
+                NSDictionary *nameDict =  [userDict objectForKey:KNAME_W];
+                self.profileObject.nameString = [NSString stringWithFormat:@"%@ %@",[nameDict objectForKey:KFIRST_NAME_W],[nameDict objectForKey:KLAST_NAME_W]];
+                if (![nameDict objectForKey:KFIRST_NAME_W]) {
+                    self.profileObject.nameString = @"";
+                }
+                self.profileObject.countryString = [userDict objectForKey:KCOUNTRY_W];
+                self.profileObject.cityString = [userDict objectForKey:KCITY_W];
+                self.profileObject.stateString = [userDict objectForKey:KSTATE_W];
                 self.profileObject.addressString = [userDict objectForKey:KADDRESS_W];
+                self.profileObject.postalCodeString = [userDict objectForKey:KPOSTALCODE_W];
                 self.profileObject.phoneNumberString = [userDict objectForKey:KPHONE_NUMBER_W];
                 self.profileObject.myLanguagesString = [userDict objectForKey:KMYLANGUAGES_W];
+                
+                NSDictionary *profileImgDict =  [userDict objectForKey:KPROFILE_IMAGE_W];
+                self.profileObject.imageURLString = [profileImgDict objectForKey:KURL_W];
+                
                 [self.tblView reloadData];
                 
             });
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-            });
+
         }
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
-        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+        });
     }];
     
 }
@@ -535,7 +579,7 @@
     languagesView.delegate = self;
     languagesView.isCountry = YES;
     languagesView.selectedCountriesStatesArray  = [NSMutableArray new];
-    languagesView.countriesStatesArray = [[NSMutableArray alloc]initWithObjects:@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9", nil];
+    languagesView.countriesStatesArray = [[NSMutableArray alloc]initWithObjects:@"Afghanistan",@"Albania",@"Algeria",@"India",@"United Kingdom",@"USA", nil];
     [languagesView.tblView reloadData];
     [self.view addSubview:languagesView];
 }
@@ -545,7 +589,7 @@
     languagesView.delegate = self;
     languagesView.isState = YES;
     languagesView.selectedCountriesStatesArray  = [NSMutableArray new];
-    languagesView.countriesStatesArray = [[NSMutableArray alloc]initWithObjects:@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9", nil];
+    languagesView.countriesStatesArray = [[NSMutableArray alloc]initWithObjects:@"Maryland",@"Oklahoma",@"Oregon",@"Nevada", nil];
     [languagesView.tblView reloadData];
     [self.view addSubview:languagesView];
 }
@@ -575,17 +619,17 @@
     //WEB Service CODE
     NSMutableDictionary *saveDict=[NSMutableDictionary new];
     [saveDict setValue:[Utility_Shared_Instance readStringUserPreference:KID_W] forKey:KID_W];
-    [saveDict setValue:self.profileObject.emailString forKey:KEMAIL_W];
-    [saveDict setValue:self.profileObject.nameString forKey:KNAME_W];
-    [saveDict setValue:self.profileObject.nickNameString forKey:KNICKNAME_W];
-    [saveDict setValue:self.profileObject.phoneNumberString forKey:KPHONE_NUMBER_W];
-    [saveDict setValue:self.profileObject.myLanguagesString forKey:KMYLANGUAGE_W];
-    [saveDict setValue:self.profileObject.addressString forKey:KADDRESS_W];
-    [saveDict setValue:self.profileObject.countryString forKey:KCOUNTRY_W];
-    [saveDict setValue:self.profileObject.stateString forKey:KSTATE_W];
-    [saveDict setValue:self.profileObject.cityString forKey:KCITY_W];
-    [saveDict setValue:self.profileObject.postalCodeString forKey:KPOSTALCODE_W];
-    [saveDict setValue:self.profileObject.eINtaxIDString forKey:KEIN_TAXID_W];
+    [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.emailString] forKey:KEMAIL_W];
+    [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.nameString] forKey:KNAME_W];
+    [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.nickNameString] forKey:KNICKNAME_W];
+    [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.phoneNumberString] forKey:KPHONE_NUMBER_W];
+    [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.myLanguagesString] forKey:KMYLANGUAGE_W];
+    [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.addressString] forKey:KADDRESS_W];
+    [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.countryString] forKey:KCOUNTRY_W];
+    [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.stateString] forKey:KSTATE_W];
+    [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.cityString] forKey:KCITY_W];
+    [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.postalCodeString] forKey:KPOSTALCODE_W];
+    [saveDict setValue:@"2222" forKey:KEIN_TAXID_W];
     
     [Web_Service_Call serviceCallWithRequestType:saveDict requestType:POST_REQUEST includeHeader:YES includeBody:YES webServicename:UPDATE_PROFILE_INFO_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         NSDictionary *responseDict=responseObject;
@@ -596,12 +640,29 @@
                 [SVProgressHUD dismiss];
                 NSLog(@"dict-->%@",responseDict);
             });
+            
+        }
+        else{
             dispatch_async(dispatch_get_main_queue(), ^{
-                
+                [SVProgressHUD dismiss];
             });
         }
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
-        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+        });
     }];
 }
+
+- (void)cameraGalleryButtonPressed{
+    UIButton *btn = [UIButton new];
+    btn.tag = 1;
+    //[Utility_Shared_Instance getImageFromCameraOrGallery:btn delegate:self];
+}
+
+- (void)getImageFromSource:(UIImage *)image{
+    //selectedImage=image;
+    //[self.tblView reloadData];
+}
+
 @end

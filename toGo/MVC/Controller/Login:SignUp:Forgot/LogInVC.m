@@ -317,8 +317,13 @@
         if ([responseDict objectForKey:KCODE_W]){
             if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
             {
-                if ([responseDict objectForKey:KTOKEN_W]) {
+                if ([responseDict objectForKey:KTOKEN_W])
+                {
                     [Utility_Shared_Instance writeStringUserPreference:USER_TOKEN value:[responseDict objectForKey:KTOKEN_W]];
+                }
+                if ([responseDict objectForKey:KEMAIL_W])
+                {
+                    [Utility_Shared_Instance writeStringUserPreference:KEMAIL_W value:userIDString];
                 }
                 [self ooVooLogin];
                 [self createSidePanel];

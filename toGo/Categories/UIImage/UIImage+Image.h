@@ -29,6 +29,7 @@
 + (UIImage *)defaultPicImage;
 + (UIImage *)editImage;
 + (UIImage *)lightButtonImage;
++ (UIImage *)CheckOrTickImage;
 + (UIImage *)closeLanguagesImage;
 + (UIImage *)setColor:(UIColor *)color frame:(CGRect)frame;
 @end
