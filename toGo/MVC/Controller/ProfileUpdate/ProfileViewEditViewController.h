@@ -18,6 +18,7 @@
 @property(nonatomic,weak) IBOutlet UIButton *editButton;
 @property (weak, nonatomic) IBOutlet UIButton *languagesButton;
 @property(nonatomic,weak) IBOutlet UIImageView *editImageView;
+@property(nonatomic,weak) IBOutlet UILabel *mandatoryLabel;
 @end
 
 @interface ProfileViewEditUpdateAnswerCell : UITableViewCell
@@ -28,4 +29,5 @@
 
 @interface ProfileViewEditViewController : BaseViewController<UtilityProtocol>
 @property(nonatomic,readwrite)BOOL isFromDashBoard;
+@property(nonatomic,assign)BOOL isInterpreter;
 @end

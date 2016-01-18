@@ -22,7 +22,7 @@ typedef void (^getImage)(UIImage *image);
     Reachability* hostReach;
     Reachability* wifiReach;
 }
-
+@property(nonatomic,strong)id delegate;
 +(Utility *)sharedInstance;
 - (BOOL)validateEmailWithString:(NSString*)emailAddress;
 

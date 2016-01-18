@@ -325,6 +325,14 @@
                 {
                     [Utility_Shared_Instance writeStringUserPreference:KEMAIL_W value:userIDString];
                 }
+                if ([responseDict objectForKey:KCOMPLETION_W])
+                {
+                    //completion = 1; Means Profile Completed req. fields
+                    //completion = 0; Means Profile In-Complete req. fields
+                    [Utility_Shared_Instance writeStringUserPreference:KCOMPLETION_W value:[Utility_Shared_Instance checkForNullString:[responseDict objectForKey:KCOMPLETION_W]]];
+                    //[Utility_Shared_Instance writeStringUserPreference:KCOMPLETION_W value:@"0"];//Test
+                }
+                
                 [self ooVooLogin];
                 [self createSidePanel];
             }
@@ -656,8 +664,12 @@
     
     if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
         dispatch_async(dispatch_get_main_queue(), ^{
+            
             UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_INTERPRETER_VIEW_CONTROLLER]];//DashBoardViewController
             
+            if ([[Utility_Shared_Instance readStringUserPreference:KCOMPLETION_W] isEqualToString:PROFILE_INCOMPLETE]) {
+                contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:PROFILE_VIEW_CONTROLLER]];//DashBoardViewController
+            }
             
             TheSidebarController *sidebarController = [[TheSidebarController alloc] initWithContentViewController:contentNavigationController
                                                                                         leftSidebarViewController:[Utility_Shared_Instance getControllerForIdentifier:@"SlideMenuViewController"]

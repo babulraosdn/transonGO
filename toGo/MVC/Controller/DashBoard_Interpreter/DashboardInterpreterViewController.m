@@ -231,6 +231,9 @@
                     self.defaultImageView.layer.cornerRadius = self.defaultImageView.frame.size.height /2;
                     self.defaultImageView.layer.masksToBounds = YES;
                 }
+                
+                //NSString *imageURLString = [profileImgDict objectForKey:KURL_W];
+                
             });
             
         }

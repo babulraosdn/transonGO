@@ -17,9 +17,9 @@
         self = [super initWithFrame:frame];
         
         self.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-64);
-        self.backgroundColor = [UIColor colorWithRed:14.0/255.0 green:14.0/255.0 blue:14.0/255.0 alpha:0.8];
+        self.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.8];
         [self configureUI];
-        
+        self.userInteractionEnabled = YES;
     }
     return self;
 }
@@ -104,7 +104,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if (self.isCountry || self.isState) {
-        [self.selectedCountriesStatesArray removeAllObjects];
+        [self.selectedCountriesStatesArray removeAllObjects];
         [self.selectedCountriesStatesArray addObject:[self.countriesStatesArray objectAtIndex: indexPath.row]];
     }
     if ([self.selectedLanguagesDict objectForKey:[[self.languagesDictionary allValues] objectAtIndex:indexPath.row]]) {
@@ -125,8 +125,8 @@
     if (self.isState) {
         [self.delegate finishStateSelection:self.selectedCountriesStatesArray];
     }
-    [self.delegate finishLanguagesSelection:self.selectedLanguagesDict];
     [self removeFromSuperview];
+    [self.delegate finishLanguagesSelection:self.selectedLanguagesDict];
     //sss
 }
 

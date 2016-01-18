@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>C91BFC74-9E8C-4A52-9686-3B633A396369</string>
+	<key>IDESourceControlProjectName</key>
+	<string>toGo</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>4719fa03-bbf6-48ab-9488-6dfe48edbdd9++8620</key>
+		<string>http://172.10.1.5/repository/ios/Template_iOS/Template_iOSsvn</string>
+		<key>4D3006D74E1F56234C69FBE96588D66F5F7ED2DA</key>
+		<string>https://github.com/babulraosdn/transonGO.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>toGo.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>4719fa03-bbf6-48ab-9488-6dfe48edbdd9++8620</key>
+		<string>../../../../Template_iOS/Template_iOSsvn</string>
+		<key>4D3006D74E1F56234C69FBE96588D66F5F7ED2DA</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectRepositoryRootDictionary</key>
+	<dict>
+		<key>4719fa03-bbf6-48ab-9488-6dfe48edbdd9++8620</key>
+		<string>http://172.10.1.5/repository/ios/Template_iOS</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/babulraosdn/transonGO.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>4D3006D74E1F56234C69FBE96588D66F5F7ED2DA</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>4719fa03-bbf6-48ab-9488-6dfe48edbdd9++8620</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Template_iOSsvn</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>4D3006D74E1F56234C69FBE96588D66F5F7ED2DA</string>
+			<key>IDESourceControlWCCName</key>
+			<string>toGo</string>
+		</dict>
+	</array>
+</dict>
+</plist>

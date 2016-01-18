@@ -27,6 +27,7 @@
 #define SLIDE_COLOR_ROW_4 colorWithRed:205.0/255.0 green:135.0/255.0 blue:40.0/255.0 alpha:1.0
 #define SLIDE_COLOR_ROW_5 colorWithRed:213.0/255.0 green:152.0/255.0 blue:53.0/255.0 alpha:1.0
 #define SLIDE_COLOR_ROW_6 colorWithRed:229.0/255.0 green:171.0/255.0 blue:68.0/255.0 alpha:1.0
+#define SLIDE_COLOR_ROW_7 colorWithRed:172.0/255.0 green:112.0/255.0 blue:32.0/255.0 alpha:1.0
 
 @interface UIColor (toGo)
 + (UIColor *)navigationBarColor;
@@ -47,4 +48,5 @@
 + (UIColor *)slideMenuBackgroundColorRow4;
 + (UIColor *)slideMenuBackgroundColorRow5;
 + (UIColor *)slideMenuBackgroundColorRow6;
++ (UIColor *)slideMenuBackgroundColorRow7;
 @end

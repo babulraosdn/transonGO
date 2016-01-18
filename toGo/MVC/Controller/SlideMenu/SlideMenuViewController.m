@@ -53,6 +53,7 @@
     
     if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
         self.namesArray = [[NSMutableArray alloc]initWithObjects:
+                           NSLOCALIZEDSTRING(@"DASHBOARD"),
                            NSLOCALIZEDSTRING(@"PROFILE"),
                            NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION"),
                            NSLOCALIZEDSTRING(@"CALL_HISTORY"),
@@ -60,6 +61,7 @@
                            NSLOCALIZEDSTRING(@"FAVORITE_INTERPRETER"),
                            NSLOCALIZEDSTRING(@"SETTINGS"), nil];
         self.imagesNamesArray = [[NSMutableArray alloc]initWithObjects:
+                                 DASHBOARD_SLIDE_IMAGE,
                                  PROFILE_IMAGE,
                                  ORDER_INTERPRETER_IMAGE,
                                  CALL_HISTORY_IMAGE,
@@ -69,12 +71,14 @@
     }
     else {
         self.namesArray = [[NSMutableArray alloc]initWithObjects:
+                           NSLOCALIZEDSTRING(@"DASHBOARD"),
                            NSLOCALIZEDSTRING(@"PROFILE"),
                            NSLOCALIZEDSTRING(@"CALL_HISTORY"),
                            NSLOCALIZEDSTRING(@"REVENUE"),
                            NSLOCALIZEDSTRING(@"FEEDBACK"),
                            NSLOCALIZEDSTRING(@"SETTINGS"), nil];
         self.imagesNamesArray = [[NSMutableArray alloc]initWithObjects:
+                                 DASHBOARD_SLIDE_IMAGE,
                                  PROFILE_IMAGE,
                                  CALL_HISTORY_IMAGE,
                                  PROFILE_IMAGE,
@@ -88,7 +92,8 @@
                             [UIColor slideMenuBackgroundColorRow3],
                             [UIColor slideMenuBackgroundColorRow4],
                             [UIColor slideMenuBackgroundColorRow5],
-                            [UIColor slideMenuBackgroundColorRow6], nil];
+                            [UIColor slideMenuBackgroundColorRow6],
+                            [UIColor slideMenuBackgroundColorRow7],nil];
     //*/
 }
 
@@ -128,7 +133,17 @@
     [self.sidebarController dismissSidebarViewController];
     NSString *selectedRowString = [self.namesArray objectAtIndex:indexPath.row];
     UINavigationController *contentNaviationController;
-    if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"PROFILE")]){
+    if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"DASHBOARD")]){
+        
+        if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
+            contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_INTERPRETER_VIEW_CONTROLLER]];
+        }
+        else{
+            contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_USER_VIEW_CONTROLLER]];
+        }
+        self.sidebarController.contentViewController = contentNaviationController;
+    }
+    else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"PROFILE")]){
         contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:PROFILE_VIEW_CONTROLLER]];
         self.sidebarController.contentViewController = contentNaviationController ;
     }
@@ -147,7 +162,7 @@
     else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"SETTINGS")]){
         
         contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:SETTINGS_VIEW_CONTROLLER]];
-        //self.sidebarController.contentViewController = contentNaviationController ;
+        self.sidebarController.contentViewController = contentNaviationController ;
         return;
         
         FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];

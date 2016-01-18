@@ -84,6 +84,7 @@ _Pragma("clang diagnostic pop") \
 
 
 //SlideMenu
+#define DASHBOARD_SLIDE_IMAGE       @"dashboard_iPhone"
 #define CALL_HISTORY_IMAGE          @"call_history_icon_iPhone"
 #define FAV_INTERPRETER_IMAGE       @"fav_interpreter_icon_iPhone"
 #define ORDER_INTERPRETER_IMAGE     @"order_interpreter_iPhone"
@@ -113,6 +114,7 @@ _Pragma("clang diagnostic pop") \
 #define INTERPRETER                 @"interpreter"
 #define CUSTOMER                    @"user"
 #define NORMAL_LOGIN                @"0"
+#define PROFILE_INCOMPLETE          @"1"
 #define FACEBOOK_LOGIN              @"1"
 #define TWITTER_LOGIN               @"1"
 #define GOOGLE_LOGIN                @"1"
@@ -130,10 +132,15 @@ _Pragma("clang diagnostic pop") \
 #define FORGOTPASSWORD_W              @"forgot"
 #define SOCIAL_LOGIN_W                @"loginSignUp"
 #define PROFILE_INFO_W                @"api/getAgentInfo"
+#define PROFILE_INFO_W_USER           @"api/getUserProfile"
+//getUserProfile
+//
 #define UPDATE_INTERPRETER_STATUS_W   @"api/updateAgentAvailability"
-#define UPDATE_PROFILE_INFO_W                @"api/updateAgentProfile"
+#define UPDATE_INTERPRETER_PROFILE_INFO_W    @"api/updateAgentProfile"
+#define UPDATE_USER_PROFILE_INFO_W                @"api/updateUserProfile"
 
-
+//updateUserProfile
+//
 
 //********************  WebService Parameters   ****************************************
 #pragma mark WebService Parameters
@@ -143,18 +150,28 @@ _Pragma("clang diagnostic pop") \
 #define KTYPE_W                        @"utype"
 #define KLOGIN_TYPE_W                  @"logintype"
 #define KAUTHORIZATION_W               @"Authorization"
+#define KCOMPLETION_W                  @"completion"
 
 #define KCERTIFICATES_W                @"certificates"
 #define KBANK_ACCOUNT_INFORMATION_W    @"bankaccountinfo"
 #define KDESCRIPTION_W                 @"description"
+#define KABOUT_USER_W                  @"about_user"
 #define KADDRESS_W                     @"address"
+#define KGENDER                        @"gender"
+#define KDOB                           @"dob"
 #define KNICKNAME_W                    @"nickname"
-#define KNAME_W                      @"name"
-#define KFIRST_NAME_W                      @"first_name"
-#define KLAST_NAME_W                      @"last_name"
+#define KNAME_W                        @"name"
+#define KFIRST_NAME_W                  @"first_name"
+#define KLAST_NAME_W                   @"last_name"
 #define KPASSWORD_W                    @"password"
 #define KMYLANGUAGES_W                 @"mylanguage"
 #define KPHONE_NUMBER_W                @"phone_number"
+#define KPAYMENT_INFO_W                @"payment_info"
+#define KCARD_TYPE_W                   @"cardtype"
+#define KCARD_NUMBER_W                 @"cardnumber"
+#define KEXP_MONTH_W                   @"expmonth"
+#define KEXP_YEAR_W                    @"expyear"
+#define KCVV_W                         @"cvv"
 
 #define KCOUNTRY_NAME_W                @"countryName"
 #define KLANGUAGE_W                    @"language"
@@ -193,7 +210,7 @@ _Pragma("clang diagnostic pop") \
 #define SETTINGS_VIEW_CONTROLLER                @"SettingsViewController"
 #define SLIDE_MENU_VIEW_CONTROLLER              @"SlideMenuViewController"
 #define FEEDBACK_LIST_VIEW_CONTROLLER           @"FeedBackListViewController"
-#define HOME_VIEW_CONTROLLER           @"HomeViewController"
+#define HOME_VIEW_CONTROLLER                    @"HomeViewController"
 
 
 //********************  Font Names   ****************************************

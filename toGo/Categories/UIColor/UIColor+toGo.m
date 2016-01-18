@@ -114,7 +114,11 @@
     return color;
 }
 
-
++ (UIColor *)slideMenuBackgroundColorRow7{
+    static UIColor *color=nil;
+    if (!color) color = [UIColor SLIDE_COLOR_ROW_7];
+    return color;
+}
 
 @end
 

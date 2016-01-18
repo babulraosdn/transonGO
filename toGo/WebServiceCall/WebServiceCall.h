@@ -23,4 +23,5 @@ typedef void (^tFailureResponse)(id responseObject,NSInteger responseCode,NSErro
 -(void)getProfileInfoServiceCall:(NSString*)headerString webServicename:(NSString *)webServicename SuccessfulBlock:(tResponseBlock)successBlock FailedCallBack:(tFailureResponse)failureBlock;
 
 -(void)serviceCallWithRequestType:(NSMutableDictionary*)payload requestType:(NSString*)rquestTypeString includeHeader:(BOOL)isIncludeHeader includeBody:(BOOL)isIncludeBody webServicename:(NSString *)webServicename SuccessfulBlock:(tResponseBlock)successBlock FailedCallBack:(tFailureResponse)failureBlock;
+-(void)serviceCallWithRequestType1:(NSMutableDictionary*)payload requestType:(NSString*)rquestTypeString includeHeader:(BOOL)isIncludeHeader includeBody:(BOOL)isIncludeBody webServicename:(NSString *)webServicename SuccessfulBlock:(tResponseBlock)successBlock FailedCallBack:(tFailureResponse)failureBlock;
 @end

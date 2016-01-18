@@ -8,7 +8,8 @@
 
 #import "Utility.h"
 @interface Utility ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate>{
-    id delegate;
+    
+    
 }
 @end
 
@@ -56,19 +57,19 @@
 
 
 -(void)getImageFromCameraOrGallery:(UIButton*)button delegate:(id)delegateObject{
-    delegate=delegateObject;
+    _delegate=delegateObject;
     if (button.tag==0) {
-        [self openDeviceCamera:delegate];
+        [self openDeviceCamera:_delegate];
     }
     else if (button.tag==1) {
-        [self openDevicePhotoGallery:delegate];
+        [self openDevicePhotoGallery:_delegate];
         
     }
 }
 #pragma mark -
 #pragma mark - ImagePicker Methods
 - (void)openDeviceCamera:(id)delegateObject{
-    delegate = delegateObject;
+    _delegate = delegateObject;
     if ([UIImagePickerController isSourceTypeAvailable:
          UIImagePickerControllerSourceTypeCamera]){
         UIImagePickerController *imagePicker =
@@ -78,21 +79,26 @@
         imagePicker.sourceType =
         UIImagePickerControllerSourceTypeCamera;
         [imagePicker setCameraFlashMode:UIImagePickerControllerCameraFlashModeOff];
-        [delegate presentViewController:imagePicker animated:YES completion:nil];
+        [_delegate presentViewController:imagePicker animated:YES completion:nil];
     }
 }
 
 - (void)openDevicePhotoGallery:(id)delegateObject{
-    delegate = delegateObject;
+    _delegate = delegateObject;
     if ([UIImagePickerController isSourceTypeAvailable:
          UIImagePickerControllerSourceTypePhotoLibrary]){
+        
+        
         UIImagePickerController *imagePicker =
         [[UIImagePickerController alloc] init];
+        
         imagePicker.delegate = self;
         imagePicker.allowsEditing=YES;
         imagePicker.sourceType =
         UIImagePickerControllerSourceTypePhotoLibrary;
-        [delegate presentViewController:imagePicker animated:YES completion:nil];
+        [_delegate presentViewController:imagePicker animated:YES completion:nil];
+        
+        
     }
 }
 
@@ -100,13 +106,14 @@
 #pragma mark - ImagePickerController Delegate.
 - (void)imagePickerController:(UIImagePickerController *)picker
 didFinishPickingMediaWithInfo:(NSDictionary *)info{
-    [delegate getImageFromSource:(UIImage *)[info objectForKey:
+    [_delegate getImageFromSource:(UIImage *)[info objectForKey:
                                              UIImagePickerControllerOriginalImage]];
-    [delegate dismissViewControllerAnimated:YES completion:nil];
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
-    [delegate dismissViewControllerAnimated:YES completion:nil];
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(NSString *)checkForNullString:(id)string
