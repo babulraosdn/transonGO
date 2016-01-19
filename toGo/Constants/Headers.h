@@ -15,6 +15,7 @@
 #import "UIImage+Image.h"
 #import "UILabel+toGo.h"
 #import "UITextField+toGo.h"
+#import "UITextView+toGo.h"
 #import "UIView+toGo.h"
 #import "WebServiceCall.h"
 #import "SocialView.h"
@@ -29,7 +30,7 @@
 #import "ProfileInfoObject.h"
 #import "MyLanguagesView.h"
 #import "BaseViewController.h"
-#import <TheSidebarController/TheSidebarController.h>
+
 @interface Headers : NSObject
 
 @end

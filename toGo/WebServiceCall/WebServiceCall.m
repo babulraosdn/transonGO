@@ -127,14 +127,20 @@
       }] resume];
 }
 
--(void)serviceCallWithRequestType1:(NSMutableDictionary*)payload requestType:(NSString*)rquestTypeString includeHeader:(BOOL)isIncludeHeader includeBody:(BOOL)isIncludeBody webServicename:(NSString *)webServicename SuccessfulBlock:(tResponseBlock)successBlock FailedCallBack:(tFailureResponse)failureBlock{
+-(void)profileImageUpload_FormData:(NSMutableDictionary*)payload requestType:(NSString*)rquestTypeString includeHeader:(BOOL)isIncludeHeader includeBody:(BOOL)isIncludeBody webServicename:(NSString *)webServicename SuccessfulBlock:(tResponseBlock)successBlock FailedCallBack:(tFailureResponse)failureBlock{
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",@"http://54.153.22.179/api/updateUserProfile"]];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@",@"http://54.153.22.179/api/upload"]];
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setTimeoutInterval:120.0f];
     [request setHTTPMethod:rquestTypeString];
-    [request addValue:@"application/json; charset=UTF-8"  forHTTPHeaderField:@"Content-Type"];
+    //[request setValue:@"application/x-www-form-urlencoded charset=utf-8" forHTTPHeaderField:@"Content-Type"];//1
+    //[request setValue:@"multipart/form-data" forHTTPHeaderField:@"Content-Type"];//2
+    
+    NSString *contentType = [NSString stringWithFormat:@"multipart/form-data;"];//3
+    [request addValue:contentType forHTTPHeaderField:@"Content-Type"];//3
+    
+    //[request addValue:@"application/json; charset=UTF-8"  forHTTPHeaderField:@"Content-Type"];
     if (isIncludeHeader) {
         [request addValue:[NSString stringWithFormat:@"%@%@",@"Bearer ",[Utility_Shared_Instance readStringUserPreference:USER_TOKEN]]  forHTTPHeaderField:KAUTHORIZATION_W];
     }
@@ -142,8 +148,12 @@
         NSError *err = nil;
         NSData *body = [NSJSONSerialization dataWithJSONObject:payload options:NSJSONWritingPrettyPrinted error:&err];
         [request setHTTPBody:body];
-        [request addValue:[NSString stringWithFormat:@"%lu", (unsigned long)body.length] forHTTPHeaderField: @"Content-Length"];
+        //[request setValue:[NSString stringWithFormat:@"%d", body.length] forHTTPHeaderField:@"Content-Length"];
+        [request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)body.length] forHTTPHeaderField: @"Content-Length"];
     }
+    
+    
+    
     
     NSLog(@"\n=====================Request=================================\nURL String : %@\nParameters :\n%@\n=========================End Request=============================",request.URL.absoluteString,[payload description]);
     
@@ -155,14 +165,15 @@
           if (!error)
           {
               NSDictionary *dictResponse =[NSDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&errorNIl]];
-              NSLog(@" %@ Response dict--> %@",webServicename,dictResponse);
+              NSLog(@" %@ Response dict-profileImageUpload_FormData-> %@",webServicename,dictResponse);
               successBlock([@"200" intValue],dictResponse);
           }
           else{
-              NSLog(@" %@ FAILURE Description--> %@",webServicename,error.description);
+              NSLog(@" %@ FAILURE Description-profileImageUpload_FormData-> %@",webServicename,error.description);
               failureBlock(nil,[@"404" intValue],error);
           }
       }] resume];
+    
 }
 
 

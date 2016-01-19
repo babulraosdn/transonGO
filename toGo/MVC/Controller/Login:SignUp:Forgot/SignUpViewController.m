@@ -187,8 +187,11 @@
     [Web_Service_Call serviceCall:signUpDictionary webServicename:SIGNUP_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         NSDictionary *responseDict=responseObject;
         
+        
         dispatch_async(dispatch_get_main_queue(), ^{
+            
             [SVProgressHUD dismiss];
+            
             [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
                                                 withMessage:[responseDict objectForKey:KMESSAGE_W]
                                                      inView:self
@@ -205,8 +208,8 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.navigationController popViewControllerAnimated:YES];
             });
-            
         }
+        
         
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{

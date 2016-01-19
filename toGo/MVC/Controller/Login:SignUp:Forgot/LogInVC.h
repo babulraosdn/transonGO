@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <ooVooSDK/ooVooSDK.h>
 #import "Headers.h"
-#import <TheSidebarController/TheSidebarController.h>
 #import "AuthorizationLoaderVc.h"
 #import <GooglePlus/GooglePlus.h>
 #import <GoogleOpenSource/GoogleOpenSource.h>

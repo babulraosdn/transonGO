@@ -113,8 +113,11 @@ _Pragma("clang diagnostic pop") \
 #pragma mark WebService Strings Constants
 #define INTERPRETER                 @"interpreter"
 #define CUSTOMER                    @"user"
+
+#define PROFILE_COMPLETE            @"1"
+#define PROFILE_INCOMPLETE          @"0"
+
 #define NORMAL_LOGIN                @"0"
-#define PROFILE_INCOMPLETE          @"1"
 #define FACEBOOK_LOGIN              @"1"
 #define TWITTER_LOGIN               @"1"
 #define GOOGLE_LOGIN                @"1"
@@ -133,6 +136,8 @@ _Pragma("clang diagnostic pop") \
 #define SOCIAL_LOGIN_W                @"loginSignUp"
 #define PROFILE_INFO_W                @"api/getAgentInfo"
 #define PROFILE_INFO_W_USER           @"api/getUserProfile"
+#define PROFILE_IMAGE_UPLOAD_W        @"api/upload"
+
 //getUserProfile
 //
 #define UPDATE_INTERPRETER_STATUS_W   @"api/updateAgentAvailability"
@@ -167,10 +172,10 @@ _Pragma("clang diagnostic pop") \
 #define KMYLANGUAGES_W                 @"mylanguage"
 #define KPHONE_NUMBER_W                @"phone_number"
 #define KPAYMENT_INFO_W                @"payment_info"
-#define KCARD_TYPE_W                   @"cardtype"
-#define KCARD_NUMBER_W                 @"cardnumber"
-#define KEXP_MONTH_W                   @"expmonth"
-#define KEXP_YEAR_W                    @"expyear"
+#define KCARD_TYPE_W                   @"card_type"
+#define KCARD_NUMBER_W                 @"card_number"
+#define KEXP_MONTH_W                   @"exp_month"
+#define KEXP_YEAR_W                    @"exp_year"
 #define KCVV_W                         @"cvv"
 
 #define KCOUNTRY_NAME_W                @"countryName"
@@ -190,6 +195,8 @@ _Pragma("clang diagnostic pop") \
 #define KPOSTALCODE_W                    @"zipcode"
 #define KEIN_TAXID_W                      @"ein_taxId"
 #define KURL_W                            @"url"
+#define KSERVICE_TYPE_W                            @"service_type"
+#define KFILE_W                            @"file"
 
 #define K_W                            @""
 

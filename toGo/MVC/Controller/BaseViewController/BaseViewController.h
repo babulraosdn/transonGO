@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "Headers.h"
-
+#import <PKRevealController/PKRevealController.h>
 @class AppDelegate;
 
-@interface BaseViewController : UIViewController{
+@interface BaseViewController : UIViewController<PKRevealing>{
     AppDelegate  *appDelegate;
 }
+@property(nonatomic,strong) PKRevealController *revealController;
 -(void)setSlideMenuButtonFornavigation;
 -(void)setLogoutButtonForNavigation;
 -(void)setCustomBackButtonForNavigation;

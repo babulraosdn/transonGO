@@ -26,7 +26,7 @@
 @property(nonatomic,strong) NSMutableArray *countriesStatesArray;
 @property(nonatomic,readwrite) BOOL isCountry;
 @property(nonatomic,readwrite) BOOL isState;
--(NSMutableDictionary *)languagesDictionary;
+-(NSMutableDictionary *)getLanguagesDictionary;
 
 @property(nonatomic,weak)id <MyLanguagesDelegate> delegate;
 

@@ -233,4 +233,13 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info{
     [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"PLEASE_WAIT")]];
 }
 
+#pragma mark Image Encoding
+- (NSString *)encodeToBase64String:(UIImage *)image {
+    NSData * data = [UIImagePNGRepresentation(image) base64EncodedDataWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    return [NSString stringWithUTF8String:[data bytes]];
+    //NSData* data = UIImageJPEGRepresentation(image, 1.0f);
+    //NSString *strEncoded = [Base64 encode:data];
+    //return [UIImagePNGRepresentation(image) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+}
+
 @end

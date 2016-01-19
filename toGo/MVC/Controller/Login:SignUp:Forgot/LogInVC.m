@@ -286,6 +286,7 @@
                                               withStyle:UIAlertControllerStyleAlert];
     else{
         [self.view endEditing:YES];
+        [Utility_Shared_Instance showProgress];
         [self loginWebServiceCall:NORMAL_LOGIN];
     }
 }
@@ -333,7 +334,7 @@
                     //[Utility_Shared_Instance writeStringUserPreference:KCOMPLETION_W value:@"0"];//Test
                 }
                 
-                [self ooVooLogin];
+                //[self ooVooLogin];
                 [self createSidePanel];
             }
         }
@@ -662,6 +663,7 @@
 
 -(void)createSidePanel{
     
+    
     if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -671,27 +673,20 @@
                 contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:PROFILE_VIEW_CONTROLLER]];//DashBoardViewController
             }
             
-            TheSidebarController *sidebarController = [[TheSidebarController alloc] initWithContentViewController:contentNavigationController
-                                                                                        leftSidebarViewController:[Utility_Shared_Instance getControllerForIdentifier:@"SlideMenuViewController"]
-                                                                                       rightSidebarViewController:nil];
+            self.revealController = [PKRevealController revealControllerWithFrontViewController:contentNavigationController leftViewController:[Utility_Shared_Instance getControllerForIdentifier:SLIDE_MENU_VIEW_CONTROLLER]];
+            appDelegate.window.rootViewController = self.revealController;
             
-            appDelegate.window.rootViewController = sidebarController;
         });
     }
     else{
         dispatch_async(dispatch_get_main_queue(), ^{
-            UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_USER_VIEW_CONTROLLER]];//DashBoardViewController
+            UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_USER_VIEW_CONTROLLER]];
             
+            self.revealController = [PKRevealController revealControllerWithFrontViewController:contentNavigationController leftViewController:[Utility_Shared_Instance getControllerForIdentifier:SLIDE_MENU_VIEW_CONTROLLER]];
+            appDelegate.window.rootViewController = self.revealController;
             
-            TheSidebarController *sidebarController = [[TheSidebarController alloc] initWithContentViewController:contentNavigationController
-                                                                                        leftSidebarViewController:[Utility_Shared_Instance getControllerForIdentifier:@"SlideMenuViewController"]
-                                                                                       rightSidebarViewController:nil];
-            
-            appDelegate.window.rootViewController = sidebarController;
         });
     }
-    
-    
 }
 
 

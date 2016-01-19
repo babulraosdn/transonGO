@@ -107,11 +107,12 @@
         [self.selectedCountriesStatesArray removeAllObjects];
         [self.selectedCountriesStatesArray addObject:[self.countriesStatesArray objectAtIndex: indexPath.row]];
     }
+    
     if ([self.selectedLanguagesDict objectForKey:[[self.languagesDictionary allValues] objectAtIndex:indexPath.row]]) {
         [self.selectedLanguagesDict removeObjectForKey:[[self.languagesDictionary allValues] objectAtIndex:indexPath.row]];
     }
     else{
-        [self.selectedLanguagesDict setObject:[[self.languagesDictionary allKeys] objectAtIndex:indexPath.row] forKey:[[self.languagesDictionary allValues] objectAtIndex:indexPath.row]];
+        [self.selectedLanguagesDict setObject:[[self.languagesDictionary allValues] objectAtIndex:indexPath.row] forKey:[[self.languagesDictionary allValues] objectAtIndex:indexPath.row]];
     }
     [self.tblView reloadData];
 }
@@ -130,7 +131,85 @@
     //sss
 }
 
--(NSMutableDictionary *)getLanguagesDictionary
+-(NSMutableDictionary *)getLanguagesDictionary{
+    
+    self.languagesDictionary = [[NSMutableDictionary alloc]initWithObjectsAndKeys:
+                                @"Afrikaans",@"AF",
+                                @"Albanian",@"SQ",
+                                @"Arabic",@"AR",
+                                @"Armenian",@"HY",
+                                @"Basque",@"EU",
+                                @"Bengali",@"BN",
+                                @"Bulgarian",@"BG",
+                                @"Catalan",@"CA",
+                                @"Cambodian",@"KM",
+                                @"Chinese (Mandarin)",@"ZH",
+                                @"Croatian",@"HR",
+                                @"Czech",@"CS",
+                                @"Danish",@"DA",
+                                @"Dutch",@"NL",
+                                @"English",@"EN",
+                                @"Estonian",@"ET",
+                                @"Fiji",@"FJ",
+                                @"Finnish",@"FI",
+                                @"French",@"FR",
+                                @"Georgian",@"KA",
+                                @"German",@"DE",
+                                @"Greek",@"EL",
+                                @"Gujarati",@"GU",
+                                @"Hebrew",@"HE",
+                                @"Hindi",@"HI",
+                                @"Hungarian",@"HU",
+                                @"Icelandic",@"IS",
+                                @"Indonesian",@"ID",
+                                @"Irish",@"GA",
+                                @"Italian",@"IT",
+                                @"Japanese",@"JA",
+                                @"Javanese",@"JW",
+                                @"Korean",@"KO",
+                                @"Latin",@"LA",
+                                @"Latvian",@"LV",
+                                @"Lithuanian",@"LT",
+                                @"Macedonian",@"MK",
+                                @"Malay",@"MS",
+                                @"Malayalam",@"ML",
+                                @"Maltese",@"MT",
+                                @"Maori",@"MI",
+                                @"Marathi",@"MR",
+                                @"Mongolian",@"MN",
+                                @"Nepali",@"NE",
+                                @"Norwegian",@"NO",
+                                @"Persian",@"FA",
+                                @"Polish",@"PL",
+                                @"Portuguese",@"PT",
+                                @"Punjabi",@"PA",
+                                @"Quechua",@"QU",
+                                @"Romanian",@"RO",
+                                @"Russian",@"RU",
+                                @"Samoan",@"SM",
+                                @"Serbian",@"SR",
+                                @"Slovak",@"SK",
+                                @"Slovenian",@"SL",
+                                @"Spanish",@"ES",
+                                @"Swahili",@"SW",
+                                @"Swedish",@"SV",
+                                @"Tamil",@"TA",
+                                @"Tatar",@"TT",
+                                @"Telugu",@"TE",
+                                @"Thai",@"TH",
+                                @"Tibetan",@"BO",
+                                @"Tonga",@"TO",
+                                @"Turkish",@"TR",
+                                @"Ukrainian",@"UK",
+                                @"Urdu",@"UR",
+                                @"Uzbek",@"UZ",
+                                @"Vietnamese",@"VI",
+                                @"Welsh",@"CY",
+                                @"Xhosa",@"XH",nil];
+    
+    return self.languagesDictionary;
+}
+/*
 {
     
     self.languagesDictionary = [[NSMutableDictionary alloc]initWithObjectsAndKeys:
@@ -209,6 +288,7 @@
     
     return self.languagesDictionary;
 }
+*/
 
 /*
 // Only override drawRect: if you perform custom drawing.

@@ -25,8 +25,10 @@
 @property(nonatomic,strong) NSString *phoneNumberString;
 @property(nonatomic,strong) NSString *bankAccountInfoString;
 @property(nonatomic,strong) NSString *myLanguagesString;
+@property(nonatomic,strong) NSString *myLanguagesKEYsString;
 @property(nonatomic,strong) NSString *certificatesString;
 @property(nonatomic,strong) NSString *imageURLString;
+@property(nonatomic,strong) NSString *base64EncodedImageString;
 
 @property(nonatomic,strong) NSString *cardNumberString;
 @property(nonatomic,strong) NSString *cardTypeString;
@@ -49,6 +51,7 @@
 @property(nonatomic,readwrite) BOOL isGenderEdit;
 @property(nonatomic,readwrite) BOOL isCertificatesEdit;
 @property(nonatomic,readwrite) BOOL isEinTaxEdit;
+@property(nonatomic,readwrite) BOOL isDOBEdit;
 
 @property(nonatomic,readwrite) BOOL isCardNumberEdit;
 @property(nonatomic,readwrite) BOOL isCardTypeEdit;

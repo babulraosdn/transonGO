@@ -129,8 +129,8 @@
 //    FBSDKLoginManager *MANAGER  = [FBSDKLoginManager new];
 //    [MANAGER logOut];
     
-    self.sidebarController.delegate = nil;
-    [self.sidebarController dismissSidebarViewController];
+    [self.revealController resignPresentationModeEntirely:NO animated:YES completion:nil];
+    
     NSString *selectedRowString = [self.namesArray objectAtIndex:indexPath.row];
     UINavigationController *contentNaviationController;
     if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"DASHBOARD")]){
@@ -141,11 +141,11 @@
         else{
             contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_USER_VIEW_CONTROLLER]];
         }
-        self.sidebarController.contentViewController = contentNaviationController;
+        self.revealController.frontViewController = contentNaviationController ;
     }
     else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"PROFILE")]){
         contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:PROFILE_VIEW_CONTROLLER]];
-        self.sidebarController.contentViewController = contentNaviationController ;
+        self.revealController.frontViewController = contentNaviationController ;
     }
     else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION")]){
         
@@ -162,7 +162,7 @@
     else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"SETTINGS")]){
         
         contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:SETTINGS_VIEW_CONTROLLER]];
-        self.sidebarController.contentViewController = contentNaviationController ;
+        self.revealController.frontViewController = contentNaviationController ;
         return;
         
         FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];

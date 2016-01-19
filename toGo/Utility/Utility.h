@@ -56,4 +56,6 @@ typedef void (^getImage)(UIImage *image);
 #pragma mark Activity Indicator
 -(void)showProgress;
 
+#pragma mark Image Encoding
+- (NSString *)encodeToBase64String:(UIImage *)image;
 @end

@@ -70,11 +70,8 @@
 
 - (void)navigationBarLeftButtonClicked {
     
-    if(self.sidebarController.sidebarIsPresenting){
-        [self.sidebarController dismissSidebarViewController];
-    }else{
-        [self.sidebarController presentLeftSidebarViewControllerWithStyle:0];
-    }
+    PKRevealController *revealController = (PKRevealController *) App_Delegate.window.rootViewController;
+    [revealController showViewController:revealController.leftViewController];
 }
 
 - (void)logOutButtonClicked{
