@@ -31,6 +31,12 @@
 #import "MyLanguagesView.h"
 #import "BaseViewController.h"
 
+#import "StoreManager.h"
+#import "CountryStore.h"
+#import "CountryObject.h"
+#import "StateObject.h"
+
+#import "MyLanguagesCell.h"
 @interface Headers : NSObject
 
 @end

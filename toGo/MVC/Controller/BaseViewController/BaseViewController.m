@@ -69,12 +69,13 @@
 }
 
 - (void)navigationBarLeftButtonClicked {
-    
+    [self.view endEditing:YES];
     PKRevealController *revealController = (PKRevealController *) App_Delegate.window.rootViewController;
     [revealController showViewController:revealController.leftViewController];
 }
 
 - (void)logOutButtonClicked{
+    [self.view endEditing:YES];
     UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:HOME_VIEW_CONTROLLER]];
     App_Delegate.window.rootViewController = contentNavigationController;
 }

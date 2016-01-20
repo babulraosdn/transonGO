@@ -26,6 +26,8 @@
 @property(nonatomic,strong) NSString *bankAccountInfoString;
 @property(nonatomic,strong) NSString *myLanguagesString;
 @property(nonatomic,strong) NSString *myLanguagesKEYsString;
+@property(nonatomic,strong) NSString *countryCodeString;
+@property(nonatomic,strong) NSString *stateCodeString;
 @property(nonatomic,strong) NSString *certificatesString;
 @property(nonatomic,strong) NSString *imageURLString;
 @property(nonatomic,strong) NSString *base64EncodedImageString;

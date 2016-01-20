@@ -55,6 +55,22 @@
         self.namesArray = [[NSMutableArray alloc]initWithObjects:
                            NSLOCALIZEDSTRING(@"DASHBOARD"),
                            NSLOCALIZEDSTRING(@"PROFILE"),
+                           NSLOCALIZEDSTRING(@"CALL_HISTORY"),
+                           NSLOCALIZEDSTRING(@"REVENUE"),
+                           NSLOCALIZEDSTRING(@"FEEDBACK"),
+                           NSLOCALIZEDSTRING(@"SETTINGS"), nil];
+        self.imagesNamesArray = [[NSMutableArray alloc]initWithObjects:
+                                 DASHBOARD_SLIDE_IMAGE,
+                                 PROFILE_IMAGE,
+                                 CALL_HISTORY_IMAGE,
+                                 PROFILE_IMAGE,
+                                 PURCHASE_IMAGE,
+                                 SETTINGS_IMAGE, nil];
+    }
+    else {
+        self.namesArray = [[NSMutableArray alloc]initWithObjects:
+                           NSLOCALIZEDSTRING(@"DASHBOARD"),
+                           NSLOCALIZEDSTRING(@"PROFILE"),
                            NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION"),
                            NSLOCALIZEDSTRING(@"CALL_HISTORY"),
                            NSLOCALIZEDSTRING(@"PURCHASES"),
@@ -67,22 +83,6 @@
                                  CALL_HISTORY_IMAGE,
                                  PURCHASE_IMAGE,
                                  FAV_INTERPRETER_IMAGE,
-                                 SETTINGS_IMAGE, nil];
-    }
-    else {
-        self.namesArray = [[NSMutableArray alloc]initWithObjects:
-                           NSLOCALIZEDSTRING(@"DASHBOARD"),
-                           NSLOCALIZEDSTRING(@"PROFILE"),
-                           NSLOCALIZEDSTRING(@"CALL_HISTORY"),
-                           NSLOCALIZEDSTRING(@"REVENUE"),
-                           NSLOCALIZEDSTRING(@"FEEDBACK"),
-                           NSLOCALIZEDSTRING(@"SETTINGS"), nil];
-        self.imagesNamesArray = [[NSMutableArray alloc]initWithObjects:
-                                 DASHBOARD_SLIDE_IMAGE,
-                                 PROFILE_IMAGE,
-                                 CALL_HISTORY_IMAGE,
-                                 PROFILE_IMAGE,
-                                 PURCHASE_IMAGE,
                                  SETTINGS_IMAGE, nil];
     }
     
@@ -113,6 +113,8 @@
     cell.displayImageView.image = [UIImage imageNamed:[self.imagesNamesArray objectAtIndex:indexPath.row]];
     cell.displayLabel.text = [self.namesArray objectAtIndex:indexPath.row];
     cell.displayLabel.font = [UIFont smallBig];
+    UIImage *img = [UIImage imageNamed:[self.imagesNamesArray objectAtIndex:indexPath.row]];
+    cell.displayImageView.frame = CGRectMake(111, 33, img.size.width, img.size.height);
     cell.contentView.backgroundColor = [self.colorCodesArray objectAtIndex:indexPath.row];
     return cell;
 }

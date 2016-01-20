@@ -75,10 +75,10 @@ _Pragma("clang diagnostic pop") \
 #define PASSWORD_PADDING_IMAGE      @"password_icon_iPhone"
 #define DEFAULT_PIC_IMAGE           @"default_pic_iPhone"
 #define EDIT_PEN_IMAGE              @"Edit_iPhone"
-#define LIGHT_BUTTON_IMAGE           @"light-button"
-#define SWITCH_OFF_IMAGE           @"status-bar-off"
-#define SWITCH_ON_IMAGE           @"status-bar-on"
-#define CLOSE_LANGUAGES_IMAGE           @"close_iPhone"
+#define LIGHT_BUTTON_IMAGE          @"light-button"
+#define SWITCH_OFF_IMAGE            @"toggle_off_iPhone"
+#define SWITCH_ON_IMAGE             @"toggle_on_iPhone"
+#define CLOSE_LANGUAGES_IMAGE       @"close_iPhone"
 #define CheckOrTick_IMAGE           @"Tick_iPhone"
 
 
@@ -117,6 +117,9 @@ _Pragma("clang diagnostic pop") \
 #define PROFILE_COMPLETE            @"1"
 #define PROFILE_INCOMPLETE          @"0"
 
+#define INTERPRETER_AVAILABLE       @"1"
+#define INTERPRETER_UN_AVAILABLE       @"0"
+
 #define NORMAL_LOGIN                @"0"
 #define FACEBOOK_LOGIN              @"1"
 #define TWITTER_LOGIN               @"1"
@@ -128,7 +131,7 @@ _Pragma("clang diagnostic pop") \
 //********************  WebService Names  ****************************************
 #pragma mark WebService Calls
 #define BASE_URL                    @"http://54.153.22.179:3000/"      //LIVE URL
-//#define BASE_URL                      @"http://172.10.55.110:3000/"  //Local URL
+//#define BASE_URL                  @"http://172.10.55.110:3000/"      //Local URL
 
 #define LOGIN_W                       @"authenticate"
 #define SIGNUP_W                      @"signup"
@@ -137,12 +140,14 @@ _Pragma("clang diagnostic pop") \
 #define PROFILE_INFO_W                @"api/getAgentInfo"
 #define PROFILE_INFO_W_USER           @"api/getUserProfile"
 #define PROFILE_IMAGE_UPLOAD_W        @"api/upload"
+#define GET_COUNTRY_LIST_W            @"getCountryList"
+#define GET_STATE_LIST_W              @"getState?country="
 
 //getUserProfile
 //
-#define UPDATE_INTERPRETER_STATUS_W   @"api/updateAgentAvailability"
-#define UPDATE_INTERPRETER_PROFILE_INFO_W    @"api/updateAgentProfile"
-#define UPDATE_USER_PROFILE_INFO_W                @"api/updateUserProfile"
+#define UPDATE_INTERPRETER_STATUS_W         @"api/updateAgentAvailability"
+#define UPDATE_INTERPRETER_PROFILE_INFO_W   @"api/updateAgentProfile"
+#define UPDATE_USER_PROFILE_INFO_W          @"api/updateUserProfile"
 
 //updateUserProfile
 //
@@ -186,17 +191,24 @@ _Pragma("clang diagnostic pop") \
 #define KCALL_YTD_EARNINGS_W           @"callYtdEarnings"
 #define KSTATUS_W                      @"status"
 #define KID_W                          @"id"
-#define KUID_W                          @"uid"
+#define KUID_W                         @"uid"
 #define KINTERPRETER_AVAILABILITY_W    @"interpreter_availability"
-#define KMYLANGUAGE_W                   @"mylanguage"
-#define KCOUNTRY_W                      @"country"
+#define KMYLANGUAGE_W                  @"mylanguage"
+#define KCOUNTRY_W                     @"country"
 #define KSTATE_W                       @"state"
-#define KCITY_W                         @"city"
-#define KPOSTALCODE_W                    @"zipcode"
-#define KEIN_TAXID_W                      @"ein_taxId"
-#define KURL_W                            @"url"
-#define KSERVICE_TYPE_W                            @"service_type"
-#define KFILE_W                            @"file"
+#define KCITY_W                        @"city"
+#define KPOSTALCODE_W                  @"zipcode"
+#define KEIN_TAXID_W                   @"ein_taxId"
+#define KURL_W                         @"url"
+#define KSERVICE_TYPE_W                @"service_type"
+#define KFILE_W                        @"file"
+#define KINTERPRETER_AVAILABILITY_W    @"interpreter_availability"
+
+#define KCOUNTRY_CODE_W                            @"countryCode"
+#define KCOUNTRY_NAME_W                            @"countryName"
+#define KCREATED_AT_W                            @"createdAt"
+#define KCOUNTRY_ID_W                            @"countryId"
+#define KSTATE_NAME_W                            @"stateName"
 
 #define K_W                            @""
 

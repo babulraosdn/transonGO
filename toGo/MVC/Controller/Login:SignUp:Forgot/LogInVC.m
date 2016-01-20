@@ -334,7 +334,7 @@
                     //[Utility_Shared_Instance writeStringUserPreference:KCOMPLETION_W value:@"0"];//Test
                 }
                 
-                //[self ooVooLogin];
+                [self ooVooLogin];
                 [self createSidePanel];
             }
         }

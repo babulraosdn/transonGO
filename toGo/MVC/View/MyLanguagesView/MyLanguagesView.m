@@ -28,13 +28,7 @@
     
     if (!self.isCountry&&!self.isState)
         self.languagesDictionary = [self getLanguagesDictionary];
-    
-    /*
-    NSMutableArray *dictAllKeys=[NSMutableArray arrayWithArray:[self.languagesDictionary allKeys]];
-    NSMutableArray *dictAllValues=[NSMutableArray arrayWithArray:[self.languagesDictionary allValues]];
-    NSMutableArray *keysAndValues=[NSMutableArray arrayWithArray:[dictAllKeys arrayByAddingObjectsFromArray:dictAllValues]];
-    NSMutableArray *test = self.languagesDictionary.copy;
-    */
+
     [self addTableView];
     
 }
@@ -50,12 +44,14 @@
     
     self.tblView.delegate = self;
     self.tblView.dataSource = self;
+    //self.tblView.layer.cornerRadius = 6.0f;
+    //self.tblView.layer.masksToBounds = YES;
     //tableView.backgroundColor = [UIColor redColor];
     [self addSubview:self.tblView];
     
     
     UIButton *closeBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.frame.size.width-50, 10 , 40, 40)];
-    //closeBtn.backgroundColor = [UIColor blackColor];
+    closeBtn.backgroundColor = [UIColor blackColor];
     [closeBtn setBackgroundImage:[UIImage closeLanguagesImage] forState:UIControlStateNormal];
     [closeBtn addTarget:self action:@selector(closeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     mainView.tag = 999;
@@ -82,22 +78,41 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    
     if (self.isCountry || self.isState) {
         UITableViewCell *cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"countryState"];
-        cell.textLabel.text = [self.countriesStatesArray objectAtIndex:indexPath.row];
+        if (self.isCountry){
+            CountryObject *cObj = [self.countriesStatesArray objectAtIndex:indexPath.row];
+            cell.textLabel.text = cObj.countryName;
+        }
+        else{
+            StateObject *sObj = [self.countriesStatesArray objectAtIndex:indexPath.row];
+            cell.textLabel.text = sObj.stateName;
+        }
+        
         if ([self.selectedCountriesStatesArray containsObject:[self.countriesStatesArray objectAtIndex: indexPath.row]]) {
             [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
         }
+        
         return cell;
     }
     
+    /*
     UITableViewCell *cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"languages"];
-    cell.textLabel.text = [[self.languagesDictionary allKeys] objectAtIndex:indexPath.row];
-    if ([self.selectedLanguagesDict objectForKey:[[self.languagesDictionary allValues] objectAtIndex:indexPath.row]]) {
+    cell.textLabel.text = [[self.languagesDictionary allValues] objectAtIndex:indexPath.row];
+    */
+    MyLanguagesCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MyLanguagesCell"];
+    if (cell==nil) {
+        NSArray *array = [[NSBundle mainBundle]loadNibNamed:@"MyLanguagesCell" owner:self options:nil];
+        cell = [array objectAtIndex:0];
+    }
+    cell.countryNameLabel.text = [[self.languagesDictionary allValues] objectAtIndex:indexPath.row];
+    //cell.countryImageView.backgroundColor = [UIColor greenColor];
+//    if ([self.languagesDictionary objectForKey:[self.selectedCountriesStatesArray objectAtIndex:indexPath.row]]) {
+//        [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+//    }
+    if ([self.selectedLanguagesDict objectForKey:[[self.languagesDictionary allKeys] objectAtIndex:indexPath.row]]){
         [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
     }
-    
     return cell;
 }
 
@@ -107,12 +122,13 @@
         [self.selectedCountriesStatesArray removeAllObjects];
         [self.selectedCountriesStatesArray addObject:[self.countriesStatesArray objectAtIndex: indexPath.row]];
     }
-    
-    if ([self.selectedLanguagesDict objectForKey:[[self.languagesDictionary allValues] objectAtIndex:indexPath.row]]) {
-        [self.selectedLanguagesDict removeObjectForKey:[[self.languagesDictionary allValues] objectAtIndex:indexPath.row]];
-    }
     else{
-        [self.selectedLanguagesDict setObject:[[self.languagesDictionary allValues] objectAtIndex:indexPath.row] forKey:[[self.languagesDictionary allValues] objectAtIndex:indexPath.row]];
+        if ([self.selectedLanguagesDict objectForKey:[[self.languagesDictionary allKeys] objectAtIndex:indexPath.row]]) {
+            [self.selectedLanguagesDict removeObjectForKey:[[self.languagesDictionary allKeys] objectAtIndex:indexPath.row]];
+        }
+        else{
+            [self.selectedLanguagesDict setObject:[[self.languagesDictionary allValues] objectAtIndex:indexPath.row] forKey:[[self.languagesDictionary allKeys] objectAtIndex:indexPath.row]];
+        }
     }
     [self.tblView reloadData];
 }
@@ -123,12 +139,13 @@
     if (self.isCountry) {
         [self.delegate finishCountrySelection:self.selectedCountriesStatesArray];
     }
-    if (self.isState) {
+    else if (self.isState) {
         [self.delegate finishStateSelection:self.selectedCountriesStatesArray];
     }
+    else{
+        [self.delegate finishLanguagesSelection:self.selectedLanguagesDict];
+    }
     [self removeFromSuperview];
-    [self.delegate finishLanguagesSelection:self.selectedLanguagesDict];
-    //sss
 }
 
 -(NSMutableDictionary *)getLanguagesDictionary{

@@ -13,7 +13,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *customerFeedBackButton;
 @property (weak, nonatomic) IBOutlet UIButton *profileManagementButton;
 @property (weak, nonatomic) IBOutlet UITextView *descriptionTextView;
-@property (weak, nonatomic) IBOutlet UISwitch *switchControl;
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 @property (weak, nonatomic) IBOutlet UILabel *callYtdEarningsDetailLabel;
 @property (weak, nonatomic) IBOutlet UILabel *callYtdEarningslabel;
@@ -24,6 +23,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *defaultImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *defaultPicBackgroundImageView;
 @property (weak, nonatomic) IBOutlet UILabel *headerLabel;
+@property (weak, nonatomic) IBOutlet UIButton *switchButton;
+- (IBAction)switchButtonPressed:(UIButton *)sender;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 - (IBAction)profileMgt_CustomerFeedBackButtonPressed:(UIButton *)sender;
 @end
@@ -40,12 +41,17 @@
     [self setImages];
     [self setColors];
     [self setFonts];
+    
+    if ([[Utility_Shared_Instance readStringUserPreference:KINTERPRETER_AVAILABILITY_W] isEqualToString:INTERPRETER_UN_AVAILABLE]) {
+        [self.switchButton setImage:[UIImage switchOffImage] forState:UIControlStateNormal];
+    }
+    else{
+        [self.switchButton setImage:[UIImage switchONImage] forState:UIControlStateNormal];
+    }
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    [self.switchControl addTarget:self action:@selector(changeAvailabilityStatus:) forControlEvents:UIControlEventValueChanged];
-    [self.switchControl setOffImage:[UIImage switchOffImage]];
-    
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setShowsVerticalScrollIndicator:NO];
     
@@ -152,18 +158,15 @@
    [statusDict setValue:[Utility_Shared_Instance readStringUserPreference:KID_W] forKey:KID_W];
    [statusDict setValue:[Utility_Shared_Instance readStringUserPreference:KEMAIL_W] forKey:KEMAIL_W];
     
-    BOOL state = [sender isOn];
-    //NSString *rez = state == YES ? @"YES" : @"NO";
-    if (state) {
+    if ([self.switchButton.currentImage isEqual:[UIImage switchONImage] ]) {
         [statusDict setValue:@"true" forKey:KINTERPRETER_AVAILABILITY_W];
-        [self.switchControl setOffImage:[UIImage switchONImage]];
     }
     else{
         [statusDict setValue:@"false" forKey:KINTERPRETER_AVAILABILITY_W];
-        [self.switchControl setOffImage:[UIImage switchOffImage]];
     }
+
     
-   [Web_Service_Call serviceCallWithRequestType:statusDict requestType:POST_REQUEST includeHeader:YES includeBody:NO webServicename:UPDATE_INTERPRETER_STATUS_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+   [Web_Service_Call serviceCallWithRequestType:statusDict requestType:POST_REQUEST includeHeader:YES includeBody:YES webServicename:UPDATE_INTERPRETER_STATUS_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         NSDictionary *responseDict=responseObject;
         if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
         {
@@ -180,9 +183,6 @@
     }];
 }
 
--(void)updateStatusInterpreter{
-    
-}
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     
@@ -232,8 +232,15 @@
                     self.defaultImageView.layer.masksToBounds = YES;
                 }
                 
-                //NSString *imageURLString = [profileImgDict objectForKey:KURL_W];
-                
+               NSString *interpreterAvailabiltyString = [NSString stringWithFormat:@"%@",[Utility_Shared_Instance checkForNullString:[userDict objectForKey:KINTERPRETER_AVAILABILITY_W]]];
+                if ([interpreterAvailabiltyString isEqualToString:INTERPRETER_UN_AVAILABLE]) {
+                    [self.switchButton setImage:[UIImage switchONImage] forState:UIControlStateNormal];
+                    [Utility_Shared_Instance writeStringUserPreference:KINTERPRETER_AVAILABILITY_W value:INTERPRETER_UN_AVAILABLE];
+                }
+                else{
+                    [self.switchButton setImage:[UIImage switchOffImage] forState:UIControlStateNormal];
+                    [Utility_Shared_Instance writeStringUserPreference:KINTERPRETER_AVAILABILITY_W value:INTERPRETER_AVAILABLE];
+                }
             });
             
         }
@@ -246,4 +253,19 @@
 }
 
 
+- (IBAction)switchButtonPressed:(UIButton *)sender {
+    
+    if ([sender.currentImage isEqual:[UIImage switchONImage] ]) {
+        [UIView animateWithDuration:0.5 animations:^{
+          [sender setImage:[UIImage switchOffImage] forState:UIControlStateNormal];
+        }];
+        
+    }
+    else{
+        [UIView animateWithDuration:0.5 animations:^{
+            [sender setImage:[UIImage switchONImage] forState:UIControlStateNormal];
+        }];
+        
+    }
+}
 @end

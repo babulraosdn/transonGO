@@ -14,7 +14,13 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <TwitterKit/TwitterKit.h>
-//pod 'PKRevealController'
+//Spacing between elements
+//Address, description auto size
+//fonts se
+//Slide menu images size
+//small cell height slide menu
+//Dashboard buttons close
+//Alert view 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 {
     UINavigationController *navigationController ;

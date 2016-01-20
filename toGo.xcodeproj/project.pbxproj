@@ -100,6 +100,8 @@
 		EDA374791C3BBDAF00288BA2 /* DashboardInterpreterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EDA374781C3BBDAF00288BA2 /* DashboardInterpreterViewController.m */; settings = {ASSET_TAGS = (); }; };
 		EDAFD9C71C3BD8CE008442A1 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EDAFD9C61C3BD8CE008442A1 /* SettingsViewController.m */; settings = {ASSET_TAGS = (); }; };
 		EDAFD9CB1C3BDA06008442A1 /* FeedBackListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EDAFD9CA1C3BDA06008442A1 /* FeedBackListViewController.m */; settings = {ASSET_TAGS = (); }; };
+		EDB1C5E81C4F95A300373358 /* MyLanguagesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EDB1C5E71C4F95A300373358 /* MyLanguagesCell.m */; settings = {ASSET_TAGS = (); }; };
+		EDB1C5EA1C4F95BA00373358 /* MyLanguagesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDB1C5E91C4F95BA00373358 /* MyLanguagesCell.xib */; settings = {ASSET_TAGS = (); }; };
 		EDCC77FC1C2BB489005A9607 /* ooVooSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDCC77FB1C2BB489005A9607 /* ooVooSDK.framework */; settings = {ASSET_TAGS = (); }; };
 		EDDF16E61C3D4B64006E4DD7 /* MyLanguagesView.m in Sources */ = {isa = PBXBuildFile; fileRef = EDDF16E51C3D4B64006E4DD7 /* MyLanguagesView.m */; settings = {ASSET_TAGS = (); }; };
 		EDE22E641C3A9B3900923ADF /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EDE22E541C3A9B3900923ADF /* Roboto-Black.ttf */; settings = {ASSET_TAGS = (); }; };
@@ -119,6 +121,10 @@
 		EDE22E721C3A9B3900923ADF /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EDE22E621C3A9B3900923ADF /* Roboto-Thin.ttf */; settings = {ASSET_TAGS = (); }; };
 		EDE22E731C3A9B3900923ADF /* Roboto-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EDE22E631C3A9B3900923ADF /* Roboto-ThinItalic.ttf */; settings = {ASSET_TAGS = (); }; };
 		EDEBB32A1C4E0A5D00BAC272 /* UITextView+toGo.m in Sources */ = {isa = PBXBuildFile; fileRef = EDEBB3291C4E0A5D00BAC272 /* UITextView+toGo.m */; settings = {ASSET_TAGS = (); }; };
+		EDF7CF0E1C4F4613009AA19A /* CountryStore.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF7CF0B1C4F4613009AA19A /* CountryStore.m */; settings = {ASSET_TAGS = (); }; };
+		EDF7CF0F1C4F4613009AA19A /* StoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF7CF0D1C4F4613009AA19A /* StoreManager.m */; settings = {ASSET_TAGS = (); }; };
+		EDF7CF1E1C4F4FBD009AA19A /* CountryObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF7CF1A1C4F4FBD009AA19A /* CountryObject.m */; settings = {ASSET_TAGS = (); }; };
+		EDF7CF1F1C4F4FBD009AA19A /* StateObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF7CF1D1C4F4FBD009AA19A /* StateObject.m */; settings = {ASSET_TAGS = (); }; };
 		EDFD7E061C27C68100E4FEEB /* UIButton+toGo.m in Sources */ = {isa = PBXBuildFile; fileRef = EDFD7DF61C27C68100E4FEEB /* UIButton+toGo.m */; settings = {ASSET_TAGS = (); }; };
 		EDFD7E071C27C68100E4FEEB /* UIColor+toGo.m in Sources */ = {isa = PBXBuildFile; fileRef = EDFD7DF91C27C68100E4FEEB /* UIColor+toGo.m */; settings = {ASSET_TAGS = (); }; };
 		EDFD7E081C27C68100E4FEEB /* UIFont+Font.m in Sources */ = {isa = PBXBuildFile; fileRef = EDFD7DFC1C27C68100E4FEEB /* UIFont+Font.m */; settings = {ASSET_TAGS = (); }; };
@@ -303,6 +309,9 @@
 		EDAFD9C61C3BD8CE008442A1 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		EDAFD9C91C3BDA05008442A1 /* FeedBackListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedBackListViewController.h; sourceTree = "<group>"; };
 		EDAFD9CA1C3BDA06008442A1 /* FeedBackListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedBackListViewController.m; sourceTree = "<group>"; };
+		EDB1C5E61C4F95A300373358 /* MyLanguagesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLanguagesCell.h; sourceTree = "<group>"; };
+		EDB1C5E71C4F95A300373358 /* MyLanguagesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLanguagesCell.m; sourceTree = "<group>"; };
+		EDB1C5E91C4F95BA00373358 /* MyLanguagesCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyLanguagesCell.xib; sourceTree = "<group>"; };
 		EDCC77FB1C2BB489005A9607 /* ooVooSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ooVooSDK.framework; sourceTree = "<group>"; };
 		EDDF16E41C3D4B64006E4DD7 /* MyLanguagesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLanguagesView.h; sourceTree = "<group>"; };
 		EDDF16E51C3D4B64006E4DD7 /* MyLanguagesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLanguagesView.m; sourceTree = "<group>"; };
@@ -324,6 +333,14 @@
 		EDE22E631C3A9B3900923ADF /* Roboto-ThinItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-ThinItalic.ttf"; sourceTree = "<group>"; };
 		EDEBB3281C4E0A5D00BAC272 /* UITextView+toGo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+toGo.h"; sourceTree = "<group>"; };
 		EDEBB3291C4E0A5D00BAC272 /* UITextView+toGo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+toGo.m"; sourceTree = "<group>"; };
+		EDF7CF0A1C4F4613009AA19A /* CountryStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountryStore.h; sourceTree = "<group>"; };
+		EDF7CF0B1C4F4613009AA19A /* CountryStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountryStore.m; sourceTree = "<group>"; };
+		EDF7CF0C1C4F4613009AA19A /* StoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoreManager.h; sourceTree = "<group>"; };
+		EDF7CF0D1C4F4613009AA19A /* StoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoreManager.m; sourceTree = "<group>"; };
+		EDF7CF191C4F4FBD009AA19A /* CountryObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountryObject.h; sourceTree = "<group>"; };
+		EDF7CF1A1C4F4FBD009AA19A /* CountryObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountryObject.m; sourceTree = "<group>"; };
+		EDF7CF1C1C4F4FBD009AA19A /* StateObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateObject.h; sourceTree = "<group>"; };
+		EDF7CF1D1C4F4FBD009AA19A /* StateObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StateObject.m; sourceTree = "<group>"; };
 		EDFD7DF51C27C68100E4FEEB /* UIButton+toGo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+toGo.h"; sourceTree = "<group>"; };
 		EDFD7DF61C27C68100E4FEEB /* UIButton+toGo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+toGo.m"; sourceTree = "<group>"; };
 		EDFD7DF81C27C68100E4FEEB /* UIColor+toGo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+toGo.h"; sourceTree = "<group>"; };
@@ -547,6 +564,9 @@
 		ED1B7EE01C2AA48600C49026 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				EDF7CF181C4F4FBD009AA19A /* Country */,
+				EDF7CF1B1C4F4FBD009AA19A /* State */,
+				EDF7CF091C4F4613009AA19A /* StoreManagers */,
 				ED2F28231C316E3B003D8C82 /* ProfileInfo */,
 				ED1B7EE11C2AA48600C49026 /* CustomValidations */,
 				ED1B7EE41C2AA48600C49026 /* DropDownViews */,
@@ -1058,6 +1078,9 @@
 			children = (
 				EDDF16E41C3D4B64006E4DD7 /* MyLanguagesView.h */,
 				EDDF16E51C3D4B64006E4DD7 /* MyLanguagesView.m */,
+				EDB1C5E61C4F95A300373358 /* MyLanguagesCell.h */,
+				EDB1C5E71C4F95A300373358 /* MyLanguagesCell.m */,
+				EDB1C5E91C4F95BA00373358 /* MyLanguagesCell.xib */,
 			);
 			path = MyLanguagesView;
 			sourceTree = "<group>";
@@ -1108,6 +1131,35 @@
 				EDEBB3291C4E0A5D00BAC272 /* UITextView+toGo.m */,
 			);
 			path = UITextView;
+			sourceTree = "<group>";
+		};
+		EDF7CF091C4F4613009AA19A /* StoreManagers */ = {
+			isa = PBXGroup;
+			children = (
+				EDF7CF0A1C4F4613009AA19A /* CountryStore.h */,
+				EDF7CF0B1C4F4613009AA19A /* CountryStore.m */,
+				EDF7CF0C1C4F4613009AA19A /* StoreManager.h */,
+				EDF7CF0D1C4F4613009AA19A /* StoreManager.m */,
+			);
+			path = StoreManagers;
+			sourceTree = "<group>";
+		};
+		EDF7CF181C4F4FBD009AA19A /* Country */ = {
+			isa = PBXGroup;
+			children = (
+				EDF7CF191C4F4FBD009AA19A /* CountryObject.h */,
+				EDF7CF1A1C4F4FBD009AA19A /* CountryObject.m */,
+			);
+			path = Country;
+			sourceTree = "<group>";
+		};
+		EDF7CF1B1C4F4FBD009AA19A /* State */ = {
+			isa = PBXGroup;
+			children = (
+				EDF7CF1C1C4F4FBD009AA19A /* StateObject.h */,
+				EDF7CF1D1C4F4FBD009AA19A /* StateObject.m */,
+			);
+			path = State;
 			sourceTree = "<group>";
 		};
 		EDFD7DF41C27C68100E4FEEB /* UIButton */ = {
@@ -1294,6 +1346,7 @@
 				EDE22E711C3A9B3900923ADF /* Roboto-Regular.ttf in Resources */,
 				ED8B51701C1EEF7000CA7306 /* LaunchScreen.storyboard in Resources */,
 				ED8B51DD1C1EEFED00CA7306 /* video incoming call rev.mp3 in Resources */,
+				EDB1C5EA1C4F95BA00373358 /* MyLanguagesCell.xib in Resources */,
 				EDE22E701C3A9B3900923ADF /* Roboto-MediumItalic.ttf in Resources */,
 				ED08F1BC1C324A0F005569E9 /* Assets.xcassets in Resources */,
 				ED437C081C1FDD1100DB68E0 /* GooglePlus.bundle in Resources */,
@@ -1406,6 +1459,7 @@
 				ED1B7EF01C2AA48600C49026 /* DashBoardViewController.m in Sources */,
 				ED8B51EA1C1EEFED00CA7306 /* MessageManager.m in Sources */,
 				EDFD7E121C27CB8B00E4FEEB /* FileLogger.m in Sources */,
+				EDB1C5E81C4F95A300373358 /* MyLanguagesCell.m in Sources */,
 				ED8B51D81C1EEFED00CA7306 /* AlertView.m in Sources */,
 				ED8B51E71C1EEFED00CA7306 /* InternetActivityVC.m in Sources */,
 				ED145A561C4612D600A5B211 /* TPKeyboardAvoidingScrollView.m in Sources */,
@@ -1422,6 +1476,7 @@
 				ED8B51D71C1EEFED00CA7306 /* ActiveUserManager.m in Sources */,
 				ED2F28181C31629A003D8C82 /* ProfileViewEditViewController.m in Sources */,
 				ED8B51E61C1EEFED00CA7306 /* ParticipentCell.m in Sources */,
+				EDF7CF1F1C4F4FBD009AA19A /* StateObject.m in Sources */,
 				ED8B51E11C1EEFED00CA7306 /* UIView-Extensions.m in Sources */,
 				ED437C021C1FD98200DB68E0 /* Application.m in Sources */,
 				ED1B7EF51C2AA48600C49026 /* SlideMenuViewController.m in Sources */,
@@ -1435,6 +1490,7 @@
 				ED145A571C4612D600A5B211 /* TPKeyboardAvoidingTableView.m in Sources */,
 				ED1B7EF31C2AA48600C49026 /* SignUpViewController.m in Sources */,
 				ED8B51E51C1EEFED00CA7306 /* InfoViewController.m in Sources */,
+				EDF7CF0F1C4F4613009AA19A /* StoreManager.m in Sources */,
 				ED8B51EF1C1EEFED00CA7306 /* VideoFrameUser.m in Sources */,
 				EDDF16E61C3D4B64006E4DD7 /* MyLanguagesView.m in Sources */,
 				ED1B7EF81C2AA48600C49026 /* SocialView.m in Sources */,
@@ -1451,8 +1507,10 @@
 				ED8B51ED1C1EEFED00CA7306 /* UserDefaults.m in Sources */,
 				ED145A581C4612D600A5B211 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
 				EDFD7E091C27C68100E4FEEB /* UIImage+Image.m in Sources */,
+				EDF7CF1E1C4F4FBD009AA19A /* CountryObject.m in Sources */,
 				ED1B7EF61C2AA48600C49026 /* CustomTextFieldDelegate.m in Sources */,
 				ED2F28061C310E3B003D8C82 /* UIView+toGo.m in Sources */,
+				EDF7CF0E1C4F4613009AA19A /* CountryStore.m in Sources */,
 				ED8B51651C1EEF7000CA7306 /* AppDelegate.m in Sources */,
 				ED8B51621C1EEF7000CA7306 /* main.m in Sources */,
 				EDAFD9CB1C3BDA06008442A1 /* FeedBackListViewController.m in Sources */,
@@ -1572,7 +1630,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "13ad72cf-a6d8-4987-88a5-19c18722caa8";
+				PROVISIONING_PROFILE = "faaf942e-6ee7-4350-8efc-fd2b82ca6267";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1612,7 +1670,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "13ad72cf-a6d8-4987-88a5-19c18722caa8";
+				PROVISIONING_PROFILE = "faaf942e-6ee7-4350-8efc-fd2b82ca6267";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1639,7 +1697,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.smartdata.interpreter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "13ad72cf-a6d8-4987-88a5-19c18722caa8";
+				PROVISIONING_PROFILE = "faaf942e-6ee7-4350-8efc-fd2b82ca6267";
 			};
 			name = Debug;
 		};
@@ -1662,7 +1720,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.smartdata.interpreter;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "13ad72cf-a6d8-4987-88a5-19c18722caa8";
+				PROVISIONING_PROFILE = "faaf942e-6ee7-4350-8efc-fd2b82ca6267";
 			};
 			name = Release;
 		};
@@ -1675,7 +1733,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.smartdata.toGoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "b14bece6-3051-4004-a30a-ee51cf0bf0ab";
+				PROVISIONING_PROFILE = "faaf942e-6ee7-4350-8efc-fd2b82ca6267";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/toGo.app/toGo";
 			};
 			name = Debug;
@@ -1689,7 +1747,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.smartdata.toGoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "b14bece6-3051-4004-a30a-ee51cf0bf0ab";
+				PROVISIONING_PROFILE = "faaf942e-6ee7-4350-8efc-fd2b82ca6267";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/toGo.app/toGo";
 			};
 			name = Release;

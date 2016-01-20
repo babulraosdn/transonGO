@@ -48,8 +48,8 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:YES];
-    [Utility_Shared_Instance showProgress];
-    [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
+    //[Utility_Shared_Instance showProgress];
+    //[self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
 }
 -(void)setLabelButtonNames{
     self.myLanguageLabel.text = NSLOCALIZEDSTRING(@"MY_LANGUAGE");
@@ -149,7 +149,7 @@
     }];
 }
 
-
+/*
 -(void)getProfileInfo
 {
     //WEB Service CODE
@@ -180,6 +180,7 @@
     }];
     
 }
+*/
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
