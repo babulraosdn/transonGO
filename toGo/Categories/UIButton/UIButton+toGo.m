@@ -10,6 +10,8 @@
 
 @implementation UIButton (toGo)
 +(void)roundedCornerButton:(UIButton *)button{
+    button.lineBreakMode = NSLineBreakByWordWrapping;
+    button.titleLabel.textAlignment = NSTextAlignmentCenter;
     button.layer.cornerRadius = 6.0f;
     button.layer.masksToBounds = YES;
 }

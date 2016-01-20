@@ -95,9 +95,14 @@
     
     ////////////////////////////////////////////
     
+    //[self performSelector:@selector(crashButtonTapped:) withObject:nil afterDelay:0];
     return YES;
 }
 
+
+- (IBAction)crashButtonTapped:(id)sender {
+    [[Crashlytics sharedInstance] crash];
+}
 
 -(void)setUpGooglePlusConfiguration{
     
@@ -397,7 +402,6 @@
     }
     
     alertView=nil;
-    
 }
 
 
@@ -467,10 +471,6 @@
     //
     //        }
     //    }
-    
-    
-    
-    
 }
 
 
@@ -566,4 +566,13 @@
 
 #pragma mark Google_Plus END
 
+
+-(void)takeTour
+{
+    NSString *curentVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    curentVersion = [curentVersion stringByReplacingOccurrencesOfString:@"." withString:@""];
+    [TakeTourView launchTakeTourViewWithNewVersion:YES];
+}
+
 @end
+

@@ -10,37 +10,48 @@
 
 @interface SignUpViewController ()<UITextFieldDelegate>{
     NSMutableDictionary *signUpDictionary;
-    NSMutableArray *signUpArray;
     UITextField *activeField;
+    
 }
+@property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
+@property (weak,nonatomic) IBOutlet UITextField *emaillTextField;
+@property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
+@property (weak, nonatomic) IBOutlet UIButton *submitButton;
+@property (weak, nonatomic) IBOutlet UITextField *confirmpasswordTextField;
+@property (weak, nonatomic) IBOutlet UILabel *registerAsLabel;
+@property (weak, nonatomic) IBOutlet UILabel *interpreterLabel;
+@property (weak, nonatomic) IBOutlet UILabel *customerLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *interpreterImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *customerImageView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+
+-(IBAction)interpreterCustomerButtonClicked:(UIButton *)sender;
 @end
 
 @implementation SignUpViewController
-@dynamic emailTextField,nameTextField,passwordTextField,confirmpasswordTextField,submitButton;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    signUpDictionary = [NSMutableDictionary new];
-    
-    self.title = NSLOCALIZEDSTRING(@"TOGO");
-    self.view.backgroundColor = [UIColor backgroundColor];
+
+    [self allocationsAndStaticText];
+    //[self registerForKeyboardNotifications];
     [self setCustomBackButtonForNavigation];
-    //[self setKeyBoardReturntypesAndDelegates];
+    [self setLabelButtonNames];
     [self setPlaceHolders];
     [self setRoundCorners];
     [self setPadding];
     [self setColors];
     [self setFonts];
-    
-    [self registerForKeyboardNotifications];
-    
 }
 
 -(void)viewDidLayoutSubviews{
-    _scrollView.contentSize=CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-64);
-    
+
+}
+
+-(void)allocationsAndStaticText{
+    signUpDictionary = [NSMutableDictionary new];
+    //typeString = INTERPRETER;
 }
 
 - (void)registerForKeyboardNotifications
@@ -73,152 +84,163 @@
     self.scrollView.scrollIndicatorInsets = contentInsets;
 }
 
-
--(void)setKeyBoardReturntypesAndDelegates{
-    
-    /*
-    self.nameTextField.tag=0;
-    self.emailTextField.tag=1;
-    self.passwordTextField.tag=2;
-    self.confirmpasswordTextField.tag=3;
-    
-    self.nameTextField.returnKeyType    = UIReturnKeyNext;
-    self.emailTextField.returnKeyType    = UIReturnKeyNext;
-    self.passwordTextField.returnKeyType = UIReturnKeyNext;
-    self.confirmpasswordTextField.returnKeyType = UIReturnKeyGo;
-    if (!self.textFieldDelegate) {
-        self.textFieldDelegate = [[CustomTextFieldDelegate alloc]init];
-        self.textFieldDelegate.owner =  self;
-    }
-    self.emailTextField.delegate=self.textFieldDelegate;
-    self.passwordTextField.delegate=self.textFieldDelegate;
-    self.nameTextField.delegate=self.textFieldDelegate;
-    self.confirmpasswordTextField.delegate=self.textFieldDelegate;
-    self.textFieldDelegate.selector = @selector(webServiceCall:);
-    self.textFieldDelegate.owner =  self;
-    */
-}
-
--(void)setPlaceHolders{
-    self.nameTextField.placeholder=NSLOCALIZEDSTRING(@"NAME");
-    self.emailTextField.placeholder=NSLOCALIZEDSTRING(@"EMAIL");
-    self.passwordTextField.placeholder=NSLOCALIZEDSTRING(@"PASSWORD");
-    self.confirmpasswordTextField.placeholder=NSLOCALIZEDSTRING(@"CONFIRM_PASSWORD");
+-(void)setLabelButtonNames{
+    self.registerAsLabel.text = NSLOCALIZEDSTRING(@"REGISTER_AS");
+    self.interpreterLabel.text = NSLOCALIZEDSTRING(@"INTERPRETER");
+    self.customerLabel.text = NSLOCALIZEDSTRING(@"CUSTOMER");
     [self.submitButton setTitle:NSLOCALIZEDSTRING(@"REGISTER_NOW") forState:UIControlStateNormal];
 }
 
+-(void)setPlaceHolders{
+    self.usernameTextField.placeholder=NSLOCALIZEDSTRING(@"USERNAME");
+    self.emaillTextField.placeholder=NSLOCALIZEDSTRING(@"EMAIL");
+    self.passwordTextField.placeholder=NSLOCALIZEDSTRING(@"PASSWORD");
+    self.confirmpasswordTextField.placeholder=NSLOCALIZEDSTRING(@"CONFIRM_PASSWORD");
+}
+
 -(void)setRoundCorners{
-    [UITextField roundedCornerTEXTFIELD:self.nameTextField];
-    [UITextField roundedCornerTEXTFIELD:self.emailTextField];
+    [UITextField roundedCornerTEXTFIELD:self.usernameTextField];
+    [UITextField roundedCornerTEXTFIELD:self.emaillTextField];
     [UITextField roundedCornerTEXTFIELD:self.passwordTextField];
     [UITextField roundedCornerTEXTFIELD:self.confirmpasswordTextField];
     [UIButton roundedCornerButton:self.submitButton];
 }
 
 -(void)setPadding{
-    self.nameTextField.leftViewMode=UITextFieldViewModeAlways;
-    self.nameTextField.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"USER_ID_PADDING_IMAGE") frame:CGRectMake(10, 0, 17, 17)];
+    self.usernameTextField.leftViewMode=UITextFieldViewModeAlways;
+    self.usernameTextField.leftView=[Utility_Shared_Instance setImageViewPadding:USER_ID_PADDING_IMAGE frame:CGRectMake(10, 1, 16, 16)];
     
-    self.emailTextField.leftViewMode=UITextFieldViewModeAlways;
-    self.emailTextField.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"USER_ID_PADDING_IMAGE") frame:CGRectMake(10, 0, 17, 17)];
+    self.emaillTextField.leftViewMode=UITextFieldViewModeAlways;
+    self.emaillTextField.leftView=[Utility_Shared_Instance setImageViewPadding:EMAIL_PADDING_IMAGE frame:CGRectMake(10, 3, 20, 13)];
     
     self.passwordTextField.leftViewMode=UITextFieldViewModeAlways;
-    self.passwordTextField.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"PASSWORD_PADDING_IMAGE") frame:CGRectMake(10, 0, 17, 17)];
+    self.passwordTextField.leftView=[Utility_Shared_Instance setImageViewPadding:PASSWORD_PADDING_IMAGE frame:CGRectMake(10, -3, 15, 20)];
     
     self.confirmpasswordTextField.leftViewMode=UITextFieldViewModeAlways;
-    self.confirmpasswordTextField.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"PASSWORD_PADDING_IMAGE") frame:CGRectMake(10, 0, 17, 17)];
+    self.confirmpasswordTextField.leftView=[Utility_Shared_Instance setImageViewPadding:PASSWORD_PADDING_IMAGE frame:CGRectMake(10, -1, 15, 20)];
 }
 
 -(void)setColors{
+    [self.registerAsLabel setTextColor:[UIColor navigationBarColor]];
+    [self.interpreterLabel setTextColor:[UIColor textColorBlackColor]];
+    [self.customerLabel setTextColor:[UIColor lightGrayConnectWithColor]];
     [self.submitButton setBackgroundColor:[UIColor buttonBackgroundColor]];
 }
 
 -(void)setFonts{
+    self.registerAsLabel.font = [UIFont normalSize];
+    self.interpreterLabel.font = [UIFont smallBig];
+    self.customerLabel.font = [UIFont smallBig];
+    self.submitButton.titleLabel.font = [UIFont largeSize];
 }
-
 
 
 -(IBAction)webServiceCall:(id)sender {
     
     [self.view endEditing:YES];
     
-     [self signUpWebServiceCall];
-    if (self.nameTextField.text.length<1)
+    if (self.usernameTextField.text.length<1)
         [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                            withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(self.nameTextField.placeholder)]
+                                            withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(self.usernameTextField.placeholder)]
                                                  inView:self
                                               withStyle:UIAlertControllerStyleAlert];
-    else  if (self.emailTextField.text.length<1)
+    else if (self.emaillTextField.text.length<1)
         [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                            withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(self.emailTextField.placeholder)]
+                                            withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(self.emaillTextField.placeholder)]
                                                  inView:self
                                               withStyle:UIAlertControllerStyleAlert];
-    else if (![Utility_Shared_Instance validateEmailWithString:self.emailTextField.text])
+    else if (![Utility_Shared_Instance validateEmailWithString:self.emaillTextField.text])
         [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
                                             withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(@"VALID_EMAILID")]
                                                  inView:self
                                               withStyle:UIAlertControllerStyleAlert];
-    else if (self.passwordTextField.text.length<1)
+    else if (![Utility_Shared_Instance passwordIsValid:self.passwordTextField.text])
         [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                            withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(self.passwordTextField.placeholder)]
+                                            withMessage:NSLOCALIZEDSTRING(@"PASSWORD_VALIDATION")
                                                  inView:self
                                               withStyle:UIAlertControllerStyleAlert];
-    else if (self.confirmpasswordTextField.text.length<1)
+    else if (![Utility_Shared_Instance passwordIsValid:self.confirmpasswordTextField.text])
         [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                            withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(self.confirmpasswordTextField.placeholder)]
+                                            withMessage:NSLOCALIZEDSTRING(@"PASSWORD_VALIDATION")
                                                  inView:self
                                               withStyle:UIAlertControllerStyleAlert];
     else if (![self.confirmpasswordTextField.text isEqualToString:self.passwordTextField.text])
         [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                            withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(@"PASSWORD_MISMATCH")]
+                                            withMessage:NSLOCALIZEDSTRING(@"PASSWORD_MISMATCH")
                                                  inView:self
                                               withStyle:UIAlertControllerStyleAlert];
+    
     
     else{
-        [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                            withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(@"SIGNUP_SUCCESS")]
-                                                 inView:self
-                                              withStyle:UIAlertControllerStyleAlert];
+        [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"PLEASE_WAIT")]];
         [self signUpWebServiceCall];
     }
-    
-    /*
-    for (id value in signUpArray) {
-        if (![signUpDictionary objectForKey:value] || [[signUpDictionary objectForKey:value] length]<1) {
-            [Utility_Shared_Instance showMessageWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME) andMessage:[NSString messageWithString:value]];
-            break;
-        }
-        if (![Utility_Shared_Instance validateEmailWithString:[signUpDictionary objectForKey:NSLOCALIZEDSTRING(@"EMAIL")]]) {
-            [Utility_Shared_Instance showMessageWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME) andMessage:[NSString messageWithString:NSLOCALIZEDSTRING(@"VALID_EMAILID")]];
-            return;
-        }
-        if (![[signUpDictionary objectForKey:NSLOCALIZEDSTRING(@"PASSWORD")] isEqualToString:[signUpDictionary objectForKey:NSLOCALIZEDSTRING(@"CONFIRM_PASSWORD")]]) {
-            [Utility_Shared_Instance showMessageWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME) andMessage:NSLOCALIZEDSTRING(@"PASSWORD_MISMATCH")];
-            return;
-        }
-    }
-    */
-    
-    //Web Service CODE
-    //[self signUpWebServiceCall];
 }
 
 -(void)signUpWebServiceCall{
 
-    [signUpDictionary setObject:@"123" forKey:@"id"];
-    [signUpDictionary setObject:@"testBabul" forKey:@"username"];
-    [signUpDictionary setObject:@"567t14" forKey:@"password"];
-    [signUpDictionary setObject:@"tset457@gmail.com" forKey:@"email"];
-    [signUpDictionary setObject:@"true" forKey:@"status"];
+    [signUpDictionary setObject:self.usernameTextField.text forKey:KUSERNAME_W];
+    [signUpDictionary setObject:self.passwordTextField.text forKey:KPASSWORD_W];
+    [signUpDictionary setObject:self.emaillTextField.text forKey:KEMAIL_W];
+    [signUpDictionary setObject:[Utility_Shared_Instance checkForNullString:[Utility_Shared_Instance readStringUserPreference:USER_TYPE]] forKey:KTYPE_W];
     
-    NSString *payload = [Utility_Shared_Instance preparePayloadForDictionary:signUpDictionary];
-    [Web_Service_Call serviceCall:signUpDictionary webServicename:SIGNUP SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
-        NSDictionary *dict=responseObject;
+    [Web_Service_Call serviceCall:signUpDictionary webServicename:SIGNUP_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+        NSDictionary *responseDict=responseObject;
+        
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [SVProgressHUD dismiss];
+            
+            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                withMessage:[responseDict objectForKey:KMESSAGE_W]
+                                                     inView:self
+                                                  withStyle:UIAlertControllerStyleAlert];
+        });
+        
+        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
+        {
+            _usernameTextField.text = @"";
+            _emaillTextField.text= @"";
+            _passwordTextField.text= @"";
+            _confirmpasswordTextField.text= @"";
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+        }
+        
+        
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                withMessage:[responseObject objectForKey:KMESSAGE_W]
+                                                     inView:self
+                                                  withStyle:UIAlertControllerStyleAlert];
+        });
     }];
+}
+
+-(void)signUpSuccess{
+    [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                        withMessage:NSLOCALIZEDSTRING(@"SIGNUP_SUCCESS")
+                                             inView:self
+                                          withStyle:UIAlertControllerStyleAlert];
     
-    
-    
+}
+
+-(IBAction)interpreterCustomerButtonClicked:(UIButton *)sender{
+    if (sender.tag==1) {
+        //Interpreter
+        self.interpreterImageView.image = [UIImage radioONImage];
+        self.customerImageView.image = [UIImage radioOffImage];
+    }
+    else{
+        //Customer
+        self.customerImageView.image = [UIImage radioONImage];
+        self.interpreterImageView.image = [UIImage radioOffImage];
+    }
 }
 
 

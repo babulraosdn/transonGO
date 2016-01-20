@@ -15,6 +15,8 @@
 #import "UIImage+Image.h"
 #import "UILabel+toGo.h"
 #import "UITextField+toGo.h"
+#import "UITextView+toGo.h"
+#import "UIView+toGo.h"
 #import "WebServiceCall.h"
 #import "SocialView.h"
 #import "CustomTextFieldDelegate.h"
@@ -23,7 +25,11 @@
 #import "SVProgressHUD.h"
 #import <AddressBook/ABAddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
-
+#import "AlertViewCustom.h"
+#import "TakeTourView.h"
+#import "ProfileInfoObject.h"
+#import "MyLanguagesView.h"
+#import "BaseViewController.h"
 
 @interface Headers : NSObject
 

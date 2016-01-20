@@ -12,5 +12,6 @@
 @interface NSString (Extensions)
 
 +(NSString *)messageWithString:(NSString *)messsage;
++(NSString *)messageWithSAVEString:(NSString *)messsage;
 +(NSString *)navigationBarTitle;
 @end

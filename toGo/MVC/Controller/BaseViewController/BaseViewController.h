@@ -8,9 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "Headers.h"
-#import "AppDelegate.h"
-@interface BaseViewController : UIViewController
+#import <PKRevealController/PKRevealController.h>
+@class AppDelegate;
 
+@interface BaseViewController : UIViewController<PKRevealing>{
+    AppDelegate  *appDelegate;
+}
+@property(nonatomic,strong) PKRevealController *revealController;
+-(void)setSlideMenuButtonFornavigation;
+-(void)setLogoutButtonForNavigation;
 -(void)setCustomBackButtonForNavigation;
 -(void)navigateToLoginView;
 @end

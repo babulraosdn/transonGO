@@ -1,4 +1,4 @@
-  //
+            //
 //  LogInVC.m
 //  ooVooSdkSampleShow
 //
@@ -15,7 +15,7 @@
 //#import "SettingBundle.h"
 #import "UserDefaults.h"
 #import "AppDelegate.h"
-
+#import "SlideMenuViewController.h"
 
 #define User_isInVideoView @"User_isInVideoView"
 
@@ -38,15 +38,31 @@
     AppDelegate  *appDelegate;
     SocialView *socialView;
     __weak IBOutlet UIActivityIndicatorView *spinner;
-    
+    NSMutableDictionary *loginDictionary;
     UITextField *activeField;
+    NSString *userIDString;
+    NSString *passwordString;
 }
-
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property(nonatomic,readwrite)BOOL isChecked;
 @property (weak, nonatomic) IBOutlet UIImageView *rememberMeImageView;
 
-- (IBAction)rememberMeButtonPressed:(id)sender;
+
+@property (weak, nonatomic) IBOutlet UIView *signUpUIView;
+@property (weak, nonatomic) IBOutlet UILabel *signUplabel;
+@property (weak, nonatomic) IBOutlet UILabel *doNotHaveAccountLabel;
+@property (weak, nonatomic) IBOutlet UILabel *connectWithLabel;
+@property (weak, nonatomic) IBOutlet UILabel *orlabel;
+@property (weak, nonatomic) IBOutlet UIButton *forgotPasswordButton;
+@property (weak, nonatomic) IBOutlet UILabel *forgotPasswordLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *logoImageView;
+
+@property (weak, nonatomic) IBOutlet UIView *viewAuthorization_Container;
+@property (weak, nonatomic) IBOutlet UITextField *txt_userId;
+@property (weak, nonatomic) IBOutlet UITextField *txtDisplayName;
+@property (weak, nonatomic) IBOutlet UIButton *loginButton;
+
+- (IBAction)act_LogIn:(id)sender;
 -(IBAction)loginWithSoicalAccounts:(id)sender;
 @end
 
@@ -54,104 +70,50 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    
-    
-
-    
     // Do any additional setup after loading the view.
-    self.title = NSLOCALIZEDSTRING(@"TOGO");
-    self.view.backgroundColor = [UIColor backgroundColor];
-    
-    
-//    scrollView.pagingEnabled = YES;
-//    scrollView.showsHorizontalScrollIndicator = NO;
-//    scrollView.showsVerticalScrollIndicator = NO;
-//    scrollView.scrollsToTop = NO;
-
-    
-    
-    appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
-    
-    self.sdk = [ooVooClient sharedInstance];
-    self.sdk.Account.delegate = self;
-    
-    socialView=[SocialView new];
-    socialView.delegate=self;
-    
-    //[self setKeyBoardReturntypesAndDelegates];
+    [self setCustomBackButtonForNavigation];
+    [self allocationsAndStaticText];
+    [self setLabelButtonNames];
     [self setPlaceHolders];
     [self setRoundCorners];
     [self setPadding];
     [self setColors];
     [self setFonts];
     
-    [self registerForKeyboardNotifications];
-    
-    
-//    [[Twitter sharedInstance] startWithConsumerKey:@"your_key"
-//     
-//                                    consumerSecret:@"your_secret"];
-    
-    
-    
-    
 }
+
+
 -(void)viewDidLayoutSubviews{
-    _scrollView.contentSize=CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-64);
-
-}
-- (void)registerForKeyboardNotifications
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification object:nil];
-}
-
-
--(void)keyboardWasShown:(NSNotification*)notification
-{
     
-    
-    NSDictionary *info = [notification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.view.frame.origin.x,self.view.frame.origin.y, kbSize.height+100, 0);
-    self.scrollView.contentInset = contentInsets;
-    self.scrollView.scrollIndicatorInsets = contentInsets;
-    
+    if(IS_IPHONE_4S)
+        _scrollView.contentSize=CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+    else
+        _scrollView.contentSize=CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-64);
+
 }
 
--(void)keyboardWillBeHidden:(NSNotification *)notification
-{
-    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-    self.scrollView.contentInset = contentInsets;
-    self.scrollView.scrollIndicatorInsets = contentInsets;
+-(void)allocationsAndStaticText{
+    
+    loginDictionary = [NSMutableDictionary new];
+    appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
+    self.sdk = [ooVooClient sharedInstance];
+    self.sdk.Account.delegate = self;
+    socialView=[SocialView new];
+    socialView.delegate=self;
 }
 
 
--(void)setKeyBoardReturntypesAndDelegates{
-    /*
-    self.txt_userId.tag=0;
-    self.txtDisplayName.tag=1;
-    if (!self.textFieldDelegate) {
-        self.textFieldDelegate = [[CustomTextFieldDelegate alloc]init];
-        self.textFieldDelegate.owner =  self;
-    }
-    self.txt_userId.returnKeyType    = UIReturnKeyNext;
-    self.txtDisplayName.returnKeyType = UIReturnKeyGo;
-    self.txt_userId.delegate=self.textFieldDelegate;
-    self.txtDisplayName.delegate=self.textFieldDelegate;
-    self.textFieldDelegate.selector = @selector(onLogin:);
-    */
+-(void)setLabelButtonNames{
+    self.forgotPasswordLabel.text = NSLOCALIZEDSTRING(@"FORGET_PASSWORD");
+    self.signUplabel.text = NSLOCALIZEDSTRING(@"SIGNUP");
+    self.orlabel.text = NSLOCALIZEDSTRING(@"OR");
+    self.connectWithLabel.text = NSLOCALIZEDSTRING(@"COONNECT_WITH");
+    [self.loginButton setTitle:NSLOCALIZEDSTRING(@"LOGIN") forState:UIControlStateNormal];
 }
 
 -(void)setPlaceHolders{
     self.txt_userId.placeholder = NSLOCALIZEDSTRING(@"USER_ID");
     self.txtDisplayName.placeholder = NSLOCALIZEDSTRING(@"PASSWORD");
-    [self.loginButton setTitle:NSLOCALIZEDSTRING(@"LOGIN") forState:UIControlStateNormal];
 }
 
 -(void)setRoundCorners{
@@ -162,21 +124,25 @@
 
 -(void)setPadding{
     self.txt_userId.leftViewMode=UITextFieldViewModeAlways;
-    self.txt_userId.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"USER_ID_PADDING_IMAGE") frame:CGRectMake(10, 0, 17, 17)];
+    self.txt_userId.leftView=[Utility_Shared_Instance setImageViewPadding:USER_ID_PADDING_IMAGE frame:CGRectMake(10, 0, 16, 16)];
     
     self.txtDisplayName.leftViewMode=UITextFieldViewModeAlways;
-    self.txtDisplayName.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"PASSWORD_PADDING_IMAGE") frame:CGRectMake(10, 0, 17, 17)];
+    self.txtDisplayName.leftView=[Utility_Shared_Instance setImageViewPadding:PASSWORD_PADDING_IMAGE frame:CGRectMake(10, 0, 15, 20)];
 }
 
 -(void)setColors{
     self.orlabel.textColor = [UIColor buttonBackgroundColor];
     self.connectWithLabel.textColor = [UIColor lightGrayConnectWithColor];
     self.loginButton.backgroundColor  = [UIColor buttonBackgroundColor];
-    self.signUplabel.textColor = [UIColor blueSignUpColor];
+    self.signUplabel.textColor = [UIColor textColorBlackColor];
 }
 
 -(void)setFonts{
-    
+    self.forgotPasswordLabel.font = [UIFont small];
+    self.signUplabel.font = [UIFont small];
+    self.orlabel.font = [UIFont smaller];
+    self.connectWithLabel.font = [UIFont largeSizeThin];
+    self.loginButton.titleLabel.font = [UIFont largeSize];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -190,14 +156,18 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
+    [_scrollView setShowsHorizontalScrollIndicator:NO];
+    [_scrollView setShowsVerticalScrollIndicator:NO];
+    
     _txt_userId.text = [self randomUser];
     _txtDisplayName.text=[self returnSavedDisplayname];
+    userIDString = _txt_userId.text;
+    passwordString = _txtDisplayName.text;
     [self autorize];
-    
-   
 }
 - (void)viewDidDisappear:(BOOL)animated {
     self.txt_userId.text = @"";
+    self.txtDisplayName.text = @"";
 }
 
 #pragma mark - Authorization ...
@@ -296,27 +266,112 @@
 
 - (IBAction)act_LogIn:(id)sender {
     
-    if ([self isUserIdEmpty])
-        return;
+    //[self createSidePanel];
+    //return;
     
+    AlertViewCustom *alertView = [[AlertViewCustom alloc]init];
+    UIView *viewIs = [alertView showAlertViewWithMessage:@"Please confirm the Registration by clicking the verification link on email" headingLabel:@"Confirm Registration" confirmButtonName:@"Confirm" cancelButtonName:@"Cancel" viewIs:self.view];
+    //[self.view addSubview:viewIs]; //Alert View Custom
+    //[App_Delegate takeTour];//Take a Tour
+    
+    if (self.txt_userId.text.length<1)
+        [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                            withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(self.txt_userId.placeholder)]
+                                                 inView:self
+                                              withStyle:UIAlertControllerStyleAlert];
+    else if (self.txtDisplayName.text.length<1)
+        [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                            withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(self.txtDisplayName.placeholder)]
+                                                 inView:self
+                                              withStyle:UIAlertControllerStyleAlert];
+    else{
+        [self.view endEditing:YES];
+        [Utility_Shared_Instance showProgress];
+        [self loginWebServiceCall:NORMAL_LOGIN];
+    }
+}
+
+-(void)loginWebServiceCall:(NSString *)loginWith{
+    
+    [loginDictionary setObject:userIDString forKey:KEMAIL_W];
+    [loginDictionary setObject:passwordString forKey:KPASSWORD_W];
+    [loginDictionary setObject:loginWith forKey:KLOGIN_TYPE_W];
+    [loginDictionary setObject:userIDString forKey:KUSERNAME_W];
+    [loginDictionary setObject:[Utility_Shared_Instance checkForNullString:[Utility_Shared_Instance readStringUserPreference:USER_TYPE]] forKey:KTYPE_W];
+    
+    //[loginDictionary setObject:@"obaidr@yopmail.com" forKey:KEMAIL_W];
+    //[loginDictionary setObject:@"Obaid@123" forKey:KPASSWORD_W];
+    //[loginDictionary setObject:@"togo-ibq@ice-breakrr.com" forKey:KEMAIL_W];
+    
+    [Web_Service_Call serviceCall:loginDictionary webServicename:LOGIN_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+        
+        NSDictionary *responseDict=responseObject;
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                withMessage:[responseDict objectForKey:KMESSAGE_W]
+                                                     inView:self
+                                                  withStyle:UIAlertControllerStyleAlert];
+        });
+        
+        if ([responseDict objectForKey:KCODE_W]){
+            if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
+            {
+                if ([responseDict objectForKey:KTOKEN_W])
+                {
+                    [Utility_Shared_Instance writeStringUserPreference:USER_TOKEN value:[responseDict objectForKey:KTOKEN_W]];
+                }
+                if ([responseDict objectForKey:KEMAIL_W])
+                {
+                    [Utility_Shared_Instance writeStringUserPreference:KEMAIL_W value:userIDString];
+                }
+                if ([responseDict objectForKey:KCOMPLETION_W])
+                {
+                    //completion = 1; Means Profile Completed req. fields
+                    //completion = 0; Means Profile In-Complete req. fields
+                    [Utility_Shared_Instance writeStringUserPreference:KCOMPLETION_W value:[Utility_Shared_Instance checkForNullString:[responseDict objectForKey:KCOMPLETION_W]]];
+                    //[Utility_Shared_Instance writeStringUserPreference:KCOMPLETION_W value:@"0"];//Test
+                }
+                
+                //[self ooVooLogin];
+                [self createSidePanel];
+            }
+        }
+        [self reportAuthStatus];//This is to clear google cookies
+        
+    } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                withMessage:[responseObject objectForKey:KMESSAGE_W]
+                                                     inView:self
+                                                  withStyle:UIAlertControllerStyleAlert];
+        });
+    }];
+}
+
+
+-(void)ooVooLogin{
     [UserDefaults setObject:_txt_userId.text ForKey:UserDefault_UserId];
     [UserDefaults setObject:_txtDisplayName.text ForKey:UserDefault_DisplayName];
-    
     //[sender setEnabled:false];
-    [spinner startAnimating];
+    //[spinner startAnimating];
     
-   
-
     [self.sdk.Account login:self.txt_userId.text
                  completion:^(SdkResult *result) {
                      NSLog(@"result code=%d result description %@", result.Result, result.description);
-                     [spinner stopAnimating];
+                     //[spinner stopAnimating];
                      if (result.Result != sdk_error_OK){
-                         [[[UIAlertView alloc] initWithTitle:@"Login Error" message:result.description delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
-                          [self.loginButton setEnabled:true];
+                         [SVProgressHUD dismiss];
+                         [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                             withMessage:@"USERID SHOULD BE MINIUMUM 6 CHARACTERS"
+                                                                  inView:self
+                                                               withStyle:UIAlertControllerStyleAlert];
                      }
                      else
                      {
+                         [SVProgressHUD dismiss];
                          [self onLogin:result.Result];
                          if(![self.sdk.Messaging isConnected])
                              [self.sdk.Messaging connect];
@@ -324,110 +379,6 @@
                  }];
 }
 
-
-#pragma mark - private methods
-
-- (BOOL)isUserIdEmpty {
-
-    // removing white space from start and end
-    if ([[self.txt_userId.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"UserId Missing" message:@"Please enter userId " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-        [alert show];
-
-        self.txt_userId.text = @"";
-
-        return true;
-    }
-
-    if (self.txt_userId.text.length < 6) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Characters Missing" message:@"UserId Must contain at least 6 characters " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-        [alert show];
-
-        return true;
-    }
-
-    return false;
-}
-
-
-- (void)onLogin:(BOOL)error {
-    if (!error) {
-        [ActiveUserManager activeUser].userId = self.txt_userId.text;
-        [ActiveUserManager activeUser].displayName = self.txtDisplayName.text;
-//        NSString * uuid = [[NSUUID UUID] UUIDString] ;
-//        NSString * token = [ActiveUserManager activeUser].token;
-//        if(token && token.length > 0){
-//        [self.sdk.PushService subscribe:token deviceUid:uuid completion:^(SdkResult *result){
-//        [ActiveUserManager activeUser].isSubscribed = true;
-//            [self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
-//        }];
-//        }
-//        
-//        else
-//        {
-           [self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
-//        }
-       
-    }else{
-        [self.loginButton setEnabled:true];
-    }
-}
-
-- (NSString *)randomUser {
-    
-    if ([UserDefaults getObjectforKey:UserDefault_UserId]) {
-        return [UserDefaults getObjectforKey:UserDefault_UserId];
-    }
-    return @"";
-}
-
-- (NSString *)returnSavedDisplayname {
-    
-    if ([UserDefaults getObjectforKey:UserDefault_DisplayName]) {
-        return [UserDefaults getObjectforKey:UserDefault_DisplayName];
-    }
-    return @"";
-}
-
-#pragma mark - ooVoo Account delegate
-
-- (void)didAccountLogIn:(id<ooVooAccount>)account {
-    
-}
-
-- (void)didAccountLogOut:(id<ooVooAccount>)account {
-    
-}
-
--(IBAction)twitterLogin:(id)sender
-{
-    
-    [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error){
-        if (session)
-        {
-             [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID]
-                                                       completion:^(TWTRUser *user,
-                                                                    NSError *error)
-              {
-                  // handle the response or error
-                  if (![error isEqual:nil]) {
-                      NSLog(@"Twitter info   -> user = %@ ",user.description);
-                      NSMutableDictionary *dict =[[NSMutableDictionary alloc]init];
-                      [dict setValue:user.userID forKey:@"id"];
-                      [dict setValue:user.name forKey:@"name"];
-                      [dict setValue:user.screenName forKey:@"screenName"];
-                      NSLog(@"User Description is %@",dict);
-                      
-                  } else {
-                  }
-              }];
-             
-         } else {
-             NSLog(@"error: %@", [error localizedDescription]);
-         }
-     }];
-    
-}
 
 -(IBAction)loginWithSoicalAccounts:(id)sender{
     
@@ -460,8 +411,9 @@
                               [dict setValue:user.name forKey:@"name"];
                               [dict setValue:user.screenName forKey:@"screenName"];
                               NSLog(@"User Description is %@",dict);
+                              [self socialLoginSuccess:TWITTER_LOGIN userID:user.screenName password:user.screenName];
                           }
-                          [self createSidePanel];
+                          //[self createSidePanel];
                           
                       } else {
                       }
@@ -512,7 +464,7 @@
 
 - (void)fetchUserFacebookCredential{
     
-    [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"Please wait...")]];
+    [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"PLEASE_WAIT")]];
     
     if ([FBSDKAccessToken currentAccessToken]) {
         
@@ -523,7 +475,10 @@
                  [SVProgressHUD dismiss];
              }else{
                  
-                 [self createSidePanel];
+                 //[self createSidePanel];
+                 [self socialLoginSuccess:FACEBOOK_LOGIN userID:[result objectForKey:@"email"] password:[result objectForKey:@"email"]];
+                 //[SVProgressHUD dismiss];
+                 
                  dispatch_async(dispatch_get_main_queue(), ^{
                      /*
                       {
@@ -540,175 +495,54 @@
                       };
                       };
                       }
-                     */
-                     [SVProgressHUD dismiss];
+                      */
                  });
              }
          }];
     }
 }
 
-
-#pragma mark Social Delegate Methods
-
--(void)finishLogin:(NSString *)mediaType responseDict:(NSMutableDictionary *)response showAlerViewController:(BOOL)isPresentAlertVC alertViewContoller:(UIAlertController *)alertViewController
+#pragma mark - twitter Signin
+-(IBAction)twitterLogin:(id)sender
 {
-    [SVProgressHUD dismiss];
     
-    if (isPresentAlertVC) {
-        [self presentViewController:alertViewController animated:YES completion:nil];
-        return;
-    }
-    
-    BOOL success;
-    if ([mediaType isEqualToString:FACEBOOK]) {
-        /*
-         {
-         {
-         email = "kbabulenjoy@gmail.com";
-         "first_name" = Babul;
-         id = 1019635601428513;
-         "last_name" = Rao;
-         name = "Babul Rao";
-         profileImage = "https://graph.facebook.com/1019635601428513/picture?type=large&return_ssl_resources=1";
-         }
-         }
-         */
-        success=YES;
-        if ([response objectForKey:@"Error Domain=com.apple.accounts Code=6 \"(null)\""]) {
-            success=NO;
-            if([UIAlertController class]){
-                NSString *alertMessage = NSLOCALIZEDSTRING(@"1. Go to Settings.\n2. Tap Facebook.\n3. Enter your facebook credentials.");
-                UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:NSLOCALIZEDSTRING(@"Facebook Account not Setup") message:alertMessage preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-                    [alertVC dismissViewControllerAnimated:YES completion:nil];
-                }];
-                [alertVC addAction:cancel];
-                UIAlertAction *settings = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-                    [alertVC dismissViewControllerAnimated:YES completion:nil];
-                }];
-                [alertVC addAction:settings];
-                NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
-                paragraphStyle.alignment =  NSTextAlignmentLeft;
-                NSMutableAttributedString *messageText = [[NSMutableAttributedString alloc]initWithString:alertMessage attributes:@{NSParagraphStyleAttributeName:paragraphStyle}];
-                [alertVC setValue:messageText forKey:@"attributedMessage"];
-                [self presentViewController:alertVC animated:YES completion:nil];
-                //[SVProgressHUD dismiss];
-            }
-        }
-    }
-    else if ([mediaType isEqualToString:TWITTER]) {
-        success=YES;
-        /*
-        2015-12-16 12:52:11.976 toGo[4938:99094] good autorization
-        Printing description of response:
+    [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error){
+        if (session)
         {
-            contributors = "<null>";
-            coordinates = "<null>";
-            "created_at" = "Wed Dec 16 07:24:55 +0000 2015";
-            entities =     {
-                hashtags =         (
-                );
-                symbols =         (
-                );
-                urls =         (
-                );
-                "user_mentions" =         (
-                );
-            };
-            "favorite_count" = 0;
-            favorited = 0;
-            geo = "<null>";
-            id = 677026602123792384;
-            "id_str" = 677026602123792384;
-            "in_reply_to_screen_name" = "<null>";
-            "in_reply_to_status_id" = "<null>";
-            "in_reply_to_status_id_str" = "<null>";
-            "in_reply_to_user_id" = "<null>";
-            "in_reply_to_user_id_str" = "<null>";
-            "is_quote_status" = 0;
-            lang = en;
-            place = "<null>";
-            "retweet_count" = 0;
-            retweeted = 0;
-            source = "<a href=\"http://www.apple.com\" rel=\"nofollow\">iOS</a>";
-            text = "My new Twitter message.";
-            truncated = 0;
-            user =     {
-                "contributors_enabled" = 0;
-                "created_at" = "Wed Aug 31 21:20:25 +0000 2011";
-                "default_profile" = 1;
-                "default_profile_image" = 0;
-                description = "";
-                entities =         {
-                    description =             {
-                        urls =                 (
-                        );
-                    };
-                };
-                "favourites_count" = 0;
-                "follow_request_sent" = 0;
-                "followers_count" = 40;
-                following = 0;
-                "friends_count" = 93;
-                "geo_enabled" = 0;
-                "has_extended_profile" = 1;
-                id = 365689054;
-                "id_str" = 365689054;
-                "is_translation_enabled" = 0;
-                "is_translator" = 0;
-                lang = en;
-                "listed_count" = 0;
-                location = "Nagpur, Maharashtra";
-                name = "BABUL RAO KOONA";
-                notifications = 0;
-                "profile_background_color" = C0DEED;
-                "profile_background_image_url" = "http://abs.twimg.com/images/themes/theme1/bg.png";
-                "profile_background_image_url_https" = "https://abs.twimg.com/images/themes/theme1/bg.png";
-                "profile_background_tile" = 0;
-                "profile_image_url" = "http://pbs.twimg.com/profile_images/657037520484470785/F9ldUePt_normal.jpg";
-                "profile_image_url_https" = "https://pbs.twimg.com/profile_images/657037520484470785/F9ldUePt_normal.jpg";
-                "profile_link_color" = 0084B4;
-                "profile_sidebar_border_color" = C0DEED;
-                "profile_sidebar_fill_color" = DDEEF6;
-                "profile_text_color" = 333333;
-                "profile_use_background_image" = 1;
-                protected = 0;
-                "screen_name" = "babul_enjoy";
-                "statuses_count" = 2;
-                "time_zone" = "<null>";
-                url = "<null>";
-                "utc_offset" = "<null>";
-                verified = 0;
-            };
+            [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID]
+                                                      completion:^(TWTRUser *user,
+                                                                   NSError *error)
+             {
+                 // handle the response or error
+                 if (![error isEqual:nil]) {
+                     NSLog(@"Twitter info   -> user = %@ ",user.description);
+                     NSMutableDictionary *dict =[[NSMutableDictionary alloc]init];
+                     [dict setValue:user.userID forKey:@"id"];
+                     [dict setValue:user.name forKey:@"name"];
+                     [dict setValue:user.screenName forKey:@"screenName"];
+                     NSLog(@"User Description is %@",dict);
+                     
+                 } else {
+                 }
+             }];
+            
+        } else {
+            NSLog(@"error: %@", [error localizedDescription]);
         }
-        */
-    }
-    else if ([mediaType isEqualToString:LINKEDIN]) {
-        success=YES;
-        /*
-         Printing description of response:
-         {
-         emailAddress = "kbabulenjoy@gmail.com";
-         firstName = Babul;
-         id = "phq36KFc-h";
-         lastName = Rao;
-         pictureUrl = "https://media.licdn.com/mpr/mprx/0_I3FrdIwDPduQ4rWHdih7deVTxWoeZ9WHd_17dWWj8uOMbtYebFcpbdj1lFEnRAeXoGLa6aUSwHgz";
-         
-         */
-    }
-    else if ([mediaType isEqualToString:GOOGLE_PLUS]) {
-        success=YES;
-    }
-    
-    if (success) {
-        [self createSidePanel
-         ];
-    }
+    }];
 }
 
 
+
+-(void)socialLoginSuccess:(NSString *)mediaType userID:(NSString *)userID password:(NSString *)password
+{
+    userIDString = userID;
+    passwordString = @"";
+    [self loginWebServiceCall:mediaType];
+    //[self createSidePanel];
+}
+
+#pragma mark Social Delegate Methods
 #pragma mark - Google Plus
 
 - (void)googleButtonClicked:(id)sender
@@ -716,8 +550,10 @@
     //    [self signOut:nil];
     GPPSignIn *signIn = [GPPSignIn sharedInstance];
     signIn.delegate =  self;
+    signIn.shouldFetchGoogleUserEmail = YES;
     [signIn authenticate];
 }
+
 - (IBAction)signOut:(id)sender {
     [[GPPSignIn sharedInstance] signOut];
     
@@ -768,10 +604,10 @@
          "locale": "en"
          }
          */
-        
+        [self socialLoginSuccess:TWITTER_LOGIN userID:[proDic objectForKey:@"email"] password:[proDic objectForKey:@"given_name"]];
     }
-    [SVProgressHUD dismiss];
-    [self createSidePanel];
+    //[SVProgressHUD dismiss];
+    //[self createSidePanel];
 }
 
 
@@ -828,34 +664,89 @@
 -(void)createSidePanel{
     
     
-    
-    UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:@"DashBoardViewController"]];
-    
-    
-    TheSidebarController *sidebarController = [[TheSidebarController alloc] initWithContentViewController:contentNavigationController
-                                                                                leftSidebarViewController:[Utility_Shared_Instance getControllerForIdentifier:@"SlideMenuViewController"]
-                                                                               rightSidebarViewController:nil];
-    
-    appDelegate.window.rootViewController = sidebarController;
-    
-}
-
-- (IBAction)rememberMeButtonPressed:(id)sender {
-    
-    [self.view endEditing:YES];
-    
-    if (!_isChecked) {
-        [Utility_Shared_Instance writeStringUserPreference:@"remember" value:@"yes"];
-        _rememberMeImageView.image=[UIImage checkedBoxImage];
-        _isChecked=YES;
+    if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_INTERPRETER_VIEW_CONTROLLER]];//DashBoardViewController
+            
+            if ([[Utility_Shared_Instance readStringUserPreference:KCOMPLETION_W] isEqualToString:PROFILE_INCOMPLETE]) {
+                contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:PROFILE_VIEW_CONTROLLER]];//DashBoardViewController
+            }
+            
+            self.revealController = [PKRevealController revealControllerWithFrontViewController:contentNavigationController leftViewController:[Utility_Shared_Instance getControllerForIdentifier:SLIDE_MENU_VIEW_CONTROLLER]];
+            appDelegate.window.rootViewController = self.revealController;
+            
+        });
     }
     else{
-        [Utility_Shared_Instance clearStringFromUserPreference:@"remember"];
-        [Utility_Shared_Instance writeStringUserPreference:@"remember" value:@"no"];
-        _rememberMeImageView.image=[UIImage uncheckBoxImage];
-        _isChecked=NO;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_USER_VIEW_CONTROLLER]];
+            
+            self.revealController = [PKRevealController revealControllerWithFrontViewController:contentNavigationController leftViewController:[Utility_Shared_Instance getControllerForIdentifier:SLIDE_MENU_VIEW_CONTROLLER]];
+            appDelegate.window.rootViewController = self.revealController;
+            
+        });
     }
 }
+
+
+-(void)popUpButtonClicked:(UIButton *)sender{
+   
+    if (sender.tag == 1) {
+        //Confirm Button
+        NSLog(@"Confirm Selected");
+    }
+    else if (sender.tag == 2) {
+        //Cancel Button
+        NSLog(@"Cancel Selected");
+        [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
+    }
+}
+
+
+
+#pragma mark - private methods
+
+- (void)onLogin:(BOOL)error {
+    if (!error) {
+        [ActiveUserManager activeUser].userId = self.txt_userId.text;
+        [ActiveUserManager activeUser].displayName = self.txtDisplayName.text;
+//        NSString * uuid = [[NSUUID UUID] UUIDString] ;
+//        NSString * token = [ActiveUserManager activeUser].token;
+//        if(token && token.length > 0){
+//        [self.sdk.PushService subscribe:token deviceUid:uuid completion:^(SdkResult *result){
+//        [ActiveUserManager activeUser].isSubscribed = true;
+//            [self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
+//        }];
+//        }
+//        
+//        else
+//        {
+        [self createSidePanel];
+        //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
+//        }
+       
+    }else{
+        [self.loginButton setEnabled:true];
+    }
+}
+
+- (NSString *)randomUser {
+    
+    if ([UserDefaults getObjectforKey:UserDefault_UserId]) {
+        return [UserDefaults getObjectforKey:UserDefault_UserId];
+    }
+    return @"";
+}
+
+- (NSString *)returnSavedDisplayname {
+    
+    if ([UserDefaults getObjectforKey:UserDefault_DisplayName]) {
+        return [UserDefaults getObjectforKey:UserDefault_DisplayName];
+    }
+    return @"";
+}
+
 
 #pragma Mark UITextField Delegate Methods
 
@@ -872,5 +763,35 @@
     return YES;
 }
 
+-(void)textFieldDidEndEditing:(UITextField *)textField{
+    if (textField == self.txt_userId) {
+        userIDString = self.txt_userId.text;
+    }
+    else if (textField == self.txtDisplayName) {
+        passwordString = self.txtDisplayName.text;
+    }
+}
+
+-(UIStatusBarStyle)preferredStatusBarStyle{
+    return UIStatusBarStyleLightContent;
+}
+
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+}
+
+
+
+
+#pragma mark - ooVoo Account delegate
+
+- (void)didAccountLogIn:(id<ooVooAccount>)account {
+    
+}
+
+- (void)didAccountLogOut:(id<ooVooAccount>)account {
+    
+}
 
 @end

@@ -10,10 +10,16 @@
 #import "Headers.h"
 #import "AppDelegate.h"
 
+@implementation SlideMenuCell
+@end
+
 @interface SlideMenuViewController ()<UITableViewDataSource,UITableViewDelegate>{
     AppDelegate *appDelegate;
 }
 @property(nonatomic,weak) IBOutlet UITableView *tblView;
+@property(nonatomic,strong) NSMutableArray *namesArray;
+@property(nonatomic,strong) NSMutableArray *imagesNamesArray;
+@property(nonatomic,strong) NSMutableArray *colorCodesArray;
 @end
 
 @implementation SlideMenuViewController
@@ -21,11 +27,80 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.view.backgroundColor = [UIColor navigationBarColor];//This changes the statusbar Color
+    self.tblView.backgroundColor = [UIColor slideMenuBackgroundColor];//This is table view back goring color
     appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
+    
+    /* //Build menu
+    self.namesArray = [[NSMutableArray alloc]initWithObjects:
+                       NSLOCALIZEDSTRING(@"PROFILE"),
+                       NSLOCALIZEDSTRING(@"CALL_HISTORY"),
+                       NSLOCALIZEDSTRING(@"SETTINGS"), nil];
+    self.imagesNamesArray = [[NSMutableArray alloc]initWithObjects:
+                             PROFILE_IMAGE,
+                             CALL_HISTORY_IMAGE,
+                             SETTINGS_IMAGE, nil];
+    self.colorCodesArray = [[NSMutableArray alloc]initWithObjects:
+                            [UIColor slideMenuBackgroundColorRow1],
+                            [UIColor slideMenuBackgroundColorRow2],
+                            [UIColor slideMenuBackgroundColorRow3],
+                            [UIColor slideMenuBackgroundColorRow4],
+                            [UIColor slideMenuBackgroundColorRow5],
+                            [UIColor slideMenuBackgroundColorRow6], nil];
+    */
+    
+    ///*
+    
+    if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
+        self.namesArray = [[NSMutableArray alloc]initWithObjects:
+                           NSLOCALIZEDSTRING(@"DASHBOARD"),
+                           NSLOCALIZEDSTRING(@"PROFILE"),
+                           NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION"),
+                           NSLOCALIZEDSTRING(@"CALL_HISTORY"),
+                           NSLOCALIZEDSTRING(@"PURCHASES"),
+                           NSLOCALIZEDSTRING(@"FAVORITE_INTERPRETER"),
+                           NSLOCALIZEDSTRING(@"SETTINGS"), nil];
+        self.imagesNamesArray = [[NSMutableArray alloc]initWithObjects:
+                                 DASHBOARD_SLIDE_IMAGE,
+                                 PROFILE_IMAGE,
+                                 ORDER_INTERPRETER_IMAGE,
+                                 CALL_HISTORY_IMAGE,
+                                 PURCHASE_IMAGE,
+                                 FAV_INTERPRETER_IMAGE,
+                                 SETTINGS_IMAGE, nil];
+    }
+    else {
+        self.namesArray = [[NSMutableArray alloc]initWithObjects:
+                           NSLOCALIZEDSTRING(@"DASHBOARD"),
+                           NSLOCALIZEDSTRING(@"PROFILE"),
+                           NSLOCALIZEDSTRING(@"CALL_HISTORY"),
+                           NSLOCALIZEDSTRING(@"REVENUE"),
+                           NSLOCALIZEDSTRING(@"FEEDBACK"),
+                           NSLOCALIZEDSTRING(@"SETTINGS"), nil];
+        self.imagesNamesArray = [[NSMutableArray alloc]initWithObjects:
+                                 DASHBOARD_SLIDE_IMAGE,
+                                 PROFILE_IMAGE,
+                                 CALL_HISTORY_IMAGE,
+                                 PROFILE_IMAGE,
+                                 PURCHASE_IMAGE,
+                                 SETTINGS_IMAGE, nil];
+    }
+    
+    self.colorCodesArray = [[NSMutableArray alloc]initWithObjects:
+                            [UIColor slideMenuBackgroundColorRow1],
+                            [UIColor slideMenuBackgroundColorRow2],
+                            [UIColor slideMenuBackgroundColorRow3],
+                            [UIColor slideMenuBackgroundColorRow4],
+                            [UIColor slideMenuBackgroundColorRow5],
+                            [UIColor slideMenuBackgroundColorRow6],
+                            [UIColor slideMenuBackgroundColorRow7],nil];
+    //*/
 }
 
+#pragma Mark TableView Delegate Methods
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    //return 3;
+    return self.namesArray.count;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -34,15 +109,11 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    UITableViewCell *cell  = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    if (cell == nil) {
-        
-        cell  = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
-    }
-    
-    cell.textLabel.text = @"My Cell";
-    
-    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    SlideMenuCell *cell = [tableView dequeueReusableCellWithIdentifier:@"SlideMenuCell"];
+    cell.displayImageView.image = [UIImage imageNamed:[self.imagesNamesArray objectAtIndex:indexPath.row]];
+    cell.displayLabel.text = [self.namesArray objectAtIndex:indexPath.row];
+    cell.displayLabel.font = [UIFont smallBig];
+    cell.contentView.backgroundColor = [self.colorCodesArray objectAtIndex:indexPath.row];
     return cell;
 }
 
@@ -58,17 +129,53 @@
 //    FBSDKLoginManager *MANAGER  = [FBSDKLoginManager new];
 //    [MANAGER logOut];
     
-    FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+    [self.revealController resignPresentationModeEntirely:NO animated:YES completion:nil];
     
-    if ( [FBSDKAccessToken currentAccessToken] ){
-        [login logOut];
+    NSString *selectedRowString = [self.namesArray objectAtIndex:indexPath.row];
+    UINavigationController *contentNaviationController;
+    if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"DASHBOARD")]){
+        
+        if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
+            contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_INTERPRETER_VIEW_CONTROLLER]];
+        }
+        else{
+            contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_USER_VIEW_CONTROLLER]];
+        }
+        self.revealController.frontViewController = contentNaviationController ;
     }
-    
-    [FBSDKAccessToken setCurrentAccessToken:nil];
-    [FBSDKProfile setCurrentProfile:nil];
-    
-    UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:@"LoginViewController"]];
-    appDelegate.window.rootViewController = contentNavigationController;
+    else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"PROFILE")]){
+        contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:PROFILE_VIEW_CONTROLLER]];
+        self.revealController.frontViewController = contentNaviationController ;
+    }
+    else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION")]){
+        
+    }
+    else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"CALL_HISTORY")]){
+        
+    }
+    else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"PURCHASES")]){
+        
+    }
+    else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"FAVORITE_INTERPRETER")]){
+        
+    }
+    else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"SETTINGS")]){
+        
+        contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:SETTINGS_VIEW_CONTROLLER]];
+        self.revealController.frontViewController = contentNaviationController ;
+        return;
+        
+        FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+        if ( [FBSDKAccessToken currentAccessToken] ){
+            [login logOut];
+        }
+        
+        [FBSDKAccessToken setCurrentAccessToken:nil];
+        [FBSDKProfile setCurrentProfile:nil];
+        
+        UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:@"LoginViewController"]];
+        appDelegate.window.rootViewController = contentNavigationController;
+    }
 }
 
 - (void)didReceiveMemoryWarning {

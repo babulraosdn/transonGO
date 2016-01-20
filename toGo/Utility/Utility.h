@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Constants.h"
 #import "Reachability.h"
-
+#import "Headers.h"
 @protocol UtilityProtocol <NSObject>
 typedef void (^getImageData)(NSData *data);
 typedef void (^getImage)(UIImage *image);
@@ -22,12 +22,9 @@ typedef void (^getImage)(UIImage *image);
     Reachability* hostReach;
     Reachability* wifiReach;
 }
-
+@property(nonatomic,strong)id delegate;
 +(Utility *)sharedInstance;
-
 - (BOOL)validateEmailWithString:(NSString*)emailAddress;
-
--(NSString*)preparePayloadForDictionary:(NSDictionary*)dictionary;
 
 -(void)showAlertViewWithTitle:(NSString*)title withMessage:(NSString*)message inView:(UIViewController *)viewController withStyle:(UIAlertControllerStyle)alertStyle;
 -(UIViewController *)getControllerForIdentifier:(NSString *)controllerIdentifier;
@@ -51,4 +48,14 @@ typedef void (^getImage)(UIImage *image);
 -(void) clearStringFromUserPreference:(NSString *) key;
 -(NSString *) readStringUserPreference:(NSString *) key;
 -(void)removeUserDefaults;
+
+#pragma mark Password Validation
+- (BOOL)passwordIsValid:(NSString *)password;
+
+
+#pragma mark Activity Indicator
+-(void)showProgress;
+
+#pragma mark Image Encoding
+- (NSString *)encodeToBase64String:(UIImage *)image;
 @end

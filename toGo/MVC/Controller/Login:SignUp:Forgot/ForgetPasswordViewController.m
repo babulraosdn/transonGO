@@ -12,6 +12,10 @@
 @interface ForgetPasswordViewController (){
     
 }
+
+@property (weak, nonatomic) IBOutlet UITextField *emailTextField;
+@property (weak, nonatomic) IBOutlet UIButton *submitButton;
+@property (weak, nonatomic) IBOutlet UILabel *displaylabel;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @end
 
@@ -20,70 +24,33 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    self.title = NSLOCALIZEDSTRING(@"TOGO");
-    self.view.backgroundColor = [UIColor backgroundColor];
+
     [self setCustomBackButtonForNavigation];
-    //[self setKeyBoardReturntypesAndDelegates];
+    [self setLabelButtonNames];
     [self setPlaceHolders];
     [self setRoundCorners];
     [self setPadding];
     [self setColors];
     [self setFonts];
     
-    [self registerForKeyboardNotifications];
-    
 }
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self viewWillAppear:animated];
+    [_scrollView setShowsHorizontalScrollIndicator:NO];
+    [_scrollView setShowsVerticalScrollIndicator:NO];
+}
+
 -(void)viewDidLayoutSubviews{
     _scrollView.contentSize=CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-64);
     
 }
-- (void)registerForKeyboardNotifications
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification object:nil];
-}
-
-
--(void)keyboardWasShown:(NSNotification*)notification
-{
-    
-    
-    NSDictionary *info = [notification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.view.frame.origin.x,self.view.frame.origin.y, kbSize.height+100, 0);
-    self.scrollView.contentInset = contentInsets;
-    self.scrollView.scrollIndicatorInsets = contentInsets;
-    
-}
-
--(void)keyboardWillBeHidden:(NSNotification *)notification
-{
-    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-    self.scrollView.contentInset = contentInsets;
-    self.scrollView.scrollIndicatorInsets = contentInsets;
-}
-
--(void)setKeyBoardReturntypesAndDelegates{
-    
-    /*
-    self.emailTextField.returnKeyType = UIReturnKeyGo;
-    if (!self.textFieldDelegate) {
-        self.textFieldDelegate = [[CustomTextFieldDelegate alloc]init];
-        self.textFieldDelegate.owner =  self;
-    }
-    self.emailTextField.delegate=self.textFieldDelegate;
-    self.textFieldDelegate.selector = @selector(webServiceCall:);
-    self.textFieldDelegate.owner =  self;
-    */
-}
 
 -(void)setPlaceHolders{
     self.emailTextField.placeholder= NSLOCALIZEDSTRING(@"EMAIL");
+}
+
+-(void)setLabelButtonNames{
     self.displaylabel.text = NSLOCALIZEDSTRING(@"FILL_YOUR_EMAIL_ID_FORGOT_PASSWORD_SCREEN_TEXT");
     [self.submitButton setTitle:NSLOCALIZEDSTRING(@"SEND_EMAIL") forState:UIControlStateNormal];
 }
@@ -95,7 +62,7 @@
 
 -(void)setPadding{
     self.emailTextField.leftViewMode=UITextFieldViewModeAlways;
-    self.emailTextField.leftView=[Utility_Shared_Instance setImageViewPadding:NSLOCALIZEDSTRING(@"USER_ID_PADDING_IMAGE") frame:CGRectMake(10, 0, 17, 17)];
+    self.emailTextField.leftView=[Utility_Shared_Instance setImageViewPadding:EMAIL_PADDING_IMAGE frame:CGRectMake(10, 3, 20, 13)];
 }
 
 -(void)setColors{
@@ -104,6 +71,8 @@
 }
 
 -(void)setFonts{
+    self.displaylabel.font = [UIFont normalSize];
+    self.submitButton.titleLabel.font = [UIFont largeSize];
 }
 
 
@@ -125,21 +94,38 @@
         return;
     }
     else{
+        [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"PLEASE_WAIT")]];
         //WEB Service CODE
         NSMutableDictionary *forgetPasswordDict=[NSMutableDictionary new];
-        [forgetPasswordDict setValue:self.emailTextField.text forKey:NSLOCALIZEDSTRING(@"EMAIL")];
-        NSString *payload = [Utility_Shared_Instance preparePayloadForDictionary:forgetPasswordDict];
-        [Web_Service_Call serviceCall:payload webServicename:FORGOTPASSWORD SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
-            //NSDictionary *dict=responseObject;
+        [forgetPasswordDict setValue:self.emailTextField.text forKey:KEMAIL_W];
+        [Web_Service_Call serviceCall:forgetPasswordDict webServicename:FORGOTPASSWORD_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+            NSDictionary *responseDict=responseObject;
+            
+            if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
+            {
+                _emailTextField.text = @"";
+                //[self.navigationController popViewControllerAnimated:YES];//Not Working
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [SVProgressHUD dismiss];
+                    [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                        withMessage:[responseDict objectForKey:KMESSAGE_W]
+                                                             inView:self
+                                                          withStyle:UIAlertControllerStyleAlert];
+                    
+                });
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                });
+            }
         } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+                [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                    withMessage:[responseObject objectForKey:KMESSAGE_W]
+                                                         inView:self
+                                                      withStyle:UIAlertControllerStyleAlert];
+            });
         }];
-        
-        [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                            withMessage:[NSString messageWithString:NSLOCALIZEDSTRING(@"FORGET_PASSWORD_SUCCESS")]
-                                                 inView:self
-                                              withStyle:UIAlertControllerStyleAlert];
-        
-        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 

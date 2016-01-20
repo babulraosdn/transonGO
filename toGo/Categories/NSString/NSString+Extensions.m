@@ -15,6 +15,11 @@
     return [NSString stringWithFormat:@"%@ %@",NSLOCALIZEDSTRING(@"PLEASE_ENTER"),messsage];
 }
 
++(NSString *)messageWithSAVEString:(NSString *)messsage{
+    
+    return [NSString stringWithFormat:@"%@ %@",NSLOCALIZEDSTRING(@"PLEASE_SAVE"),messsage];
+}
+
 +(NSString *)navigationBarTitle{
     return [NSString stringWithFormat:@"%@",NSLOCALIZEDSTRING(@"TOGO")];
 }

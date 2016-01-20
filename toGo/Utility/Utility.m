@@ -8,7 +8,8 @@
 
 #import "Utility.h"
 @interface Utility ()<UIImagePickerControllerDelegate,UINavigationControllerDelegate>{
-    id delegate;
+    
+    
 }
 @end
 
@@ -33,6 +34,7 @@
 }
 
 -(void)showAlertViewWithTitle:(NSString*)title withMessage:(NSString*)message inView:(UIViewController *)viewController withStyle:(UIAlertControllerStyle)alertStyle{
+    
     UIAlertController * alert=   [UIAlertController
                                   alertControllerWithTitle:title
                                   message:message
@@ -45,7 +47,7 @@
                              [alert dismissViewControllerAnimated:YES completion:nil];
                          }];
     [alert addAction:ok];
-    [viewController presentViewController:alert animated:YES completion:nil];
+    [App_Delegate.window.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
 -(UIViewController *)getControllerForIdentifier:(NSString *)controllerIdentifier {
@@ -55,19 +57,19 @@
 
 
 -(void)getImageFromCameraOrGallery:(UIButton*)button delegate:(id)delegateObject{
-    delegate=delegateObject;
+    _delegate=delegateObject;
     if (button.tag==0) {
-        [self openDeviceCamera:delegate];
+        [self openDeviceCamera:_delegate];
     }
     else if (button.tag==1) {
-        [self openDevicePhotoGallery:delegate];
+        [self openDevicePhotoGallery:_delegate];
         
     }
 }
 #pragma mark -
 #pragma mark - ImagePicker Methods
 - (void)openDeviceCamera:(id)delegateObject{
-    delegate = delegateObject;
+    _delegate = delegateObject;
     if ([UIImagePickerController isSourceTypeAvailable:
          UIImagePickerControllerSourceTypeCamera]){
         UIImagePickerController *imagePicker =
@@ -77,21 +79,26 @@
         imagePicker.sourceType =
         UIImagePickerControllerSourceTypeCamera;
         [imagePicker setCameraFlashMode:UIImagePickerControllerCameraFlashModeOff];
-        [delegate presentViewController:imagePicker animated:YES completion:nil];
+        [_delegate presentViewController:imagePicker animated:YES completion:nil];
     }
 }
 
 - (void)openDevicePhotoGallery:(id)delegateObject{
-    delegate = delegateObject;
+    _delegate = delegateObject;
     if ([UIImagePickerController isSourceTypeAvailable:
          UIImagePickerControllerSourceTypePhotoLibrary]){
+        
+        
         UIImagePickerController *imagePicker =
         [[UIImagePickerController alloc] init];
+        
         imagePicker.delegate = self;
         imagePicker.allowsEditing=YES;
         imagePicker.sourceType =
         UIImagePickerControllerSourceTypePhotoLibrary;
-        [delegate presentViewController:imagePicker animated:YES completion:nil];
+        [_delegate presentViewController:imagePicker animated:YES completion:nil];
+        
+        
     }
 }
 
@@ -99,25 +106,14 @@
 #pragma mark - ImagePickerController Delegate.
 - (void)imagePickerController:(UIImagePickerController *)picker
 didFinishPickingMediaWithInfo:(NSDictionary *)info{
-    [delegate getImageFromSource:(UIImage *)[info objectForKey:
+    [_delegate getImageFromSource:(UIImage *)[info objectForKey:
                                              UIImagePickerControllerOriginalImage]];
-    [delegate dismissViewControllerAnimated:YES completion:nil];
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
-    [delegate dismissViewControllerAnimated:YES completion:nil];
-}
-
-
--(NSString*)preparePayloadForDictionary:(NSDictionary*)dictionary{
-    NSError *error = nil;
-    NSData *jsonData2 = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:&error];
-    if (error) {
-        NSLog(@"error%@",[error localizedDescription]);
-    }
-    NSString *jsonString = [[NSString alloc] initWithData:jsonData2 encoding:NSUTF8StringEncoding];
-    NSLog(@"jsonData as string:\n%@", jsonString);
-    return jsonString;
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(NSString *)checkForNullString:(id)string
@@ -212,5 +208,38 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info{
     [userDefaults synchronize];
 }
 
+#pragma mark Password Validation
+- (BOOL)isValidString:(NSString *)string
+{
+    return [string rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]].location != NSNotFound &&
+    [string rangeOfCharacterFromSet:[NSCharacterSet lowercaseLetterCharacterSet]].location != NSNotFound &&
+    [string rangeOfCharacterFromSet:[NSCharacterSet decimalDigitCharacterSet]].location != NSNotFound ;
+}
+- (BOOL)passwordIsValid:(NSString *)password {
+    if (![self isValidString:password]) {
+        return NO;
+    }
+    // 1. Upper case.
+    if ([password length] < 6)
+    {
+        return NO;
+    }
+    return YES;
+}
+
+
+#pragma mark Activity Indicator
+-(void)showProgress{
+    [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"PLEASE_WAIT")]];
+}
+
+#pragma mark Image Encoding
+- (NSString *)encodeToBase64String:(UIImage *)image {
+    NSData * data = [UIImagePNGRepresentation(image) base64EncodedDataWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    return [NSString stringWithUTF8String:[data bytes]];
+    //NSData* data = UIImageJPEGRepresentation(image, 1.0f);
+    //NSString *strEncoded = [Base64 encode:data];
+    //return [UIImagePNGRepresentation(image) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+}
 
 @end

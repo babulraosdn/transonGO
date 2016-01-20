@@ -21,16 +21,16 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.webView.delegate =  self;
-    
     [self.webView loadRequest:[NSURLRequest requestWithURL:_loadURL]];
 }
+
 -(void)loadURL:(NSURL *)loadURL{
     if (self.webView) {
         [self.webView loadRequest:[NSURLRequest requestWithURL:loadURL]];
     }
     _loadURL = loadURL;
-
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
