@@ -54,7 +54,6 @@
 @property(nonatomic,strong) NSMutableArray *countryArray;
 @property(nonatomic,strong) NSMutableArray *stateArray;
 @property(nonatomic,strong) NSMutableArray *einTaxArray;
-//@property(nonatomic,strong) NSMutableArray *dataArray;
 @property(nonatomic,strong) IBOutlet UITableView *tblView;
 @property(nonatomic,strong) ProfileInfoObject *profileObject;
 
@@ -77,14 +76,17 @@
     
     [self allocationsAndStaticText];
     
+    
     if(self.isFromDashBoard)
         [self setCustomBackButtonForNavigation];
     else
         [self setSlideMenuButtonFornavigation];
     
+    
+    
     [self setLogoutButtonForNavigation];
     
-    self.einTaxArray = [[NSMutableArray alloc]initWithObjects:@"India",@"China",@"Georgia", nil];
+    self.einTaxArray = [[NSMutableArray alloc]initWithObjects:@"India",@"Japan", nil];
     [Utility_Shared_Instance showProgress];
     [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
     
@@ -244,7 +246,7 @@
                 return DEFAULT_TABLE_CELL_HEIGHT;
             }
             
-            return [self heightOfTextViewWithString:self.profileObject.addressString withFont:[UIFont normal] andFixedWidth:280]+defaultHeight;
+            return [self heightOfTextViewWithString:self.profileObject.addressString withFont:[UIFont normal] andFixedWidth:self.view.frame.size.width]+defaultHeight;
         }
         else{
             int defaultHeight = 0;
@@ -252,7 +254,7 @@
                 //defaultHeight = DEFAULT_HEIGHT;
                 return DEFAULT_TABLE_CELL_HEIGHT;
             }
-            return [self heightOfTextViewWithString:self.profileObject.descriptionString withFont:[UIFont normal] andFixedWidth:280]+defaultHeight;
+            return [self heightOfTextViewWithString:self.profileObject.descriptionString withFont:[UIFont normal] andFixedWidth:self.view.frame.size.width]+defaultHeight;
         }
     }
     else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"MY_LANGUAGES")] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"COUNTRY")] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"STATE")])
@@ -268,11 +270,23 @@
     else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Address"] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Description"]) {
         //return 100;
         //return UITableViewAutomaticDimension;
-        //return [self heightOfTextViewWithString:@"START  END" withFont:[UIFont normal] andFixedWidth:280];
-        if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Address"])
-            return [self heightOfTextViewWithString:self.profileObject.addressString withFont:[UIFont normal] andFixedWidth:280];
-        else
-            return [self heightOfTextViewWithString:self.profileObject.descriptionString withFont:[UIFont normal] andFixedWidth:280];
+        if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Address"]){
+            int defaultHeight = 0;
+            if (self.profileObject.addressString.length<TEXT_MINIMUM_HEIGHT) {
+                //defaultHeight = DEFAULT_HEIGHT;
+                return DEFAULT_TABLE_CELL_HEIGHT;
+            }
+            
+            return [self heightOfTextViewWithString:self.profileObject.addressString withFont:[UIFont normal] andFixedWidth:self.view.frame.size.width]+defaultHeight;
+        }
+        else{
+            int defaultHeight = 0;
+            if (self.profileObject.descriptionString.length<TEXT_MINIMUM_HEIGHT) {
+                //defaultHeight = DEFAULT_HEIGHT;
+                return DEFAULT_TABLE_CELL_HEIGHT;
+            }
+            return [self heightOfTextViewWithString:self.profileObject.descriptionString withFont:[UIFont normal] andFixedWidth:self.view.frame.size.width]+defaultHeight;
+        }
     }
     return DEFAULT_TABLE_CELL_HEIGHT;
 }
@@ -291,12 +305,16 @@
         [cell.profileImageView setContentMode:UIViewContentModeScaleToFill];
         
         if ([Utility_Shared_Instance checkForNullString:self.profileObject.imageURLString].length) {
-            cell.profileImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.profileObject.imageURLString]]];
+            [cell.profileImageView sd_setImageWithURL:[NSURL URLWithString:self.profileObject.imageURLString]
+                                     placeholderImage:[UIImage defaultPicImage]];
+            
         }
         if (selectedImage) {
             cell.profileImageView.image= selectedImage;
         }
         cell.nameLabel.text = [Utility_Shared_Instance checkForNullString:self.profileObject.nameString];
+        cell.nameLabel.textColor = [UIColor navigationBarColor];
+        cell.nameLabel.font = [UIFont normal];
         [cell.selectImageButton addTarget:self action:@selector(cameraGalleryButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         cell.contentView.backgroundColor = [UIColor backgroundColor];
         return cell;
@@ -358,6 +376,7 @@
                 textView.delegate = self;
                 textView.tag = ADDRESS_TEXT_VIEW_TAG;
                 textView.textColor = [UIColor buttonBackgroundColor];
+                textView.font = [UIFont smallBig];
                 textView.text = self.profileObject.addressString;
                 [UITextView roundedCornerTextView:textView];
                 [addressCell.contentView addSubview:textView];
@@ -420,6 +439,7 @@
                 
                 UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(10, 23, self.view.frame.size.width-20, [self heightOfTextViewWithString:self.profileObject.descriptionString withFont:[UIFont normal] andFixedWidth:280])];
                 textView.textColor = [UIColor buttonBackgroundColor];
+                textView.font = [UIFont smallBig];
                 textView.delegate = self;
                 textView.tag = DESCRIPTION_TEXT_VIEW_TAG;
                 textView.text = self.profileObject.descriptionString;
@@ -458,6 +478,12 @@
         cell.descriptionTextField.textColor = [UIColor buttonBackgroundColor];
         cell.languagesButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         cell.languagesButton.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+        
+        CGSize size = [[self.namesArray objectAtIndex:indexPath.row] sizeWithAttributes:
+                       @{NSFontAttributeName:[UIFont normal]}];
+    
+        //cell.mandatoryLabel.frame = CGRectMake(size.width, 3, 18, 20);
+        
         [UIButton roundedCornerButton:cell.languagesButton];
         ///////////// Styles
         [cell.descriptionTextField setBorderStyle:UITextBorderStyleNone];
@@ -756,7 +782,8 @@
             }
             cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.expMonthString];
         }
-        else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"EIN_TaxID")]) {
+        
+        else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"EIN_TaxID")] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"TaxID_EIN")]) {
             cell.editImageView.hidden = NO;
             cell.editButton.hidden = NO;
             cell.editButton.tag = indexPath.row;
@@ -811,8 +838,6 @@
     CGRect newFrame = tempTV.frame;
     newFrame.size = CGSizeMake(fmaxf(newSize.width, fixedWidth), newSize.height);
     tempTV.frame = newFrame;
-    
-    descriptionHeight = tempTV.frame.size.height;;
     
     return tempTV.frame.size.height;
 }
@@ -1342,8 +1367,7 @@
         isEditMode = self.profileObject.isCardTypeEdit;
         
     }
-    
-    if ([cell.headerLabel.text isEqualToString:NSLOCALIZEDSTRING(@"EIN_TaxID")])
+    if ([cell.headerLabel.text isEqualToString:NSLOCALIZEDSTRING(@"EIN_TaxID")] || [cell.headerLabel.text isEqualToString:NSLOCALIZEDSTRING(@"TaxID_EIN")])
     {
         self.profileObject.isFirstNameEdit = NO;
         self.profileObject.isLastNameEdit = NO;
@@ -1361,6 +1385,14 @@
         self.profileObject.isDOBEdit = NO;
         
         self.profileObject.eINtaxIDString = cell.descriptionTextField.text;
+//        
+//        if ([self.einTaxArray containsObject:self.profileObject.countryString]){
+//            self.profileObject.eINtaxIDString = [NSString stringWithFormat:@"TIN:%@",self.profileObject.eINtaxIDString];
+//        }
+//        else{
+//            self.profileObject.eINtaxIDString = [NSString stringWithFormat:@"EIN:%@",self.profileObject.eINtaxIDString];
+//        }
+        
         self.profileObject.isCertificatesEdit = NO;
         if(self.profileObject.isEinTaxEdit){
             editableString = @"";
@@ -1500,6 +1532,15 @@
                 self.profileObject.phoneNumberString = [userDict objectForKey:KPHONE_NUMBER_W];
                 self.profileObject.myLanguagesString = [userDict objectForKey:KMYLANGUAGES_W];
                 
+                if ([userDict objectForKey:KEIN_TAXID_W]) {
+                    NSString *einTempSting = [userDict objectForKey:KEIN_TAXID_W];
+                    NSArray *einArray = [einTempSting componentsSeparatedByString:@":"];
+                    if (einArray.count>1) {
+                        self.profileObject.eINtaxIDString = [einArray objectAtIndex:1];
+                        [self changeTableLabelHeaders_Tax_EIN];
+                    }
+                }
+                
                 //////
                 NSDictionary *profileImgDict =  [userDict objectForKey:KPROFILE_IMAGE_W];
                 self.profileObject.imageURLString = [profileImgDict objectForKey:KURL_W];
@@ -1508,27 +1549,28 @@
                 [self makeEditableMandatoryFields];
                 
                 self.profileObject.dobString = [self dateConvertion];
+                self.profileObject.myLanguagesKEYsString = self.profileObject.myLanguagesString;
+//                /////////// Languages
+//                NSArray *langArray = [self.profileObject.myLanguagesString componentsSeparatedByString:@","];
+//                if (langArray.count) {
+//
+//                    self.profileObject.myLanguagesString = @"";
+//                    NSMutableString *mutableStr = [NSMutableString new];;
+//                    MyLanguagesView *languages =[[MyLanguagesView alloc]init];
+//                    NSMutableDictionary *languagesDit = [languages getLanguagesDictionary];
+//                    for (id key in langArray) {
+//                        NSString *str = [NSString stringWithFormat:@"%@,",[languagesDit objectForKey:key]];
+//                        [mutableStr appendString:str];
+//                        [self.selectedLanguagesDict setObject:[languagesDit objectForKey:key] forKey:key];
+//                    }
+//                    self.profileObject.myLanguagesString = [NSString stringWithString:mutableStr];
+//                    if ([self.profileObject.myLanguagesString hasSuffix:@","]) {
+//                        self.profileObject.myLanguagesString = [self.profileObject.myLanguagesString substringToIndex:[self.profileObject.myLanguagesString length] - 1];
+//                    }
+//                }
+//                /////////////////
                 
-                /////////// Languages
-                NSArray *langArray = [self.profileObject.myLanguagesString componentsSeparatedByString:@","];
-                if (langArray.count) {
-
-                    self.profileObject.myLanguagesString = @"";
-                    NSMutableString *mutableStr = [NSMutableString new];;
-                    MyLanguagesView *languagesView =[[MyLanguagesView alloc]initWithFrame:CGRectZero];
-                    NSMutableDictionary *languagesDit = [languagesView getLanguagesDictionary];
-                    for (id key in langArray) {
-                        NSLog(@"adsads======>>%@",[languagesDit objectForKey:key]);
-                        NSString *str = [NSString stringWithFormat:@"%@,",[languagesDit objectForKey:key]];
-                        [mutableStr appendString:str];
-                        [self.selectedLanguagesDict setObject:[languagesDit objectForKey:key] forKey:key];
-                    }
-                    self.profileObject.myLanguagesString = [NSString stringWithString:mutableStr];
-                    if ([self.profileObject.myLanguagesString hasSuffix:@","]) {
-                        self.profileObject.myLanguagesString = [self.profileObject.myLanguagesString substringToIndex:[self.profileObject.myLanguagesString length] - 1];
-                    }
-                }
-                /////////////////
+                [self getLanguagesNames:self.profileObject.myLanguagesString];
                 
                 ///////////////// Get States With Country Name
                 if (self.profileObject.countryString.length) {
@@ -1608,6 +1650,11 @@
     languagesView.tag = 1000;
     languagesView.delegate = self;
     languagesView.selectedLanguagesDict  = [NSMutableDictionary new];
+    
+    if (!_isInterpreter)
+        languagesView.isCustomer = YES;
+    
+    
     if (self.selectedLanguagesDict.allValues.count) {
         languagesView.selectedLanguagesDict = self.selectedLanguagesDict;
     }
@@ -1634,6 +1681,7 @@
 
     languagesView.delegate = self;
     languagesView.isCountry = YES;
+    
     languagesView.selectedCountriesStatesArray  = [NSMutableArray new];
     if (self.countryArray.count) {
         languagesView.countriesStatesArray = self.countryArray;
@@ -1647,18 +1695,27 @@
     [self.view endEditing:YES];
     [self removeTapGesture];
     [self removePopUpView];
-    languagesView =[[MyLanguagesView alloc]initWithFrame:CGRectZero];
-    languagesView.delegate = self;
-    languagesView.tag = 3000;
-
-    languagesView.isState = YES;
-    languagesView.selectedCountriesStatesArray  = [NSMutableArray new];
-    if (self.stateArray.count) {
-        languagesView.countriesStatesArray = self.stateArray;
+    
+    if(self.profileObject.countryString){
+        languagesView =[[MyLanguagesView alloc]initWithFrame:CGRectZero];
+        languagesView.delegate = self;
+        languagesView.tag = 3000;
+        
+        languagesView.isState = YES;
+        languagesView.selectedCountriesStatesArray  = [NSMutableArray new];
+        if (self.stateArray.count) {
+            languagesView.countriesStatesArray = self.stateArray;
+        }
+        //languagesView.countriesStatesArray = [[NSMutableArray alloc]initWithObjects:@"Maryland",@"Oklahoma",@"Oregon",@"Nevada", nil];
+        [languagesView.tblView reloadData];
+        [self.view addSubview:languagesView];
     }
-    //languagesView.countriesStatesArray = [[NSMutableArray alloc]initWithObjects:@"Maryland",@"Oklahoma",@"Oregon",@"Nevada", nil];
-    [languagesView.tblView reloadData];
-    [self.view addSubview:languagesView];
+    else{
+        AlertViewCustom *alertView = [AlertViewCustom new];
+        UIView *viewIs = [alertView showAlertViewWithMessage:NSLOCALIZEDSTRING(@"PLEASE_SELECT_COUNTRY") headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self.view];
+        [self.view addSubview:viewIs];
+
+    }
 }
 
 
@@ -1728,7 +1785,12 @@
             alertString = NSLOCALIZEDSTRING(@"PHONE_NUMBER");
         }
         else if (!self.profileObject.eINtaxIDString.length && _isInterpreter) {
-            alertString = NSLOCALIZEDSTRING(@"EIN_TaxID");
+            if ([self.einTaxArray containsObject:self.profileObject.countryString])
+                alertString = NSLOCALIZEDSTRING(@"EIN_TaxID");
+            else
+                alertString = NSLOCALIZEDSTRING(@"TaxID_EIN");
+            
+            
         }
         else if (!self.profileObject.myLanguagesString.length) {
             alertString = NSLOCALIZEDSTRING(@"MY_LANGUAGES");
@@ -1748,10 +1810,7 @@
         else if (!self.profileObject.addressString.length) {
             alertString = NSLOCALIZEDSTRING(@"ADDRESS");
         }
-        else if (!self.profileObject.cardNumberString.length && _isInterpreter) {
-            alertString = NSLOCALIZEDSTRING(@"CARD_NUMBER");
-        }
-        else if (!self.profileObject.cardNumberString.length && _isInterpreter) {
+        else if (!self.profileObject.cardNumberString.length && !_isInterpreter) {
             alertString = NSLOCALIZEDSTRING(@"CARD_NUMBER");
         }
         else if (!self.profileObject.cardTypeString.length && !_isInterpreter) {
@@ -1828,7 +1887,13 @@
     }
     else
     {
-        [saveDict setValue:self.profileObject.eINtaxIDString forKey:KEIN_TAXID_W];
+        if ([self.einTaxArray containsObject:self.profileObject.countryString]){
+            [saveDict setValue:[NSString stringWithFormat:@"TIN:%@",self.profileObject.eINtaxIDString] forKey:KEIN_TAXID_W];
+        }
+        else{
+            [saveDict setValue:[NSString stringWithFormat:@"EIN:%@",self.profileObject.eINtaxIDString] forKey:KEIN_TAXID_W];
+        }
+        
         [saveDict setValue:dictName forKey:@"payment_info"];
     }
     
@@ -1920,10 +1985,10 @@
     // Dismiss the image selection, hide the picker and
     //show the image view with the picked image
     selectedImage=image;
-    
+    [self dismissViewControllerAnimated:picker completion:nil];
+    [self.tblView reloadData];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self dismissViewControllerAnimated:picker completion:nil];
-        [self.tblView reloadData];
+        
     });
     
     self.profileObject.base64EncodedImageString = [Utility_Shared_Instance encodeToBase64String:image];
@@ -2064,95 +2129,18 @@
 }
 
 -(void)uploadImageToServer{
-    ///WEB Service CODE
-    //"data:image/jpeg;base64"
-    /*
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://54.153.22.179/api/upload"]];
     
-    NSData *imageData = UIImageJPEGRepresentation(selectedImage, 1.0);
-    
-    [request setCachePolicy:NSURLRequestReloadIgnoringLocalCacheData];
-    [request setHTTPShouldHandleCookies:NO];
-    [request setTimeoutInterval:60];
-    [request setHTTPMethod:@"POST"];
-    [request addValue:[NSString stringWithFormat:@"%@%@",@"Bearer ",[Utility_Shared_Instance readStringUserPreference:USER_TOKEN]]  forHTTPHeaderField:KAUTHORIZATION_W];
-    NSString *boundary = @"unique-consistent-string";
-    
-    // set Content-Type in HTTP header
-    NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
-    [request setValue:contentType forHTTPHeaderField: @"Content-Type"];
-    
-    // post body
-    NSMutableData *body = [NSMutableData data];
-    
-    // add params (all params are strings)
-    [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=%@\r\n\r\n", @"imageCaption"] dataUsingEncoding:NSUTF8StringEncoding]];
-    [body appendData:[[NSString stringWithFormat:@"%@\r\n", @"Some Caption"] dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    // add image data
-    if (imageData) {
-        
-        NSMutableDictionary *imageDict=[NSMutableDictionary new];
-        [imageDict setValue:[Utility_Shared_Instance readStringUserPreference:KID_W] forKey:KID_W];
-        [imageDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.emailString] forKey:KEMAIL_W];
-        [NSString stringWithFormat:@"%@%@",@"data:image/jpeg;base64",self.profileObject.base64EncodedImageString];
-        [imageDict setValue:self.profileObject.base64EncodedImageString forKey:KFILE_W];
-        [imageDict setValue:@"api" forKey:KSERVICE_TYPE_W];
-        NSError *err = nil;
-        NSData *bodyMore = [NSJSONSerialization dataWithJSONObject:imageDict options:NSJSONWritingPrettyPrinted error:&err];
-        
-        
-        
-        [body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-        [body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=%@; filename=imageName.jpg\r\n", @"imageFormKey"] dataUsingEncoding:NSUTF8StringEncoding]];
-        [body appendData:[@"Content-Type: image/jpeg\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-        [body appendData:bodyMore];
-        //[body appendData:imageData];
-        [body appendData:[[NSString stringWithFormat:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-    }
-    
-    [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    
-    // setting the body of the post to the reqeust
-    [request setHTTPBody:body];
-    
-    // set the content-length
-    NSString *postLength = [NSString stringWithFormat:@"%d", (unsigned)[body length]];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    
-    
-    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue currentQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-        if(data.length > 0)
-        {
-            NSError *errorNIl = nil;
-            NSDictionary *dictResponse =[NSDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&errorNIl]];
-            
-            NSLog(@"-------SUCCESSSSSSS----dictResponse-->%@",dictResponse.description);
-            //success
-        }
-        else{
-             NSLog(@"-------failure------>%@",error.description);
-        }
-    }];
-    */
-    
-    ///*
+    [Utility_Shared_Instance showProgress];
     NSMutableDictionary *imageDict=[NSMutableDictionary new];
     [imageDict setValue:[Utility_Shared_Instance readStringUserPreference:KID_W] forKey:KID_W];
     [imageDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.emailString] forKey:KEMAIL_W];
-    //[imageDict setValue:[NSString stringWithFormat:@"%@%@",@"",self.profileObject.base64EncodedImageString] forKey:KFILE_W];
-    //[imageDict setValue:[NSString stringWithFormat:@"%@%@",@"data:image/png;base64,",self.profileObject.base64EncodedImageString] forKey:KFILE_W];
     [imageDict setValue:[NSString stringWithFormat:@"%@%@",@"data:image/jpeg;base64,",self.profileObject.base64EncodedImageString] forKey:KFILE_W];
-    //[imageDict setValue:@"data:image/jpeg;base64,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" forKey:KFILE_W];
     [imageDict setValue:@"api" forKey:KSERVICE_TYPE_W];
     
-    [Web_Service_Call profileImageUpload_FormData:imageDict requestType:POST_REQUEST includeHeader:YES includeBody:YES webServicename:PROFILE_IMAGE_UPLOAD_W SuccessfulBlock:^(NSInteger responseCode, id responseObject){
+    [Web_Service_Call serviceCallWithRequestType:imageDict requestType:POST_REQUEST includeHeader:YES includeBody:YES webServicename:PROFILE_IMAGE_UPLOAD_W SuccessfulBlock:^(NSInteger responseCode, id responseObject){
         
         NSDictionary *responseDict=responseObject;
 
-        
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
             [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
@@ -2173,7 +2161,6 @@
                                                 withStyle:UIAlertControllerStyleAlert];
       });
     }];
-    //*/
 }
 #pragma mark TextField Delegate Methods
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
@@ -2190,6 +2177,27 @@
 }
 -(void)textFieldDidBeginEditing:(UITextField *)textField{
     
+}
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    //NSString *currentString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    
+    NSUInteger newLength = [textField.text length] + [string length] - range.length;
+    NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:NUMBERS_ONLY] invertedSet];
+    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+    
+    if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"POSTAL_CODE")]){
+        return (([string isEqualToString:filtered])&&(newLength <= POSTAL_CODE_LIMIT));
+    }
+    else if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"PHONE_NUMBER")]){
+        return (([string isEqualToString:filtered])&&(newLength <= PHONE_NUMBER_LIMIT));
+    }
+    else if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"CARD_NUMBER")]){
+        return (([string isEqualToString:filtered])&&(newLength <= CARD_NUMBER_LIMIT));
+    }
+    else if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"CVV")]){
+        return (([string isEqualToString:filtered])&&(newLength <= CVV_LIMIT));
+    }
+    return YES;
 }
 -(void)textFieldDidEndEditing:(UITextField *)textField{
     
@@ -2282,15 +2290,18 @@
             //CountryStore *store = [[CountryStore alloc]initWithJsonDictionary:responseDict];
            // NSMutableArray *array = [[StoreManager sharedManager] getCountryObject];
             
-            self.countryArray = [NSMutableArray new];
+            NSMutableArray *countryTemp = [NSMutableArray new];
             NSArray *dataArray = [responseDict objectForKey:@"data"];
             for (id jsonObject in dataArray) {
                 CountryObject *cObj = [CountryObject new];
                 cObj.countryCode = [jsonObject objectForKey:KCOUNTRY_CODE_W];
                 cObj.countryName = [jsonObject objectForKey:KCOUNTRY_NAME_W];
                 cObj.createdAt = [jsonObject objectForKey:KCREATED_AT_W];
-                [self.countryArray addObject:cObj];
+                [countryTemp addObject:cObj];
             }
+            [self.countryArray removeAllObjects];
+            NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"countryName" ascending:YES];
+            self.countryArray=[[countryTemp sortedArrayUsingDescriptors:@[sort]] mutableCopy];
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [SVProgressHUD dismiss];
@@ -2397,5 +2408,36 @@
                                NSLOCALIZEDSTRING(@"CERTIFICATES"), nil];
         }
     }
+}
+
+
+#pragma mark AlertView Custom PopUp CLicked
+
+-(void)popUpButtonClicked:(UIButton *)sender{
+    if (sender.tag == 2) {
+        [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
+    }
+}
+
+
+-(void)getLanguagesNames:(NSString *)keysString{
+    /////////// Languages
+    NSArray *langArray = [keysString componentsSeparatedByString:@","];
+    if (langArray.count) {
+        
+        NSMutableString *mutableStr = [NSMutableString new];;
+        MyLanguagesView *languages =[[MyLanguagesView alloc]init];
+        NSMutableDictionary *languagesDit = [languages getLanguagesDictionary];
+        for (id key in langArray) {
+            NSString *str = [NSString stringWithFormat:@"%@,",[languagesDit objectForKey:key]];
+            [mutableStr appendString:str];
+            //[self.selectedLanguagesDict setObject:[languagesDit objectForKey:key] forKey:key];
+        }
+        self.profileObject.myLanguagesString = [NSString stringWithString:mutableStr];
+        if ([self.profileObject.myLanguagesString hasSuffix:@","]) {
+            self.profileObject.myLanguagesString = [self.profileObject.myLanguagesString substringToIndex:[self.profileObject.myLanguagesString length] - 1];
+        }
+    }
+    /////////////////
 }
 @end

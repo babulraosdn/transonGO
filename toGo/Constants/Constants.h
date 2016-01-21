@@ -43,6 +43,15 @@ Stuff; \
 _Pragma("clang diagnostic pop") \
 } while (0)
 
+#define CARD_NUMBER_LIMIT 16
+#define CVV_LIMIT 4
+#define PHONE_NUMBER_LIMIT 10
+#define POSTAL_CODE_LIMIT 5
+
+#define CHARACTER_LIMIT 10000000
+#define NUMBERS_ONLY @"0123456789."
+#define ACCEPTABLE_CHARACTERS_NAME @" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+
 //********************  Social   ****************************************
 #pragma mark Social Calls
 #define LinkedIn_RedirectURL          @"http://www.testapp.com/testapp"

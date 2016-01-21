@@ -23,7 +23,6 @@
     self.view.backgroundColor = [UIColor backgroundColor];
     
     [self setLabelButtonNames];
-    [self setRoundCorners];
     [self setColors];
     [self setFonts];
     
@@ -34,15 +33,11 @@
     [self.customerButton setTitle:NSLOCALIZEDSTRING(@"CUSTOMER") forState:UIControlStateNormal];
 }
 
--(void)setRoundCorners{
-    //[UIButton roundedCornerButton:self.interpreterButton];
-    //[UIButton roundedCornerButton:self.customerButton];
-}
-
 
 -(void)setColors{
-    [self.interpreterButton setBackgroundColor:[UIColor buttonBackgroundColor]];
-    [self.customerButton setBackgroundColor:[UIColor buttonBackgroundColor]];
+    
+    [self.interpreterButton setTitleColor:[UIColor textColorBlackColor] forState:UIControlStateNormal];
+    [self.customerButton setTitleColor:[UIColor textColorBlackColor] forState:UIControlStateNormal];
 }
 
 -(void)setFonts{

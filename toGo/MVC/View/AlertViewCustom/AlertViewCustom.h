@@ -10,6 +10,7 @@
 #import "Headers.h"
 
 @interface AlertViewCustom : UIView
++(AlertViewCustom *)sharedManager;
 -(UIView *)showAlertViewWithMessage:(NSString *)messageString headingLabel:(NSString *)headerString confirmButtonName:(NSString *)confrirmSting cancelButtonName:(NSString *)cancelString viewIs:(UIView *)currentView;
 -(void)popUpButtonClicked:(UIButton *)sender;
 @end

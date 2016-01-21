@@ -36,6 +36,15 @@
     return font;
 }
 
++ (UIFont *) lightFontWithSize:(CGFloat) fontSize {
+    UIFont *font;
+    
+    font = [UIFont fontWithName:KFontFamily_ROBOTO_LIGHT size:fontSize];
+    
+    return font;
+}
+
+
 + (UIFont *) hugeBold {
     return [self boldFontWithSize:26.0];
 }

@@ -33,31 +33,51 @@
     
 }
 
--(void)addTableView {
+-(void)addTableView
+{
     
-    int alertViewHeight = self.frame.size.height-30;
-    int alertViewWidth = self.frame.size.width-30;
+    int tableViewHeight = self.frame.size.height-30;
+    int tableViewWidth = self.frame.size.width-30;
     
     UIView *mainView = [[UIView alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
-    //mainView.backgroundColor = [UIColor colorWithRed:14.0/255.0 green:14.0/255.0 blue:14.0/255.0 alpha:0.8];
-    self.tblView = [[UITableView alloc]initWithFrame:CGRectMake(self.center.x-(alertViewWidth/2), 30, alertViewWidth, alertViewHeight-30)];
+    mainView.backgroundColor = [UIColor colorWithRed:14.0/255.0 green:14.0/255.0 blue:14.0/255.0 alpha:0.8];
+    mainView.tag = 999;
+    
+    self.tblView = [[UITableView alloc]initWithFrame:CGRectMake(self.center.x-(tableViewWidth/2), 30, tableViewWidth, tableViewHeight-70)];//tableViewHeight-30
+    
+    int buttonWidth = tableViewWidth/2;
+    int buttonHeight = 35;
+    
+    UIView *submitView = [[UIView alloc]initWithFrame:CGRectMake(self.center.x-(tableViewWidth/2), self.tblView.frame.origin.y+self.tblView.frame.size.height, tableViewWidth, 40)];
+    [submitView setBackgroundColor:[UIColor backgroundColor]];
+    
+    UIButton *submitBtn = [[UIButton alloc]initWithFrame:CGRectMake(0,3, buttonWidth, buttonHeight)];
+    submitBtn.backgroundColor = [UIColor buttonBackgroundColor];
+    [submitBtn setTitle:NSLOCALIZEDSTRING(@"SAVE") forState:UIControlStateNormal];
+    [submitBtn addTarget:self action:@selector(closeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    submitBtn.tag = 1;
+    [UIButton roundedCornerButton:submitBtn];
+    [submitView addSubview:submitBtn];
+    
+    UIButton *cancelBtn = [[UIButton alloc]initWithFrame:CGRectMake(submitBtn.frame.size.width+2, 3, buttonWidth, buttonHeight)];
+    cancelBtn.tag = 2;
+    [cancelBtn setBackgroundImage:[UIImage lightButtonImage] forState:UIControlStateNormal];
+    [cancelBtn setTitle:NSLOCALIZEDSTRING(@"CANCEL") forState:UIControlStateNormal];
+    [cancelBtn addTarget:self action:@selector(closeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [UIButton roundedCornerButton:cancelBtn];
+    
+    [submitView setBackgroundColor:[UIColor clearColor]];
+    [submitView addSubview:cancelBtn];
+    
+    [self addSubview:submitView];
     
     self.tblView.delegate = self;
     self.tblView.dataSource = self;
-    //self.tblView.layer.cornerRadius = 6.0f;
-    //self.tblView.layer.masksToBounds = YES;
-    //tableView.backgroundColor = [UIColor redColor];
+    
+    self.tblView.layer.cornerRadius = 6.0f;
+    self.tblView.layer.masksToBounds = YES;
     [self addSubview:self.tblView];
-    
-    
-    UIButton *closeBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.frame.size.width-50, 10 , 40, 40)];
-    closeBtn.backgroundColor = [UIColor blackColor];
-    [closeBtn setBackgroundImage:[UIImage closeLanguagesImage] forState:UIControlStateNormal];
-    [closeBtn addTarget:self action:@selector(closeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    mainView.tag = 999;
-    [self addSubview:closeBtn];
 }
-
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
@@ -106,12 +126,12 @@
         cell = [array objectAtIndex:0];
     }
     cell.countryNameLabel.text = [[self.languagesDictionary allValues] objectAtIndex:indexPath.row];
-    //cell.countryImageView.backgroundColor = [UIColor greenColor];
-//    if ([self.languagesDictionary objectForKey:[self.selectedCountriesStatesArray objectAtIndex:indexPath.row]]) {
-//        [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-//    }
-    if ([self.selectedLanguagesDict objectForKey:[[self.languagesDictionary allKeys] objectAtIndex:indexPath.row]]){
+    
+    if ([self.selectedLanguagesDict objectForKey:[[self.languagesDictionary allKeys] objectAtIndex:indexPath.row]]) {
         [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+    }
+    else{
+        [cell setAccessoryType:UITableViewCellAccessoryNone];
     }
     return cell;
 }
@@ -123,6 +143,11 @@
         [self.selectedCountriesStatesArray addObject:[self.countriesStatesArray objectAtIndex: indexPath.row]];
     }
     else{
+        
+        if (self.isCustomer) {
+            [self.selectedLanguagesDict removeAllObjects];
+        }
+        
         if ([self.selectedLanguagesDict objectForKey:[[self.languagesDictionary allKeys] objectAtIndex:indexPath.row]]) {
             [self.selectedLanguagesDict removeObjectForKey:[[self.languagesDictionary allKeys] objectAtIndex:indexPath.row]];
         }
@@ -134,18 +159,20 @@
 }
 
 
--(void)closeButtonPressed{
+-(void)closeButtonPressed:(UIButton *)sender{
     
-    if (self.isCountry) {
-        [self.delegate finishCountrySelection:self.selectedCountriesStatesArray];
-    }
-    else if (self.isState) {
-        [self.delegate finishStateSelection:self.selectedCountriesStatesArray];
-    }
-    else{
-        [self.delegate finishLanguagesSelection:self.selectedLanguagesDict];
-    }
     [self removeFromSuperview];
+    if (sender.tag==1) {
+        if (self.isCountry) {
+            [self.delegate finishCountrySelection:self.selectedCountriesStatesArray];
+        }
+        else if (self.isState) {
+            [self.delegate finishStateSelection:self.selectedCountriesStatesArray];
+        }
+        else{
+            [self.delegate finishLanguagesSelection:self.selectedLanguagesDict];
+        }
+    }
 }
 
 -(NSMutableDictionary *)getLanguagesDictionary{
@@ -226,86 +253,6 @@
     
     return self.languagesDictionary;
 }
-/*
-{
-    
-    self.languagesDictionary = [[NSMutableDictionary alloc]initWithObjectsAndKeys:
-                                @"AF",@"Afrikaans",
-                                @"SQ",@"Albanian",
-                                @"AR",@"Arabic",
-                                @"HY",@"Armenian",
-                                @"EU",@"Basque",
-                                @"BN",@"Bengali",
-                                @"BG",@"Bulgarian",
-                                @"CA",@"Catalan",
-                                @"KM",@"Cambodian",
-                                @"ZH",@"Chinese (Mandarin)",
-                                @"HR",@"Croatian",
-                                @"CS",@"Czech",
-                                @"DA",@"Danish",
-                                @"NL",@"Dutch",
-                                @"EN",@"English",
-                                @"ET",@"Estonian",
-                                @"FJ",@"Fiji",
-                                @"FI",@"Finnish",
-                                @"FR",@"French",
-                                @"KA",@"Georgian",
-                                @"DE",@"German",
-                                @"EL",@"Greek",
-                                @"GU",@"Gujarati",
-                                @"HE",@"Hebrew",
-                                @"HI",@"Hindi",
-                                @"HU",@"Hungarian",
-                                @"IS",@"Icelandic",
-                                @"ID",@"Indonesian",
-                                @"GA",@"Irish",
-                                @"IT",@"Italian",
-                                @"JA",@"Japanese",
-                                @"JW",@"Javanese",
-                                @"KO",@"Korean",
-                                @"LA",@"Latin",
-                                @"LV",@"Latvian",
-                                @"LT",@"Lithuanian",
-                                @"MK",@"Macedonian",
-                                @"MS",@"Malay",
-                                @"ML",@"Malayalam",
-                                @"MT",@"Maltese",
-                                @"MI",@"Maori",
-                                @"MR",@"Marathi",
-                                @"MN",@"Mongolian",
-                                @"NE",@"Nepali",
-                                @"NO",@"Norwegian",
-                                @"FA",@"Persian",
-                                @"PL",@"Polish",
-                                @"PT",@"Portuguese",
-                                @"PA",@"Punjabi",
-                                @"QU",@"Quechua",
-                                @"RO",@"Romanian",
-                                @"RU",@"Russian",
-                                @"SM",@"Samoan",
-                                @"SR",@"Serbian",
-                                @"SK",@"Slovak",
-                                @"SL",@"Slovenian",
-                                @"ES",@"Spanish",
-                                @"SW",@"Swahili",
-                                @"SV",@"Swedish",
-                                @"TA",@"Tamil",
-                                @"TT",@"Tatar",
-                                @"TE",@"Telugu",
-                                @"TH",@"Thai",
-                                @"BO",@"Tibetan",
-                                @"TO",@"Tonga",
-                                @"TR",@"Turkish",
-                                @"UK",@"Ukrainian",
-                                @"UR",@"Urdu",
-                                @"UZ",@"Uzbek",
-                                @"VI",@"Vietnamese",
-                                @"CY",@"Welsh",
-                                @"XH",@"Xhosa",nil];
-    
-    return self.languagesDictionary;
-}
-*/
 
 /*
 // Only override drawRect: if you perform custom drawing.

@@ -25,6 +25,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *defaultPicBackgroundImageView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
+@property(nonatomic,weak) IBOutlet NSLayoutConstraint *myLanguageTopConstraint;
+@property(nonatomic,weak) IBOutlet NSLayoutConstraint *emailTopConstraint;
 @end
 
 @implementation DashBoardViewController
@@ -48,8 +50,8 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:YES];
-    //[Utility_Shared_Instance showProgress];
-    //[self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
+    [Utility_Shared_Instance showProgress];
+    [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
 }
 -(void)setLabelButtonNames{
     self.myLanguageLabel.text = NSLOCALIZEDSTRING(@"MY_LANGUAGE");
@@ -91,9 +93,9 @@
     self.nameLabel.font = [UIFont largeSize];
     self.countryLabel.font = [UIFont normal];
     self.myLanguageLabel.font = [UIFont normal];
-    self.myLanguageDetailLabel.font = [UIFont normal];
+    self.myLanguageDetailLabel.font = [UIFont smallBig];
     self.emailIDLabel.font = [UIFont normal];
-    self.emailIDDetailLabel.font = [UIFont normal];
+    self.emailIDDetailLabel.font = [UIFont smallBig];
     self.descriptionTextView.font = [UIFont normal];
     
     self.orderInterpretationButton.titleLabel.font = [UIFont largeSize];
@@ -130,7 +132,11 @@
                     if ([dashBoardDict objectForKey:KDESCRIPTION_W])
                         self.descriptionTextView.text = [dashBoardDict objectForKey:KDESCRIPTION_W];
                     if ([dashBoardDict objectForKey:KPROFILE_IMAGE_W])
-                        self.defaultImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dashBoardDict objectForKey:KPROFILE_IMAGE_W]]]];
+                        [self.defaultImageView sd_setImageWithURL:[NSURL URLWithString:[dashBoardDict objectForKey:KPROFILE_IMAGE_W]]
+                                                 placeholderImage:[UIImage defaultPicImage]];
+                        //self.defaultImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dashBoardDict objectForKey:KPROFILE_IMAGE_W]]]];
+                 
+                 
               }
 
             });
@@ -149,7 +155,7 @@
     }];
 }
 
-/*
+
 -(void)getProfileInfo
 {
     //WEB Service CODE
@@ -163,6 +169,9 @@
                 NSLog(@"dict-->%@",responseDict);
                 NSMutableDictionary *userDict = [responseDict objectForKey:@"user"];
                 [Utility_Shared_Instance writeStringUserPreference:KID_W value:[userDict objectForKey:KID_W]];
+;
+                self.descriptionTextView.text =[userDict objectForKey:KABOUT_USER_W];
+                
                 NSDictionary *profileImgDict =  [userDict objectForKey:KPROFILE_IMAGE_W];
                 NSString *imageURLString = [profileImgDict objectForKey:KURL_W];
                 if (imageURLString.length) {
@@ -170,8 +179,21 @@
                     self.defaultImageView.layer.cornerRadius = self.defaultImageView.frame.size.height /2;
                     self.defaultImageView.layer.masksToBounds = YES;
                 }
+                
+                self.emailIDDetailLabel.text = [userDict objectForKey:KEMAIL_W];
+                if ([userDict objectForKey:KNAME_W]) {
+                    NSDictionary *nameDict =  [userDict objectForKey:KNAME_W];
+                    self.nameLabel.text = [NSString stringWithFormat:@"%@ %@",[nameDict objectForKey:KFIRST_NAME_W],[nameDict objectForKey:KLAST_NAME_W]];
+                }
+                else{
+                    self.nameLabel.text = @"";
+                }
+                self.countryLabel.text = [userDict objectForKey:KCOUNTRY_W];
+                if (self.countryLabel.text.length) {
+                    self.countryLabel.text = [NSString stringWithFormat:@"@%@",self.countryLabel.text];
+                }
+                self.myLanguageDetailLabel.text = [userDict objectForKey:KMYLANGUAGES_W];
             });
-            
         }
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -180,7 +202,7 @@
     }];
     
 }
-*/
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

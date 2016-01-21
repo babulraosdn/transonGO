@@ -11,6 +11,7 @@
 		ED145A561C4612D600A5B211 /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED145A511C4612D600A5B211 /* TPKeyboardAvoidingScrollView.m */; settings = {ASSET_TAGS = (); }; };
 		ED145A571C4612D600A5B211 /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED145A531C4612D600A5B211 /* TPKeyboardAvoidingTableView.m */; settings = {ASSET_TAGS = (); }; };
 		ED145A581C4612D600A5B211 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = ED145A551C4612D600A5B211 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; settings = {ASSET_TAGS = (); }; };
+		ED1493D41C50978B00277DA8 /* LanguageObject.m in Sources */ = {isa = PBXBuildFile; fileRef = ED1493D31C50978B00277DA8 /* LanguageObject.m */; settings = {ASSET_TAGS = (); }; };
 		ED1B7EC21C2AA3AB00C49026 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = ED1B7EC11C2AA3AB00C49026 /* Localizable.strings */; settings = {ASSET_TAGS = (); }; };
 		ED1B7EEB1C2AA48600C49026 /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED1B7EC71C2AA48600C49026 /* BaseViewController.m */; settings = {ASSET_TAGS = (); }; };
 		ED1B7EEF1C2AA48600C49026 /* ContactsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED1B7ED01C2AA48600C49026 /* ContactsListViewController.m */; settings = {ASSET_TAGS = (); }; };
@@ -164,6 +165,8 @@
 		ED145A531C4612D600A5B211 /* TPKeyboardAvoidingTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingTableView.m; sourceTree = "<group>"; };
 		ED145A541C4612D600A5B211 /* UIScrollView+TPKeyboardAvoidingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+TPKeyboardAvoidingAdditions.h"; sourceTree = "<group>"; };
 		ED145A551C4612D600A5B211 /* UIScrollView+TPKeyboardAvoidingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+TPKeyboardAvoidingAdditions.m"; sourceTree = "<group>"; };
+		ED1493D21C50978B00277DA8 /* LanguageObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LanguageObject.h; sourceTree = "<group>"; };
+		ED1493D31C50978B00277DA8 /* LanguageObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LanguageObject.m; sourceTree = "<group>"; };
 		ED1B7EC01C2AA3AB00C49026 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		ED1B7EC61C2AA48600C49026 /* BaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
 		ED1B7EC71C2AA48600C49026 /* BaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
@@ -483,6 +486,15 @@
 			path = TPKeyboardAvoidingScrollView;
 			sourceTree = "<group>";
 		};
+		ED1493D11C50977000277DA8 /* Language */ = {
+			isa = PBXGroup;
+			children = (
+				ED1493D21C50978B00277DA8 /* LanguageObject.h */,
+				ED1493D31C50978B00277DA8 /* LanguageObject.m */,
+			);
+			path = Language;
+			sourceTree = "<group>";
+		};
 		ED1B7EC31C2AA48600C49026 /* MVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -564,6 +576,7 @@
 		ED1B7EE01C2AA48600C49026 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				ED1493D11C50977000277DA8 /* Language */,
 				EDF7CF181C4F4FBD009AA19A /* Country */,
 				EDF7CF1B1C4F4FBD009AA19A /* State */,
 				EDF7CF091C4F4613009AA19A /* StoreManagers */,
@@ -1461,6 +1474,7 @@
 				EDFD7E121C27CB8B00E4FEEB /* FileLogger.m in Sources */,
 				EDB1C5E81C4F95A300373358 /* MyLanguagesCell.m in Sources */,
 				ED8B51D81C1EEFED00CA7306 /* AlertView.m in Sources */,
+				ED1493D41C50978B00277DA8 /* LanguageObject.m in Sources */,
 				ED8B51E71C1EEFED00CA7306 /* InternetActivityVC.m in Sources */,
 				ED145A561C4612D600A5B211 /* TPKeyboardAvoidingScrollView.m in Sources */,
 				EDFD7E081C27C68100E4FEEB /* UIFont+Font.m in Sources */,

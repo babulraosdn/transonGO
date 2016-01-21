@@ -36,7 +36,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [self viewWillAppear:animated];
+    //[self viewWillAppear:animated];
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setShowsVerticalScrollIndicator:NO];
 }
@@ -107,23 +107,18 @@
                 //[self.navigationController popViewControllerAnimated:YES];//Not Working
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [SVProgressHUD dismiss];
-                    [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                                        withMessage:[responseDict objectForKey:KMESSAGE_W]
-                                                             inView:self
-                                                          withStyle:UIAlertControllerStyleAlert];
-                    
+                    AlertViewCustom *alertView = [AlertViewCustom new];
+                    UIView *viewIs = [alertView showAlertViewWithMessage:[responseDict objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self.view];
+                    [self.view addSubview:viewIs];
                 });
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                });
+                
             }
         } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [SVProgressHUD dismiss];
-                [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                                    withMessage:[responseObject objectForKey:KMESSAGE_W]
-                                                         inView:self
-                                                      withStyle:UIAlertControllerStyleAlert];
+                AlertViewCustom *alertView = [AlertViewCustom new];
+                UIView *viewIs = [alertView showAlertViewWithMessage:[responseObject objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self.view];
+                [self.view addSubview:viewIs];
             });
         }];
     }
@@ -143,6 +138,12 @@
     return YES;
 }
 
+#pragma mark AlertView Custom PopUp CLicked
 
+-(void)popUpButtonClicked:(UIButton *)sender{
+    if (sender.tag == 2) {
+        [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
+    }
+}
 
 @end

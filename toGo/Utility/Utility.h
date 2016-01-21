@@ -58,4 +58,8 @@ typedef void (^getImage)(UIImage *image);
 
 #pragma mark Image Encoding
 - (NSString *)encodeToBase64String:(UIImage *)image;
+
+- (CGFloat)heightOfTextViewWithString:(NSString *)string
+                             withFont:(UIFont *)font
+                        andFixedWidth:(CGFloat)fixedWidth;
 @end

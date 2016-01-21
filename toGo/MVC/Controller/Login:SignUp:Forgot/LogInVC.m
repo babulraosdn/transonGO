@@ -42,6 +42,7 @@
     UITextField *activeField;
     NSString *userIDString;
     NSString *passwordString;
+    AlertViewCustom *alertViewCustom;
 }
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property(nonatomic,readwrite)BOOL isChecked;
@@ -94,6 +95,7 @@
 
 -(void)allocationsAndStaticText{
     
+    alertViewCustom = [[AlertViewCustom alloc]init];
     loginDictionary = [NSMutableDictionary new];
     appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
     self.sdk = [ooVooClient sharedInstance];
@@ -307,6 +309,7 @@
         
         NSDictionary *responseDict=responseObject;
 
+        /*
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
             [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
@@ -314,6 +317,7 @@
                                                      inView:self
                                                   withStyle:UIAlertControllerStyleAlert];
         });
+        */
         
         if ([responseDict objectForKey:KCODE_W]){
             if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
@@ -333,20 +337,40 @@
                     [Utility_Shared_Instance writeStringUserPreference:KCOMPLETION_W value:[Utility_Shared_Instance checkForNullString:[responseDict objectForKey:KCOMPLETION_W]]];
                     //[Utility_Shared_Instance writeStringUserPreference:KCOMPLETION_W value:@"0"];//Test
                 }
-                
-                [self ooVooLogin];
-                [self createSidePanel];
+                if ([[Utility_Shared_Instance readStringUserPreference:KCOMPLETION_W] isEqualToString:PROFILE_INCOMPLETE]){
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [SVProgressHUD dismiss];
+                        AlertViewCustom *alertView = [AlertViewCustom new];
+                        UIView *viewIs = [alertView showAlertViewWithMessage:NSLOCALIZEDSTRING(@"PLEASE_COMPLETE_YOUR_PROFILE") headingLabel:NSLOCALIZEDSTRING(@"COMPLETE_PROFILE_INFO") confirmButtonName:NSLOCALIZEDSTRING(@"CONFIRM") cancelButtonName:NSLOCALIZEDSTRING(@"CANCEL") viewIs:self.view];
+                        [self.view addSubview:viewIs];
+                    });
+                    
+                }
+                else{
+                    [self ooVooLogin];
+                    [self createSidePanel];
+                }
+            }
+            else{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [SVProgressHUD dismiss];
+                    AlertViewCustom *alertView = [AlertViewCustom new];
+                    UIView *viewIs = [alertView showAlertViewWithMessage:[responseDict objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self.view];
+                    [self.view addSubview:viewIs];
+                });
             }
         }
+        
         [self reportAuthStatus];//This is to clear google cookies
         
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD dismiss];
-            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                                withMessage:[responseObject objectForKey:KMESSAGE_W]
-                                                     inView:self
-                                                  withStyle:UIAlertControllerStyleAlert];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+                AlertViewCustom *alertView = [AlertViewCustom new];
+                UIView *viewIs = [alertView showAlertViewWithMessage:NSLOCALIZEDSTRING(@"PLEASE_COMPLETE_YOUR_PROFILE") headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self.view];
+                [self.view addSubview:viewIs];
+            });
         });
     }];
 }
@@ -689,12 +713,15 @@
     }
 }
 
+#pragma mark AlertView Custom PopUp CLicked
 
 -(void)popUpButtonClicked:(UIButton *)sender{
    
     if (sender.tag == 1) {
         //Confirm Button
         NSLog(@"Confirm Selected");
+        [self ooVooLogin];
+        [self createSidePanel];
     }
     else if (sender.tag == 2) {
         //Cancel Button

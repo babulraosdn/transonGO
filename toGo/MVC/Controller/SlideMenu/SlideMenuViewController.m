@@ -53,7 +53,7 @@
     
     if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
         self.namesArray = [[NSMutableArray alloc]initWithObjects:
-                           NSLOCALIZEDSTRING(@"DASHBOARD"),
+                           NSLOCALIZEDSTRING(@"DASHBOARD_SLIDE"),
                            NSLOCALIZEDSTRING(@"PROFILE"),
                            NSLOCALIZEDSTRING(@"CALL_HISTORY"),
                            NSLOCALIZEDSTRING(@"REVENUE"),
@@ -63,15 +63,15 @@
                                  DASHBOARD_SLIDE_IMAGE,
                                  PROFILE_IMAGE,
                                  CALL_HISTORY_IMAGE,
-                                 PROFILE_IMAGE,
+                                 FAV_INTERPRETER_IMAGE,
                                  PURCHASE_IMAGE,
                                  SETTINGS_IMAGE, nil];
     }
     else {
         self.namesArray = [[NSMutableArray alloc]initWithObjects:
-                           NSLOCALIZEDSTRING(@"DASHBOARD"),
+                           NSLOCALIZEDSTRING(@"DASHBOARD_SLIDE"),
                            NSLOCALIZEDSTRING(@"PROFILE"),
-                           NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION"),
+                           NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION_SLIDE"),
                            NSLOCALIZEDSTRING(@"CALL_HISTORY"),
                            NSLOCALIZEDSTRING(@"PURCHASES"),
                            NSLOCALIZEDSTRING(@"FAVORITE_INTERPRETER"),
@@ -121,7 +121,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
-    //[FBSDKAccessToken setCurrentAccessToken:nil];
+//[FBSDKAccessToken setCurrentAccessToken:nil];
 //    
 //    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/permissions" parameters:nil
 //                                       HTTPMethod:@"DELETE"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
@@ -135,7 +135,7 @@
     
     NSString *selectedRowString = [self.namesArray objectAtIndex:indexPath.row];
     UINavigationController *contentNaviationController;
-    if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"DASHBOARD")]){
+    if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"DASHBOARD_SLIDE")]){
         
         if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
             contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_INTERPRETER_VIEW_CONTROLLER]];

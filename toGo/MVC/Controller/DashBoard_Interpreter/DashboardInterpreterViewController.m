@@ -9,6 +9,7 @@
 #import "DashboardInterpreterViewController.h"
 
 @interface DashboardInterpreterViewController ()
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *descriptionTextViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet UILabel *interpreterName;
 @property (weak, nonatomic) IBOutlet UIButton *customerFeedBackButton;
 @property (weak, nonatomic) IBOutlet UIButton *profileManagementButton;
@@ -84,6 +85,11 @@
 
 -(void)setColors{
     self.descriptionTextView.textColor = [UIColor textColorBlackColor];
+    
+    self.noOfCallDetailLabel.textColor = [UIColor buttonBackgroundColor];
+    self.callMinutesDetailLabel.textColor = [UIColor buttonBackgroundColor];
+    self.callYtdEarningsDetailLabel.textColor = [UIColor buttonBackgroundColor];
+    
     [self.profileManagementButton setBackgroundColor:[UIColor buttonBackgroundColor]];
     [self.customerFeedBackButton setBackgroundColor:[UIColor buttonBackgroundColor]];
 }
@@ -223,13 +229,36 @@
                 NSLog(@"dict-->%@",responseDict);
                 NSMutableDictionary *userDict = [responseDict objectForKey:@"user"];
                 [Utility_Shared_Instance writeStringUserPreference:KID_W value:[userDict objectForKey:KID_W]];
+                
+                if ([userDict objectForKey:KNAME_W]) {
+                    NSDictionary *nameDict =  [userDict objectForKey:KNAME_W];
+                    self.interpreterName.text = [NSString stringWithFormat:@"%@ %@",[nameDict objectForKey:KFIRST_NAME_W],[nameDict objectForKey:KLAST_NAME_W]];
+                }
+                else{
+                    self.interpreterName.text = @"";
+                }
+                
+                
                 NSDictionary *profileImgDict =  [userDict objectForKey:KPROFILE_IMAGE_W];
                 [Utility_Shared_Instance writeStringUserPreference:KEMAIL_W value:[userDict objectForKey:KEMAIL_W]];
+                
+                
+                NSString *descriptionStr =@"An interpreter translates high-level instructions into an intermediate form, which it then executes. In contrast, a compiler translates high-level instructions directly into machine language. Compiled programs generally run faster than interpreted programs. The advantage of an interpreter, however, is that it does not need to go through the compilation stage during which machine instructions are generated. ";// [userDict objectForKey:KABOUT_USER_W];
+                
+                /*
+                CGFloat descriptionHeight =  [Utility_Shared_Instance heightOfTextViewWithString:descriptionStr withFont:[UIFont smallThin] andFixedWidth:self.view.frame.size.width];
+                self.descriptionTextViewHeightConstraint.constant = descriptionHeight-50;
+                [self.descriptionTextView.superview.superview updateConstraints];
+                */
+                self.descriptionTextView.text = [descriptionStr substringToIndex:159];
                 NSString *imageURLString = [profileImgDict objectForKey:KURL_W];
+                
                 if (imageURLString.length) {
-                    self.defaultImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURLString]]];
+                    //self.defaultImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURLString]]];
                     self.defaultImageView.layer.cornerRadius = self.defaultImageView.frame.size.height /2;
                     self.defaultImageView.layer.masksToBounds = YES;
+                    [self.defaultImageView sd_setImageWithURL:[NSURL URLWithString:imageURLString]
+                                      placeholderImage:[UIImage defaultPicImage]];
                 }
                 
                NSString *interpreterAvailabiltyString = [NSString stringWithFormat:@"%@",[Utility_Shared_Instance checkForNullString:[userDict objectForKey:KINTERPRETER_AVAILABILITY_W]]];
