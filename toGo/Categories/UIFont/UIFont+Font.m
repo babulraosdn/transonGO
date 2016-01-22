@@ -99,6 +99,7 @@
     return [self fontWithSize:18.0];
 }
 
+
 + (UIFont *) largeSize {
     return [self fontWithSize:17.0];
 }

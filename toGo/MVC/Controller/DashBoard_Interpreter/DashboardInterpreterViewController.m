@@ -65,7 +65,7 @@
 }
 
 -(void)setLabelButtonNames{
-    self.headerLabel.text = NSLOCALIZEDSTRING(@"DASHBOARD");
+    self.headerLabel.text = NSLOCALIZEDSTRING(@"DASHBOARD_SLIDE");
     self.noOfCallLabel.text = NSLOCALIZEDSTRING(@"No_OF_CALL");
     self.callMinutesLabel.text = NSLOCALIZEDSTRING(@"CALL_MINUTES");
     self.callYtdEarningslabel.text = NSLOCALIZEDSTRING(@"CALL_YTD_EARNINIGS");

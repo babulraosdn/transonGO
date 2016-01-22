@@ -30,10 +30,7 @@
     self.navigationItem.title=@"Menu";
         self.sdk = [ooVooClient sharedInstance];
     
-    
-    
-     NSLog(@"token =%@",[UserDefaults getObjectforKey:[ActiveUserManager activeUser].userId]);
-    
+
     if ([UserDefaults getObjectforKey:[ActiveUserManager activeUser].userId]) {
         [ActiveUserManager activeUser].token=[UserDefaults getObjectforKey:[ActiveUserManager activeUser].userId];
     }

@@ -165,18 +165,6 @@
         
         contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:SETTINGS_VIEW_CONTROLLER]];
         self.revealController.frontViewController = contentNaviationController ;
-        return;
-        
-        FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
-        if ( [FBSDKAccessToken currentAccessToken] ){
-            [login logOut];
-        }
-        
-        [FBSDKAccessToken setCurrentAccessToken:nil];
-        [FBSDKProfile setCurrentProfile:nil];
-        
-        UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:@"LoginViewController"]];
-        appDelegate.window.rootViewController = contentNavigationController;
     }
 }
 

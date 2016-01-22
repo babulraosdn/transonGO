@@ -247,4 +247,7 @@ _Pragma("clang diagnostic pop") \
 #define KFontFamily_ROBOTO_BOLD                           @"Roboto-Bold"
 #define KFontFamily_ROBOTO_MEDIUM                         @"Roboto-Medium"
 #define KFontFamily_ROBOTO_THIN                           @"Roboto-Thin"
+
+//********************  Segue Identifiers   ****************************************
+#define Segue_MenuConferenceVC @"Segue_MenuConferenceVC"
 #endif

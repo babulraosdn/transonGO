@@ -108,17 +108,29 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [SVProgressHUD dismiss];
                     AlertViewCustom *alertView = [AlertViewCustom new];
-                    UIView *viewIs = [alertView showAlertViewWithMessage:[responseDict objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self.view];
+                    UIView *viewIs = [alertView showAlertViewWithMessage:[responseDict objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(@"FORGET_PASSWORD") confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self.view];
                     [self.view addSubview:viewIs];
                 });
                 
             }
+            else{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [SVProgressHUD dismiss];
+                    [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                        withMessage:[responseObject objectForKey:KMESSAGE_W]
+                                                             inView:self
+                                                          withStyle:UIAlertControllerStyleAlert];
+                    
+                });
+            }
         } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [SVProgressHUD dismiss];
-                AlertViewCustom *alertView = [AlertViewCustom new];
-                UIView *viewIs = [alertView showAlertViewWithMessage:[responseObject objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self.view];
-                [self.view addSubview:viewIs];
+                [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                    withMessage:[responseObject objectForKey:KMESSAGE_W]
+                                                         inView:self
+                                                      withStyle:UIAlertControllerStyleAlert];
+               
             });
         }];
     }

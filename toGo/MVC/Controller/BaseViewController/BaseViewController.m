@@ -85,6 +85,10 @@
 
 - (void)logOutButtonClicked{
     [self.view endEditing:YES];
+    [App_Delegate.facebookLoginManager logOut];
+    [FBSDKAccessToken setCurrentAccessToken:nil];
+    [FBSDKProfile setCurrentProfile:nil];
+    
     UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:HOME_VIEW_CONTROLLER]];
     App_Delegate.window.rootViewController = contentNavigationController;
 }

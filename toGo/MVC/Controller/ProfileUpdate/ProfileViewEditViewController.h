@@ -19,13 +19,19 @@
 @property (weak, nonatomic) IBOutlet UIButton *languagesButton;
 @property(nonatomic,weak) IBOutlet UIImageView *editImageView;
 @property(nonatomic,weak) IBOutlet UILabel *mandatoryLabel;
+@property(nonatomic,weak) IBOutlet UIScrollView *scrollViewLabel;
 @end
 
-@interface ProfileViewEditUpdateAnswerCell : UITableViewCell
+@interface ProfileViewLanguageCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UIImageView *dropDownImageView;
 @property(nonatomic,weak) IBOutlet UILabel *headerLabel;
-@property(nonatomic,weak) IBOutlet UILabel *answerLabel;
-@property(nonatomic,weak) IBOutlet UITextView *answerTextView;
+@property(nonatomic,weak) IBOutlet UIButton *editButton;
+@property (weak, nonatomic) IBOutlet UIButton *languagesButton;
+@property(nonatomic,weak) IBOutlet UIImageView *editImageView;
+@property(nonatomic,weak) IBOutlet UILabel *mandatoryLabel;
+@property(nonatomic,weak) IBOutlet UIScrollView *scrollViewLabel;
 @end
+
 
 @interface ProfileViewEditViewController : BaseViewController<UtilityProtocol>
 @property(nonatomic,readwrite)BOOL isFromDashBoard;

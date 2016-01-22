@@ -9,6 +9,9 @@
 #import "HomeViewController.h"
 
 @interface HomeViewController ()
+@property (weak, nonatomic) IBOutlet UILabel *theGoLabel;
+@property (weak, nonatomic) IBOutlet UILabel *onLabel;
+@property (weak, nonatomic) IBOutlet UILabel *togoInterpretationLabel;
 @property(nonatomic,weak) IBOutlet UIButton *interpreterButton;
 @property(nonatomic,weak) IBOutlet UIButton *customerButton;
 @end
@@ -35,12 +38,17 @@
 
 
 -(void)setColors{
-    
+    self.togoInterpretationLabel.textColor = [UIColor textColorBlackColor];
+    self.onLabel.textColor = [UIColor textColorBlackColor];
+    self.theGoLabel.textColor = [UIColor textColorBlackColor];
     [self.interpreterButton setTitleColor:[UIColor textColorBlackColor] forState:UIControlStateNormal];
     [self.customerButton setTitleColor:[UIColor textColorBlackColor] forState:UIControlStateNormal];
 }
 
 -(void)setFonts{
+    self.togoInterpretationLabel.font = [UIFont largerThin];
+    self.onLabel.font = [UIFont largerThin];
+    self.theGoLabel.font = [UIFont largerBold];
     self.interpreterButton.titleLabel.font = [UIFont largeSize];
     self.customerButton.titleLabel.font = [UIFont largeSize];
 }

@@ -28,7 +28,7 @@
 
 @implementation ProfileViewEditUpdateCell
 @end
-@implementation ProfileViewEditUpdateAnswerCell
+@implementation ProfileViewLanguageCell
 @end
 
 @interface ProfileViewEditViewController ()<UITableViewDataSource,UITableViewDelegate,MyLanguagesDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,UIPickerViewDataSource,UIPickerViewDelegate,UIAlertViewDelegate,UITextViewDelegate,UITextFieldDelegate>{
@@ -63,6 +63,7 @@
 @property(nonatomic,strong)NSMutableArray *expiryMonthArray;
 @property(nonatomic,strong)NSMutableArray *expiryYearArray;
 @property(nonatomic,strong)UIView *backPickerview;
+@property (weak, nonatomic) IBOutlet UILabel *headerLabel;
 @end
 
 @implementation ProfileViewEditViewController
@@ -101,6 +102,10 @@
                                              selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
+    
+    
+    self.headerLabel.font = [UIFont normalSize];
+    self.headerLabel.text = NSLOCALIZEDSTRING(@"PROFILE");
     
     [self getCountryList];
     
@@ -257,7 +262,11 @@
             return [self heightOfTextViewWithString:self.profileObject.descriptionString withFont:[UIFont normal] andFixedWidth:self.view.frame.size.width]+defaultHeight;
         }
     }
-    else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"MY_LANGUAGES")] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"COUNTRY")] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"STATE")])
+    else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"MY_LANGUAGES")]){
+        return [self.selectedLanguagesDict allKeys].count>=3?DEFAULT_TABLE_CELL_HEIGHT+3*35:DEFAULT_TABLE_CELL_HEIGHT+[self.selectedLanguagesDict allKeys].count*35+8;
+        
+    }
+    else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"COUNTRY")] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"STATE")])
         return DEFAULT_TABLE_CELL_HEIGHT_IF_BUTTON;
     
     return DEFAULT_TABLE_CELL_HEIGHT;
@@ -277,7 +286,7 @@
                 return DEFAULT_TABLE_CELL_HEIGHT;
             }
             
-            return [self heightOfTextViewWithString:self.profileObject.addressString withFont:[UIFont normal] andFixedWidth:self.view.frame.size.width]+defaultHeight;
+            return [self heightOfTextViewWithString:self.profileObject.addressString withFont:[UIFont normal] andFixedWidth:self.view.frame.size.width]+defaultHeight+15;
         }
         else{
             int defaultHeight = 0;
@@ -484,7 +493,7 @@
     
         //cell.mandatoryLabel.frame = CGRectMake(size.width, 3, 18, 20);
         
-        [UIButton roundedCornerButton:cell.languagesButton];
+        //[UIButton roundedCornerButton:cell.languagesButton];
         ///////////// Styles
         [cell.descriptionTextField setBorderStyle:UITextBorderStyleNone];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -690,20 +699,83 @@
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"MY_LANGUAGES")]) {
             cell.languagesButton.hidden = NO;
             cell.dropDownImageView.hidden = NO;
+            
+            [cell.languagesButton setTitle:NSLOCALIZEDSTRING(@"MY_LANGUAGES") forState:UIControlStateNormal];
             if ([self.selectedLanguagesDict allValues].count) {
-                [cell.languagesButton setTitle:self.profileObject.myLanguagesString forState:UIControlStateNormal];
+                //[cell.languagesButton setTitle:self.profileObject.myLanguagesString forState:UIControlStateNormal];
             }
             else{
-                [cell.languagesButton setTitle:NSLOCALIZEDSTRING(@"MY_LANGUAGES") forState:UIControlStateNormal];
             }
             [cell.languagesButton removeTarget:nil
                                action:NULL
                      forControlEvents:UIControlEventAllEvents];
             [cell.languagesButton addTarget:self action:@selector(languagesButtonPressed) forControlEvents:UIControlEventTouchUpInside];
             
-            if (self.profileObject.myLanguagesString.length) {
-                [cell.languagesButton setTitle:self.profileObject.myLanguagesString forState:UIControlStateNormal];
+            //**** LanguagesScrollView removing
+            if([cell viewWithTag:741])
+                [[cell viewWithTag:741] removeFromSuperview];
+            
+            int x = cell.languagesButton.frame.origin.x;
+            int y = 8;
+            int height = 35;
+            int width = cell.languagesButton.frame.size.width - 80;
+            //int rowHeightCount = 0;
+            
+            UIScrollView *languagesScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(x, DEFAULT_TABLE_CELL_HEIGHT, cell.languagesButton.frame.size.width, [self.selectedLanguagesDict allKeys].count*height + 15)]; //+15 to show the seelcted language with full height
+            languagesScrollView.tag = 741;
+            
+            NSArray *array = [self.profileObject.myLanguagesString componentsSeparatedByString:@","];
+            int tag = 0;
+            for (id langName in array) {
+                UIView *scrollInnerView = [[UIView alloc]initWithFrame:CGRectMake(x, y, width, height)];
+                
+                UIImageView *imgView = [[UIImageView alloc]initWithFrame:CGRectMake(5, 10, 16, 16)];
+                //imgView.backgroundColor = [UIColor blackColor];
+                //imgView.image= [];
+                
+                UILabel *nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(imgView.frame.size.width+17, 6, scrollInnerView.frame.size.width-imgView.frame.size.width-50, 21)];
+                nameLabel.textColor = [UIColor textColorWhiteColor];
+                nameLabel.text = langName;
+                nameLabel.font = [UIFont smallBig];
+                //nameLabel.backgroundColor = [UIColor blueColor];
+                
+                UIButton *closeBtn = [[UIButton alloc]initWithFrame:CGRectMake(nameLabel.frame.size.width+35, 10, 16, 16)];
+                [closeBtn setBackgroundImage:[UIImage imageNamed:@"close_iPhone"] forState:UIControlStateNormal];
+                closeBtn.tag = tag;
+                tag++;
+                //[closeBtn setBackgroundColor:[UIColor redColor]];
+                
+                [scrollInnerView addSubview:imgView];
+                [scrollInnerView addSubview:nameLabel];
+                [scrollInnerView addSubview:closeBtn];
+                 [scrollInnerView setBackgroundColor:[UIColor buttonBackgroundColor]];
+                [languagesScrollView addSubview:scrollInnerView];
+                y = y +height +5;
+                
             }
+            float sizeOfContent = 0;
+            UIView *lLast = [languagesScrollView.subviews lastObject];
+            NSInteger wd = lLast.frame.origin.y;
+            NSInteger ht = lLast.frame.size.height;
+            sizeOfContent = wd+ht+[self.selectedLanguagesDict allKeys].count*5;;
+            
+            if (array.count>3) {
+                NSInteger multiply= array.count -3;
+                languagesScrollView.contentSize = CGSizeMake(languagesScrollView.frame.size.width, sizeOfContent+(multiply*30));
+            }
+            else{
+                languagesScrollView.contentSize = CGSizeMake(languagesScrollView.frame.size.width, sizeOfContent);
+            }
+            
+            
+            //[languagesScrollView setContentSize:CGSizeMake(width, [self.selectedLanguagesDict allKeys].count*height)];
+            
+            [cell addSubview:languagesScrollView];
+            /*
+             if (self.profileObject.myLanguagesString.length) {
+             [cell.languagesButton setTitle:self.profileObject.myLanguagesString forState:UIControlStateNormal];
+             }
+             */
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"CARD_NUMBER")]) {
             cell.editImageView.hidden = NO;
@@ -1711,9 +1783,10 @@
         [self.view addSubview:languagesView];
     }
     else{
-        AlertViewCustom *alertView = [AlertViewCustom new];
-        UIView *viewIs = [alertView showAlertViewWithMessage:NSLOCALIZEDSTRING(@"PLEASE_SELECT_COUNTRY") headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self.view];
-        [self.view addSubview:viewIs];
+        [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                            withMessage:NSLOCALIZEDSTRING(@"PLEASE_SELECT_COUNTRY")
+                                                 inView:self
+                                              withStyle:UIAlertControllerStyleAlert];
 
     }
 }

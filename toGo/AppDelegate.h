@@ -27,6 +27,7 @@
     UIStoryboard *mainStoryboard ;
     VideoConferenceVC *viewVideoControler ;
 }
+@property (strong, nonatomic) FBSDKLoginManager *facebookLoginManager;
 @property (strong, nonatomic) UINavigationController *navigationController ;
 @property (strong, nonatomic) UIWindow *window;
 @property (retain, nonatomic) ooVooClient *sdk;
