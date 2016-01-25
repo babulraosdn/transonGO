@@ -52,6 +52,7 @@
     [super viewWillAppear:YES];
     [Utility_Shared_Instance showProgress];
     [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
+    [App_Delegate getLanguages];
 }
 -(void)setLabelButtonNames{
     self.headerLabel.text = NSLOCALIZEDSTRING(@"DASHBOARD_SLIDE");
@@ -194,7 +195,7 @@
                     self.countryLabel.text = [NSString stringWithFormat:@"@%@",self.countryLabel.text];
                 }
                 self.myLanguageDetailLabel.text = [userDict objectForKey:KMYLANGUAGES_W];
-                [self getLanguagesNames:self.myLanguageDetailLabel.text];
+                //[self getLanguagesNames:self.myLanguageDetailLabel.text];
             });
         }
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
@@ -206,24 +207,13 @@
 }
 
 
--(void)getLanguagesNames:(NSString *)keysString{
-    /////////// Languages
-    NSArray *langArray = [keysString componentsSeparatedByString:@","];
-    if (langArray.count) {
-        MyLanguagesView *languages =[[MyLanguagesView alloc]init];
-        NSMutableDictionary *languagesDit = [languages getLanguagesDictionary];
-        self.myLanguageDetailLabel.text = [NSString stringWithFormat:@"%@",[languagesDit objectForKey:[langArray objectAtIndex:0]]];
-    }
-    /////////////////
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 -(BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender{
-    [self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil];
+    //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil];
     return YES;
 }
 -(IBAction)callPressed:(id)sender{

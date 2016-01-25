@@ -149,7 +149,9 @@
         contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:PROFILE_VIEW_CONTROLLER]];
         self.revealController.frontViewController = contentNaviationController ;
     }
-    else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION")]){
+    else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION_SLIDE")]){
+        contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:ORDER_INTERPRETATION_VIEW_CONTROLLER]];
+        self.revealController.frontViewController = contentNaviationController ;
         
     }
     else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"CALL_HISTORY")]){

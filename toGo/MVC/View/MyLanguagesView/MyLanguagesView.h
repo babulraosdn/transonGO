@@ -10,9 +10,9 @@
 #import <UIKit/UIKit.h>
 
 @protocol MyLanguagesDelegate <NSObject>
--(void)finishLanguagesSelection:(NSMutableDictionary *)selectedDataArray;
+-(void)finishLanguagesSelection:(NSMutableArray *)selectedDataArray;
 -(void)finishCountrySelection:(NSMutableArray *)selectedDataArray;
--(void)finishStateSelection:(NSMutableArray *)selectedLanguagesDict;
+-(void)finishStateSelection:(NSMutableArray *)selectedDataArray;
 @end
 
 @interface MyLanguagesView : UIView <UITableViewDataSource,UITableViewDelegate>{
@@ -20,15 +20,13 @@
     
 }
 @property(nonatomic,strong) UITableView *tblView;
-@property(nonatomic,strong) NSMutableDictionary *languagesDictionary;
-@property(nonatomic,strong) NSMutableDictionary *selectedLanguagesDict;
-@property(nonatomic,strong) NSMutableArray *selectedCountriesStatesArray;
-@property(nonatomic,strong) NSMutableArray *countriesStatesArray;
+@property(nonatomic,strong) NSMutableArray *selectedDataArray;
+@property(nonatomic,strong) NSMutableArray *dataArray;
 @property(nonatomic,readwrite) BOOL isCountry;
 @property(nonatomic,readwrite) BOOL isState;
 @property(nonatomic,readwrite) BOOL isCustomer;
--(NSMutableDictionary *)getLanguagesDictionary;
+@property(nonatomic,readwrite) BOOL isSelectInterpretationLanguage;
 
 @property(nonatomic,weak)id <MyLanguagesDelegate> delegate;
-
+-(void)assignData;
 @end

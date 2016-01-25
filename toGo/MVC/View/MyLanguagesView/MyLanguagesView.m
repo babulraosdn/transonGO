@@ -26,9 +26,6 @@
 
 -(void)configureUI {
     
-    if (!self.isCountry&&!self.isState)
-        self.languagesDictionary = [self getLanguagesDictionary];
-
     [self addTableView];
     
 }
@@ -84,10 +81,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (self.isCountry || self.isState) {
-        return self.countriesStatesArray.count;
-    }
-    return [self.languagesDictionary allValues].count;
+    return self.dataArray.count;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -101,33 +95,35 @@
     if (self.isCountry || self.isState) {
         UITableViewCell *cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"countryState"];
         if (self.isCountry){
-            CountryObject *cObj = [self.countriesStatesArray objectAtIndex:indexPath.row];
+            CountryObject *cObj = [self.dataArray objectAtIndex:indexPath.row];
             cell.textLabel.text = cObj.countryName;
         }
         else{
-            StateObject *sObj = [self.countriesStatesArray objectAtIndex:indexPath.row];
+            StateObject *sObj = [self.dataArray objectAtIndex:indexPath.row];
             cell.textLabel.text = sObj.stateName;
         }
         
-        if ([self.selectedCountriesStatesArray containsObject:[self.countriesStatesArray objectAtIndex: indexPath.row]]) {
+        if ([self.selectedDataArray containsObject:[self.dataArray objectAtIndex: indexPath.row]]) {
             [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+        }
+        else{
+            [cell setAccessoryType:UITableViewCellAccessoryNone];
         }
         
         return cell;
     }
+
     
-    /*
-    UITableViewCell *cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"languages"];
-    cell.textLabel.text = [[self.languagesDictionary allValues] objectAtIndex:indexPath.row];
-    */
     MyLanguagesCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MyLanguagesCell"];
     if (cell==nil) {
         NSArray *array = [[NSBundle mainBundle]loadNibNamed:@"MyLanguagesCell" owner:self options:nil];
         cell = [array objectAtIndex:0];
     }
-    cell.countryNameLabel.text = [[self.languagesDictionary allValues] objectAtIndex:indexPath.row];
-    
-    if ([self.selectedLanguagesDict objectForKey:[[self.languagesDictionary allKeys] objectAtIndex:indexPath.row]]) {
+    LanguageObject *lObj = [self.dataArray objectAtIndex:indexPath.row];
+    cell.countryNameLabel.text = lObj.languageName;
+    [cell.countryImageView sd_setImageWithURL:[NSURL URLWithString:lObj.imagePathString]
+                             placeholderImage:[UIImage defaultPicImage]];
+    if ([self.selectedDataArray containsObject:[self.dataArray objectAtIndex: indexPath.row]]) {
         [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
     }
     else{
@@ -139,20 +135,20 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     if (self.isCountry || self.isState) {
-        [self.selectedCountriesStatesArray removeAllObjects];
-        [self.selectedCountriesStatesArray addObject:[self.countriesStatesArray objectAtIndex: indexPath.row]];
+        [self.selectedDataArray removeAllObjects];
+        [self.selectedDataArray addObject:[self.dataArray objectAtIndex: indexPath.row]];
     }
     else{
         
-        if (self.isCustomer) {
-            [self.selectedLanguagesDict removeAllObjects];
+        if (self.isCustomer || self.isSelectInterpretationLanguage) {
+            [self.selectedDataArray removeAllObjects];
         }
         
-        if ([self.selectedLanguagesDict objectForKey:[[self.languagesDictionary allKeys] objectAtIndex:indexPath.row]]) {
-            [self.selectedLanguagesDict removeObjectForKey:[[self.languagesDictionary allKeys] objectAtIndex:indexPath.row]];
+        if ([self.selectedDataArray containsObject:[self.dataArray objectAtIndex: indexPath.row]]) {
+            [self.selectedDataArray removeObject:[self.dataArray objectAtIndex: indexPath.row]];
         }
         else{
-            [self.selectedLanguagesDict setObject:[[self.languagesDictionary allValues] objectAtIndex:indexPath.row] forKey:[[self.languagesDictionary allKeys] objectAtIndex:indexPath.row]];
+             [self.selectedDataArray addObject:[self.dataArray objectAtIndex: indexPath.row]];
         }
     }
     [self.tblView reloadData];
@@ -164,94 +160,19 @@
     [self removeFromSuperview];
     if (sender.tag==1) {
         if (self.isCountry) {
-            [self.delegate finishCountrySelection:self.selectedCountriesStatesArray];
+            [self.delegate finishCountrySelection:self.selectedDataArray];
         }
         else if (self.isState) {
-            [self.delegate finishStateSelection:self.selectedCountriesStatesArray];
+            [self.delegate finishStateSelection:self.selectedDataArray];
         }
         else{
-            [self.delegate finishLanguagesSelection:self.selectedLanguagesDict];
+            [self.delegate finishLanguagesSelection:self.selectedDataArray];
         }
     }
 }
 
--(NSMutableDictionary *)getLanguagesDictionary{
+-(void)assignData{
     
-    self.languagesDictionary = [[NSMutableDictionary alloc]initWithObjectsAndKeys:
-                                @"Afrikaans",@"AF",
-                                @"Albanian",@"SQ",
-                                @"Arabic",@"AR",
-                                @"Armenian",@"HY",
-                                @"Basque",@"EU",
-                                @"Bengali",@"BN",
-                                @"Bulgarian",@"BG",
-                                @"Catalan",@"CA",
-                                @"Cambodian",@"KM",
-                                @"Chinese (Mandarin)",@"ZH",
-                                @"Croatian",@"HR",
-                                @"Czech",@"CS",
-                                @"Danish",@"DA",
-                                @"Dutch",@"NL",
-                                @"English",@"EN",
-                                @"Estonian",@"ET",
-                                @"Fiji",@"FJ",
-                                @"Finnish",@"FI",
-                                @"French",@"FR",
-                                @"Georgian",@"KA",
-                                @"German",@"DE",
-                                @"Greek",@"EL",
-                                @"Gujarati",@"GU",
-                                @"Hebrew",@"HE",
-                                @"Hindi",@"HI",
-                                @"Hungarian",@"HU",
-                                @"Icelandic",@"IS",
-                                @"Indonesian",@"ID",
-                                @"Irish",@"GA",
-                                @"Italian",@"IT",
-                                @"Japanese",@"JA",
-                                @"Javanese",@"JW",
-                                @"Korean",@"KO",
-                                @"Latin",@"LA",
-                                @"Latvian",@"LV",
-                                @"Lithuanian",@"LT",
-                                @"Macedonian",@"MK",
-                                @"Malay",@"MS",
-                                @"Malayalam",@"ML",
-                                @"Maltese",@"MT",
-                                @"Maori",@"MI",
-                                @"Marathi",@"MR",
-                                @"Mongolian",@"MN",
-                                @"Nepali",@"NE",
-                                @"Norwegian",@"NO",
-                                @"Persian",@"FA",
-                                @"Polish",@"PL",
-                                @"Portuguese",@"PT",
-                                @"Punjabi",@"PA",
-                                @"Quechua",@"QU",
-                                @"Romanian",@"RO",
-                                @"Russian",@"RU",
-                                @"Samoan",@"SM",
-                                @"Serbian",@"SR",
-                                @"Slovak",@"SK",
-                                @"Slovenian",@"SL",
-                                @"Spanish",@"ES",
-                                @"Swahili",@"SW",
-                                @"Swedish",@"SV",
-                                @"Tamil",@"TA",
-                                @"Tatar",@"TT",
-                                @"Telugu",@"TE",
-                                @"Thai",@"TH",
-                                @"Tibetan",@"BO",
-                                @"Tonga",@"TO",
-                                @"Turkish",@"TR",
-                                @"Ukrainian",@"UK",
-                                @"Urdu",@"UR",
-                                @"Uzbek",@"UZ",
-                                @"Vietnamese",@"VI",
-                                @"Welsh",@"CY",
-                                @"Xhosa",@"XH",nil];
-    
-    return self.languagesDictionary;
 }
 
 /*

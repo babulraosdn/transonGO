@@ -27,7 +27,10 @@
     UIAlertView *myAlertView ;
 }
 
-
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    arrFriends = [NSMutableArray new];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -43,6 +46,7 @@
 
 -(void)setNavigationBarRightButton{
     
+    arrFriends = [NSMutableArray new];
     self.navigationItem.rightBarButtonItem=nil;
     UIBarButtonItem *btnSubscribe ;
     if ([ActiveUserManager activeUser].isSubscribed) {
@@ -125,7 +129,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    cell.textLabel.text=arrFriends[indexPath.row];
+    cell.textLabel.text= arrFriends[indexPath.row];
     
     return cell;
 }
@@ -456,9 +460,11 @@ int callAmount = 0 ; // saving the calling amount so if one of then rejects , th
         NSString *friendName = [[alertView textFieldAtIndex:0] text];
         if (![[friendName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]isEqualToString:@""])
         {
-            arrFriends =[NSMutableArray new];
+            //arrFriends =[NSMutableArray new];
             [arrFriends addObject:friendName];
-            //   NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:[arrFriends count] inSection:0];
+            
+            [_tableView reloadData];
+//               NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:[arrFriends count] inSection:0];
             //[_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForItem:[arrFriends count]-1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
         }
     }

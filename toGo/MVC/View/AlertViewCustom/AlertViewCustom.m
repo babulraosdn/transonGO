@@ -11,7 +11,6 @@
 
 
 @implementation AlertViewCustom
-static AlertViewCustom *singletonManager = nil;
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
@@ -20,15 +19,8 @@ static AlertViewCustom *singletonManager = nil;
 }
 */
 
-+(AlertViewCustom *)sharedManager{
-    if (singletonManager == nil) {
-        singletonManager = [[self alloc]init];
-    }
-    return singletonManager;
-}
-
--(UIView *)showAlertViewWithMessage:(NSString *)messageString headingLabel:(NSString *)headerString confirmButtonName:(NSString *)confrirmSting cancelButtonName:(NSString *)cancelString viewIs:(UIView *)currentView{
-    
++(void)showAlertViewWithMessage:(NSString *)messageString headingLabel:(NSString *)headerString confirmButtonName:(NSString *)confrirmSting cancelButtonName:(NSString *)cancelString viewIs:(UIViewController *)currentController{
+    UIView *currentView = currentController.view;
     int x = 10;
     int y = 8;
     
@@ -37,7 +29,8 @@ static AlertViewCustom *singletonManager = nil;
     
     UIView *mainView = [[UIView alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
     mainView.backgroundColor = [UIColor colorWithRed:14.0/255.0 green:14.0/255.0 blue:14.0/255.0 alpha:0.8];
-    
+    mainView.userInteractionEnabled = YES;
+
     
     UILabel *headingLabel = [[UILabel alloc]initWithFrame:CGRectMake(x, y, alertViewWidth-(x+x), 20)];
     headingLabel.text = headerString;
@@ -52,6 +45,8 @@ static AlertViewCustom *singletonManager = nil;
     
     //UIView *alertUIView = [[UIView alloc]initWithFrame:CGRectMake(currentView.center.x-(alertViewWidth/2), currentView.center.y-(alertViewHeight/2), alertViewWidth, alertViewHeight)];
     UIView *alertUIView = [[UIView alloc]initWithFrame:CGRectMake(currentView.center.x-(alertViewWidth/2), currentView.frame.origin.y+(alertViewHeight/2), alertViewWidth, alertViewHeight)];
+    alertUIView.userInteractionEnabled = YES;
+    
     alertUIView.backgroundColor  = [UIColor whiteColor];
     
     
@@ -68,14 +63,15 @@ static AlertViewCustom *singletonManager = nil;
     UIButton *cancelButton  = [[UIButton alloc]initWithFrame:CGRectMake(alertViewWidth-buttonWidth-10, y, buttonWidth, buttonHeight)];
     [cancelButton setTitle:cancelString forState:UIControlStateNormal];
     cancelButton.tag = 2;
-    [cancelButton addTarget:self action:@selector(popUpButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [cancelButton addTarget:currentController action:@selector(finishAlertViewCustomAction:) forControlEvents:UIControlEventTouchUpInside];
     [cancelButton setTintColor:[UIColor textColorWhiteColor]];
     [cancelButton setBackgroundColor:[UIColor buttonBackgroundColor]];
     
-    UIButton *confirmButton  = [[UIButton alloc]initWithFrame:CGRectMake(alertViewWidth-(buttonWidth*2)-20, y, buttonWidth, buttonHeight)];
+    UIButton *confirmButton  = [UIButton buttonWithType:UIButtonTypeCustom];
+    [confirmButton setFrame:CGRectMake(alertViewWidth-(buttonWidth*2)-20, y, buttonWidth, buttonHeight)];
     confirmButton.tag = 1;
     [confirmButton setTitle:confrirmSting forState:UIControlStateNormal];
-    [confirmButton addTarget:self action:@selector(popUpButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [confirmButton addTarget:currentController action:@selector(finishAlertViewCustomAction:) forControlEvents:UIControlEventTouchUpInside];
     [confirmButton setTintColor:[UIColor textColorWhiteColor]];
     [confirmButton setBackgroundColor:[UIColor buttonBackgroundColor]];
     
@@ -109,9 +105,6 @@ static AlertViewCustom *singletonManager = nil;
     mainView.tag = 999;
     [UIView roundedCornerView:alertUIView];
     [mainView addSubview:alertUIView];
-    
-    return mainView;
+    [currentView addSubview:mainView];
 }
-
-
 @end

@@ -12,7 +12,7 @@
 #import "AuthorizationLoaderVc.h"
 #import <GooglePlus/GooglePlus.h>
 #import <GoogleOpenSource/GoogleOpenSource.h>
-@interface LogInVC : BaseViewController <AuthorizationDelegate, ooVooAccount, SocialDelegate, GPPSignInDelegate>
+@interface LogInVC : BaseViewController <AuthorizationDelegate, ooVooAccount, SocialDelegate, GPPSignInDelegate,ALERTVIEWCUSTOMDELEGATE>
 
 
 @property (retain, nonatomic) ooVooClient *sdk;

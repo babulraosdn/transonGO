@@ -29,6 +29,9 @@
 }
 @property (strong, nonatomic) FBSDKLoginManager *facebookLoginManager;
 @property (strong, nonatomic) UINavigationController *navigationController ;
+
+@property(nonatomic,strong) NSMutableArray *languagesArray;
+
 @property (strong, nonatomic) UIWindow *window;
 @property (retain, nonatomic) ooVooClient *sdk;
 @property(nonatomic,strong)NSMutableArray *callingUsers;
@@ -36,6 +39,6 @@
 -(void)subscribePushNotifications : (UIApplication *)application;
 
 -(void)takeTour;
-
+-(void)getLanguages;
 @end
 

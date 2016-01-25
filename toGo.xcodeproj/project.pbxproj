@@ -104,6 +104,7 @@
 		EDB1C5E81C4F95A300373358 /* MyLanguagesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EDB1C5E71C4F95A300373358 /* MyLanguagesCell.m */; settings = {ASSET_TAGS = (); }; };
 		EDB1C5EA1C4F95BA00373358 /* MyLanguagesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDB1C5E91C4F95BA00373358 /* MyLanguagesCell.xib */; settings = {ASSET_TAGS = (); }; };
 		EDCC77FC1C2BB489005A9607 /* ooVooSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDCC77FB1C2BB489005A9607 /* ooVooSDK.framework */; settings = {ASSET_TAGS = (); }; };
+		EDD802FC1C56353A00FC5AD0 /* OrderInterpretationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EDD802FB1C56353A00FC5AD0 /* OrderInterpretationViewController.m */; settings = {ASSET_TAGS = (); }; };
 		EDDF16E61C3D4B64006E4DD7 /* MyLanguagesView.m in Sources */ = {isa = PBXBuildFile; fileRef = EDDF16E51C3D4B64006E4DD7 /* MyLanguagesView.m */; settings = {ASSET_TAGS = (); }; };
 		EDE22E641C3A9B3900923ADF /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EDE22E541C3A9B3900923ADF /* Roboto-Black.ttf */; settings = {ASSET_TAGS = (); }; };
 		EDE22E651C3A9B3900923ADF /* Roboto-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EDE22E551C3A9B3900923ADF /* Roboto-BlackItalic.ttf */; settings = {ASSET_TAGS = (); }; };
@@ -316,6 +317,8 @@
 		EDB1C5E71C4F95A300373358 /* MyLanguagesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLanguagesCell.m; sourceTree = "<group>"; };
 		EDB1C5E91C4F95BA00373358 /* MyLanguagesCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyLanguagesCell.xib; sourceTree = "<group>"; };
 		EDCC77FB1C2BB489005A9607 /* ooVooSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ooVooSDK.framework; sourceTree = "<group>"; };
+		EDD802FA1C56353A00FC5AD0 /* OrderInterpretationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderInterpretationViewController.h; sourceTree = "<group>"; };
+		EDD802FB1C56353A00FC5AD0 /* OrderInterpretationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderInterpretationViewController.m; sourceTree = "<group>"; };
 		EDDF16E41C3D4B64006E4DD7 /* MyLanguagesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLanguagesView.h; sourceTree = "<group>"; };
 		EDDF16E51C3D4B64006E4DD7 /* MyLanguagesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLanguagesView.m; sourceTree = "<group>"; };
 		EDE22E541C3A9B3900923ADF /* Roboto-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Black.ttf"; sourceTree = "<group>"; };
@@ -508,6 +511,7 @@
 		ED1B7EC41C2AA48600C49026 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				EDD802F91C56352600FC5AD0 /* OrderInterpretation */,
 				ED1B7EC51C2AA48600C49026 /* BaseViewController */,
 				ED90D3501C3FAFB500D72731 /* HomeView */,
 				ED1B7ED41C2AA48600C49026 /* Login:SignUp:Forgot */,
@@ -1086,6 +1090,15 @@
 			path = ooVoo;
 			sourceTree = "<group>";
 		};
+		EDD802F91C56352600FC5AD0 /* OrderInterpretation */ = {
+			isa = PBXGroup;
+			children = (
+				EDD802FA1C56353A00FC5AD0 /* OrderInterpretationViewController.h */,
+				EDD802FB1C56353A00FC5AD0 /* OrderInterpretationViewController.m */,
+			);
+			path = OrderInterpretation;
+			sourceTree = "<group>";
+		};
 		EDDF16E31C3D4B4D006E4DD7 /* MyLanguagesView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1514,6 +1527,7 @@
 				EDFD7E061C27C68100E4FEEB /* UIButton+toGo.m in Sources */,
 				ED8B51DF1C1EEFED00CA7306 /* NSData+Base64.m in Sources */,
 				ED1B7EF71C2AA48600C49026 /* DropDown.m in Sources */,
+				EDD802FC1C56353A00FC5AD0 /* OrderInterpretationViewController.m in Sources */,
 				ED1B7EFD1C2AA4A900C49026 /* Headers.m in Sources */,
 				ED1B7EEB1C2AA48600C49026 /* BaseViewController.m in Sources */,
 				EDFD7E071C27C68100E4FEEB /* UIColor+toGo.m in Sources */,

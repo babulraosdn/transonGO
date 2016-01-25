@@ -23,26 +23,43 @@
 
 @implementation MenuConferenceVC
 
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self setBackButton];
     self.navigationItem.title=@"Menu";
-        self.sdk = [ooVooClient sharedInstance];
+    self.sdk = [ooVooClient sharedInstance];
     
-
-    if ([UserDefaults getObjectforKey:[ActiveUserManager activeUser].userId]) {
-        [ActiveUserManager activeUser].token=[UserDefaults getObjectforKey:[ActiveUserManager activeUser].userId];
+    
+    
+    
+    //if ([UserDefaults getObjectforKey:[ActiveUserManager activeUser].userId])
+    {
+        //[ActiveUserManager activeUser].token=[UserDefaults getObjectforKey:[ActiveUserManager activeUser].userId];
     }
-    
-    else{
-        
-        
+    //else
+    {
         UIApplication *application=[UIApplication sharedApplication];
+        //NSLog(@"token =%@",[UserDefaults getObjectforKey:[ActiveUserManager activeUser].userId]);
         
-        AppDelegate *appDelegate  = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-        [appDelegate subscribePushNotifications:application];
         
+        if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+#ifdef __IPHONE_8_0
+            UIUserNotificationType types = UIUserNotificationTypeBadge |
+            UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+            //
+            UIUserNotificationSettings *mySettings =
+            [UIUserNotificationSettings settingsForTypes:types categories:nil];
+            //
+            [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
+            [application registerForRemoteNotifications];
+#endif
+        } else {
+            UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
+            [application registerForRemoteNotificationTypes:myTypes];
+        }
     }
 }
 
@@ -51,14 +68,14 @@
     
 }
 -(void)subscribeUser{
-    NSString * uuid = ooVooAppID ;
+    NSString * uuid = @"12349983355077" ;
     NSString * token = [ActiveUserManager activeUser].token;
     if(token && token.length > 0){
         [self.sdk.PushService subscribe:token deviceUid:uuid completion:^(SdkResult *result){
             [ActiveUserManager activeUser].isSubscribed = true;
         }];
     }
-
+    
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -74,14 +91,14 @@
 
 -(void)actLogOut{
     [self.navigationController popViewControllerAnimated:YES];
-    //NSString * uuid = ooVooAppID ;
+    NSString * uuid = @"12349983355077" ;
     NSString * token = [ActiveUserManager activeUser].token;
     if(token && token.length > 0){
         [self.sdk.Account logout];
     }else{
         [self.sdk.Account logout];
     }
-
+    
     
 }
 #pragma mark - Navigation
@@ -106,9 +123,6 @@
         }
     }
 }
-
-
-
 
 
 @end

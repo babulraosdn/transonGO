@@ -71,9 +71,7 @@
 - (void)navigationBarLeftButtonClicked {
     [self.view endEditing:YES];
     if ([[Utility_Shared_Instance readStringUserPreference:KCOMPLETION_W] isEqualToString:PROFILE_INCOMPLETE]){
-        AlertViewCustom *alertView = [[AlertViewCustom alloc]init];
-        UIView *viewIs = [alertView showAlertViewWithMessage:NSLOCALIZEDSTRING(@"PLEASE_COMPLETE_YOUR_PROFILE") headingLabel:NSLOCALIZEDSTRING(@"COMPLETE_PROFILE_INFO") confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self.view];
-        [self.view addSubview:viewIs];
+        [AlertViewCustom showAlertViewWithMessage:NSLOCALIZEDSTRING(@"PLEASE_COMPLETE_YOUR_PROFILE") headingLabel:NSLOCALIZEDSTRING(@"COMPLETE_PROFILE_INFO") confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self];
     }
     else
     {
@@ -101,18 +99,12 @@
     
 }
 
--(void)popUpButtonClicked:(UIButton *)sender{
-    
-    if (sender.tag == 1) {
-        //Confirm Button
-        NSLog(@"Confirm Selected");
-    }
-    else if (sender.tag == 2) {
-        //Cancel Button
-        NSLog(@"Cancel Selected");
-        [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
-    }
+
+#pragma mark - AlertView Custom delegate
+-(void)finishAlertViewCustomAction:(UIButton *)sender{
+    [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

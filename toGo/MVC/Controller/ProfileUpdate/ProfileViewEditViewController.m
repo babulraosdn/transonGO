@@ -12,7 +12,7 @@
 
 #define HEADER_HEIGHT 163
 #define DEFAULT_TABLE_CELL_HEIGHT 57
-#define DEFAULT_TABLE_CELL_HEIGHT_IF_BUTTON 70
+#define DEFAULT_TABLE_CELL_HEIGHT_IF_BUTTON 65
 #define DEFAULT_HEIGHT 40
 #define DESCRIPTION_BUTTON_TAG 555
 #define IMAGE_VIEW_TAG  666
@@ -51,13 +51,14 @@
     MyLanguagesView *languagesView;
 }
 @property(nonatomic,strong) NSMutableArray *namesArray;
+@property(nonatomic,strong) NSMutableArray *selectedLanguagesArray;
 @property(nonatomic,strong) NSMutableArray *countryArray;
 @property(nonatomic,strong) NSMutableArray *stateArray;
 @property(nonatomic,strong) NSMutableArray *einTaxArray;
 @property(nonatomic,strong) IBOutlet UITableView *tblView;
 @property(nonatomic,strong) ProfileInfoObject *profileObject;
 
-@property(nonatomic,strong) NSMutableDictionary *selectedLanguagesDict;
+@property(nonatomic,strong) NSMutableArray *selectedDataArray;
 @property(nonatomic,strong)NSMutableArray *cardTypeArray;
 @property(nonatomic,strong)NSMutableArray *genderArray;
 @property(nonatomic,strong)NSMutableArray *expiryMonthArray;
@@ -136,6 +137,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.tblView.backgroundColor = [UIColor backgroundColor];
+    [App_Delegate getLanguages];
 }
 
 -(void)addTapGesture{
@@ -151,7 +153,9 @@
 -(void)allocationsAndStaticText{
     
     self.profileObject = [ProfileInfoObject new];
-    self.selectedLanguagesDict = [NSMutableDictionary new];
+    self.selectedDataArray = [NSMutableArray new];
+    
+    self.selectedLanguagesArray = [NSMutableArray new];
     
     isEditMode = false;
     editableString = @"";
@@ -263,7 +267,7 @@
         }
     }
     else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"MY_LANGUAGES")]){
-        return [self.selectedLanguagesDict allKeys].count>=3?DEFAULT_TABLE_CELL_HEIGHT+3*35:DEFAULT_TABLE_CELL_HEIGHT+[self.selectedLanguagesDict allKeys].count*35+8;
+        return self.selectedLanguagesArray.count>=3?DEFAULT_TABLE_CELL_HEIGHT+3*35:DEFAULT_TABLE_CELL_HEIGHT+self.selectedLanguagesArray.count*35+12;
         
     }
     else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"COUNTRY")] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"STATE")])
@@ -610,6 +614,10 @@
         }
         
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"COUNTRY")]) {
+            
+            if([cell viewWithTag:741])
+                [[cell viewWithTag:741] removeFromSuperview];
+            
             cell.languagesButton.hidden = NO;
             cell.dropDownImageView.hidden = NO;
             if ([Utility_Shared_Instance checkForNullString:self.profileObject.countryString].length) {
@@ -622,6 +630,10 @@
             [cell.languagesButton addTarget:self action:@selector(countryButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"STATE")]) {
+            
+            if([cell viewWithTag:741])
+                [[cell viewWithTag:741] removeFromSuperview];
+            
             cell.languagesButton.hidden = NO;
             cell.dropDownImageView.hidden = NO;
             if ([Utility_Shared_Instance checkForNullString:self.profileObject.stateString].length) {
@@ -701,11 +713,6 @@
             cell.dropDownImageView.hidden = NO;
             
             [cell.languagesButton setTitle:NSLOCALIZEDSTRING(@"MY_LANGUAGES") forState:UIControlStateNormal];
-            if ([self.selectedLanguagesDict allValues].count) {
-                //[cell.languagesButton setTitle:self.profileObject.myLanguagesString forState:UIControlStateNormal];
-            }
-            else{
-            }
             [cell.languagesButton removeTarget:nil
                                action:NULL
                      forControlEvents:UIControlEventAllEvents];
@@ -721,29 +728,27 @@
             int width = cell.languagesButton.frame.size.width - 80;
             //int rowHeightCount = 0;
             
-            UIScrollView *languagesScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(x, DEFAULT_TABLE_CELL_HEIGHT, cell.languagesButton.frame.size.width, [self.selectedLanguagesDict allKeys].count*height + 15)]; //+15 to show the seelcted language with full height
+            UIScrollView *languagesScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(x, DEFAULT_TABLE_CELL_HEIGHT, cell.languagesButton.frame.size.width, self.selectedLanguagesArray.count*height + 20)]; //+15 to show the seelcted language with full height
             languagesScrollView.tag = 741;
             
-            NSArray *array = [self.profileObject.myLanguagesString componentsSeparatedByString:@","];
             int tag = 0;
-            for (id langName in array) {
+            for (LanguageObject *lObj in self.selectedLanguagesArray) {
                 UIView *scrollInnerView = [[UIView alloc]initWithFrame:CGRectMake(x, y, width, height)];
                 
-                UIImageView *imgView = [[UIImageView alloc]initWithFrame:CGRectMake(5, 10, 16, 16)];
-                //imgView.backgroundColor = [UIColor blackColor];
-                //imgView.image= [];
+                UIImageView *imgView = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 24, 24)];
+                [imgView sd_setImageWithURL:[NSURL URLWithString:lObj.imagePathString]
+                                         placeholderImage:[UIImage defaultPicImage]];
                 
                 UILabel *nameLabel = [[UILabel alloc]initWithFrame:CGRectMake(imgView.frame.size.width+17, 6, scrollInnerView.frame.size.width-imgView.frame.size.width-50, 21)];
                 nameLabel.textColor = [UIColor textColorWhiteColor];
-                nameLabel.text = langName;
+                nameLabel.text = lObj.languageName;
                 nameLabel.font = [UIFont smallBig];
-                //nameLabel.backgroundColor = [UIColor blueColor];
                 
                 UIButton *closeBtn = [[UIButton alloc]initWithFrame:CGRectMake(nameLabel.frame.size.width+35, 10, 16, 16)];
                 [closeBtn setBackgroundImage:[UIImage imageNamed:@"close_iPhone"] forState:UIControlStateNormal];
                 closeBtn.tag = tag;
                 tag++;
-                //[closeBtn setBackgroundColor:[UIColor redColor]];
+                [closeBtn addTarget:self action:@selector(languageDeleteButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
                 
                 [scrollInnerView addSubview:imgView];
                 [scrollInnerView addSubview:nameLabel];
@@ -757,18 +762,18 @@
             UIView *lLast = [languagesScrollView.subviews lastObject];
             NSInteger wd = lLast.frame.origin.y;
             NSInteger ht = lLast.frame.size.height;
-            sizeOfContent = wd+ht+[self.selectedLanguagesDict allKeys].count*5;;
+            sizeOfContent = wd+ht+self.selectedLanguagesArray.count*5;;
             
-            if (array.count>3) {
-                NSInteger multiply= array.count -3;
-                languagesScrollView.contentSize = CGSizeMake(languagesScrollView.frame.size.width, sizeOfContent+(multiply*30));
+            if (self.selectedLanguagesArray.count>3) {
+                NSInteger multiply= self.selectedLanguagesArray.count -3;
+                languagesScrollView.contentSize = CGSizeMake(languagesScrollView.frame.size.width, sizeOfContent+(multiply*40));
             }
             else{
                 languagesScrollView.contentSize = CGSizeMake(languagesScrollView.frame.size.width, sizeOfContent);
             }
             
             
-            //[languagesScrollView setContentSize:CGSizeMake(width, [self.selectedLanguagesDict allKeys].count*height)];
+            //[languagesScrollView setContentSize:CGSizeMake(width, [self.selectedDataArray allKeys].count*height)];
             
             [cell addSubview:languagesScrollView];
             /*
@@ -1633,7 +1638,7 @@
 //                    for (id key in langArray) {
 //                        NSString *str = [NSString stringWithFormat:@"%@,",[languagesDit objectForKey:key]];
 //                        [mutableStr appendString:str];
-//                        [self.selectedLanguagesDict setObject:[languagesDit objectForKey:key] forKey:key];
+//                        [self.selectedDataArray setObject:[languagesDit objectForKey:key] forKey:key];
 //                    }
 //                    self.profileObject.myLanguagesString = [NSString stringWithString:mutableStr];
 //                    if ([self.profileObject.myLanguagesString hasSuffix:@","]) {
@@ -1642,7 +1647,7 @@
 //                }
 //                /////////////////
                 
-                [self getLanguagesNames:self.profileObject.myLanguagesString];
+                //[self getLanguagesNames:self.profileObject.myLanguagesString];
                 
                 ///////////////// Get States With Country Name
                 if (self.profileObject.countryString.length) {
@@ -1721,15 +1726,20 @@
     languagesView =[[MyLanguagesView alloc]initWithFrame:CGRectZero];
     languagesView.tag = 1000;
     languagesView.delegate = self;
-    languagesView.selectedLanguagesDict  = [NSMutableDictionary new];
+    languagesView.selectedDataArray  = [NSMutableArray new];
     
     if (!_isInterpreter)
         languagesView.isCustomer = YES;
     
+    if (App_Delegate.languagesArray.count)
+        languagesView.dataArray = App_Delegate.languagesArray;
     
-    if (self.selectedLanguagesDict.allValues.count) {
-        languagesView.selectedLanguagesDict = self.selectedLanguagesDict;
+    if (self.selectedLanguagesArray.count) {
+        languagesView.selectedDataArray = self.selectedLanguagesArray;
     }
+    
+    [languagesView assignData];
+    
     [languagesView.tblView reloadData];
     [self.view addSubview:languagesView];
 }
@@ -1754,9 +1764,9 @@
     languagesView.delegate = self;
     languagesView.isCountry = YES;
     
-    languagesView.selectedCountriesStatesArray  = [NSMutableArray new];
+    languagesView.selectedDataArray  = [NSMutableArray new];
     if (self.countryArray.count) {
-        languagesView.countriesStatesArray = self.countryArray;
+        languagesView.dataArray = self.countryArray;
     }
     //languagesView.countriesStatesArray = [[NSMutableArray alloc]initWithObjects:@"Afghanistan",@"Albania",@"Algeria",@"India",@"United Kingdom",@"USA", nil];
     [languagesView.tblView reloadData];
@@ -1774,9 +1784,9 @@
         languagesView.tag = 3000;
         
         languagesView.isState = YES;
-        languagesView.selectedCountriesStatesArray  = [NSMutableArray new];
+        languagesView.selectedDataArray  = [NSMutableArray new];
         if (self.stateArray.count) {
-            languagesView.countriesStatesArray = self.stateArray;
+            languagesView.dataArray = self.stateArray;
         }
         //languagesView.countriesStatesArray = [[NSMutableArray alloc]initWithObjects:@"Maryland",@"Oklahoma",@"Oregon",@"Nevada", nil];
         [languagesView.tblView reloadData];
@@ -1792,12 +1802,21 @@
 }
 
 
--(void)finishLanguagesSelection:(NSMutableDictionary *)selectedLanguagesDict{
+-(void)finishLanguagesSelection:(NSMutableArray *)selectedDataArray{
     [self removePopUpView];
-    NSLog(@"selectedlanguages -->%@",[selectedLanguagesDict description]);
-    self.selectedLanguagesDict = selectedLanguagesDict;
-    self.profileObject.myLanguagesString = [[self.selectedLanguagesDict allValues] componentsJoinedByString:@","];
-    self.profileObject.myLanguagesKEYsString = [[self.selectedLanguagesDict allKeys] componentsJoinedByString:@","];
+    NSLog(@"selectedlanguages -->%@",[selectedDataArray description]);
+    self.selectedLanguagesArray = [NSMutableArray new];
+    [self.selectedLanguagesArray addObjectsFromArray:selectedDataArray];
+    
+    NSMutableString *mutableStr = [NSMutableString new];
+    for (LanguageObject *lObj in self.selectedLanguagesArray) {
+        if (self.selectedDataArray.count != (self.selectedLanguagesArray.count-1))
+            [mutableStr appendString:[NSString stringWithFormat:@"%@,",lObj.languageCode]];
+        else
+            [mutableStr appendString:[NSString stringWithFormat:@"%@",lObj.languageCode]];
+            
+    }
+    self.profileObject.myLanguagesString = [NSString stringWithString:mutableStr];
     [self.tblView reloadData];
     [self addTapGesture];
 }
@@ -2492,25 +2511,8 @@
     }
 }
 
-
--(void)getLanguagesNames:(NSString *)keysString{
-    /////////// Languages
-    NSArray *langArray = [keysString componentsSeparatedByString:@","];
-    if (langArray.count) {
-        
-        NSMutableString *mutableStr = [NSMutableString new];;
-        MyLanguagesView *languages =[[MyLanguagesView alloc]init];
-        NSMutableDictionary *languagesDit = [languages getLanguagesDictionary];
-        for (id key in langArray) {
-            NSString *str = [NSString stringWithFormat:@"%@,",[languagesDit objectForKey:key]];
-            [mutableStr appendString:str];
-            //[self.selectedLanguagesDict setObject:[languagesDit objectForKey:key] forKey:key];
-        }
-        self.profileObject.myLanguagesString = [NSString stringWithString:mutableStr];
-        if ([self.profileObject.myLanguagesString hasSuffix:@","]) {
-            self.profileObject.myLanguagesString = [self.profileObject.myLanguagesString substringToIndex:[self.profileObject.myLanguagesString length] - 1];
-        }
-    }
-    /////////////////
+-(void)languageDeleteButtonPressed:(UIButton *)sender{
+    [self.selectedLanguagesArray removeObjectAtIndex:sender.tag];
+    [self.tblView reloadData];
 }
 @end

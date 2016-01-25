@@ -189,9 +189,9 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
-            AlertViewCustom *alertView = [AlertViewCustom new];
-            UIView *viewIs = [alertView showAlertViewWithMessage:[responseDict objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self.view];
-            [self.view addSubview:viewIs];
+//            AlertViewCustom *alertView = [AlertViewCustom new];
+//            UIView *viewIs = [alertView showAlertViewWithMessage:[responseDict objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self.view];
+//            [self.view addSubview:viewIs];
         });
         
         if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
@@ -210,9 +210,7 @@
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
-            AlertViewCustom *alertView = [AlertViewCustom new];
-            UIView *viewIs = [alertView showAlertViewWithMessage:[responseObject objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self.view];
-            [self.view addSubview:viewIs];
+            [AlertViewCustom showAlertViewWithMessage:[responseObject objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self];
         });
     }];
 }
@@ -255,11 +253,10 @@
     return YES;
 }
 
-#pragma mark AlertView Custom PopUp CLicked
 
--(void)popUpButtonClicked:(UIButton *)sender{
-    if (sender.tag == 2) {
-        [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
-    }
+#pragma mark - AlertView Custom delegate
+-(void)finishAlertViewCustomAction:(UIButton *)sender{
+    [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
 }
+
 @end

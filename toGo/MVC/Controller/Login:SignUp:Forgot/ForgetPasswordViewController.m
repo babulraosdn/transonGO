@@ -107,9 +107,7 @@
                 //[self.navigationController popViewControllerAnimated:YES];//Not Working
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [SVProgressHUD dismiss];
-                    AlertViewCustom *alertView = [AlertViewCustom new];
-                    UIView *viewIs = [alertView showAlertViewWithMessage:[responseDict objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(@"FORGET_PASSWORD") confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self.view];
-                    [self.view addSubview:viewIs];
+                    [AlertViewCustom showAlertViewWithMessage:[responseDict objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(@"FORGET_PASSWORD") confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self];
                 });
                 
             }
@@ -150,12 +148,9 @@
     return YES;
 }
 
-#pragma mark AlertView Custom PopUp CLicked
-
--(void)popUpButtonClicked:(UIButton *)sender{
-    if (sender.tag == 2) {
-        [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
-    }
+#pragma mark - AlertView Custom delegate
+-(void)finishAlertViewCustomAction:(UIButton *)sender{
+    [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
 }
 
 @end

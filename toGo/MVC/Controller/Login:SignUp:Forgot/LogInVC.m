@@ -1,4 +1,4 @@
-            //
+//
 //  LogInVC.m
 //  ooVooSdkSampleShow
 //
@@ -88,7 +88,6 @@
 
 -(void)allocationsAndStaticText{
     
-    alertViewCustom = [[AlertViewCustom alloc]init];
     loginDictionary = [NSMutableDictionary new];
     appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
     self.sdk = [ooVooClient sharedInstance];
@@ -253,10 +252,13 @@
     //[self createSidePanel];
     //return;
     
-    AlertViewCustom *alertView = [[AlertViewCustom alloc]init];
-    UIView *viewIs = [alertView showAlertViewWithMessage:@"Please confirm the Registration by clicking the verification link on email" headingLabel:@"Confirm Registration" confirmButtonName:@"Confirm" cancelButtonName:@"Cancel" viewIs:self.view];
+//    AlertViewCustom *alertView = [[AlertViewCustom alloc]init];
+//    UIView *viewIs = [alertView showAlertViewWithMessage:@"Please confirm the Registration by clicking the verification link on email" headingLabel:@"Confirm Registration" confirmButtonName:@"Confirm" cancelButtonName:@"Cancel" viewIs:self.view];
     //[self.view addSubview:viewIs]; //Alert View Custom
     //[App_Delegate takeTour];//Take a Tour
+    
+    [UserDefaults setObject:_txt_userId.text ForKey:UserDefault_UserId];
+    [UserDefaults setObject:_txtDisplayName.text ForKey:UserDefault_DisplayName];
     
     if (self.txt_userId.text.length<1)
         [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
@@ -275,7 +277,7 @@
     }
 }
 
--(void)loginWebServiceCall:(NSString *)loginWith{
+-(void)loginWebServiceCall:(NSString *)loginWith {
     
     [loginDictionary setObject:userIDString forKey:KEMAIL_W];
     [loginDictionary setObject:passwordString forKey:KPASSWORD_W];
@@ -323,13 +325,24 @@
                 if ([[Utility_Shared_Instance readStringUserPreference:KCOMPLETION_W] isEqualToString:PROFILE_INCOMPLETE]){
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [SVProgressHUD dismiss];
-                        AlertViewCustom *alertView = [AlertViewCustom new];
-                        UIView *viewIs = [alertView showAlertViewWithMessage:NSLOCALIZEDSTRING(@"PLEASE_COMPLETE_YOUR_PROFILE") headingLabel:NSLOCALIZEDSTRING(@"COMPLETE_PROFILE_INFO") confirmButtonName:NSLOCALIZEDSTRING(@"CONFIRM") cancelButtonName:NSLOCALIZEDSTRING(@"CANCEL") viewIs:self.view];
-                        [self.view addSubview:viewIs];
+                        
+//                        AlertViewCustom *alertView = [AlertViewCustom new];
+//                        
+//                        alertView.delegate = self;
+////                        UIView *viewIs
+//                        alertView = (AlertViewCustom*)
+                        [AlertViewCustom showAlertViewWithMessage:NSLOCALIZEDSTRING(@"PLEASE_COMPLETE_YOUR_PROFILE") headingLabel:NSLOCALIZEDSTRING(@"COMPLETE_PROFILE_INFO") confirmButtonName:NSLOCALIZEDSTRING(@"CONFIRM") cancelButtonName:NSLOCALIZEDSTRING(@"CANCEL") viewIs:self];
+                        
+//                        [self.view addSubview:alertView];
+                        
+                        
+//                        [self ooVooLogin];
+//                        [self createSidePanel];
                     });
                     
                 }
                 else{
+                    [Utility_Shared_Instance writeStringUserPreference:KUSERNAME_W value:userIDString];
                     [self ooVooLogin];
                     [self createSidePanel];
                 }
@@ -351,9 +364,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             dispatch_async(dispatch_get_main_queue(), ^{
                 [SVProgressHUD dismiss];
-                AlertViewCustom *alertView = [AlertViewCustom new];
-                UIView *viewIs = [alertView showAlertViewWithMessage:NSLOCALIZEDSTRING(@"PLEASE_COMPLETE_YOUR_PROFILE") headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self.view];
-                [self.view addSubview:viewIs];
+                [AlertViewCustom showAlertViewWithMessage:NSLOCALIZEDSTRING(@"PLEASE_COMPLETE_YOUR_PROFILE") headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self];
             });
         });
     }];
@@ -687,7 +698,9 @@
     else{
         dispatch_async(dispatch_get_main_queue(), ^{
             UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_USER_VIEW_CONTROLLER]];
-            
+            if ([[Utility_Shared_Instance readStringUserPreference:KCOMPLETION_W] isEqualToString:PROFILE_INCOMPLETE]) {
+                contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:PROFILE_VIEW_CONTROLLER]];//DashBoardViewController
+            }
             self.revealController = [PKRevealController revealControllerWithFrontViewController:contentNavigationController leftViewController:[Utility_Shared_Instance getControllerForIdentifier:SLIDE_MENU_VIEW_CONTROLLER]];
             appDelegate.window.rootViewController = self.revealController;
             
@@ -695,34 +708,12 @@
     }
 }
 
-#pragma mark AlertView Custom PopUp CLicked
-
--(void)popUpButtonClicked:(UIButton *)sender{
-   
-    if (sender.tag == 1) {
-        //Confirm Button
-        NSLog(@"Confirm Selected");
-        [self ooVooLogin];
-        [self createSidePanel];
-    }
-    else if (sender.tag == 2) {
-        //Cancel Button
-        NSLog(@"Cancel Selected");
-        [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
-    }
-}
-
-
 
 #pragma mark - private methods
 
 -(void)ooVooLogin{
-    [UserDefaults setObject:_txt_userId.text ForKey:UserDefault_UserId];
-    [UserDefaults setObject:_txtDisplayName.text ForKey:UserDefault_DisplayName];
-    //[sender setEnabled:false];
-    //[spinner startAnimating];
     
-    [self.sdk.Account login:self.txt_userId.text
+    [self.sdk.Account login:[Utility_Shared_Instance readStringUserPreference:KUSERNAME_W]
                  completion:^(SdkResult *result) {
                      NSLog(@"result code=%d result description %@", result.Result, result.description);
                      //[spinner stopAnimating];
@@ -748,25 +739,31 @@
 
 - (void)onLogin:(BOOL)error {
     if (!error) {
+        
         [ActiveUserManager activeUser].userId = self.txt_userId.text;
         [ActiveUserManager activeUser].displayName = self.txtDisplayName.text;
-//        NSString * uuid = [[NSUUID UUID] UUIDString] ;
-//        NSString * token = [ActiveUserManager activeUser].token;
-//        if(token && token.length > 0){
-//        [self.sdk.PushService subscribe:token deviceUid:uuid completion:^(SdkResult *result){
-//        [ActiveUserManager activeUser].isSubscribed = true;
-//            [self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
-//        }];
-//        }
-//        
-//        else
-//        {
-        //[self createSidePanel];
-//        }
-       
+        
+        [UserDefaults setObject:[ActiveUserManager activeUser].userId ForKey:[ActiveUserManager activeUser].userId];
+        [UserDefaults setObject:[ActiveUserManager activeUser].displayName ForKey:[ActiveUserManager activeUser].displayName];
+        
+        NSString * uuid = [[NSUUID UUID] UUIDString] ;
+        NSString * token = [ActiveUserManager activeUser].token;
+        if(token && token.length > 0){
+            [self.sdk.PushService subscribe:token deviceUid:uuid completion:^(SdkResult *result){
+                [ActiveUserManager activeUser].isSubscribed = true;
+                //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
+            }];
+        }
+        
+        else
+        {
+            //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
+        }
+        
     }else{
         [self.loginButton setEnabled:true];
     }
+    
 }
 
 - (NSString *)randomUser {
@@ -830,6 +827,16 @@
 
 - (void)didAccountLogOut:(id<ooVooAccount>)account {
     
+}
+
+#pragma mark - AlertView Custom delegate
+-(void)finishAlertViewCustomAction:(UIButton *)sender{
+    if (sender.tag ==1) {
+        [self createSidePanel];
+    }else{
+        [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
+    }
+   
 }
 
 @end

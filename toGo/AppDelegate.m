@@ -573,5 +573,37 @@
     [TakeTourView launchTakeTourViewWithNewVersion:YES];
 }
 
+-(void)getLanguages{
+    //WEB Service CODE
+    [Utility_Shared_Instance showProgress];
+    self.languagesArray = [NSMutableArray new];
+    [Web_Service_Call serviceCallWithRequestType:nil requestType:GET_REQUEST includeHeader:YES includeBody:NO webServicename:GET_LANGUAGES_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+        NSDictionary *responseDict=responseObject;
+        
+        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+            });
+            NSMutableArray *dataArray = [responseDict objectForKey:KDATA_W];
+            for (id json in dataArray) {
+                LanguageObject *lObj = [LanguageObject new];
+                NSString *iconStr = [json objectForKey:KICON_W];
+                iconStr = [iconStr stringByReplacingOccurrencesOfString:@"<img src='" withString:@""];
+                iconStr = [iconStr stringByReplacingOccurrencesOfString:@"'  />" withString:@""];
+                lObj.imagePathString = [NSString stringWithFormat:@"%@%@",BASE_URL,iconStr];
+                lObj.languageName = [json objectForKey:KLANGUAGE_W];
+                lObj.languageCode = [json objectForKey:KLANGUAGEID_W];
+                [self.languagesArray addObject:lObj];
+            }
+        }
+    } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+        });
+    }];
+}
+
+
 @end
 

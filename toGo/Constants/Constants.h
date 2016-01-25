@@ -157,6 +157,8 @@ _Pragma("clang diagnostic pop") \
 #define UPDATE_INTERPRETER_STATUS_W         @"api/updateAgentAvailability"
 #define UPDATE_INTERPRETER_PROFILE_INFO_W   @"api/updateAgentProfile"
 #define UPDATE_USER_PROFILE_INFO_W          @"api/updateUserProfile"
+#define GET_LANGUAGES_W                     @"getLanguageList"
+#define GET_LANGUAGE_PRICE_W                     @"getLanguagePrice"
 
 //updateUserProfile
 //
@@ -213,13 +215,22 @@ _Pragma("clang diagnostic pop") \
 #define KFILE_W                        @"file"
 #define KINTERPRETER_AVAILABILITY_W    @"interpreter_availability"
 
-#define KCOUNTRY_CODE_W                            @"countryCode"
-#define KCOUNTRY_NAME_W                            @"countryName"
-#define KCREATED_AT_W                            @"createdAt"
-#define KCOUNTRY_ID_W                            @"countryId"
-#define KSTATE_NAME_W                            @"stateName"
+#define KCOUNTRY_CODE_W                 @"countryCode"
+#define KCOUNTRY_NAME_W                 @"countryName"
+#define KCREATED_AT_W                   @"createdAt"
+#define KCOUNTRY_ID_W                   @"countryId"
+#define KSTATE_NAME_W                   @"stateName"
+
+#define KLANGUAGEID_W                   @"languageId"
+#define KICON_W                         @"icon"
+#define KDATA_W                         @"data"
+
+#define KTO_LANGUAGE_W                  @"toLanguage"
+#define KFROM_LANGUAGE_W                @"fromLanguage"
+#define KLANGUAGE_PRICE_W               @"languagePrice"
 
 #define K_W                            @""
+
 
 //********************  WebService Response Parameters   ****************************************
 #define KSUCCESS                       ((int)200)
@@ -239,7 +250,7 @@ _Pragma("clang diagnostic pop") \
 #define SLIDE_MENU_VIEW_CONTROLLER              @"SlideMenuViewController"
 #define FEEDBACK_LIST_VIEW_CONTROLLER           @"FeedBackListViewController"
 #define HOME_VIEW_CONTROLLER                    @"HomeViewController"
-
+#define ORDER_INTERPRETATION_VIEW_CONTROLLER                    @"OrderInterpretationViewController"
 
 //********************  Font Names   ****************************************
 #define KFontFamily_ROBOTO_REGULAR                        @"Roboto-Regular"

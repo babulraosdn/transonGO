@@ -11,5 +11,5 @@
 @interface LanguageObject : NSObject
 @property(nonatomic,strong) NSString *languageCode;
 @property(nonatomic,strong) NSString *languageName;
-@property(nonatomic,readwrite) NSInteger row;
+@property(nonatomic,strong) NSString *imagePathString;
 @end
