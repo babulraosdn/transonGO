@@ -126,7 +126,7 @@
 
 -(void)setColors{
     self.orlabel.textColor = [UIColor buttonBackgroundColor];
-    self.connectWithLabel.textColor = [UIColor lightGrayConnectWithColor];
+    self.connectWithLabel.textColor = [UIColor textColorBlackColor];//lightGrayConnectWithColor
     self.loginButton.backgroundColor  = [UIColor buttonBackgroundColor];
     self.signUplabel.textColor = [UIColor textColorBlackColor];
 }
@@ -168,19 +168,26 @@
 
 - (void)autorize {
     
-    NSString* token =[UserDefaults getObjectforKey:@"APP_TOKEN_SETTINGS_KEY"];
-    NSLog(@"Token %@",token);
+    [Utility_Shared_Instance showProgress];
+    NSString* token = TOKEN;
+    NSLog(@"Token -->Login--->%@",token);
     
     [self.sdk authorizeClient:token
                    completion:^(SdkResult *result) {
                        
                        sdk_error err = result.Result;
                        if (err == sdk_error_OK) {
+                           dispatch_async(dispatch_get_main_queue(), ^{
+                               [SVProgressHUD dismiss];
+                           });
                            NSLog(@"good autorization");
                            sleep(0.5);
                            //[_delegate AuthorizationDelegate_DidAuthorized];
                        }
                        else {
+                           dispatch_async(dispatch_get_main_queue(), ^{
+                               [SVProgressHUD dismiss];
+                           });
                            NSLog(@"fail  autorization");
 //                           self.btn_Authorizate.hidden = false;
 //                           self.lbl_Status.font=[UIFont systemFontOfSize:13];
@@ -190,27 +197,28 @@
                                double delayInSeconds = 0.75;
                                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
                                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                                   
-                                   [[[UIAlertView alloc] initWithTitle:@"ooVoo Sdk"
-                                                               message:[NSString stringWithFormat:NSLocalizedString(@"Error: %@", nil), @"App Token probably invalid or might be empty.\n\nGet your App Token at http://developer.oovoo.com.\nGo to Settings->ooVooSample screen and set the values, or set @APP_TOKEN constants in code."]
-                                                              delegate:nil
-                                                     cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                                     otherButtonTitles:nil] show];
+                                   [SVProgressHUD dismiss];
+//                                   [[[UIAlertView alloc] initWithTitle:@"ooVoo Sdk"
+//                                                               message:[NSString stringWithFormat:NSLocalizedString(@"Error: %@", nil), @"App Token probably invalid or might be empty.\n\nGet your App Token at http://developer.oovoo.com.\nGo to Settings->ooVooSample screen and set the values, or set @APP_TOKEN constants in code."]
+//                                                              delegate:nil
+//                                                     cancelButtonTitle:NSLocalizedString(@"OK", nil)
+//                                                     otherButtonTitles:nil] show];
                                });
                               // [_spinner stopAnimating];
                                
                            }
                            else if (err != sdk_error_InvalidToken)
                            {
+                            
                                double delayInSeconds = 0.75;
                                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
                                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                                   
-                                   [[[UIAlertView alloc] initWithTitle:@"ooVoo Sdk"
-                                                               message:[NSString stringWithFormat:NSLocalizedString(@"Error: %@", nil), [result description]]
-                                                              delegate:nil
-                                                     cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                                     otherButtonTitles:nil] show];
+                                   [SVProgressHUD dismiss];
+//                                   [[[UIAlertView alloc] initWithTitle:@"ooVoo Sdk"
+//                                                               message:[NSString stringWithFormat:NSLocalizedString(@"Error: %@", nil), [result description]]
+//                                                              delegate:nil
+//                                                     cancelButtonTitle:NSLocalizedString(@"OK", nil)
+//                                                     otherButtonTitles:nil] show];
                                });
                                //[_spinner stopAnimating];
                            }
@@ -307,6 +315,7 @@
             
             if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
             {
+                //[App_Delegate getLanguages];
                 if ([responseDict objectForKey:KTOKEN_W])
                 {
                     [Utility_Shared_Instance writeStringUserPreference:USER_TOKEN value:[responseDict objectForKey:KTOKEN_W]];
@@ -713,18 +722,20 @@
 
 -(void)ooVooLogin{
     
-    [self.sdk.Account login:[Utility_Shared_Instance readStringUserPreference:KUSERNAME_W]
+    //[self.sdk.Account login:[Utility_Shared_Instance readStringUserPreference:KUSERNAME_W]
+    [self.sdk.Account login:@"test123"
+    //[self.sdk.Account login:@"babul123"
                  completion:^(SdkResult *result) {
                      NSLog(@"result code=%d result description %@", result.Result, result.description);
                      //[spinner stopAnimating];
                      if (result.Result != sdk_error_OK){
                          [SVProgressHUD dismiss];
-                         /*
+                         ///*
                          [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
                                                              withMessage:@"USERID SHOULD BE MINIUMUM 6 CHARACTERS"
                                                                   inView:self
                                                                withStyle:UIAlertControllerStyleAlert];
-                         */
+                         //*/
                      }
                      else
                      {
@@ -734,6 +745,7 @@
                              [self.sdk.Messaging connect];
                      }
                  }];
+    
 }
 
 
@@ -815,9 +827,6 @@
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     
 }
-
-
-
 
 #pragma mark - ooVoo Account delegate
 

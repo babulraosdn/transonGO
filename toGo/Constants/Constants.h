@@ -14,6 +14,36 @@
 #define App_Delegate         ((AppDelegate*)[[UIApplication sharedApplication]delegate])
 #endif
 
+
+//1
+///*
+#define APP_TOKEN_SETTINGS_KEY    @"12349983355392"
+#define LOG_LEVEL_SETTINGS_KEY    @"LOG_LEVEL_SETTINGS_KEY"
+#define APP_VIDEO_RENDER            @"APP_VIDEO_RENDER"
+#define APP_MESSAGING            @"APP_MESSAGING"
+
+
+#ifndef TOKEN
+
+#define TOKEN @"MDAxMDAxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACs5wargiqXmlwM3bTZvfNOocpZHMgFFy9TaEfqCu4GrTO7y6TKXQZXtPLNmO1fWi4w1oUzY5wcXlSuiLl5YHFJx2%2FZP6baqkSrDP5ywPkbVGsHlvRUHkLmE%2B6%2BeY4LVVAxLwTliCn%2FDCPSve1wV6hT"
+#endif
+//*/
+
+/* //2
+ #define APP_TOKEN_SETTINGS_KEY    @"12349983355077"
+ #define LOG_LEVEL_SETTINGS_KEY    @"LOG_LEVEL_SETTINGS_KEY"
+ #define APP_VIDEO_RENDER            @"APP_VIDEO_RENDER"
+ #define APP_MESSAGING            @"APP_MESSAGING"
+ 
+ 
+ #ifndef TOKEN
+ 
+ #define TOKEN @"MDAxMDAxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZUYVW%2BB1MwyBDpt22C0WvOeMPW7fH6mMOv8d%2FAPeFZ2QeCOguU288bRzsChrixFyZ%2BKzm9nrLmfOkZwyPrAO%2BDP8wgDiVtL%2F0w9mZQ78Az5Hk6imDbhYGNGRFMqo0H2virlVE4Q%2Bpf5S%2Fm50MO%2BMh"
+ #endif
+ */
+
+
+
 #define APPLICATION_NAME             NSLOCALIZEDSTRING([[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"])
 
 #define IS_IPHONE                   (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
@@ -45,8 +75,8 @@ _Pragma("clang diagnostic pop") \
 
 #define CARD_NUMBER_LIMIT 16
 #define CVV_LIMIT 4
-#define PHONE_NUMBER_LIMIT 10
-#define POSTAL_CODE_LIMIT 5
+#define PHONE_NUMBER_LIMIT 12
+#define POSTAL_CODE_LIMIT 6
 
 #define CHARACTER_LIMIT 10000000
 #define NUMBERS_ONLY @"0123456789."
@@ -70,7 +100,8 @@ _Pragma("clang diagnostic pop") \
 
 //********************  ooVoo App Details   ****************************************
 #pragma mark ooVoo App Details
-#define ooVooAppID                  @"12349983355077"
+//#define ooVooAppID                  @"12349983355077"//OLD //2
+#define ooVooAppID                  @"12349983355392"//New //1
 
 
 //********************  Image Names   ****************************************

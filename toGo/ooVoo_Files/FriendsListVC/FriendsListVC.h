@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <ooVooSDK/ooVooSDK.h>
-
+#import "Headers.h"
 
 @interface FriendsListVC : UIViewController
 

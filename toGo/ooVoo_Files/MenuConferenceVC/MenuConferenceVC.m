@@ -68,7 +68,7 @@
     
 }
 -(void)subscribeUser{
-    NSString * uuid = @"12349983355077" ;
+    NSString * uuid = @"12349983355392" ;
     NSString * token = [ActiveUserManager activeUser].token;
     if(token && token.length > 0){
         [self.sdk.PushService subscribe:token deviceUid:uuid completion:^(SdkResult *result){
@@ -86,12 +86,12 @@
     
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStyleBordered target:self action:@selector(actLogOut)];
     self.navigationItem.hidesBackButton = YES;
-    self.navigationItem.leftBarButtonItem = item;
+    //self.navigationItem.leftBarButtonItem = item;
 }
 
 -(void)actLogOut{
     [self.navigationController popViewControllerAnimated:YES];
-    NSString * uuid = @"12349983355077" ;
+    NSString * uuid = @"12349983355392" ;
     NSString * token = [ActiveUserManager activeUser].token;
     if(token && token.length > 0){
         [self.sdk.Account logout];

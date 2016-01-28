@@ -33,9 +33,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+}
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     [self allocationsAndStaticText];
-    //[self registerForKeyboardNotifications];
     [self setCustomBackButtonForNavigation];
     [self setLabelButtonNames];
     [self setPlaceHolders];
@@ -45,43 +47,8 @@
     [self setFonts];
 }
 
--(void)viewDidLayoutSubviews{
-
-}
-
 -(void)allocationsAndStaticText{
     signUpDictionary = [NSMutableDictionary new];
-    //typeString = INTERPRETER;
-}
-
-- (void)registerForKeyboardNotifications
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification object:nil];
-}
-
-
--(void)keyboardWasShown:(NSNotification*)notification
-{
-    
-    
-    NSDictionary *info = [notification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.view.frame.origin.x,self.view.frame.origin.y, kbSize.height+100, 0);
-    self.scrollView.contentInset = contentInsets;
-    self.scrollView.scrollIndicatorInsets = contentInsets;
-    
-}
-
--(void)keyboardWillBeHidden:(NSNotification *)notification
-{
-    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-    self.scrollView.contentInset = contentInsets;
-    self.scrollView.scrollIndicatorInsets = contentInsets;
 }
 
 -(void)setLabelButtonNames{
@@ -189,9 +156,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
-//            AlertViewCustom *alertView = [AlertViewCustom new];
-//            UIView *viewIs = [alertView showAlertViewWithMessage:[responseDict objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self.view];
-//            [self.view addSubview:viewIs];
+            [AlertViewCustom showAlertViewWithMessage:[responseDict objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self];
         });
         
         if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
@@ -216,13 +181,6 @@
 }
 
 
--(void)signUpSuccess{
-    [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                        withMessage:NSLOCALIZEDSTRING(@"SIGNUP_SUCCESS")
-                                             inView:self
-                                          withStyle:UIAlertControllerStyleAlert];
-    
-}
 
 -(IBAction)interpreterCustomerButtonClicked:(UIButton *)sender{
     if (sender.tag==1) {

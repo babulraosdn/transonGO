@@ -58,7 +58,6 @@
 @property(nonatomic,strong) IBOutlet UITableView *tblView;
 @property(nonatomic,strong) ProfileInfoObject *profileObject;
 
-@property(nonatomic,strong) NSMutableArray *selectedDataArray;
 @property(nonatomic,strong)NSMutableArray *cardTypeArray;
 @property(nonatomic,strong)NSMutableArray *genderArray;
 @property(nonatomic,strong)NSMutableArray *expiryMonthArray;
@@ -153,9 +152,7 @@
 -(void)allocationsAndStaticText{
     
     self.profileObject = [ProfileInfoObject new];
-    self.selectedDataArray = [NSMutableArray new];
     
-    self.selectedLanguagesArray = [NSMutableArray new];
     
     isEditMode = false;
     editableString = @"";
@@ -267,7 +264,7 @@
         }
     }
     else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"MY_LANGUAGES")]){
-        return self.selectedLanguagesArray.count>=3?DEFAULT_TABLE_CELL_HEIGHT+3*35:DEFAULT_TABLE_CELL_HEIGHT+self.selectedLanguagesArray.count*35+12;
+        return self.selectedLanguagesArray.count>=2?DEFAULT_TABLE_CELL_HEIGHT+2*40:DEFAULT_TABLE_CELL_HEIGHT+self.selectedLanguagesArray.count*35+12;
         
     }
     else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"COUNTRY")] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"STATE")])
@@ -318,8 +315,20 @@
         [cell.profileImageView setContentMode:UIViewContentModeScaleToFill];
         
         if ([Utility_Shared_Instance checkForNullString:self.profileObject.imageURLString].length) {
-            [cell.profileImageView sd_setImageWithURL:[NSURL URLWithString:self.profileObject.imageURLString]
-                                     placeholderImage:[UIImage defaultPicImage]];
+            SDWebImageManager *manager = [SDWebImageManager sharedManager];
+            [manager downloadImageWithURL:[NSURL URLWithString:self.profileObject.imageURLString]
+                                  options:0
+                                 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+                                     // progression tracking code
+                                 }
+                                completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+                                    if (image) {
+                                        // do something with image
+                                        cell.profileImageView.image = image;
+                                    }
+                                }];
+//            [cell.profileImageView sd_setImageWithURL:[NSURL URLWithString:self.profileObject.imageURLString]
+//                                     placeholderImage:[UIImage defaultPicImage]];
             
         }
         if (selectedImage) {
@@ -530,6 +539,7 @@
             cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.uIdString];
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"EMAIL")]) {
+            cell.mandatoryLabel.hidden = YES;
             cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.emailString];
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"PASSWORD")]) {
@@ -661,6 +671,7 @@
                 [cell.descriptionTextField setBorderStyle:UITextBorderStyleNone];
             }
             cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.cityString];
+            
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"POSTAL_CODE")]) {
             cell.editImageView.hidden = NO;
@@ -764,8 +775,8 @@
             NSInteger ht = lLast.frame.size.height;
             sizeOfContent = wd+ht+self.selectedLanguagesArray.count*5;;
             
-            if (self.selectedLanguagesArray.count>3) {
-                NSInteger multiply= self.selectedLanguagesArray.count -3;
+            if (self.selectedLanguagesArray.count>2) {
+                NSInteger multiply= self.selectedLanguagesArray.count -2;
                 languagesScrollView.contentSize = CGSizeMake(languagesScrollView.frame.size.width, sizeOfContent+(multiply*40));
             }
             else{
@@ -925,7 +936,6 @@
     [self removePickerViews];
     NSLog(@"Tag is %ld",(long)sender.tag);
 
-    
     if (sender.tag == EDIT_BUTTON_TAG) {
         //This Condition is only for Address Edit
         NSIndexPath *indexpath;
@@ -1462,13 +1472,6 @@
         self.profileObject.isDOBEdit = NO;
         
         self.profileObject.eINtaxIDString = cell.descriptionTextField.text;
-//        
-//        if ([self.einTaxArray containsObject:self.profileObject.countryString]){
-//            self.profileObject.eINtaxIDString = [NSString stringWithFormat:@"TIN:%@",self.profileObject.eINtaxIDString];
-//        }
-//        else{
-//            self.profileObject.eINtaxIDString = [NSString stringWithFormat:@"EIN:%@",self.profileObject.eINtaxIDString];
-//        }
         
         self.profileObject.isCertificatesEdit = NO;
         if(self.profileObject.isEinTaxEdit){
@@ -1476,11 +1479,13 @@
             self.profileObject.isEinTaxEdit = NO;
             [self saveProfileInfo:indexpath];
             return;
-            
         }
         else{
+            if ([cell.headerLabel.text isEqualToString:NSLOCALIZEDSTRING(@"EIN_TaxID")])
+                editableString = NSLOCALIZEDSTRING(@"EIN_TaxID");
+            else
+                editableString = NSLOCALIZEDSTRING(@"TaxID_EIN");
             
-            editableString = NSLOCALIZEDSTRING(@"EIN_TaxID");
             self.profileObject.isEinTaxEdit = YES;
         }
         isEditMode = self.profileObject.isEinTaxEdit;
@@ -1607,7 +1612,7 @@
                 self.profileObject.dobString = [userDict objectForKey:KDOB];
                 self.profileObject.postalCodeString = [userDict objectForKey:KPOSTALCODE_W];
                 self.profileObject.phoneNumberString = [userDict objectForKey:KPHONE_NUMBER_W];
-                self.profileObject.myLanguagesString = [userDict objectForKey:KMYLANGUAGES_W];
+                self.profileObject.myLanguagesKEYsString = [NSString stringWithFormat:@"%@",[Utility_Shared_Instance checkForNullString:[userDict objectForKey:KMYLANGUAGES_W]]];
                 
                 if ([userDict objectForKey:KEIN_TAXID_W]) {
                     NSString *einTempSting = [userDict objectForKey:KEIN_TAXID_W];
@@ -1626,28 +1631,21 @@
                 [self makeEditableMandatoryFields];
                 
                 self.profileObject.dobString = [self dateConvertion];
-                self.profileObject.myLanguagesKEYsString = self.profileObject.myLanguagesString;
-//                /////////// Languages
-//                NSArray *langArray = [self.profileObject.myLanguagesString componentsSeparatedByString:@","];
-//                if (langArray.count) {
-//
-//                    self.profileObject.myLanguagesString = @"";
-//                    NSMutableString *mutableStr = [NSMutableString new];;
-//                    MyLanguagesView *languages =[[MyLanguagesView alloc]init];
-//                    NSMutableDictionary *languagesDit = [languages getLanguagesDictionary];
-//                    for (id key in langArray) {
-//                        NSString *str = [NSString stringWithFormat:@"%@,",[languagesDit objectForKey:key]];
-//                        [mutableStr appendString:str];
-//                        [self.selectedDataArray setObject:[languagesDit objectForKey:key] forKey:key];
-//                    }
-//                    self.profileObject.myLanguagesString = [NSString stringWithString:mutableStr];
-//                    if ([self.profileObject.myLanguagesString hasSuffix:@","]) {
-//                        self.profileObject.myLanguagesString = [self.profileObject.myLanguagesString substringToIndex:[self.profileObject.myLanguagesString length] - 1];
-//                    }
-//                }
-//                /////////////////
-                
-                //[self getLanguagesNames:self.profileObject.myLanguagesString];
+                /////////// Languages
+                NSLog(@"--langArray -->%@",App_Delegate.languagesArray);
+                NSArray *langArray = [[userDict objectForKey:KMYLANGUAGES_W] componentsSeparatedByString:@","];
+                if (langArray.count) {
+                    self.selectedLanguagesArray = [NSMutableArray new];
+                    for (id key in langArray) {
+                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageCode beginswith[c] %@",key];
+                        NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
+                        if (sortedArray.count) {
+                            LanguageObject *lObj = [sortedArray lastObject];
+                            [self.selectedLanguagesArray addObject:lObj];
+                        }
+                    }
+                }
+                /////////////////
                 
                 ///////////////// Get States With Country Name
                 if (self.profileObject.countryString.length) {
@@ -1664,6 +1662,16 @@
                 }
                 /////////////////
                 
+                //////CreditCard Info
+                if ([userDict objectForKey:KPAYMENT_INFO_W]) {
+                    NSMutableDictionary *paymentDict = [userDict objectForKey:KPAYMENT_INFO_W];
+                    self.profileObject.cardNumberString = [Utility_Shared_Instance checkForNullString:[paymentDict objectForKey:KCARD_NUMBER_W]];
+                    self.profileObject.cardTypeString = [Utility_Shared_Instance checkForNullString:[paymentDict objectForKey:KCARD_TYPE_W]];
+                    self.profileObject.CVVString = [Utility_Shared_Instance checkForNullString:[paymentDict objectForKey:KCVV_W]];self.profileObject.cardNumberString = [Utility_Shared_Instance checkForNullString:[paymentDict objectForKey:KCARD_NUMBER_W]];
+                    self.profileObject.expMonthString = [Utility_Shared_Instance checkForNullString:[paymentDict objectForKey:KEXP_MONTH_W]];
+                    self.profileObject.expYearString = [Utility_Shared_Instance checkForNullString:[paymentDict objectForKey:KEXP_YEAR_W]];
+                }
+                ///////////////
                 [self changeTableLabelHeaders_Tax_EIN];
                 
                 [self.tblView reloadData];
@@ -1678,7 +1686,7 @@
 
 -(void)makeEditableMandatoryFields{
     
-    if ([[Utility_Shared_Instance readStringUserPreference:KCOMPLETION_W] isEqualToString:PROFILE_INCOMPLETE])
+    //if ([[Utility_Shared_Instance readStringUserPreference:KCOMPLETION_W] isEqualToString:PROFILE_INCOMPLETE])
     {
         if (!self.profileObject.firstNameString.length) {
             self.profileObject.isFirstNameEdit = YES;
@@ -1735,7 +1743,7 @@
         languagesView.dataArray = App_Delegate.languagesArray;
     
     if (self.selectedLanguagesArray.count) {
-        languagesView.selectedDataArray = self.selectedLanguagesArray;
+        [languagesView.selectedDataArray addObjectsFromArray:self.selectedLanguagesArray];
     }
     
     [languagesView assignData];
@@ -1745,6 +1753,7 @@
 }
 
 -(void)countryButtonPressed{
+    
     [self.view endEditing:YES];
     [self removeTapGesture];
     [self removePopUpView];
@@ -1803,20 +1812,33 @@
 
 
 -(void)finishLanguagesSelection:(NSMutableArray *)selectedDataArray{
+    
+    if (_isInterpreter){
+        if (selectedDataArray.count<2) {
+            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                withMessage:NSLOCALIZEDSTRING(@"PLEASE_SELECT_ATLEAST_2_LANGUAGES")
+                                                     inView:self
+                                                  withStyle:UIAlertControllerStyleAlert];
+            return;
+        }
+    }
+    
     [self removePopUpView];
     NSLog(@"selectedlanguages -->%@",[selectedDataArray description]);
-    self.selectedLanguagesArray = [NSMutableArray new];
-    [self.selectedLanguagesArray addObjectsFromArray:selectedDataArray];
+    if (selectedDataArray.count) {
+        self.selectedLanguagesArray = [NSMutableArray new];
+        [self.selectedLanguagesArray addObjectsFromArray:selectedDataArray];
+    }
     
     NSMutableString *mutableStr = [NSMutableString new];
     for (LanguageObject *lObj in self.selectedLanguagesArray) {
-        if (self.selectedDataArray.count != (self.selectedLanguagesArray.count-1))
             [mutableStr appendString:[NSString stringWithFormat:@"%@,",lObj.languageCode]];
-        else
-            [mutableStr appendString:[NSString stringWithFormat:@"%@",lObj.languageCode]];
-            
     }
-    self.profileObject.myLanguagesString = [NSString stringWithString:mutableStr];
+    NSString *tempStr = [NSString stringWithString:mutableStr];
+    if ([tempStr hasSuffix:@","]) {
+        tempStr = [tempStr substringToIndex:[tempStr length]-1];
+    }
+    self.profileObject.myLanguagesKEYsString = tempStr;
     [self.tblView reloadData];
     [self addTapGesture];
 }
@@ -1850,96 +1872,14 @@
 -(void)saveProfileInfo:(NSIndexPath *)currentIndexPath{
     [Utility_Shared_Instance showProgress];
     [self.view endEditing:YES];
-    BOOL callWebService = YES;
+    
+    if(![self validateData]){
+        [self makeEditableMandatoryFields];
+        return;
+    }
+    
     if ([[Utility_Shared_Instance readStringUserPreference:KCOMPLETION_W] isEqualToString:PROFILE_INCOMPLETE]){
         
-        NSString *alertString=@"";
-        callWebService = NO;
-        if (!self.profileObject.firstNameString.length) {
-            alertString = NSLOCALIZEDSTRING(@"FIRST_NAME");
-        }
-        else if (!self.profileObject.lastNameString.length) {
-            alertString = NSLOCALIZEDSTRING(@"LAST_NAME");
-        }
-        else if (!self.profileObject.nickNameString.length) {
-            alertString = NSLOCALIZEDSTRING(@"NICK_NAME");
-        }
-        else if (!self.profileObject.addressString.length && _isInterpreter) {
-            alertString = NSLOCALIZEDSTRING(@"ADDRESS");
-        }
-        else if (!self.profileObject.postalCodeString.length) {
-            alertString = NSLOCALIZEDSTRING(@"POSTAL_CODE");
-        }
-        else if (!self.profileObject.cityString.length) {
-            alertString = NSLOCALIZEDSTRING(@"CITY");
-        }
-        else if (!self.profileObject.phoneNumberString.length) {
-            alertString = NSLOCALIZEDSTRING(@"PHONE_NUMBER");
-        }
-        else if (!self.profileObject.eINtaxIDString.length && _isInterpreter) {
-            if ([self.einTaxArray containsObject:self.profileObject.countryString])
-                alertString = NSLOCALIZEDSTRING(@"EIN_TaxID");
-            else
-                alertString = NSLOCALIZEDSTRING(@"TaxID_EIN");
-            
-            
-        }
-        else if (!self.profileObject.myLanguagesString.length) {
-            alertString = NSLOCALIZEDSTRING(@"MY_LANGUAGES");
-        }
-        else if (!self.profileObject.countryString.length) {
-            alertString = NSLOCALIZEDSTRING(@"COUNTRY");
-        }
-        else if (!self.profileObject.stateString.length) {
-            alertString = NSLOCALIZEDSTRING(@"STATE");
-        }
-        else if (!self.profileObject.dobString.length && !_isInterpreter) {
-            alertString = NSLOCALIZEDSTRING(@"DOB");
-        }
-        else if (!self.profileObject.genderString.length && !_isInterpreter) {
-            alertString = NSLOCALIZEDSTRING(@"GENDER");
-        }
-        else if (!self.profileObject.addressString.length) {
-            alertString = NSLOCALIZEDSTRING(@"ADDRESS");
-        }
-        else if (!self.profileObject.cardNumberString.length && !_isInterpreter) {
-            alertString = NSLOCALIZEDSTRING(@"CARD_NUMBER");
-        }
-        else if (!self.profileObject.cardTypeString.length && !_isInterpreter) {
-            alertString = NSLOCALIZEDSTRING(@"CARD_TYPE");
-        }
-        else if (!self.profileObject.cardNumberString.length && !_isInterpreter) {
-            alertString = NSLOCALIZEDSTRING(@"CARD_NUMBER");
-        }
-        else if (!self.profileObject.expMonthString.length && !_isInterpreter) {
-            alertString = NSLOCALIZEDSTRING(@"EXPIRY_MONTH");
-        }
-        else if (!self.profileObject.expYearString.length && !_isInterpreter) {
-            alertString = NSLOCALIZEDSTRING(@"EXPIRY_YEAR");
-        }
-        else if (!self.profileObject.CVVString.length && !_isInterpreter) {
-            alertString = NSLOCALIZEDSTRING(@"CVV");
-        }
-        
-        if (alertString.length>1) {
-            [SVProgressHUD dismiss];
-            [self makeEditableMandatoryFields];
-            
-            NSString *messageStr;
-            if (([alertString isEqualToString:NSLOCALIZEDSTRING(@"GENDER")])||([alertString isEqualToString:NSLOCALIZEDSTRING(@"DOB")])||([alertString isEqualToString:NSLOCALIZEDSTRING(@"MY_LANGUAGES")])||([alertString isEqualToString:NSLOCALIZEDSTRING(@"COUNTRY")])||([alertString isEqualToString:NSLOCALIZEDSTRING(@"STATE")])||([alertString isEqualToString:NSLOCALIZEDSTRING(@"CARD_TYPE")])||([alertString isEqualToString:NSLOCALIZEDSTRING(@"EXPIRY_MONTH")])||([alertString isEqualToString:NSLOCALIZEDSTRING(@"EXPIRY_YEAR")])) {
-                messageStr = [NSString messageWithSelectString:alertString];
-            }
-            else{
-                messageStr = [NSString messageWithString:alertString];
-            }
-            
-            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                                withMessage:messageStr
-                                                     inView:self
-                                                  withStyle:UIAlertControllerStyleAlert];
-            
-            return;
-        }
     }
     ///WEB Service CODE
     NSMutableDictionary *saveDict=[NSMutableDictionary new];
@@ -2025,7 +1965,134 @@
       }];
 }
 
-
+-(BOOL)validateData{
+    
+    NSString *alertString=@"";
+    if (_isInterpreter) {
+        if (!self.profileObject.firstNameString.length) {
+            alertString = NSLOCALIZEDSTRING(@"FIRST_NAME");
+        }
+        else if (!self.profileObject.lastNameString.length) {
+            alertString = NSLOCALIZEDSTRING(@"LAST_NAME");
+        }
+        else if (!self.profileObject.nickNameString.length) {
+            alertString = NSLOCALIZEDSTRING(@"NICK_NAME");
+        }
+        else if (!self.profileObject.addressString.length) {
+            alertString = NSLOCALIZEDSTRING(@"ADDRESS");
+        }
+        else if (!self.profileObject.countryString.length) {
+            alertString = NSLOCALIZEDSTRING(@"COUNTRY");
+        }
+        else if (!self.profileObject.stateString.length) {
+            alertString = NSLOCALIZEDSTRING(@"STATE");
+        }
+        else if (!self.profileObject.cityString.length) {
+            alertString = NSLOCALIZEDSTRING(@"CITY");
+        }
+        else if (!self.profileObject.postalCodeString.length) {
+            alertString = NSLOCALIZEDSTRING(@"POSTAL_CODE");
+        }
+        else if (!self.profileObject.phoneNumberString.length) {
+            alertString = NSLOCALIZEDSTRING(@"PHONE_NUMBER");
+        }
+        else if (!self.profileObject.eINtaxIDString.length && _isInterpreter) {
+            if ([self.einTaxArray containsObject:self.profileObject.countryString])
+                alertString = NSLOCALIZEDSTRING(@"TaxID_EIN");
+            else
+                alertString = NSLOCALIZEDSTRING(@"EIN_TaxID");
+        }
+        else if (!self.profileObject.myLanguagesKEYsString.length) {
+            alertString = NSLOCALIZEDSTRING(@"MY_LANGUAGES");
+        }
+    }
+    else{ //User or Customer
+        if (!self.profileObject.firstNameString.length) {
+            alertString = NSLOCALIZEDSTRING(@"FIRST_NAME");
+        }
+        else if (!self.profileObject.lastNameString.length) {
+            alertString = NSLOCALIZEDSTRING(@"LAST_NAME");
+        }
+        else if (!self.profileObject.nickNameString.length) {
+            alertString = NSLOCALIZEDSTRING(@"NICK_NAME");
+        }
+        else if (!self.profileObject.phoneNumberString.length) {
+            alertString = NSLOCALIZEDSTRING(@"PHONE_NUMBER");
+        }
+        else if (!self.profileObject.dobString.length && !_isInterpreter) {
+            alertString = NSLOCALIZEDSTRING(@"DOB");
+        }
+        else if (!self.profileObject.genderString.length && !_isInterpreter) {
+            alertString = NSLOCALIZEDSTRING(@"GENDER");
+        }
+        else if (!self.profileObject.addressString.length) {
+            alertString = NSLOCALIZEDSTRING(@"ADDRESS");
+        }
+        else if (!self.profileObject.addressString.length && _isInterpreter) {
+            alertString = NSLOCALIZEDSTRING(@"ADDRESS");
+        }
+        else if (!self.profileObject.countryString.length) {
+            alertString = NSLOCALIZEDSTRING(@"COUNTRY");
+        }
+        else if (!self.profileObject.stateString.length) {
+            alertString = NSLOCALIZEDSTRING(@"STATE");
+        }
+        else if (!self.profileObject.cityString.length) {
+            alertString = NSLOCALIZEDSTRING(@"CITY");
+        }
+        else if (!self.profileObject.postalCodeString.length) {
+            alertString = NSLOCALIZEDSTRING(@"POSTAL_CODE");
+        }
+        else if (!self.profileObject.myLanguagesKEYsString.length) {
+            alertString = NSLOCALIZEDSTRING(@"MY_LANGUAGES");
+        }
+        else if (!self.profileObject.cardTypeString.length && !_isInterpreter) {
+            alertString = NSLOCALIZEDSTRING(@"CARD_TYPE");
+        }
+        else if (!self.profileObject.cardNumberString.length && !_isInterpreter) {
+            alertString = NSLOCALIZEDSTRING(@"CARD_NUMBER");
+        }
+        else if (!self.profileObject.cardNumberString.length && !_isInterpreter) {
+            alertString = NSLOCALIZEDSTRING(@"CARD_NUMBER");
+        }
+        else if (!self.profileObject.expMonthString.length && !_isInterpreter) {
+            alertString = NSLOCALIZEDSTRING(@"EXPIRY_MONTH");
+        }
+        else if (!self.profileObject.expYearString.length && !_isInterpreter) {
+            alertString = NSLOCALIZEDSTRING(@"EXPIRY_YEAR");
+        }
+        else if (!self.profileObject.CVVString.length && !_isInterpreter) {
+            alertString = NSLOCALIZEDSTRING(@"CVV");
+        }
+        else if (!self.profileObject.eINtaxIDString.length && _isInterpreter) {
+            if ([self.einTaxArray containsObject:self.profileObject.countryString])
+                alertString = NSLOCALIZEDSTRING(@"EIN_TaxID");
+            else
+                alertString = NSLOCALIZEDSTRING(@"TaxID_EIN");
+        }
+    }
+    
+    if (alertString.length>1) {
+        [SVProgressHUD dismiss];
+        [self makeEditableMandatoryFields];
+        
+        NSString *messageStr;
+        if (([alertString isEqualToString:NSLOCALIZEDSTRING(@"GENDER")])||([alertString isEqualToString:NSLOCALIZEDSTRING(@"DOB")])||([alertString isEqualToString:NSLOCALIZEDSTRING(@"MY_LANGUAGES")])||([alertString isEqualToString:NSLOCALIZEDSTRING(@"COUNTRY")])||([alertString isEqualToString:NSLOCALIZEDSTRING(@"STATE")])||([alertString isEqualToString:NSLOCALIZEDSTRING(@"CARD_TYPE")])||([alertString isEqualToString:NSLOCALIZEDSTRING(@"EXPIRY_MONTH")])||([alertString isEqualToString:NSLOCALIZEDSTRING(@"EXPIRY_YEAR")])) {
+            messageStr = [NSString messageWithSelectString:alertString];
+        }
+        else{
+            messageStr = [NSString messageWithString:alertString];
+        }
+        
+        [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                            withMessage:messageStr
+                                                 inView:self
+                                              withStyle:UIAlertControllerStyleAlert];
+        
+        return NO;
+    }
+    return YES;
+}
 
 - (void)cameraGalleryButtonPressed{
     
@@ -2078,14 +2145,13 @@
     //show the image view with the picked image
     selectedImage=image;
     [self dismissViewControllerAnimated:picker completion:nil];
-    [self.tblView reloadData];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-    });
-    
-    self.profileObject.base64EncodedImageString = [Utility_Shared_Instance encodeToBase64String:image];
-    
-    [self uploadImageToServer];
+    [Utility_Shared_Instance showProgress];
+    [self performSelector:@selector(uploadImageToServer) withObject:nil afterDelay:0.3];
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [self dismissViewControllerAnimated:picker completion:nil];
+//        [self.tblView reloadData];
+//        [self uploadImageToServer];
+//    });
 }
 
 
@@ -2222,7 +2288,7 @@
 
 -(void)uploadImageToServer{
     
-    [Utility_Shared_Instance showProgress];
+    self.profileObject.base64EncodedImageString = [Utility_Shared_Instance encodeToBase64String:selectedImage];
     NSMutableDictionary *imageDict=[NSMutableDictionary new];
     [imageDict setValue:[Utility_Shared_Instance readStringUserPreference:KID_W] forKey:KID_W];
     [imageDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.emailString] forKey:KEMAIL_W];
@@ -2271,24 +2337,37 @@
     
 }
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    //NSString *currentString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    NSString *currentString = [textField.text stringByReplacingCharactersInRange:range withString:string];
     
-    NSUInteger newLength = [textField.text length] + [string length] - range.length;
-    NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:NUMBERS_ONLY] invertedSet];
-    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+    if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"FIRST_NAME")]||[textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"LAST_NAME")]){
+        if (currentString.length>13) {
+            return NO;
+        }
+    }
     
-    if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"POSTAL_CODE")]){
-        return (([string isEqualToString:filtered])&&(newLength <= POSTAL_CODE_LIMIT));
+    if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"POSTAL_CODE")]||[textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"PHONE_NUMBER")]||[textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"CARD_NUMBER")]||[textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"CVV")]){
+        
+        NSUInteger newLength = [textField.text length] + [string length] - range.length;
+        NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:NUMBERS_ONLY] invertedSet];
+        NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+        if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"POSTAL_CODE")]){
+            cs = [[NSCharacterSet characterSetWithCharactersInString:ACCEPTABLE_CHARACTERS_NAME] invertedSet];
+            NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+            return (([string isEqualToString:filtered])&&(newLength <= POSTAL_CODE_LIMIT));
+        }
+        else if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"PHONE_NUMBER")]){
+            return (([string isEqualToString:filtered])&&(newLength <= PHONE_NUMBER_LIMIT));
+        }
+        else if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"CARD_NUMBER")]){
+            return (([string isEqualToString:filtered])&&(newLength <= CARD_NUMBER_LIMIT));
+        }
+        else if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"CVV")]){
+            return (([string isEqualToString:filtered])&&(newLength <= CVV_LIMIT));
+        }
+        
     }
-    else if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"PHONE_NUMBER")]){
-        return (([string isEqualToString:filtered])&&(newLength <= PHONE_NUMBER_LIMIT));
-    }
-    else if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"CARD_NUMBER")]){
-        return (([string isEqualToString:filtered])&&(newLength <= CARD_NUMBER_LIMIT));
-    }
-    else if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"CVV")]){
-        return (([string isEqualToString:filtered])&&(newLength <= CVV_LIMIT));
-    }
+    
+    
     return YES;
 }
 -(void)textFieldDidEndEditing:(UITextField *)textField{

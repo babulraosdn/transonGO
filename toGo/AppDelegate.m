@@ -24,20 +24,7 @@
 #import "Constants.h"
 #define User_isInVideoView @"User_isInVideoView"
 
-
-
-
-#define APP_TOKEN_SETTINGS_KEY    @"APP_TOKEN_SETTINGS_KEY"
-#define LOG_LEVEL_SETTINGS_KEY    @"LOG_LEVEL_SETTINGS_KEY"
-#define APP_VIDEO_RENDER            @"APP_VIDEO_RENDER"
-#define APP_MESSAGING            @"APP_MESSAGING"
-
-
-#ifndef TOKEN
-#define TOKEN @"MDAxMDAxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZUYVW%2BB1MwyBDpt22C0WvOeMPW7fH6mMOv8d%2FAPeFZ2QeCOguU288bRzsChrixFyZ%2BKzm9nrLmfOkZwyPrAO%2BDP8wgDiVtL%2F0w9mZQ78Az5Hk6imDbhYGNGRFMqo0H2virlVE4Q%2Bpf5S%2Fm50MO%2BMh"
-#endif
-
-
+ 
 @interface AppDelegate ()<UIAlertViewDelegate>{
     AlertView *alert ;
 }
@@ -196,53 +183,36 @@
     [[NSUserDefaults standardUserDefaults] setValue:curAppToken forKey:APP_TOKEN_SETTINGS_KEY];
     [[NSUserDefaults standardUserDefaults] setValue:logLevel forKey:LOG_LEVEL_SETTINGS_KEY];
     [[NSUserDefaults standardUserDefaults] setBool:isMessaging forKey:APP_MESSAGING];
-    
     [[NSUserDefaults standardUserDefaults] synchronize];
     
 }
 
+//// orientation
+//
+//- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
+//{
+//    if ([self isIpad]) {
+//        return UIInterfaceOrientationMaskAll;
+//    }
+//
+//    return ( UIInterfaceOrientationMaskPortraitUpsideDown | UIInterfaceOrientationMaskPortrait);
+//}
+//-(BOOL)shouldAutorotate
+//{
+//    return YES;
+//}
 
 
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-// orientation
-
-- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
-{
-    if ([self isIpad]) {
-        return UIInterfaceOrientationMaskAll;
-    }
-    
-    return ( UIInterfaceOrientationMaskPortraitUpsideDown | UIInterfaceOrientationMaskPortrait);
-}
--(BOOL)shouldAutorotate
-{
-    return YES;
-}
-
-
--(BOOL)isIpad{
-#define IDIOM    UI_USER_INTERFACE_IDIOM()
-#define IPAD     UIUserInterfaceIdiomPad
-    
-    if ( IDIOM == IPAD ) {
-        return true;
-    } else {
-        return  false;
-    }
-}
-*/
+//-(BOOL)isIpad{
+//#define IDIOM    UI_USER_INTERFACE_IDIOM()
+//#define IPAD     UIUserInterfaceIdiomPad
+//
+//    if ( IDIOM == IPAD ) {
+//        return true;
+//    } else {
+//        return  false;
+//    }
+//}
 
 - (void)SetNotificationObserversForCallMessaging {
     NSLog(@"@@@@@@@@@@@@@@@@@@@@@  SetNotificationObserversForCallMessaging  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
@@ -253,9 +223,11 @@
     
 }
 
+
+
 -(void)incomingCall:(NSNotification*)notif{
     
-    NSLog(@"notification %@",notif.userInfo);
+        NSLog(@"notification %@",notif.userInfo);
     CNMessage *message=[notif object];
     
     // if we are in video "ROOM" and i am transmitting video on other session Than i am busy
@@ -270,6 +242,7 @@
             }];
             return;
         }
+        
     }
     //    else if ([navigationController.topViewController isKindOfClass:[VideoConferenceVCWithRender class]])
     //    {
@@ -402,6 +375,7 @@
     }
     
     alertView=nil;
+    
 }
 
 
@@ -422,7 +396,8 @@
         {// if view controller is not shown yet
             
             @try {
-                [navigationController pushViewController:viewVideoControler animated:NO];
+                [self.navController pushViewController:viewVideoControler animated:NO];
+                //[navigationController pushViewController:viewVideoControler animated:NO];
             } @catch (NSException * ex) {
                 NSLog(@"Exception: %@", ex);
                 //“Pushing the same view controller instance more than once is not supported”
@@ -468,9 +443,13 @@
     //        }
     //        else // view is allready on
     //        {
-    //
+    //            
     //        }
     //    }
+    
+    
+    
+    
 }
 
 

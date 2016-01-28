@@ -157,7 +157,6 @@
 
 -(void)closeButtonPressed:(UIButton *)sender{
     
-    [self removeFromSuperview];
     if (sender.tag==1) {
         if (self.isCountry) {
             [self.delegate finishCountrySelection:self.selectedDataArray];
@@ -165,11 +164,23 @@
         else if (self.isState) {
             [self.delegate finishStateSelection:self.selectedDataArray];
         }
+        else if (self.isSelectInterpretationLanguage) {
+            [self.delegate finishLanguagesSelection:self.selectedDataArray];
+        }
         else{
+            if (!self.isCustomer){
+                //This means it is interpreter - Interpreter should select 2 languages
+                if (self.selectedDataArray.count<2) {
+                    [self.delegate finishLanguagesSelection:self.selectedDataArray];
+                    return;
+                }
+            }
             [self.delegate finishLanguagesSelection:self.selectedDataArray];
         }
     }
+    [self removeFromSuperview];
 }
+
 
 -(void)assignData{
     

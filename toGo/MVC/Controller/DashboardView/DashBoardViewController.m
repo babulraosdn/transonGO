@@ -106,58 +106,6 @@
     self.provideFeedBackButton.titleLabel.font = [UIFont largeSize];
 }
 
--(void)getDashboardInfo
-{
-    [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"PLEASE_WAIT")]];
-    //WEB Service CODE
-    [Web_Service_Call getProfileInfoServiceCall:[Utility_Shared_Instance checkForNullString:[NSString stringWithFormat:@"%@%@",@"Bearer ",[Utility_Shared_Instance readStringUserPreference:USER_TOKEN]]] webServicename:PROFILE_INFO_W_USER SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
-        NSDictionary *responseDict=responseObject;
-        
-        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [SVProgressHUD dismiss];
-                NSLog(@"dict-->%@",responseDict);
-             if ([responseDict objectForKey:KDASHBOARD_W]){
-                    NSMutableDictionary *dashBoardDict = [responseDict objectForKey:KDASHBOARD_W];
-                    NSString *idString;
-                    if ([dashBoardDict objectForKey:KID_W])
-                        idString = [dashBoardDict objectForKey:KID_W];
-                    if ([dashBoardDict objectForKey:KNAME_W])
-                        self.nameLabel.text = [dashBoardDict objectForKey:KNAME_W];
-                    if ([dashBoardDict objectForKey:KCOUNTRY_NAME_W])
-                        self.countryLabel.text = [dashBoardDict objectForKey:KCOUNTRY_NAME_W];
-                    if ([dashBoardDict objectForKey:KLANGUAGE_W])
-                        self.myLanguageDetailLabel.text = [dashBoardDict objectForKey:KLANGUAGE_W];
-                    if ([dashBoardDict objectForKey:KEMAIL_W])
-                        self.emailIDDetailLabel.text = [dashBoardDict objectForKey:KEMAIL_W];
-                    if ([dashBoardDict objectForKey:KDESCRIPTION_W])
-                        self.descriptionTextView.text = [dashBoardDict objectForKey:KDESCRIPTION_W];
-                    if ([dashBoardDict objectForKey:KPROFILE_IMAGE_W])
-                        [self.defaultImageView sd_setImageWithURL:[NSURL URLWithString:[dashBoardDict objectForKey:KPROFILE_IMAGE_W]]
-                                                 placeholderImage:[UIImage defaultPicImage]];
-                        //self.defaultImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dashBoardDict objectForKey:KPROFILE_IMAGE_W]]]];
-                 
-                 
-              }
-
-            });
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-            });
-        }
-    } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD dismiss];
-            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                                withMessage:[responseObject objectForKey:KMESSAGE_W]
-                                                     inView:self
-                                                  withStyle:UIAlertControllerStyleAlert];
-        });
-    }];
-}
-
-
 -(void)getProfileInfo
 {
     //WEB Service CODE
@@ -177,7 +125,8 @@
                 NSDictionary *profileImgDict =  [userDict objectForKey:KPROFILE_IMAGE_W];
                 NSString *imageURLString = [profileImgDict objectForKey:KURL_W];
                 if (imageURLString.length) {
-                    self.defaultImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURLString]]];
+                    [self.defaultImageView sd_setImageWithURL:[NSURL URLWithString:imageURLString]
+                                             placeholderImage:[UIImage defaultPicImage]];
                     self.defaultImageView.layer.cornerRadius = self.defaultImageView.frame.size.height /2;
                     self.defaultImageView.layer.masksToBounds = YES;
                 }
@@ -194,8 +143,30 @@
                 if (self.countryLabel.text.length) {
                     self.countryLabel.text = [NSString stringWithFormat:@"@%@",self.countryLabel.text];
                 }
-                self.myLanguageDetailLabel.text = [userDict objectForKey:KMYLANGUAGES_W];
-                //[self getLanguagesNames:self.myLanguageDetailLabel.text];
+                
+                /////////// Languages
+                NSLog(@"--langArray -->%@",App_Delegate.languagesArray);
+                NSArray *langArray = [[userDict objectForKey:KMYLANGUAGES_W] componentsSeparatedByString:@","];
+                if (langArray.count) {
+                    NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageCode beginswith[c] %@",[langArray objectAtIndex:0]];
+                    NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
+                    if (sortedArray.count) {
+                        LanguageObject *lObj = [sortedArray lastObject];
+                        self.myLanguageDetailLabel.text = lObj.languageName;
+                    }
+                }
+                else{
+                    NSString *str = [userDict objectForKey:KMYLANGUAGES_W];
+                    if (str.length) {
+                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageCode beginswith[c] %@",str];
+                        NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
+                        if (sortedArray.count) {
+                            LanguageObject *lObj = [sortedArray lastObject];
+                            self.myLanguageDetailLabel.text = lObj.languageName;
+                        }
+                    }
+                }
+                /////////////////
             });
         }
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
@@ -203,7 +174,6 @@
             [SVProgressHUD dismiss];
         });
     }];
-    
 }
 
 
@@ -212,13 +182,6 @@
     // Dispose of any resources that can be recreated.
 }
 
--(BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender{
-    //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil];
-    return YES;
-}
--(IBAction)callPressed:(id)sender{
-    //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil];
-}
 /*
 #pragma mark - Navigation
 

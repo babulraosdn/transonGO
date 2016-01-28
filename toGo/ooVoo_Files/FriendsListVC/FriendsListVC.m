@@ -30,7 +30,33 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     arrFriends = [NSMutableArray new];
+    App_Delegate.navController = self.navigationController;
+    [self autorize];
 }
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.sdk = [ooVooClient sharedInstance];
+    
+    secCounter=0;
+    // arrFriends=[[NSMutableArray alloc]initWithObjects:@"iphone6",@"android",@"ipadipad", nil];
+    arrFriends=[[NSMutableArray alloc]init];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AnswerDecline:) name:@"AnswerDecline" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AnswerAccept) name:@"AnswerAccept" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(otherUserbusy:) name:@"Busy" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(remoteUserIsOffLine:) name:@"OffLine" object:nil];
+    
+    
+    _isForCall?[self.btnCallOrSendMessage setTitle:@"Call" forState:UIControlStateNormal]:[self.btnCallOrSendMessage setTitle:@"Send Message" forState:UIControlStateNormal];
+    
+    if ([ActiveUserManager activeUser].token.length) {
+        _isForCall?@"":[self setNavigationBarRightButton];
+    }
+    
+    
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -166,15 +192,15 @@
 
 -(BOOL)canSend{
     
-    if ([arrFriends count]==0) {
-        [self showAlertWithTitle:@"No Friends" WithMessage:@"You must have friends in list to make a call !" CancelButton:@"Ok" OkButton:nil];
-        return NO;
-    }
+//    if ([arrFriends count]==0) {
+//        [self showAlertWithTitle:@"No Friends" WithMessage:@"You must have friends in list to make a call !" CancelButton:@"Ok" OkButton:nil];
+//        return NO;
+//    }
     return YES;
     
 }
 - (IBAction)actCall:(id)sender {
-    
+    /*
     if (![self canSend]) {
         [self showAlertWithTitle:@"No Friends" WithMessage:@"You must have friends in list to make a call !" CancelButton:@"Ok" OkButton:nil];
         return;
@@ -192,7 +218,7 @@
     [myAlertView setValue:loading forKey:@"accessoryView"];
     [loading startAnimating];
     [myAlertView show];
-    
+    */
     [self callToFriends];
 }
 
@@ -214,7 +240,6 @@
     
     [alertViewChangeName show];
     
-    
 }
 
 
@@ -227,7 +252,8 @@ int callAmount = 0 ; // saving the calling amount so if one of then rejects , th
     AppDelegate *appDelegate =(AppDelegate *)[[UIApplication sharedApplication]delegate];
     appDelegate.callingUsers = arrFriends;
     __block index=0;
-    
+    [arrFriends removeAllObjects];
+    [arrFriends addObject:@"babul123"];
   //  for (int i=0; i<[arrFriends count]; i++)
     {
       //  NSString *userName = arrFriends[i];
@@ -468,9 +494,58 @@ int callAmount = 0 ; // saving the calling amount so if one of then rejects , th
             //[_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForItem:[arrFriends count]-1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
         }
     }
-    
-    
 }
 
+
+- (void)autorize {
+    
+    NSString* token = [UserDefaults getObjectforKey:@"APP_TOKEN_SETTINGS_KEY"];
+    NSLog(@"Token FriendsList %@",token);
+    
+    [self.sdk authorizeClient:token
+                   completion:^(SdkResult *result) {
+                       
+                       sdk_error err = result.Result;
+                       if (err == sdk_error_OK) {
+                           NSLog(@"good autorization - FriendsList VC");
+                           sleep(0.5);
+                       }
+                       else {
+                           NSLog(@"fail  autorization - - FriendsList VC");
+                           
+                           
+                           if (err == sdk_error_InvalidToken) {
+                               double delayInSeconds = 0.75;
+                               dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                               dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                                   
+                                   
+                               });
+                               // [_spinner stopAnimating];
+                               
+                           }
+                           else if (err != sdk_error_InvalidToken)
+                           {
+                               double delayInSeconds = 0.75;
+                               dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                               dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                                   
+                               });
+                               //[_spinner stopAnimating];
+                           }
+                       }
+                       
+                   }];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [self callCancelFriends];
+    NSString * token = [ActiveUserManager activeUser].token;
+    if(token && token.length > 0){
+        [self.sdk.Account logout];
+    }else{
+        [self.sdk.Account logout];
+    }
+}
 
 @end

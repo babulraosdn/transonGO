@@ -139,7 +139,9 @@
                     if ([dashBoardDict objectForKey:KDESCRIPTION_W])
                         self.descriptionTextView.text = [dashBoardDict objectForKey:KDESCRIPTION_W];
                     if ([dashBoardDict objectForKey:KPROFILE_IMAGE_W])
-                        self.defaultImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dashBoardDict objectForKey:KPROFILE_IMAGE_W]]]];
+                        [self.defaultImageView sd_setImageWithURL:[dashBoardDict objectForKey:KPROFILE_IMAGE_W]
+                                                 placeholderImage:[UIImage defaultPicImage]];
+            
                }
                 
             });
@@ -254,7 +256,6 @@
                 NSString *imageURLString = [profileImgDict objectForKey:KURL_W];
                 
                 if (imageURLString.length) {
-                    //self.defaultImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURLString]]];
                     self.defaultImageView.layer.cornerRadius = self.defaultImageView.frame.size.height /2;
                     self.defaultImageView.layer.masksToBounds = YES;
                     [self.defaultImageView sd_setImageWithURL:[NSURL URLWithString:imageURLString]

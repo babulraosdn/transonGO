@@ -14,13 +14,6 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <TwitterKit/TwitterKit.h>
-//Spacing between elements
-//Address, description auto size
-//fonts se
-//Slide menu images size
-//small cell height slide menu
-//Dashboard buttons close
-//Alert view 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 {
     UINavigationController *navigationController ;
@@ -29,7 +22,7 @@
 }
 @property (strong, nonatomic) FBSDKLoginManager *facebookLoginManager;
 @property (strong, nonatomic) UINavigationController *navigationController ;
-
+@property (strong, nonatomic) UINavigationController *navController ;
 @property(nonatomic,strong) NSMutableArray *languagesArray;
 
 @property (strong, nonatomic) UIWindow *window;

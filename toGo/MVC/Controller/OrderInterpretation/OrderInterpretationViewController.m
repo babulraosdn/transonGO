@@ -41,6 +41,8 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [Utility_Shared_Instance showProgress];
+    [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
 }
 
 -(void)setLabelButtonNames{
@@ -122,7 +124,7 @@
 
 -(IBAction)confirmCancelButtonPressed:(UIButton *)sender{
     if (sender.tag==1) {
-        
+        [self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil];
     }
     else{
         
@@ -144,11 +146,11 @@
             NSMutableArray *array = [responseDict objectForKey:KDATA_W];
             if (array.count) {
                 NSMutableDictionary *dict = [array lastObject];
-                self.descriptionLabel.text = [NSString stringWithFormat:@"%@ $%.2f %@",NSLOCALIZEDSTRING(@"INTERPRETATION_SERVICE_CHARGE"),[[Utility_Shared_Instance checkForNullString:[dict objectForKey:KLANGUAGE_PRICE_W]] floatValue],NSLOCALIZEDSTRING(@"PER_MIN")];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.descriptionLabel.text = [NSString stringWithFormat:@"%@ $%.2f %@",NSLOCALIZEDSTRING(@"INTERPRETATION_SERVICE_CHARGE"),[[Utility_Shared_Instance checkForNullString:[dict objectForKey:KLANGUAGE_PRICE_W]] floatValue],NSLOCALIZEDSTRING(@"PER_MIN")];
+                    [SVProgressHUD dismiss];
+                });
             }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [SVProgressHUD dismiss];
-            });
         }
         else{
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -195,6 +197,58 @@
         [self getLanguagePrice];
     }
 }
+
+
+-(void)getProfileInfo
+{
+    //WEB Service CODE
+    [Web_Service_Call serviceCallWithRequestType:nil requestType:GET_REQUEST includeHeader:YES includeBody:NO webServicename:PROFILE_INFO_W_USER SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+        NSDictionary *responseDict=responseObject;
+        
+        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+                NSLog(@"dict-->%@",responseDict);
+                NSMutableDictionary *userDict = [responseDict objectForKey:@"user"];
+                [Utility_Shared_Instance writeStringUserPreference:KID_W value:[userDict objectForKey:KID_W]];
+                ;
+                /////////// Languages
+                NSLog(@"--langArray -->%@",App_Delegate.languagesArray);
+                NSArray *langArray = [[userDict objectForKey:KMYLANGUAGES_W] componentsSeparatedByString:@","];
+                if (langArray.count) {
+                    NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageCode beginswith[c] %@",[langArray objectAtIndex:0]];
+                    NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
+                    if (sortedArray.count) {
+                        LanguageObject *lObj = [sortedArray lastObject];
+                        self.fromDetailLabel.text = lObj.languageName;
+                        [self.fromImageView sd_setImageWithURL:[NSURL URLWithString:lObj.imagePathString]
+                                              placeholderImage:[UIImage defaultPicImage]];
+                    }
+                }
+                else{
+                    NSString *str = [userDict objectForKey:KMYLANGUAGES_W];
+                    if (str.length) {
+                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageCode beginswith[c] %@",str];
+                        NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
+                        if (sortedArray.count) {
+                            LanguageObject *lObj = [sortedArray lastObject];
+                            self.fromDetailLabel.text = lObj.languageName;
+                            [self.fromImageView sd_setImageWithURL:[NSURL URLWithString:lObj.imagePathString]
+                                                  placeholderImage:[UIImage defaultPicImage]];
+                        }
+                    }
+                }
+                /////////////////
+            });
+        }
+    } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+        });
+    }];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

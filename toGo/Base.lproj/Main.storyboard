@@ -1233,14 +1233,14 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sl7-AY-pXH" userLabel="From">
                                 <rect key="frame" x="15" y="172" width="283" height="90"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Eenglish-languages" translatesAutoresizingMaskIntoConstraints="NO" id="2Ll-TB-SDw">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_pic_iPhone" translatesAutoresizingMaskIntoConstraints="NO" id="2Ll-TB-SDw">
                                         <rect key="frame" x="5" y="21" width="48" height="48"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="48" id="0H9-Hu-3fy"/>
                                             <constraint firstAttribute="width" constant="48" id="gpI-Tr-fJ2"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="English" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yzb-Bx-rSX">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Language" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yzb-Bx-rSX">
                                         <rect key="frame" x="56" y="27" width="214" height="37"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="37" id="0zv-ll-Pfe"/>
@@ -1274,7 +1274,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HlY-BX-dbh" userLabel="To">
                                 <rect key="frame" x="303" y="172" width="282" height="90"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="France" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g3M-NU-8Eq">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Language" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g3M-NU-8Eq">
                                         <rect key="frame" x="13" y="27" width="213" height="37"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="37" id="eb6-JE-NGS"/>
@@ -1283,7 +1283,7 @@
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="france-languages" translatesAutoresizingMaskIntoConstraints="NO" id="Kn8-35-kre">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_pic_iPhone" translatesAutoresizingMaskIntoConstraints="NO" id="Kn8-35-kre">
                                         <rect key="frame" x="228" y="21" width="48" height="48"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="48" id="rNB-Er-9Og"/>
@@ -1391,6 +1391,7 @@
                         <outlet property="toDetailLabel" destination="g3M-NU-8Eq" id="Cdw-RY-Pdg"/>
                         <outlet property="toImageView" destination="Kn8-35-kre" id="sir-Lx-2wt"/>
                         <outlet property="toLabel" destination="3KP-YM-YHV" id="NLv-Dy-Ucd"/>
+                        <segue destination="b2g-dq-T25" kind="push" identifier="Segue_MenuConferenceVC" id="Lsa-MN-ytf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gxW-vL-lS7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2198,7 +2199,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Gm-Hg-p3V">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Gm-Hg-p3V">
                                 <rect key="frame" x="156" y="218" width="288" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="288" id="ISc-GD-pCR"/>
@@ -2215,14 +2216,16 @@
                             </button>
                             <button opaque="NO" tag="10" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wJH-ik-vs3">
                                 <rect key="frame" x="156" y="300" width="288" height="50"/>
+                                <color key="backgroundColor" red="0.61568627450000002" green="0.47843137250000001" blue="0.3411764706" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="Make A Call">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="actMakeCallOrSendMessage:" destination="b2g-dq-T25" eventType="touchUpInside" id="mRv-lh-ctv"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" tag="20" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7dQ-ky-op5">
+                            <button hidden="YES" opaque="NO" tag="20" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7dQ-ky-op5">
                                 <rect key="frame" x="156" y="386" width="288" height="50"/>
                                 <state key="normal" title="Send Push Message">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -2255,7 +2258,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QQx-kp-NTu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="991" y="3695"/>
+            <point key="canvasLocation" x="1267" y="3891"/>
         </scene>
         <!--Friends ListVC-->
         <scene sceneID="Pph-3Q-kpe">
@@ -2290,7 +2293,7 @@
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NzV-hA-ze5">
                                 <rect key="frame" x="20" y="8" width="560" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" title="Add Friend">
+                                <state key="normal" title="Add">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -2299,7 +2302,7 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cpk-aq-6yQ">
                                 <rect key="frame" x="20" y="567" width="560" height="30"/>
-                                <state key="normal" title="Call Or Send Message">
+                                <state key="normal" title="Call">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -2594,13 +2597,13 @@
                                 <rect key="frame" x="0.0" y="63" width="600" height="537"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_profile_iPhone" translatesAutoresizingMaskIntoConstraints="NO" id="TMw-em-wHi">
-                                        <rect key="frame" x="250" y="10" width="105" height="105"/>
+                                        <rect key="frame" x="252" y="12" width="101" height="101"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="105" id="oIP-tb-NsA"/>
-                                            <constraint firstAttribute="height" constant="105" id="sG2-rb-1ri"/>
+                                            <constraint firstAttribute="width" constant="101" id="oIP-tb-NsA"/>
+                                            <constraint firstAttribute="height" constant="101" id="sG2-rb-1ri"/>
                                         </constraints>
                                     </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_pic_iPhone" translatesAutoresizingMaskIntoConstraints="NO" id="Skv-do-OgR">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_pic_iPhone" translatesAutoresizingMaskIntoConstraints="NO" id="Skv-do-OgR">
                                         <rect key="frame" x="255" y="15" width="95" height="95"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="95" id="d1T-RC-lEr"/>
@@ -2724,7 +2727,7 @@
                                     <constraint firstItem="9yu-3B-Qj0" firstAttribute="leading" secondItem="rpv-D8-jo5" secondAttribute="leading" id="0c2-q8-6jc"/>
                                     <constraint firstAttribute="bottom" secondItem="jT2-WZ-m92" secondAttribute="bottom" constant="87" id="0s9-Ns-31h"/>
                                     <constraint firstItem="9yu-3B-Qj0" firstAttribute="leading" secondItem="n5F-uD-hrd" secondAttribute="leading" id="1gY-HQ-0ce"/>
-                                    <constraint firstItem="Skv-do-OgR" firstAttribute="bottom" secondItem="TMw-em-wHi" secondAttribute="bottom" constant="-5" id="2E3-A3-pd6"/>
+                                    <constraint firstItem="Skv-do-OgR" firstAttribute="bottom" secondItem="TMw-em-wHi" secondAttribute="bottom" constant="-3" id="2E3-A3-pd6"/>
                                     <constraint firstItem="oH5-pp-bsc" firstAttribute="top" relation="greaterThanOrEqual" secondItem="1bH-ZC-agB" secondAttribute="bottom" constant="8" id="5oo-La-6Bs"/>
                                     <constraint firstItem="Oz9-QV-jHE" firstAttribute="top" secondItem="vgb-Ea-frD" secondAttribute="top" constant="263" id="7KG-bT-xH8"/>
                                     <constraint firstItem="9yu-3B-Qj0" firstAttribute="top" secondItem="Y4Q-1D-TKB" secondAttribute="bottom" constant="10" id="E4X-v6-uou"/>
@@ -2749,7 +2752,7 @@
                                     <constraint firstItem="jT2-WZ-m92" firstAttribute="leading" secondItem="7j9-qU-oJh" secondAttribute="leading" id="Z85-71-2yl"/>
                                     <constraint firstItem="9yu-3B-Qj0" firstAttribute="leading" secondItem="1bH-ZC-agB" secondAttribute="leading" id="auu-Oa-7os"/>
                                     <constraint firstItem="cvt-ex-qeP" firstAttribute="top" secondItem="Skv-do-OgR" secondAttribute="bottom" constant="14" id="b2R-wd-gFJ"/>
-                                    <constraint firstItem="TMw-em-wHi" firstAttribute="top" secondItem="vgb-Ea-frD" secondAttribute="top" constant="10" id="d5J-GQ-xnc"/>
+                                    <constraint firstItem="TMw-em-wHi" firstAttribute="top" secondItem="vgb-Ea-frD" secondAttribute="top" constant="12" id="d5J-GQ-xnc"/>
                                     <constraint firstAttribute="bottom" secondItem="9yu-3B-Qj0" secondAttribute="bottom" constant="357" id="etf-OO-yWn"/>
                                     <constraint firstItem="9yu-3B-Qj0" firstAttribute="centerX" secondItem="Skv-do-OgR" secondAttribute="centerX" id="fkR-xV-d4H"/>
                                     <constraint firstItem="1bH-ZC-agB" firstAttribute="top" secondItem="7j9-qU-oJh" secondAttribute="top" id="gzt-2x-MFS"/>
@@ -2778,7 +2781,7 @@
                                     </mask>
                                 </variation>
                             </scrollView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="DASHBOARD" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z4Z-C1-tkU">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DASHBOARD" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z4Z-C1-tkU">
                                 <rect key="frame" x="0.0" y="20" width="600" height="40"/>
                                 <color key="backgroundColor" red="0.87843137250000003" green="0.57647058819999997" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -2792,8 +2795,8 @@
                         <constraints>
                             <constraint firstItem="vgb-Ea-frD" firstAttribute="trailing" secondItem="z4Z-C1-tkU" secondAttribute="trailing" id="5FF-LI-Ryv"/>
                             <constraint firstAttribute="leadingMargin" secondItem="rpv-D8-jo5" secondAttribute="leading" id="8Hi-pP-OJM"/>
-                            <constraint firstItem="z4Z-C1-tkU" firstAttribute="top" secondItem="bJQ-OV-sfk" secondAttribute="bottom" constant="2" id="LRS-zK-1ZT"/>
-                            <constraint firstItem="vgb-Ea-frD" firstAttribute="top" secondItem="z4Z-C1-tkU" secondAttribute="bottom" constant="1" id="VLm-vw-wo2"/>
+                            <constraint firstItem="z4Z-C1-tkU" firstAttribute="top" secondItem="bJQ-OV-sfk" secondAttribute="bottom" id="LRS-zK-1ZT"/>
+                            <constraint firstItem="vgb-Ea-frD" firstAttribute="top" secondItem="z4Z-C1-tkU" secondAttribute="bottom" constant="3" id="VLm-vw-wo2"/>
                             <constraint firstAttribute="trailingMargin" secondItem="rpv-D8-jo5" secondAttribute="trailing" id="c1D-tu-Ujg"/>
                             <constraint firstItem="vgb-Ea-frD" firstAttribute="bottom" secondItem="s40-by-vNG" secondAttribute="top" id="ic2-SY-rbd"/>
                             <constraint firstItem="vgb-Ea-frD" firstAttribute="leading" secondItem="z4Z-C1-tkU" secondAttribute="leading" id="u5b-pa-OTS"/>
@@ -2825,7 +2828,6 @@
     </scenes>
     <resources>
         <image name="Edit_iPhone" width="12" height="12"/>
-        <image name="Eenglish-languages" width="62" height="62"/>
         <image name="arrow-Ellipse" width="28" height="28"/>
         <image name="bg_iPhone" width="310" height="484"/>
         <image name="buttonWhiteDarkShade" width="382" height="51"/>
@@ -2838,7 +2840,6 @@
         <image name="effects" width="72" height="72"/>
         <image name="email_icon_iPhone" width="20" height="13"/>
         <image name="fb_iPhone" width="54" height="53"/>
-        <image name="france-languages" width="62" height="62"/>
         <image name="g+_iPhone" width="54" height="53"/>
         <image name="light-button" width="204" height="100"/>
         <image name="mic" width="72" height="72"/>
@@ -2854,8 +2855,8 @@
         <image name="unselect_iPhone" width="17" height="17"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="aOS-yc-nCM"/>
-        <segue reference="fAp-Qo-UAn"/>
+        <segue reference="Lsa-MN-ytf"/>
         <segue reference="3YI-PF-rsG"/>
+        <segue reference="aOS-yc-nCM"/>
     </inferredMetricsTieBreakers>
 </document>
