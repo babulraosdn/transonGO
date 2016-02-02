@@ -35,6 +35,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
     [self setSlideMenuButtonFornavigation];
     [self setLogoutButtonForNavigation];
     [self setLabelButtonNames];
@@ -58,6 +59,26 @@
     
     [Utility_Shared_Instance showProgress];
     [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
+    
+//    
+//    [self.sdk.Account login:[Utility_Shared_Instance readStringUserPreference:KUID_W]
+//    // [self.sdk.Account login:@"babul123"
+//    //[self.sdk.Account login:self.txt_userId.text
+//completion:^(SdkResult *result) {
+//    NSLog(@"result code=%d result description %@", result.Result, result.description);
+//    if (result.Result != sdk_error_OK){
+//        [[[UIAlertView alloc] initWithTitle:@"Login Error" message:result.description delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
+//        //[self.loginButton setEnabled:true];
+//    }
+//    else
+//    {
+//        //[self onLogin:result.Result];
+//        if(![self.sdk.Messaging isConnected])
+//            [self.sdk.Messaging connect];
+//    }
+//    
+//}];
+    
 }
 
 -(void)viewDidLayoutSubviews{
@@ -106,61 +127,8 @@
     self.customerFeedBackButton.titleLabel.font = [UIFont largeSize];
 }
 
-// 1860 180 1290
-// 9am to 6 PM
--(void)getDashboardInfo
-{
-    [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"PLEASE_WAIT")]];
-    //WEB Service CODE
-    [Web_Service_Call getProfileInfoServiceCall:[Utility_Shared_Instance checkForNullString:[NSString stringWithFormat:@"%@%@",@"Bearer ",[Utility_Shared_Instance readStringUserPreference:USER_TOKEN]]] webServicename:PROFILE_INFO_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
-        NSDictionary *responseDict=responseObject;
-        
-        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [SVProgressHUD dismiss];
-                NSLog(@"dict-->%@",responseDict);
-             if ([responseDict objectForKey:KDASHBOARD_W]){
-                    NSMutableDictionary *dashBoardDict = [responseDict objectForKey:KDASHBOARD_W];
-                    NSString *idString;
-                    NSString *statusString;
-                    if ([dashBoardDict objectForKey:KID_W])
-                        idString = [dashBoardDict objectForKey:KID_W];
-                    if ([dashBoardDict objectForKey:KNAME_W])
-                        self.interpreterName.text = [dashBoardDict objectForKey:KNAME_W];
-                    if ([dashBoardDict objectForKey:KNO_OF_CALL_W])
-                        self.noOfCallDetailLabel.text = [dashBoardDict objectForKey:KNO_OF_CALL_W];
-                    if ([dashBoardDict objectForKey:KCALL_MINUTES_W])
-                        self.callMinutesDetailLabel.text = [dashBoardDict objectForKey:KCALL_MINUTES_W];
-                    if ([dashBoardDict objectForKey:KCALL_YTD_EARNINGS_W])
-                        self.callYtdEarningsDetailLabel.text = [dashBoardDict objectForKey:KCALL_YTD_EARNINGS_W];
-                    if ([dashBoardDict objectForKey:KSTATUS_W])
-                        statusString = [dashBoardDict objectForKey:KSTATUS_W];
-                    if ([dashBoardDict objectForKey:KDESCRIPTION_W])
-                        self.descriptionTextView.text = [dashBoardDict objectForKey:KDESCRIPTION_W];
-                    if ([dashBoardDict objectForKey:KPROFILE_IMAGE_W])
-                        [self.defaultImageView sd_setImageWithURL:[dashBoardDict objectForKey:KPROFILE_IMAGE_W]
-                                                 placeholderImage:[UIImage defaultPicImage]];
-            
-               }
-                
-            });
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-            });
-        }
-    } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD dismiss];
-            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                                withMessage:[responseObject objectForKey:KMESSAGE_W]
-                                                     inView:self
-                                                  withStyle:UIAlertControllerStyleAlert];
-        });
-    }];
-}
 
-- (void)changeAvailabilityStatus:(id)sender
+- (IBAction)changeAvailabilityStatus
 {
     NSMutableDictionary *statusDict=[NSMutableDictionary new];
    [statusDict setValue:[Utility_Shared_Instance readStringUserPreference:KID_W] forKey:KID_W];
@@ -230,6 +198,7 @@
                 [SVProgressHUD dismiss];
                 NSLog(@"dict-->%@",responseDict);
                 NSMutableDictionary *userDict = [responseDict objectForKey:@"user"];
+                [Utility_Shared_Instance writeStringUserPreference:KUID_W value:[userDict objectForKey:KUID_W]];
                 [Utility_Shared_Instance writeStringUserPreference:KID_W value:[userDict objectForKey:KID_W]];
                 
                 if ([userDict objectForKey:KNAME_W]) {
@@ -264,11 +233,11 @@
                 
                NSString *interpreterAvailabiltyString = [NSString stringWithFormat:@"%@",[Utility_Shared_Instance checkForNullString:[userDict objectForKey:KINTERPRETER_AVAILABILITY_W]]];
                 if ([interpreterAvailabiltyString isEqualToString:INTERPRETER_UN_AVAILABLE]) {
-                    [self.switchButton setImage:[UIImage switchONImage] forState:UIControlStateNormal];
+                    [self.switchButton setImage:[UIImage switchOffImage] forState:UIControlStateNormal];
                     [Utility_Shared_Instance writeStringUserPreference:KINTERPRETER_AVAILABILITY_W value:INTERPRETER_UN_AVAILABLE];
                 }
                 else{
-                    [self.switchButton setImage:[UIImage switchOffImage] forState:UIControlStateNormal];
+                    [self.switchButton setImage:[UIImage switchONImage] forState:UIControlStateNormal];
                     [Utility_Shared_Instance writeStringUserPreference:KINTERPRETER_AVAILABILITY_W value:INTERPRETER_AVAILABLE];
                 }
             });
@@ -297,5 +266,6 @@
         }];
         
     }
+    [self changeAvailabilityStatus];
 }
 @end

@@ -7,25 +7,26 @@
 //
 
 #import "LogInVC.h"
-#import "UIView-Extensions.h"
-#import "ActiveUserManager.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
-
-//#import "SettingBundle.h"
-#import "UserDefaults.h"
 #import "AppDelegate.h"
 #import "SlideMenuViewController.h"
-#import "MenuConferenceVC.h"
-#define User_isInVideoView @"User_isInVideoView"
-
-#define UserDefault_UserId @"UserID"
-#define UserDefault_DisplayName @"displayName"
-
 #import <ooVooSDK/ooVooPushService.h>
-
 #import <TwitterKit/TwitterKit.h>
 #import <Twitter/Twitter.h>
+
+#import "UIView-Extensions.h"
+#import "ActiveUserManager.h"
+//#import "SettingBundle.h"
+#import "UserDefaults.h"
+#define User_isInVideoView @"User_isInVideoView"
+#define Segue_Authorization @"ToAuthorizationView"
+#define Segue_MenuConferenceVC @"Segue_MenuConferenceVC"
+#define Segue_VideoConference @"Segue_VideoConferenceVC"
+#define UserDefault_UserId @"UserID"
+#define UserDefault_DisplayName @"displayName"
+#import <ooVooSDK/ooVooPushService.h>
+
 
 @interface LogInVC ()<UITextFieldDelegate> {
     AppDelegate  *appDelegate;
@@ -73,7 +74,6 @@
     [self setPadding];
     [self setColors];
     [self setFonts];
-    
 }
 
 
@@ -91,7 +91,6 @@
     loginDictionary = [NSMutableDictionary new];
     appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
     self.sdk = [ooVooClient sharedInstance];
-    self.sdk.Account.delegate = self;
     socialView=[SocialView new];
     socialView.delegate=self;
 }
@@ -153,12 +152,17 @@
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setShowsVerticalScrollIndicator:NO];
     
-    _txt_userId.text = [self randomUser];
-    _txtDisplayName.text=[self returnSavedDisplayname];
+    //self.txt_userId.text = @"testcustomer@gmail.com";
+    //self.txtDisplayName.text = @"Test@123";
+    
+    //_txt_userId.text = [self randomUser];
+    //_txtDisplayName.text=[self returnSavedDisplayname];
+    
     userIDString = _txt_userId.text;
     passwordString = _txtDisplayName.text;
     [self autorize];
 }
+
 - (void)viewDidDisappear:(BOOL)animated {
     self.txt_userId.text = @"";
     self.txtDisplayName.text = @"";
@@ -169,7 +173,7 @@
 - (void)autorize {
     
     [Utility_Shared_Instance showProgress];
-    NSString* token = TOKEN;
+    NSString* token = @"MDAxMDAxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZUYVW%2BB1MwyBDpt22C0WvOeMPW7fH6mMOv8d%2FAPeFZ2QeCOguU288bRzsChrixFyZ%2BKzm9nrLmfOkZwyPrAO%2BDP8wgDiVtL%2F0w9mZQ78Az5Hk6imDbhYGNGRFMqo0H2virlVE4Q%2Bpf5S%2Fm50MO%2BMh";
     NSLog(@"Token -->Login--->%@",token);
     
     [self.sdk authorizeClient:token
@@ -257,6 +261,7 @@
 
 - (IBAction)act_LogIn:(id)sender {
     
+    
     //[self createSidePanel];
     //return;
     
@@ -265,8 +270,8 @@
     //[self.view addSubview:viewIs]; //Alert View Custom
     //[App_Delegate takeTour];//Take a Tour
     
-    [UserDefaults setObject:_txt_userId.text ForKey:UserDefault_UserId];
-    [UserDefaults setObject:_txtDisplayName.text ForKey:UserDefault_DisplayName];
+//    [UserDefaults setObject:_txt_userId.text ForKey:UserDefault_UserId];
+//    [UserDefaults setObject:_txtDisplayName.text ForKey:UserDefault_DisplayName];
     
     if (self.txt_userId.text.length<1)
         [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
@@ -351,9 +356,10 @@
                     
                 }
                 else{
+                    [Utility_Shared_Instance writeStringUserPreference:KUID_W value:[responseDict objectForKey:KUID_W]];
                     [Utility_Shared_Instance writeStringUserPreference:KUSERNAME_W value:userIDString];
                     [self ooVooLogin];
-                    [self createSidePanel];
+                    //[self createSidePanel];
                 }
             }
             else{
@@ -720,79 +726,7 @@
 
 #pragma mark - private methods
 
--(void)ooVooLogin{
-    
-    //[self.sdk.Account login:[Utility_Shared_Instance readStringUserPreference:KUSERNAME_W]
-    [self.sdk.Account login:@"test123"
-    //[self.sdk.Account login:@"babul123"
-                 completion:^(SdkResult *result) {
-                     NSLog(@"result code=%d result description %@", result.Result, result.description);
-                     //[spinner stopAnimating];
-                     if (result.Result != sdk_error_OK){
-                         [SVProgressHUD dismiss];
-                         ///*
-                         [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                                             withMessage:@"USERID SHOULD BE MINIUMUM 6 CHARACTERS"
-                                                                  inView:self
-                                                               withStyle:UIAlertControllerStyleAlert];
-                         //*/
-                     }
-                     else
-                     {
-                         [SVProgressHUD dismiss];
-                         [self onLogin:result.Result];
-                         if(![self.sdk.Messaging isConnected])
-                             [self.sdk.Messaging connect];
-                     }
-                 }];
-    
-}
 
-
-- (void)onLogin:(BOOL)error {
-    if (!error) {
-        
-        [ActiveUserManager activeUser].userId = self.txt_userId.text;
-        [ActiveUserManager activeUser].displayName = self.txtDisplayName.text;
-        
-        [UserDefaults setObject:[ActiveUserManager activeUser].userId ForKey:[ActiveUserManager activeUser].userId];
-        [UserDefaults setObject:[ActiveUserManager activeUser].displayName ForKey:[ActiveUserManager activeUser].displayName];
-        
-        NSString * uuid = [[NSUUID UUID] UUIDString] ;
-        NSString * token = [ActiveUserManager activeUser].token;
-        if(token && token.length > 0){
-            [self.sdk.PushService subscribe:token deviceUid:uuid completion:^(SdkResult *result){
-                [ActiveUserManager activeUser].isSubscribed = true;
-                //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
-            }];
-        }
-        
-        else
-        {
-            //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
-        }
-        
-    }else{
-        [self.loginButton setEnabled:true];
-    }
-    
-}
-
-- (NSString *)randomUser {
-    
-    if ([UserDefaults getObjectforKey:UserDefault_UserId]) {
-        return [UserDefaults getObjectforKey:UserDefault_UserId];
-    }
-    return @"";
-}
-
-- (NSString *)returnSavedDisplayname {
-    
-    if ([UserDefaults getObjectforKey:UserDefault_DisplayName]) {
-        return [UserDefaults getObjectforKey:UserDefault_DisplayName];
-    }
-    return @"";
-}
 
 
 #pragma Mark UITextField Delegate Methods
@@ -828,6 +762,117 @@
     
 }
 
+#pragma mark - AlertView Custom delegate
+-(void)finishAlertViewCustomAction:(UIButton *)sender{
+    if (sender.tag ==1) {
+        [self createSidePanel];
+    }else{
+        [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
+    }
+   
+}
+
+
+#pragma mark - IBAction
+
+- (IBAction)ooVooLogin{
+    
+//    if ([self isUserIdEmpty])
+//        return;
+    
+//    [UserDefaults setObject:[Utility_Shared_Instance readStringUserPreference:KUID_W] ForKey:UserDefault_UserId];
+//    [UserDefaults setObject:[Utility_Shared_Instance readStringUserPreference:KUID_W] ForKey:UserDefault_DisplayName];
+    //[UserDefaults setObject:_txtDisplayName.text ForKey:UserDefault_DisplayName];
+    //[UserDefaults setObject:@"user1454389915259" ForKey:UserDefault_DisplayName];
+//    [sender setEnabled:false];
+//    [spinner startAnimating];
+    
+    [self.sdk.Account login:[Utility_Shared_Instance readStringUserPreference:KUID_W]
+   // [self.sdk.Account login:@"babul123"
+    //[self.sdk.Account login:self.txt_userId.text
+                 completion:^(SdkResult *result) {
+                     NSLog(@"result code=%d result description %@", result.Result, result.description);
+                     [spinner stopAnimating];
+                     if (result.Result != sdk_error_OK){
+                         [[[UIAlertView alloc] initWithTitle:@"Login Error" message:result.description delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
+                         [self.loginButton setEnabled:true];
+                     }
+                     else
+                     {
+                         [self onLogin:result.Result];
+                         if(![self.sdk.Messaging isConnected])
+                             [self.sdk.Messaging connect];
+                     }
+                 }];
+}
+
+
+#pragma mark - private methods
+
+- (BOOL)isUserIdEmpty {
+    
+    // removing white space from start and end
+    if ([[self.txt_userId.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@""]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"UserId Missing" message:@"Please enter userId " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alert show];
+        
+        self.txt_userId.text = @"";
+        
+        return true;
+    }
+    
+    if (self.txt_userId.text.length < 6) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Characters Missing" message:@"UserId Must contain at least 6 characters " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+        [alert show];
+        
+        return true;
+    }
+    
+    return false;
+}
+
+
+- (void)onLogin:(BOOL)error {
+    
+    if (!error) {
+        [ActiveUserManager activeUser].userId =[Utility_Shared_Instance readStringUserPreference:KUID_W];
+        [ActiveUserManager activeUser].displayName = [Utility_Shared_Instance readStringUserPreference:KUID_W];
+        //        NSString * uuid = [[NSUUID UUID] UUIDString] ;
+        //        NSString * token = [ActiveUserManager activeUser].token;
+        //        if(token && token.length > 0){
+        //        [self.sdk.PushService subscribe:token deviceUid:uuid completion:^(SdkResult *result){
+        //        [ActiveUserManager activeUser].isSubscribed = true;
+        //            [self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
+        //        }];
+        //        }
+        //
+        //        else
+        //        {
+                [self createSidePanel];
+        //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
+        //        }
+        
+    }else{
+        [self.loginButton setEnabled:true];
+    }
+}
+
+- (NSString *)randomUser {
+    
+    if ([UserDefaults getObjectforKey:UserDefault_UserId]) {
+        return [UserDefaults getObjectforKey:UserDefault_UserId];
+    }
+    return @"";
+}
+
+- (NSString *)returnSavedDisplayname {
+    
+    if ([UserDefaults getObjectforKey:UserDefault_DisplayName]) {
+        return [UserDefaults getObjectforKey:UserDefault_DisplayName];
+    }
+    return @"";
+}
+
 #pragma mark - ooVoo Account delegate
 
 - (void)didAccountLogIn:(id<ooVooAccount>)account {
@@ -838,14 +883,6 @@
     
 }
 
-#pragma mark - AlertView Custom delegate
--(void)finishAlertViewCustomAction:(UIButton *)sender{
-    if (sender.tag ==1) {
-        [self createSidePanel];
-    }else{
-        [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
-    }
-   
-}
+
 
 @end

@@ -9,6 +9,7 @@
 #import "ProfileViewEditViewController.h"
 #import "ProfileImageTableViewCell.h"
 #import "Headers.h"
+#import <AssetsLibrary/AssetsLibrary.h>
 
 #define HEADER_HEIGHT 163
 #define DEFAULT_TABLE_CELL_HEIGHT 57
@@ -108,7 +109,7 @@
     self.headerLabel.text = NSLOCALIZEDSTRING(@"PROFILE");
     
     [self getCountryList];
-    
+    App_Delegate.naviController= self.navigationController;
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification
@@ -387,7 +388,7 @@
                 [addressCell.contentView addSubview:editBtn];
 
                 
-                UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, self.view.frame.size.width-60, 20)];
+                UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, self.view.frame.size.width-60, 20)];
                 label.text = [self.namesArray objectAtIndex:indexPath.row];
                 label.tag = LABEL_TAG;
                 //label.backgroundColor = [UIColor redColor];
@@ -1583,6 +1584,7 @@
                 NSLog(@"dict-->%@",responseDict);
                 NSMutableDictionary *userDict = [responseDict objectForKey:@"user"];
                 self.profileObject = [ProfileInfoObject new];
+                [Utility_Shared_Instance writeStringUserPreference:KUID_W value:[userDict objectForKey:KUID_W]];
                 self.profileObject.uIdString = [userDict objectForKey:KUID_W];
                 self.profileObject.idString = [userDict objectForKey:KID_W];
                 [Utility_Shared_Instance writeStringUserPreference:KID_W value:[userDict objectForKey:KID_W]];
@@ -1612,7 +1614,7 @@
                 self.profileObject.dobString = [userDict objectForKey:KDOB];
                 self.profileObject.postalCodeString = [userDict objectForKey:KPOSTALCODE_W];
                 self.profileObject.phoneNumberString = [userDict objectForKey:KPHONE_NUMBER_W];
-                self.profileObject.myLanguagesKEYsString = [NSString stringWithFormat:@"%@",[Utility_Shared_Instance checkForNullString:[userDict objectForKey:KMYLANGUAGES_W]]];
+                self.profileObject.myLanguagesKEYsString = [userDict objectForKey:KMYLANGUAGES_W];
                 
                 if ([userDict objectForKey:KEIN_TAXID_W]) {
                     NSString *einTempSting = [userDict objectForKey:KEIN_TAXID_W];
@@ -1632,12 +1634,12 @@
                 
                 self.profileObject.dobString = [self dateConvertion];
                 /////////// Languages
-                NSLog(@"--langArray -->%@",App_Delegate.languagesArray);
-                NSArray *langArray = [[userDict objectForKey:KMYLANGUAGES_W] componentsSeparatedByString:@","];
+                //NSLog(@"--langArray -->%@",App_Delegate.languagesArray);
+                NSArray *langArray = [userDict objectForKey:KMYLANGUAGES_W];//[ componentsSeparatedByString:@","];
                 if (langArray.count) {
                     self.selectedLanguagesArray = [NSMutableArray new];
                     for (id key in langArray) {
-                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageCode beginswith[c] %@",key];
+                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageID beginswith[c] %@",key];
                         NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
                         if (sortedArray.count) {
                             LanguageObject *lObj = [sortedArray lastObject];
@@ -1646,6 +1648,7 @@
                     }
                 }
                 /////////////////
+                
                 
                 ///////////////// Get States With Country Name
                 if (self.profileObject.countryString.length) {
@@ -1832,7 +1835,7 @@
     
     NSMutableString *mutableStr = [NSMutableString new];
     for (LanguageObject *lObj in self.selectedLanguagesArray) {
-            [mutableStr appendString:[NSString stringWithFormat:@"%@,",lObj.languageCode]];
+            [mutableStr appendString:[NSString stringWithFormat:@"%@,",lObj.languageID]];
     }
     NSString *tempStr = [NSString stringWithString:mutableStr];
     if ([tempStr hasSuffix:@","]) {
@@ -1893,7 +1896,8 @@
 
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.nickNameString] forKey:KNICKNAME_W];
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.phoneNumberString] forKey:KPHONE_NUMBER_W];
-    [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.myLanguagesKEYsString] forKey:KMYLANGUAGE_W];
+    NSArray *langKeysArray = [[Utility_Shared_Instance checkForNullString:self.profileObject.myLanguagesKEYsString] componentsSeparatedByString:@","];
+    [saveDict setValue:langKeysArray forKey:KMYLANGUAGE_W];
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.addressString] forKey:KADDRESS_W];
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.countryString] forKey:KCOUNTRY_W];
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.stateString] forKey:KSTATE_W];
@@ -2095,6 +2099,13 @@
 }
 
 - (void)cameraGalleryButtonPressed{
+    
+    ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
+    
+    if (status != ALAuthorizationStatusAuthorized) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Attention" message:@"Please give this app permission to access your photo library in your settings app!" delegate:nil cancelButtonTitle:@"Close" otherButtonTitles:nil, nil];
+        [alert show];
+    }
     
     UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:NSLOCALIZEDSTRING(@"CHOOSE_PROFILE_IMAGE") message:@"" delegate:self cancelButtonTitle:NSLOCALIZEDSTRING(@"CAMERA") otherButtonTitles:NSLOCALIZEDSTRING(@"GALLERY"), nil];
     alertView.delegate = self;

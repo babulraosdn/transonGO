@@ -7,27 +7,38 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "VideoConferenceVC.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 #import "Headers.h"
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <TwitterKit/TwitterKit.h>
+
+#import "VideoConferenceVC.h"
+#import <AVFoundation/AVAudioPlayer.h>
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 {
     UINavigationController *navigationController ;
     UIStoryboard *mainStoryboard ;
     VideoConferenceVC *viewVideoControler ;
+    
+    AVAudioPlayer *_audioPlayer;
+    //  VideoConferenceVCWithRender *viewVideoControllerRender;
 }
-@property (strong, nonatomic) FBSDKLoginManager *facebookLoginManager;
-@property (strong, nonatomic) UINavigationController *navigationController ;
-@property (strong, nonatomic) UINavigationController *navController ;
-@property(nonatomic,strong) NSMutableArray *languagesArray;
 
-@property (strong, nonatomic) UIWindow *window;
 @property (retain, nonatomic) ooVooClient *sdk;
 @property(nonatomic,strong)NSMutableArray *callingUsers;
+
+
+@property(nonatomic,strong) NSString *conferenceIDString;
+
+
+@property (strong, nonatomic) FBSDKLoginManager *facebookLoginManager;
+@property (strong, nonatomic) UINavigationController *naviController ;
+@property(nonatomic,strong) NSMutableArray *languagesArray;
+@property(nonatomic,strong) NSMutableArray *interpreterListArray;
+@property (strong, nonatomic) UIWindow *window;
 @property(nonatomic,strong)NSString *emailString;
 -(void)subscribePushNotifications : (UIApplication *)application;
 

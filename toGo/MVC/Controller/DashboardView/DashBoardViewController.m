@@ -46,6 +46,8 @@
     
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setShowsVerticalScrollIndicator:NO];
+    App_Delegate.naviController= self.navigationController;
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -54,6 +56,7 @@
     [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
     [App_Delegate getLanguages];
 }
+
 -(void)setLabelButtonNames{
     self.headerLabel.text = NSLOCALIZEDSTRING(@"DASHBOARD_SLIDE");
     self.myLanguageLabel.text = NSLOCALIZEDSTRING(@"MY_LANGUAGE");
@@ -69,6 +72,7 @@
     [self.manageMyProfileButton setBackgroundImage:[UIImage imageNamed:LIGHT_BUTTON_IMAGE] forState:UIControlStateNormal];
     [self.viewPurchaseHistoryButton setBackgroundImage:[UIImage imageNamed:LIGHT_BUTTON_IMAGE] forState:UIControlStateNormal];
 }
+
 -(void)setRoundCorners{
     [UIButton roundedCornerButton:self.orderInterpretationButton];
     [UIButton roundedCornerButton:self.manageMyProfileButton];
@@ -118,9 +122,10 @@
                 [SVProgressHUD dismiss];
                 NSLog(@"dict-->%@",responseDict);
                 NSMutableDictionary *userDict = [responseDict objectForKey:@"user"];
+                [Utility_Shared_Instance writeStringUserPreference:KUID_W value:[userDict objectForKey:KUID_W]];
                 [Utility_Shared_Instance writeStringUserPreference:KID_W value:[userDict objectForKey:KID_W]];
 ;
-                self.descriptionTextView.text =[userDict objectForKey:KABOUT_USER_W];
+                self.descriptionTextView.text = [userDict objectForKey:KABOUT_USER_W];
                 
                 NSDictionary *profileImgDict =  [userDict objectForKey:KPROFILE_IMAGE_W];
                 NSString *imageURLString = [profileImgDict objectForKey:KURL_W];
@@ -145,10 +150,11 @@
                 }
                 
                 /////////// Languages
-                NSLog(@"--langArray -->%@",App_Delegate.languagesArray);
-                NSArray *langArray = [[userDict objectForKey:KMYLANGUAGES_W] componentsSeparatedByString:@","];
+               // NSLog(@"--langArray -->%@",App_Delegate.languagesArray);
+                 
+                NSArray *langArray = [userDict objectForKey:KMYLANGUAGES_W];//[ componentsSeparatedByString:@","];
                 if (langArray.count) {
-                    NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageCode beginswith[c] %@",[langArray objectAtIndex:0]];
+                    NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageID beginswith[c] %@",[langArray objectAtIndex:0]];
                     NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
                     if (sortedArray.count) {
                         LanguageObject *lObj = [sortedArray lastObject];
@@ -158,7 +164,7 @@
                 else{
                     NSString *str = [userDict objectForKey:KMYLANGUAGES_W];
                     if (str.length) {
-                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageCode beginswith[c] %@",str];
+                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageID beginswith[c] %@",str];
                         NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
                         if (sortedArray.count) {
                             LanguageObject *lObj = [sortedArray lastObject];
@@ -166,6 +172,7 @@
                         }
                     }
                 }
+                
                 /////////////////
             });
         }

@@ -7,24 +7,38 @@
 //
 
 #import "AppDelegate.h"
-
+#import <GooglePlus/GooglePlus.h>
+#import "WebLoginControllerViewController.h"
+#import "Constants.h"
 
 #import <ooVooSDK/ooVooSDK.h>
 #import "FileLogger.h"
 
 #import "UserDefaults.h"
-//#import "SettingBundle.h"
-
-#import <GooglePlus/GooglePlus.h>
-#import "WebLoginControllerViewController.h"
-
 #import "MessageManager.h"
 #import "AlertView.h"
 #import "ActiveUserManager.h"
-#import "Constants.h"
+#import "MenuConferenceVC.h"
+#import "MessageManager.h"
 #define User_isInVideoView @"User_isInVideoView"
 
- 
+
+
+
+#define APP_TOKEN_SETTINGS_KEY    @"12349983355077"
+#define LOG_LEVEL_SETTINGS_KEY    @"LOG_LEVEL_SETTINGS_KEY"
+#define APP_VIDEO_RENDER          @"APP_VIDEO_RENDER"
+#define APP_MESSAGING            @"APP_MESSAGING"
+
+#define DEVICE_TOKEN            @"DEVICE_TOKEN"
+#define USER_ID                 @"USER_ID"
+
+
+#ifndef TOKEN
+#define TOKEN @"MDAxMDAxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZUYVW%2BB1MwyBDpt22C0WvOeMPW7fH6mMOv8d%2FAPeFZ2QeCOguU288bRzsChrixFyZ%2BKzm9nrLmfOkZwyPrAO%2BDP8wgDiVtL%2F0w9mZQ78Az5Hk6imDbhYGNGRFMqo0H2virlVE4Q%2Bpf5S%2Fm50MO%2BMh"
+#endif
+
+
 @interface AppDelegate ()<UIAlertViewDelegate>{
     AlertView *alert ;
 }
@@ -36,53 +50,85 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
-        
+    self.interpreterListArray = [NSMutableArray new];
     [Fabric with:@[[Crashlytics class], [Twitter class]]];
-
-    
     [self subscribePushNotifications:application];
+    self.callingUsers = [NSMutableArray new];
+    [self setUpGooglePlusConfiguration];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor  navigationBarColor]];
+    
+    //////
+    [ActiveUserManager activeUser].token =[UserDefaults getObjectforKey:DEVICE_TOKEN];
+    [ActiveUserManager activeUser].userId =[UserDefaults getObjectforKey:USER_ID];
+    NSLog(@"My token is: %@", [ActiveUserManager activeUser].token);
+    NSLog(@"[ActiveUserManager activeUser].userId--->: %@", [ActiveUserManager activeUser].userId);
+    
+    
     
     self.sdk = [ooVooClient sharedInstance];
     self.callingUsers = [NSMutableArray new];
 #ifdef DEBUG
     NSLog(@"Debug mode no Hockey");
 #else
-
+    
+    
+    
+    
 #endif
     
     
     
     [UserDefaults setBool:NO ToKey:User_isInVideoView];
-    [self setUpGooglePlusConfiguration];
+    
     [self setupConnectionParameters];
     
     
     [[MessageManager sharedMessage]initSdkMessage]; // a singeltone for retrieve a message of a incoming call
     
-    navigationController = (UINavigationController *)self.window.rootViewController;
-    mainStoryboard = [UIStoryboard storyboardWithName:@"Main_ooVoo" bundle: nil];
+    {
+        
+        navigationController = (UINavigationController *)self.window.rootViewController;
+    }
+    
+    mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    
     
     viewVideoControler = (VideoConferenceVC *)[mainStoryboard instantiateViewControllerWithIdentifier:@"VideoConferenceVC"];
     NSLog(@"***********************   didFinishLaunchingWithOptions  ****************************");
     [self SetNotificationObserversForCallMessaging];
     
     
-    NSLog(@"%d",[UserDefaults getBoolForToKey:APP_VIDEO_RENDER]);
+    NSLog(@"APP_VIDEO_RENDER---->%d",[UserDefaults getBoolForToKey:APP_VIDEO_RENDER]);
     
     
-    ///////// Nav Bar Image  /////////
-    /* //WORKINg CODE for Image
-    UIImage *gradientImage32 = [[UIImage navigationBarImage] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
-    [[UINavigationBar appearance] setBackgroundImage:[UIImage navigationBarImage]
-                                       forBarMetrics:UIBarMetricsDefault];
-    [self.navigationController.navigationBar setBackgroundImage:gradientImage32 forBarMetrics:UIBarMetricsDefault];
-    */
-    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
-    [[UINavigationBar appearance] setBarTintColor:[UIColor  navigationBarColor]];
     
-    ////////////////////////////////////////////
+    application.applicationIconBadgeNumber = 0;
     
-    //[self performSelector:@selector(crashButtonTapped:) withObject:nil afterDelay:0];
+    // Handle launching from a notification
+    UILocalNotification *localNotif =
+    [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+    if (localNotif) {
+        NSLog(@"Recieved Notification %@",localNotif);
+    }
+    
+    
+    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+#ifdef __IPHONE_8_0
+        UIUserNotificationType types = UIUserNotificationTypeBadge |
+        UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+        //
+        UIUserNotificationSettings *mySettings =
+        [UIUserNotificationSettings settingsForTypes:types categories:nil];
+        //
+        [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
+        [application registerForRemoteNotifications];
+#endif
+    } else {
+        UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
+        [application registerForRemoteNotificationTypes:myTypes];
+    }
+    //////////
     return YES;
 }
 
@@ -117,36 +163,154 @@
 }
 */
 
+#pragma mark - Push notification
+
+-(void)subscribePushNotifications : (UIApplication *)application{
+        if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+    #ifdef __IPHONE_8_0
+            UIUserNotificationType types = UIUserNotificationTypeBadge |
+            UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+            //
+            UIUserNotificationSettings *mySettings =
+            [UIUserNotificationSettings settingsForTypes:types categories:nil];
+            //
+            [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
+            [application registerForRemoteNotifications];
+    #endif
+        } else {
+            UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
+            [application registerForRemoteNotificationTypes:myTypes];
+        }
+}
+
+#pragma mark Google_Plus Start
+//Google_Plus
+-(void)openWebView:(NSNotification *)noti{
+    
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
+    WebLoginControllerViewController *obj = (WebLoginControllerViewController *)[storyBoard instantiateViewControllerWithIdentifier:@"WebLoginControllerViewController"];
+    [obj loadURL:noti.object];
+    if ([self.window.rootViewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController *navi = (UINavigationController *)self.window.rootViewController;
+        [navi.visibleViewController presentViewController:obj animated:YES completion:nil];
+    }else{
+        [self.window.rootViewController presentViewController:obj animated:YES completion:nil];
+    }
+}
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+    return [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                          openURL:url
+                                                sourceApplication:sourceApplication
+                                                       annotation:annotation] ||[GPPURLHandler handleURL:url
+                                                                                       sourceApplication:sourceApplication
+                                                                                              annotation:annotation];
+    /*
+    return [GPPURLHandler handleURL:url
+                  sourceApplication:sourceApplication
+                         annotation:annotation];
+    */
+}
+
+#pragma mark - GPPDeepLinkDelegate
+
+- (void)didReceiveDeepLink:(GPPDeepLink *)deepLink {
+    // An example to handle the deep link data.
+    UIAlertView *alertView = [[UIAlertView alloc]
+                          initWithTitle:@"Deep-link Data"
+                          message:[deepLink deepLinkID]
+                          delegate:nil
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil];
+    [alertView show];
+    alertView = nil;
+}
+
+#pragma mark Google_Plus END
+
+-(void)takeTour
+{
+    NSString *curentVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    curentVersion = [curentVersion stringByReplacingOccurrencesOfString:@"." withString:@""];
+    [TakeTourView launchTakeTourViewWithNewVersion:YES];
+}
+
+-(void)getLanguages {
+    //WEB Service CODE
+    [Utility_Shared_Instance showProgress];
+    self.languagesArray = [NSMutableArray new];
+    [Web_Service_Call serviceCallWithRequestType:nil requestType:GET_REQUEST includeHeader:YES includeBody:NO webServicename:GET_LANGUAGES_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+        NSDictionary *responseDict=responseObject;
+        
+        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+            });
+            NSMutableArray *dataArray = [responseDict objectForKey:KDATA_W];
+            for (id json in dataArray) {
+                LanguageObject *lObj = [LanguageObject new];
+                NSString *iconStr = [json objectForKey:KICON_W];
+                iconStr = [iconStr stringByReplacingOccurrencesOfString:@"<img src='" withString:@""];
+                iconStr = [iconStr stringByReplacingOccurrencesOfString:@"'  />" withString:@""];
+                lObj.imagePathString = [NSString stringWithFormat:@"%@%@",BASE_URL,iconStr];
+                lObj.languageName = [json objectForKey:KLANGUAGE_W];
+                lObj.languageID = [json objectForKey:KLANGUAGEID_W];
+                [self.languagesArray addObject:lObj];
+            }
+        }
+    } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+        });
+    }];
+}
+
+///////
+
+- (void)application:(UIApplication *)app didReceiveLocalNotification:(UILocalNotification  *)notif {
+    // Handle the notificaton when the app is running
+    NSLog(@"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ Recieved Notification %@",notif);
+}
+
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    [ooVooClient applicationWillResignActive];
-    
-    bool isMessaging = [[[NSUserDefaults standardUserDefaults] stringForKey:APP_MESSAGING]boolValue];
-    if (!isMessaging) {
-        ooVooClient *sdk = [ooVooClient sharedInstance];
-        [sdk.Messaging disconnect];
-    }
+    //    [ooVooClient applicationWillResignActive];
+    //
+    //    bool isMessaging = [[[NSUserDefaults standardUserDefaults] stringForKey:APP_MESSAGING]boolValue];
+    //    if (!isMessaging) {
+    //        ooVooClient *sdk = [ooVooClient sharedInstance];
+    //        [sdk.Messaging disconnect];
+    //    }
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    [ooVooClient applicationDidEnterBackground];
-    ooVooClient *sdk = [ooVooClient sharedInstance];
-    [sdk.AVChat.VideoController stopTransmitVideo];
+    
+    [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
+    
+    //    [ooVooClient applicationDidEnterBackground];
+    //    ooVooClient *sdk = [ooVooClient sharedInstance];
+    //    [sdk.AVChat.VideoController stopTransmitVideo];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    [ooVooClient applicationWillEnterForeground];
-    ooVooClient *sdk = [ooVooClient sharedInstance];
-    [sdk.AVChat.VideoController startTransmitVideo];
+    //    [ooVooClient applicationWillEnterForeground];
+    //    ooVooClient *sdk = [ooVooClient sharedInstance];
+    //    [sdk.AVChat.VideoController startTransmitVideo];
 }
+
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    [ooVooClient applicationDidBecomeActive];
-    
-    bool isMessaging = [[[NSUserDefaults standardUserDefaults] stringForKey:APP_MESSAGING]boolValue];
-    if (!isMessaging) {
-        ooVooClient *sdk = [ooVooClient sharedInstance];
-        [sdk.Messaging connect];
-    }
+    //   [ooVooClient applicationDidBecomeActive];
+    //
+    //    bool isMessaging = [[[NSUserDefaults standardUserDefaults] stringForKey:APP_MESSAGING]boolValue];
+    //    if (!isMessaging) {
+    //        ooVooClient *sdk = [ooVooClient sharedInstance];
+    //        [sdk.Messaging connect];
+    //    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -227,7 +391,31 @@
 
 -(void)incomingCall:(NSNotification*)notif{
     
-        NSLog(@"notification %@",notif.userInfo);
+    
+    
+    
+    [self playSystemLineSound];
+    UILocalNotification *localNotif = [[UILocalNotification alloc] init];
+    localNotif.fireDate = [NSDate date];//date;  // date after 10 sec from now
+    localNotif.timeZone = [NSTimeZone defaultTimeZone];
+    
+    // Notification details
+    localNotif.alertBody =  @"Incoming Call, Please click here"; // text of you that you have fetched
+    // Set the action button
+    localNotif.alertAction = @"View";
+    
+    localNotif.soundName = UILocalNotificationDefaultSoundName;
+    localNotif.applicationIconBadgeNumber = 1;
+    
+    // Specify custom data for the notification
+    NSDictionary *infoDict = [NSDictionary dictionaryWithObject:@"someValue" forKey:@"someKey"];
+    localNotif.userInfo = infoDict;
+    
+    // Schedule the notification
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
+    
+    
+    NSLog(@"notification %@",notif.userInfo);
     CNMessage *message=[notif object];
     
     // if we are in video "ROOM" and i am transmitting video on other session Than i am busy
@@ -240,6 +428,7 @@
             [[MessageManager sharedMessage]messageOtherUsers:[NSArray arrayWithObject:message.fromUseriD]  WithMessageType:Busy WithConfID:viewVideoControler.conferenceId Compelition:^(BOOL CallSuccess) {
                 
             }];
+            
             return;
         }
         
@@ -396,8 +585,7 @@
         {// if view controller is not shown yet
             
             @try {
-                [self.navController pushViewController:viewVideoControler animated:NO];
-                //[navigationController pushViewController:viewVideoControler animated:NO];
+                [self.naviController pushViewController:viewVideoControler animated:NO];
             } @catch (NSException * ex) {
                 NSLog(@"Exception: %@", ex);
                 //“Pushing the same view controller instance more than once is not supported”
@@ -411,7 +599,11 @@
                 if ([ex.name isEqualToString:@"NSInvalidArgumentException"] &&
                     range.location != NSNotFound) {
                     //view controller already exists in the stack - just pop back to it
-                    [navigationController popToViewController:viewVideoControler animated:NO];
+//                    for (NSString *remainigUser in self.callingUsers) {
+//                        [[MessageManager sharedMessage]messageOtherUsers:[NSArray arrayWithObject:remainigUser] WithMessageType:Cancel WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess) {
+//                        }];
+//                    }
+                    [self.naviController popToViewController:viewVideoControler animated:NO];
                 } else {
                     NSLog(@"ERROR:UNHANDLED EXCEPTION TYPE:%@", ex);
                 }
@@ -443,7 +635,7 @@
     //        }
     //        else // view is allready on
     //        {
-    //            
+    //
     //        }
     //    }
     
@@ -452,137 +644,129 @@
     
 }
 
-
-
 #pragma mark - Push notification
 
--(void)subscribePushNotifications : (UIApplication *)application{
-        if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-    #ifdef __IPHONE_8_0
-            UIUserNotificationType types = UIUserNotificationTypeBadge |
-            UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
-            //
-            UIUserNotificationSettings *mySettings =
-            [UIUserNotificationSettings settingsForTypes:types categories:nil];
-            //
-            [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
-            [application registerForRemoteNotifications];
-    #endif
-        } else {
-            UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
-            [application registerForRemoteNotificationTypes:myTypes];
-        }
-}
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
 {
+    
+    NSString *devToken = [[[[deviceToken description]
+                            stringByReplacingOccurrencesOfString:@"<"withString:@""]
+                           stringByReplacingOccurrencesOfString:@">" withString:@""]
+                          stringByReplacingOccurrencesOfString: @" " withString:@""];
+    NSLog(@"deviceToken:%@",devToken);
+    
+    
     NSLog(@"My token is: %@", deviceToken);
+    NSLog(@"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%d%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   didRegisterForRemoteNotificationsWithDeviceToken");
     const unsigned *tokenBytes = [deviceToken bytes];
     NSString *hexToken = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
                           ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
                           ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
                           ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
     [ActiveUserManager activeUser].token = hexToken;
+    
+    [UserDefaults setObject:hexToken ForKey:DEVICE_TOKEN];
     NSLog(@"My token is: %@", [ActiveUserManager activeUser].token);
+    NSLog(@"[ActiveUserManager activeUser].userId--->: %@", [ActiveUserManager activeUser].userId);
+    
+    
+    
+    /*
+     
+     [UserDefaults setObject:[ActiveUserManager activeUser].token ForKey:[ActiveUserManager activeUser].userId];
+     
+     NSString * uuid = [[NSUUID UUID] UUIDString] ;
+     NSString * token = [ActiveUserManager activeUser].token;
+     
+     if(token && token.length > 0){
+     [self.sdk.PushService subscribe:token deviceUid:uuid completion:^(SdkResult *result)
+     {
+     [ActiveUserManager activeUser].isSubscribed = true;
+     }];
+     
+     }
+     */
+    
 }
-
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
     NSLog(@"user info %@",userInfo);
+    
+    NSLog(@"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% didReceiveRemoteNotification");
+    
+    
 }
-
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
 {
     NSLog(@"Failed to get token, error: %@", error);
     
-}
-
-
-#pragma mark Google_Plus Start
-//Google_Plus
--(void)openWebView:(NSNotification *)noti{
+    NSLog(@"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   didFailToRegisterForRemoteNotificationsWithError");
     
-    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
-    WebLoginControllerViewController *obj = (WebLoginControllerViewController *)[storyBoard instantiateViewControllerWithIdentifier:@"WebLoginControllerViewController"];
-    [obj loadURL:noti.object];
-    if ([self.window.rootViewController isKindOfClass:[UINavigationController class]]) {
-        UINavigationController *navi = (UINavigationController *)self.window.rootViewController;
-        [navi.visibleViewController presentViewController:obj animated:YES completion:nil];
-    }else{
-        [self.window.rootViewController presentViewController:obj animated:YES completion:nil];
+}
+
+
+
+-(void)playSystemSound{
+    
+    NSString *path = [NSString stringWithFormat:@"%@/video incoming call rev.mp3", [[NSBundle mainBundle] resourcePath]];
+    NSURL *soundUrl = [NSURL fileURLWithPath:path];
+    
+    // Create audio player object and initialize with URL to sound
+    
+    [self initAudioSoundWith:soundUrl];
+    
+    [_audioPlayer play];
+    
+}
+
+-(void)initAudioSoundWith:(NSURL*)url{
+    
+    if (_audioPlayer) {
+        _audioPlayer.delegate=nil;
+        _audioPlayer=nil;
     }
+    //_audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+    //_audioPlayer.delegate=self;
 }
 
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation {
-    return [[FBSDKApplicationDelegate sharedInstance] application:application
-                                                          openURL:url
-                                                sourceApplication:sourceApplication
-                                                       annotation:annotation] ||[GPPURLHandler handleURL:url
-                                                                                       sourceApplication:sourceApplication
-                                                                                              annotation:annotation];
-    /*
-    return [GPPURLHandler handleURL:url
-                  sourceApplication:sourceApplication
-                         annotation:annotation];
-    */
+-(void)playSystemLineSound{
+    
+    NSString *path = [NSString stringWithFormat:@"%@/CallLine.mp3", [[NSBundle mainBundle] resourcePath]];
+    NSURL *soundUrl = [NSURL fileURLWithPath:path];
+    
+    [self initAudioSoundWith:soundUrl];
+    [_audioPlayer play];
+    
+    
+    UIBackgroundTaskIdentifier newTaskId = UIBackgroundTaskInvalid;
+    if([_audioPlayer play]){
+        newTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
+    }
+    [self initAudioSoundWith:soundUrl];
+    [_audioPlayer play];
+    
+    if([_audioPlayer play]){
+        newTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
+    }
+    [self initAudioSoundWith:soundUrl];
+    [_audioPlayer play];
+    
+    
 }
 
-#pragma mark - GPPDeepLinkDelegate
+#pragma mark - AVAudioFoundation Delegate
 
-- (void)didReceiveDeepLink:(GPPDeepLink *)deepLink {
-    // An example to handle the deep link data.
-    UIAlertView *alertView = [[UIAlertView alloc]
-                          initWithTitle:@"Deep-link Data"
-                          message:[deepLink deepLinkID]
-                          delegate:nil
-                          cancelButtonTitle:@"OK"
-                          otherButtonTitles:nil];
-    [alertView show];
-    alertView = nil;
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag{
+    [player play];
 }
 
-#pragma mark Google_Plus END
-
-
--(void)takeTour
-{
-    NSString *curentVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    curentVersion = [curentVersion stringByReplacingOccurrencesOfString:@"." withString:@""];
-    [TakeTourView launchTakeTourViewWithNewVersion:YES];
+-(void)stopCallSound{
+    [_audioPlayer stop];
+    _audioPlayer.delegate=nil;
+    _audioPlayer=nil;
+    
 }
 
--(void)getLanguages{
-    //WEB Service CODE
-    [Utility_Shared_Instance showProgress];
-    self.languagesArray = [NSMutableArray new];
-    [Web_Service_Call serviceCallWithRequestType:nil requestType:GET_REQUEST includeHeader:YES includeBody:NO webServicename:GET_LANGUAGES_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
-        NSDictionary *responseDict=responseObject;
-        
-        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [SVProgressHUD dismiss];
-            });
-            NSMutableArray *dataArray = [responseDict objectForKey:KDATA_W];
-            for (id json in dataArray) {
-                LanguageObject *lObj = [LanguageObject new];
-                NSString *iconStr = [json objectForKey:KICON_W];
-                iconStr = [iconStr stringByReplacingOccurrencesOfString:@"<img src='" withString:@""];
-                iconStr = [iconStr stringByReplacingOccurrencesOfString:@"'  />" withString:@""];
-                lObj.imagePathString = [NSString stringWithFormat:@"%@%@",BASE_URL,iconStr];
-                lObj.languageName = [json objectForKey:KLANGUAGE_W];
-                lObj.languageCode = [json objectForKey:KLANGUAGEID_W];
-                [self.languagesArray addObject:lObj];
-            }
-        }
-    } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD dismiss];
-        });
-    }];
-}
-
+////////////
 
 @end
 

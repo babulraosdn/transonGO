@@ -15,32 +15,32 @@
 #endif
 
 
-//1
-///*
-#define APP_TOKEN_SETTINGS_KEY    @"12349983355392"
-#define LOG_LEVEL_SETTINGS_KEY    @"LOG_LEVEL_SETTINGS_KEY"
-#define APP_VIDEO_RENDER            @"APP_VIDEO_RENDER"
-#define APP_MESSAGING            @"APP_MESSAGING"
-
-
-#ifndef TOKEN
-
-#define TOKEN @"MDAxMDAxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACs5wargiqXmlwM3bTZvfNOocpZHMgFFy9TaEfqCu4GrTO7y6TKXQZXtPLNmO1fWi4w1oUzY5wcXlSuiLl5YHFJx2%2FZP6baqkSrDP5ywPkbVGsHlvRUHkLmE%2B6%2BeY4LVVAxLwTliCn%2FDCPSve1wV6hT"
-#endif
-//*/
-
-/* //2
- #define APP_TOKEN_SETTINGS_KEY    @"12349983355077"
- #define LOG_LEVEL_SETTINGS_KEY    @"LOG_LEVEL_SETTINGS_KEY"
- #define APP_VIDEO_RENDER            @"APP_VIDEO_RENDER"
- #define APP_MESSAGING            @"APP_MESSAGING"
- 
- 
- #ifndef TOKEN
- 
- #define TOKEN @"MDAxMDAxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZUYVW%2BB1MwyBDpt22C0WvOeMPW7fH6mMOv8d%2FAPeFZ2QeCOguU288bRzsChrixFyZ%2BKzm9nrLmfOkZwyPrAO%2BDP8wgDiVtL%2F0w9mZQ78Az5Hk6imDbhYGNGRFMqo0H2virlVE4Q%2Bpf5S%2Fm50MO%2BMh"
- #endif
- */
+////1
+/////*
+//#define APP_TOKEN_SETTINGS_KEY    @"12349983355392"
+//#define LOG_LEVEL_SETTINGS_KEY    @"LOG_LEVEL_SETTINGS_KEY"
+//#define APP_VIDEO_RENDER            @"APP_VIDEO_RENDER"
+//#define APP_MESSAGING            @"APP_MESSAGING"
+//
+//
+//#ifndef TOKEN
+//
+//#define TOKEN @"MDAxMDAxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACs5wargiqXmlwM3bTZvfNOocpZHMgFFy9TaEfqCu4GrTO7y6TKXQZXtPLNmO1fWi4w1oUzY5wcXlSuiLl5YHFJx2%2FZP6baqkSrDP5ywPkbVGsHlvRUHkLmE%2B6%2BeY4LVVAxLwTliCn%2FDCPSve1wV6hT"
+//#endif
+////*/
+//
+///* //2
+// #define APP_TOKEN_SETTINGS_KEY    @"12349983355077"
+// #define LOG_LEVEL_SETTINGS_KEY    @"LOG_LEVEL_SETTINGS_KEY"
+// #define APP_VIDEO_RENDER            @"APP_VIDEO_RENDER"
+// #define APP_MESSAGING            @"APP_MESSAGING"
+// 
+// 
+// #ifndef TOKEN
+// 
+// #define TOKEN @"MDAxMDAxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZUYVW%2BB1MwyBDpt22C0WvOeMPW7fH6mMOv8d%2FAPeFZ2QeCOguU288bRzsChrixFyZ%2BKzm9nrLmfOkZwyPrAO%2BDP8wgDiVtL%2F0w9mZQ78Az5Hk6imDbhYGNGRFMqo0H2virlVE4Q%2Bpf5S%2Fm50MO%2BMh"
+// #endif
+// */
 
 
 
@@ -182,6 +182,7 @@ _Pragma("clang diagnostic pop") \
 #define PROFILE_IMAGE_UPLOAD_W        @"api/upload"
 #define GET_COUNTRY_LIST_W            @"getCountryList"
 #define GET_STATE_LIST_W              @"getState?country="
+#define GET_INTERPRETER_BY_LANGUAGE_W @"getInterpreterByLanguage"//This will return price also
 
 //getUserProfile
 //
@@ -189,7 +190,7 @@ _Pragma("clang diagnostic pop") \
 #define UPDATE_INTERPRETER_PROFILE_INFO_W   @"api/updateAgentProfile"
 #define UPDATE_USER_PROFILE_INFO_W          @"api/updateUserProfile"
 #define GET_LANGUAGES_W                     @"getLanguageList"
-#define GET_LANGUAGE_PRICE_W                     @"getLanguagePrice"
+#define GET_LANGUAGE_PRICE_W                @"getLanguagePrice"
 
 //updateUserProfile
 //
@@ -252,10 +253,10 @@ _Pragma("clang diagnostic pop") \
 #define KCOUNTRY_ID_W                   @"countryId"
 #define KSTATE_NAME_W                   @"stateName"
 
-#define KLANGUAGEID_W                   @"languageId"
+#define KLANGUAGEID_W                   @"id"
 #define KICON_W                         @"icon"
 #define KDATA_W                         @"data"
-
+#define KPRICE_W                            @"price"
 #define KTO_LANGUAGE_W                  @"toLanguage"
 #define KFROM_LANGUAGE_W                @"fromLanguage"
 #define KLANGUAGE_PRICE_W               @"languagePrice"

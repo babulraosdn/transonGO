@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "Headers.h"
+#import <ooVooSDK/ooVooSDK.h>
 @interface DashboardInterpreterViewController : BaseViewController
+@property (retain, nonatomic) ooVooClient *sdk;
 
 @end

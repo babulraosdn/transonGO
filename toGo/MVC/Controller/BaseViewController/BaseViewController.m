@@ -24,6 +24,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    App_Delegate.naviController = self.navigationController;
     self.title = NSLOCALIZEDSTRING(@"TOGO");
     self.view.backgroundColor = [UIColor backgroundColor];
     appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
