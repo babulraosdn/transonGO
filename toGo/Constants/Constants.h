@@ -260,6 +260,7 @@ _Pragma("clang diagnostic pop") \
 #define KTO_LANGUAGE_W                  @"toLanguage"
 #define KFROM_LANGUAGE_W                @"fromLanguage"
 #define KLANGUAGE_PRICE_W               @"languagePrice"
+#define KLANGUAGE_NAME_W                @"languageName"
 
 #define K_W                            @""
 

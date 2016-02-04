@@ -65,7 +65,6 @@
     [self.manageMyProfileButton setTitle:NSLOCALIZEDSTRING(@"MANAGE_MY_PROFILE")  forState: UIControlStateNormal];
     [self.viewPurchaseHistoryButton setTitle:NSLOCALIZEDSTRING(@"VIEW_PURCHASE_HISTORY")  forState: UIControlStateNormal];
     [self.provideFeedBackButton setTitle:NSLOCALIZEDSTRING(@"PROVIDE_FEEDBACK")  forState: UIControlStateNormal];
-    
 }
 
 -(void)setImages{
@@ -149,6 +148,7 @@
                     self.countryLabel.text = [NSString stringWithFormat:@"@%@",self.countryLabel.text];
                 }
                 
+                /*
                 /////////// Languages
                // NSLog(@"--langArray -->%@",App_Delegate.languagesArray);
                  
@@ -172,8 +172,9 @@
                         }
                     }
                 }
-                
                 /////////////////
+                */
+                self.myLanguageDetailLabel.text = [responseDict objectForKey:KLANGUAGE_NAME_W];
             });
         }
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {

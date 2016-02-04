@@ -75,7 +75,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    self.navigationItem.title = @"Conference";
+    self.navigationItem.title = NSLOCALIZEDSTRING(APPLICATION_NAME);
     
     if (_pageControl.numberOfPages>1 && [self isIpad]) {
         _pageControl.hidden=false;
@@ -216,11 +216,11 @@
     [self saveMaxFrameSize];
   
     if ([self checkPanelSize:currentFullScreenPanel]) {
-    //    [self UserMainPanel_Touched:[self videoPanel]];
+        [self UserMainPanel_Touched:[self videoPanel]];
     }
     
     // fix the panels in place
-    for (int i=1 ; i<[arrTakenSlot count]; i++) {
+    for (int i=1 ; i<3; i++) {
         if (![arrTakenSlot[i]isEqualToString:String_Empty]) // if the place is taken
         {
             id panel = self.videoPanels[arrTakenSlot[i]];
@@ -553,8 +553,7 @@
         self.navigationItem.rightBarButtonItems=nil ;
         
         UIBarButtonItem *btnJoin = [[UIBarButtonItem alloc] initWithTitle:@"Join" style:UIBarButtonItemStylePlain target:self action:@selector(act_joinConference:)];
-        
-        self.navigationItem.rightBarButtonItem=btnJoin;
+        //self.navigationItem.rightBarButtonItem=btnJoin;//me
         return;
     }
     
@@ -583,7 +582,7 @@
     btnSecurity.tag=200;
     
     // [btnSecurity setTintColor: [UIColor clearColor]];
-    self.navigationItem.rightBarButtonItems = @[ btnEditUserInfo, /* fixedSpaceBarButtonItem,  */ btnInternetConnection,btnSecurity];
+    //self.navigationItem.rightBarButtonItems = @[ btnEditUserInfo, /* fixedSpaceBarButtonItem,  */ btnInternetConnection,btnSecurity];
     
     
 //    disable navigation bar translucent.
@@ -761,6 +760,7 @@
     
     else
     {
+        
         [self saveDefaultFrameSize];
         [self saveMaxFrameSize];
         
@@ -826,14 +826,15 @@
     self.contrainTopViewText.constant = [arrDefultConstrain[0] integerValue];
     [self animateConstraints];
 
-    if ([self isCustomRenderView])
-    {
-        self.constrainRightViewVideoRender.constant = [arrDefultConstrain[1] integerValue];
-        self.constrainBottomViewVideoRender.constant = [arrDefultConstrain[2] integerValue];
-        self.constrainLeftViewVideoRender.constant = [arrDefultConstrain[3] integerValue];
-        self.constrainTopViewVideoRender.constant = [arrDefultConstrain[4] integerValue];
-    }
-    else
+    //These line commented to make the "Me" video small left hand corner
+//    if ([self isCustomRenderView])
+//    {
+//        self.constrainRightViewVideoRender.constant = [arrDefultConstrain[1] integerValue];
+//        self.constrainBottomViewVideoRender.constant = [arrDefultConstrain[2] integerValue];
+//        self.constrainLeftViewVideoRender.constant = [arrDefultConstrain[3] integerValue];
+//        self.constrainTopViewVideoRender.constant = [arrDefultConstrain[4] integerValue];
+//    }
+//    else
     {
     // video constrain
     self.constrainRightViewVideo.constant = [arrDefultConstrain[1] integerValue];
@@ -853,15 +854,17 @@
     {
         arrDefultConstrain = [[NSMutableArray alloc] initWithCapacity:5];
         [arrDefultConstrain addObject:[NSNumber numberWithInt:self.contrainTopViewText.constant]];      // 0
-        
-        if ([self isCustomRenderView])
+
+        //These line commented to make the "Me" video small left hand corner
+//        if ([self isCustomRenderView])
+//        {
+//            [arrDefultConstrain addObject:[NSNumber numberWithInt:self.constrainRightViewVideoRender.constant]];  // 1
+//            [arrDefultConstrain addObject:[NSNumber numberWithInt:self.constrainBottomViewVideoRender.constant]]; // 2
+//            [arrDefultConstrain addObject:[NSNumber numberWithInt:self.constrainLeftViewVideoRender.constant]]; // 3
+//            [arrDefultConstrain addObject:[NSNumber numberWithInt:self.constrainTopViewVideoRender.constant]]; // 4
+//        }
+//        else
         {
-            [arrDefultConstrain addObject:[NSNumber numberWithInt:self.constrainRightViewVideoRender.constant]];  // 1
-            [arrDefultConstrain addObject:[NSNumber numberWithInt:self.constrainBottomViewVideoRender.constant]]; // 2
-            [arrDefultConstrain addObject:[NSNumber numberWithInt:self.constrainLeftViewVideoRender.constant]]; // 3
-            [arrDefultConstrain addObject:[NSNumber numberWithInt:self.constrainTopViewVideoRender.constant]]; // 4
-        }
-        else{
             [arrDefultConstrain addObject:[NSNumber numberWithInt:self.constrainRightViewVideo.constant]];  // 1
             [arrDefultConstrain addObject:[NSNumber numberWithInt:self.constrainBottomViewVideo.constant]]; // 2
             [arrDefultConstrain addObject:[NSNumber numberWithInt:self.constrainLeftViewVideo.constant]]; // 3
@@ -877,30 +880,31 @@
         self.contrainTopViewText.constant -= self.viewTextBox.frame.size.height;
         [self animateConstraints];
           [arrBackupConstrain addObject:[NSNumber numberWithInt:self.contrainTopViewText.constant]];      // 0
-        
-        if ([self isCustomRenderView]) {
-            // video constrain
-            self.constrainRightViewVideoRender.constant += (self.viewForVideoSizeAdjest.width/2)+space;
-            self.constrainLeftViewVideoRender.constant =space;
-            
-            self.constrainBottomViewVideoRender.constant += (self.viewForVideoSizeAdjest.height/2)+space;
-            self.constrainBottomViewVideoRender.constant += self.viewCustomTollbar_container.height;
-            self.constrainTopViewVideoRender.constant=space;
-            _isViewInTransmitMode = true;
-            
-            // saving the small size video constrains
-            // if (!arrBackupConstrain)
-            
-            arrBackupConstrain=nil;
-            arrBackupConstrain = [[NSMutableArray alloc] initWithCapacity:5];
-            [arrBackupConstrain addObject:[NSNumber numberWithInt:self.contrainTopViewText.constant]];      // 0
-            [arrBackupConstrain addObject:[NSNumber numberWithInt:self.constrainRightViewVideoRender.constant]];  // 1
-            [arrBackupConstrain addObject:[NSNumber numberWithInt:self.constrainBottomViewVideoRender.constant]]; // 2
-            [arrBackupConstrain addObject:[NSNumber numberWithInt:self.constrainLeftViewVideoRender.constant]]; // 2
-            [arrBackupConstrain addObject:[NSNumber numberWithInt:self.constrainTopViewVideoRender.constant]]; // 2
 
-        }
-        else
+        //These line commented to make the "Me" video small left hand corner
+//        if ([self isCustomRenderView]) {
+//            // video constrain
+//            self.constrainRightViewVideoRender.constant += (self.viewForVideoSizeAdjest.width/2)+space;
+//            self.constrainLeftViewVideoRender.constant =space;
+//            
+//            self.constrainBottomViewVideoRender.constant += (self.viewForVideoSizeAdjest.height/2)+space;
+//            self.constrainBottomViewVideoRender.constant += self.viewCustomTollbar_container.height;
+//            self.constrainTopViewVideoRender.constant=space;
+//            _isViewInTransmitMode = true;
+//            
+//            // saving the small size video constrains
+//            // if (!arrBackupConstrain)
+//            
+//            arrBackupConstrain=nil;
+//            arrBackupConstrain = [[NSMutableArray alloc] initWithCapacity:5];
+//            [arrBackupConstrain addObject:[NSNumber numberWithInt:self.contrainTopViewText.constant]];      // 0
+//            [arrBackupConstrain addObject:[NSNumber numberWithInt:self.constrainRightViewVideoRender.constant]];  // 1
+//            [arrBackupConstrain addObject:[NSNumber numberWithInt:self.constrainBottomViewVideoRender.constant]]; // 2
+//            [arrBackupConstrain addObject:[NSNumber numberWithInt:self.constrainLeftViewVideoRender.constant]]; // 2
+//            [arrBackupConstrain addObject:[NSNumber numberWithInt:self.constrainTopViewVideoRender.constant]]; // 2
+//
+//        }
+//        else
         {
             // video constrain
             self.constrainRightViewVideo.constant += (self.viewForVideoSizeAdjest.width/2)+space;
@@ -943,13 +947,14 @@
     
         self.contrainTopViewText.constant=[arrBackupConstrain[0]integerValue];
     
-    if ([self isCustomRenderView]) {
-        self.constrainRightViewVideoRender.constant=[arrBackupConstrain[1]integerValue];
-        self.constrainBottomViewVideoRender.constant=[arrBackupConstrain[2]integerValue];
-        self.constrainLeftViewVideoRender.constant=[arrBackupConstrain[3]integerValue];
-        self.constrainTopViewVideoRender.constant=[arrBackupConstrain[4]integerValue];
-    }
-    else
+    //These line commented to make the "Me" video small left hand corner
+//    if ([self isCustomRenderView]) {
+//        self.constrainRightViewVideoRender.constant=[arrBackupConstrain[1]integerValue];
+//        self.constrainBottomViewVideoRender.constant=[arrBackupConstrain[2]integerValue];
+//        self.constrainLeftViewVideoRender.constant=[arrBackupConstrain[3]integerValue];
+//        self.constrainTopViewVideoRender.constant=[arrBackupConstrain[4]integerValue];
+//    }
+//    else
     {
         self.constrainRightViewVideo.constant=[arrBackupConstrain[1]integerValue];
         self.constrainBottomViewVideo.constant=[arrBackupConstrain[2]integerValue];
@@ -969,13 +974,14 @@
     self.contrainTopViewText.constant=0;
      [self animateConstraints];
     
-    if ([self isCustomRenderView]) {
-        self.constrainRightViewVideoRender.constant = 0;
-        self.constrainBottomViewVideoRender.constant = 0;
-        self.constrainTopViewVideoRender.constant = 0;
-        self.constrainLeftViewVideoRender.constant=0;
-    }
-    else
+    //These line commented to make the "Me" video small left hand corner
+//    if ([self isCustomRenderView]) {
+//        self.constrainRightViewVideoRender.constant = 0;
+//        self.constrainBottomViewVideoRender.constant = 0;
+//        self.constrainTopViewVideoRender.constant = 0;
+//        self.constrainLeftViewVideoRender.constant=0;
+//    }
+//    else
     {
         self.constrainRightViewVideo.constant = 0;
         self.constrainBottomViewVideo.constant = 0;
@@ -1204,7 +1210,8 @@
     [arrTakenSlot replaceObjectAtIndex:emptySlot withObject:participant.participantID];
     [self.ParticipentShowOrHide setObject:[NSNumber numberWithBool:true] forKey:participant.participantID]; // default should show user video
     
-    if (currentFullScreenPanel) {
+    if (currentFullScreenPanel)
+    {
         [self UserVideoPanel_Touched:currentFullScreenPanel];
     }
 
@@ -1232,8 +1239,37 @@
         panel=(UserVideoPanelRender*)somePanel;
     }
 
+    panel.frame = self.viewScroll.frame;//CGRectMake(0, 0, 768, 918);
+    
+    if(currentFullScreenPanel == NULL)
+        [self.viewScroll addSubview:panel];
+    else
+        [self.viewScroll insertSubview:panel belowSubview:currentFullScreenPanel];
+    
+    [self.viewScroll sendSubviewToBack:panel];
+    
+    [_viewScroll.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSLog(@"User pack :%@",obj);
+        if ([obj isKindOfClass:[UIImageView class]]) {
+            UIImageView *img = (UIImageView *)obj;
+            
+        }else if([obj isKindOfClass:[UserVideoPanel class]]){
+//            UserVideoPanel *user = [UserVideoPanel new];;
+//
+//            CGRect userVideoPanelFrame = CGRectMake(50, 250, 200, 200);
+//            [user initWithFrame:userVideoPanelFrame];
+           // UserVideoPanel.imgView.view.frame = userVideoPanelFrame;
+
+            
+//            if (currentUserVideoPanelFullScreenPanel == obj) {
+//                UserVideoPanel *viedip = (UserVideoPanel *)obj;
+//                //viedip.userInteractionEnabled = NO;
+//            }
+        }
+    } ];
     
     
+    /*
     [self saveDefaultFrameSize];
     [self saveMaxFrameSize];
     
@@ -1349,6 +1385,7 @@
     else
         [self.viewScroll insertSubview:panel belowSubview:currentFullScreenPanel];
     
+    
     if (animated) {
         
         [UIView animateWithDuration:0.1
@@ -1361,8 +1398,8 @@
     {
         panel.x = position;
     }
-    
-    [self refreshScrollViewContentSize];
+    */
+    //[self refreshScrollViewContentSize];
     
    // NSLog(@"the resolution before join %@",currentRes);
     currentRes = [self.sdk.AVChat.VideoController getConfig:ooVooVideoControllerConfigKeyResolution];
@@ -1409,9 +1446,7 @@
             return @"ooVooOnHold";
             break;
             
-            
     }
-    
     return  @"Unknown state";
 }
 
@@ -2147,7 +2182,7 @@ typedef enum {
 //    }
     
     NSString *uid = [_videoPanels allKeysForObject:videoPanel][0];
-    
+    NSLog(@"-@@@@@@@@@@@@@@@@@@@--uid-->%@",uid);
     BOOL stateCameraOn = [ParticipentState[uid]boolValue];
     
     if (!stateCameraOn) // if the remote video is on mute than dont change to big size.
@@ -2175,7 +2210,7 @@ typedef enum {
         rectLast=videoPanel.frame;
         [self animate:videoPanel ToFrame:rectMaxSize];
         [self.viewScroll bringSubviewToFront:videoPanel];
-        currentFullScreenPanel = videoPanel;
+        //currentFullScreenPanel = videoPanel;
         _pageControl.hidden=true;
         
         if ([self isIpad]) {
@@ -2200,18 +2235,38 @@ typedef enum {
             return;
         }
         else if  (currentFullScreenPanel &&  (currentFullScreenPanel = panel)){
+            //[self.viewScroll sendSubviewToBack:panel];
               [self UserMainPanel_Touched:panel];
         }
         else{
+            //[self.viewScroll sendSubviewToBack:panel];
             [self UserMainPanel_Touched:panel];
-
         }
-           }
+}
     
-    
+    ///*
+    NSLog(@"UserVideoPanel_Touched Panel is -->%@",panel);
+//    if (panel = currentFullScreenPanel) {
+        [_viewScroll.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSLog(@"User pack :%@",obj);
+            if ([obj isKindOfClass:[UIImageView class]]) {
+                UIImageView *img = (UIImageView *)obj;
+                //img.userInteractionEnabled = YES;
+                //[self.viewScroll sendSubviewToBack:currentFullScreenPanel];
 
-    
-   }
+            }else if([obj isKindOfClass:[UserVideoPanel class]]){
+                if (currentFullScreenPanel == obj) {
+                    UserVideoPanel *viedip = (UserVideoPanel *)obj;
+                    //viedip.userInteractionEnabled = NO;
+                }
+                
+            }
+           
+        } ];
+    //*/
+//    }
+
+}
 
 
 //#define TopSpace 10

@@ -101,5 +101,5 @@
 -(void)setScrollViewToYPosition:(int)yPosition;
 -(void)animateVideoToFullSize;
 -(void)somePanelTouched:(id)panel;
-
+-(void)UserVideoPanel_Touched:(id)panel;
 @end

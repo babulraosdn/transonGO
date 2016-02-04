@@ -33,7 +33,7 @@
 }
 - (instancetype)initWithFrame:(CGRect)frame WithName:(NSString *)strUserName 
 {
-    self = [super initWithFrame:frame];
+    self = [super initWithFrame:CGRectMake(50, 250, 200, 200)];
     _strUserId = strUserName;
     _isAllowedToChangeImage=true;
     return self;
@@ -69,9 +69,9 @@
 - (void)layoutIfNeeded {
 }
 
-- (void)strUserId {
-    lblUserName.text = _strUserId;
-}
+//- (void)strUserId {
+//    lblUserName.text = _strUserId;
+//}
 
 
 
@@ -118,6 +118,7 @@
         imgView = [[UIImageView alloc] init];
         [imgView setImage:[UIImage imageNamed:@"Avatar"]];
         [self addSubview:imgView];
+        [imgView setUserInteractionEnabled:YES];
         [self setConstarinsTo:imgView];
     }
     

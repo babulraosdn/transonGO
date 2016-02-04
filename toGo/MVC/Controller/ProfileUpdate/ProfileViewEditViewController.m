@@ -90,6 +90,7 @@
     
     self.einTaxArray = [[NSMutableArray alloc]initWithObjects:@"India",@"Japan", nil];
     [Utility_Shared_Instance showProgress];
+    
     [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
     
     [self addTapGesture];
@@ -1614,7 +1615,7 @@
                 self.profileObject.dobString = [userDict objectForKey:KDOB];
                 self.profileObject.postalCodeString = [userDict objectForKey:KPOSTALCODE_W];
                 self.profileObject.phoneNumberString = [userDict objectForKey:KPHONE_NUMBER_W];
-                self.profileObject.myLanguagesKEYsString = [userDict objectForKey:KMYLANGUAGES_W];
+                self.profileObject.myLanguagesKeysArray = [userDict objectForKey:KMYLANGUAGES_W];
                 
                 if ([userDict objectForKey:KEIN_TAXID_W]) {
                     NSString *einTempSting = [userDict objectForKey:KEIN_TAXID_W];
@@ -1734,6 +1735,9 @@
     [self.view endEditing:YES];
     [self removeTapGesture];
     [self removePopUpView];
+    if (App_Delegate.languagesArray.count<1) {
+        [App_Delegate getLanguages];
+    }
     languagesView =[[MyLanguagesView alloc]initWithFrame:CGRectZero];
     languagesView.tag = 1000;
     languagesView.delegate = self;
@@ -1833,16 +1837,9 @@
         [self.selectedLanguagesArray addObjectsFromArray:selectedDataArray];
     }
     
-    NSMutableString *mutableStr = [NSMutableString new];
-    for (LanguageObject *lObj in self.selectedLanguagesArray) {
-            [mutableStr appendString:[NSString stringWithFormat:@"%@,",lObj.languageID]];
-    }
-    NSString *tempStr = [NSString stringWithString:mutableStr];
-    if ([tempStr hasSuffix:@","]) {
-        tempStr = [tempStr substringToIndex:[tempStr length]-1];
-    }
-    self.profileObject.myLanguagesKEYsString = tempStr;
+    [self getLanguageKeys];
     [self.tblView reloadData];
+    [self performSelector:@selector(saveProfileInfo:) withObject:nil];
     [self addTapGesture];
 }
 
@@ -1858,6 +1855,7 @@
     [self changeTableLabelHeaders_Tax_EIN];
     
     [self.tblView reloadData];
+    [self performSelector:@selector(saveProfileInfo:) withObject:nil];
     [self addTapGesture];
 }
 
@@ -1869,6 +1867,7 @@
         self.profileObject.stateString = sObj.stateName;
     }
     [self.tblView reloadData];
+    [self performSelector:@selector(saveProfileInfo:) withObject:nil];
     [self addTapGesture];
 }
 
@@ -1896,8 +1895,8 @@
 
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.nickNameString] forKey:KNICKNAME_W];
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.phoneNumberString] forKey:KPHONE_NUMBER_W];
-    NSArray *langKeysArray = [[Utility_Shared_Instance checkForNullString:self.profileObject.myLanguagesKEYsString] componentsSeparatedByString:@","];
-    [saveDict setValue:langKeysArray forKey:KMYLANGUAGE_W];
+    //NSArray *langKeysArray = [[Utility_Shared_Instance checkForNullString:self.profileObject.myLanguagesKEYsString] componentsSeparatedByString:@","];
+    [saveDict setValue:self.profileObject.myLanguagesKeysArray forKey:KMYLANGUAGE_W];
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.addressString] forKey:KADDRESS_W];
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.countryString] forKey:KCOUNTRY_W];
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.stateString] forKey:KSTATE_W];
@@ -1939,17 +1938,18 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
             NSLog(@"dict-->%@",responseDict);
-            [self.tblView beginUpdates];
-            [self.tblView reloadRowsAtIndexPaths:@[currentIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            [self.tblView endUpdates];
+            [self.tblView reloadData];
+//            [self.tblView beginUpdates];
+//            [self.tblView reloadRowsAtIndexPaths:@[currentIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+//            [self.tblView endUpdates];
         });
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
-            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                                withMessage:[responseDict objectForKey:KMESSAGE_W]
-                                                     inView:self
-                                                  withStyle:UIAlertControllerStyleAlert];
+//            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+//                                                withMessage:[responseDict objectForKey:KMESSAGE_W]
+//                                                     inView:self
+//                                                  withStyle:UIAlertControllerStyleAlert];
             
         });
         
@@ -2006,7 +2006,7 @@
             else
                 alertString = NSLOCALIZEDSTRING(@"EIN_TaxID");
         }
-        else if (!self.profileObject.myLanguagesKEYsString.length) {
+        else if (self.profileObject.myLanguagesKeysArray.count<1) {
             alertString = NSLOCALIZEDSTRING(@"MY_LANGUAGES");
         }
     }
@@ -2047,7 +2047,7 @@
         else if (!self.profileObject.postalCodeString.length) {
             alertString = NSLOCALIZEDSTRING(@"POSTAL_CODE");
         }
-        else if (!self.profileObject.myLanguagesKEYsString.length) {
+        else if (self.profileObject.myLanguagesKeysArray.count<1) {
             alertString = NSLOCALIZEDSTRING(@"MY_LANGUAGES");
         }
         else if (!self.profileObject.cardTypeString.length && !_isInterpreter) {
@@ -2100,12 +2100,12 @@
 
 - (void)cameraGalleryButtonPressed{
     
-    ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
-    
-    if (status != ALAuthorizationStatusAuthorized) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Attention" message:@"Please give this app permission to access your photo library in your settings app!" delegate:nil cancelButtonTitle:@"Close" otherButtonTitles:nil, nil];
-        [alert show];
-    }
+//    ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
+//    
+//    if (status != ALAuthorizationStatusAuthorized) {
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Attention" message:@"Please give this app permission to access your photo library in your settings app!" delegate:nil cancelButtonTitle:@"Close" otherButtonTitles:nil, nil];
+//        [alert show];
+//    }
     
     UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:NSLOCALIZEDSTRING(@"CHOOSE_PROFILE_IMAGE") message:@"" delegate:self cancelButtonTitle:NSLOCALIZEDSTRING(@"CAMERA") otherButtonTitles:NSLOCALIZEDSTRING(@"GALLERY"), nil];
     alertView.delegate = self;
@@ -2282,8 +2282,16 @@
 -(void)taskDateDone{
     
 }
+
 -(void)taskDatePicked{
     self.profileObject.dobString=[NSString stringWithFormat:@"%@",datePicker.date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
+    NSDate *strTempDate = [dateFormatter dateFromString:self.profileObject.dobString];
+    
+    [dateFormatter setDateFormat:@"MM-dd-yyyy"];
+    NSString *str=[dateFormatter stringFromDate:strTempDate];
+    self.profileObject.dobString = str;
 }
 
 -(NSString *)dateConvertion
@@ -2603,6 +2611,22 @@
 
 -(void)languageDeleteButtonPressed:(UIButton *)sender{
     [self.selectedLanguagesArray removeObjectAtIndex:sender.tag];
+    [self getLanguageKeys];
+    [self performSelector:@selector(saveProfileInfo:) withObject:nil];
     [self.tblView reloadData];
+}
+
+-(void)getLanguageKeys{
+    //NSMutableString *mutableStr = [NSMutableString new];
+    self.profileObject.myLanguagesKeysArray = [NSMutableArray new];
+    for (LanguageObject *lObj in self.selectedLanguagesArray) {
+        //[mutableStr appendString:[NSString stringWithFormat:@"%@,",lObj.languageID]];
+        [self.profileObject.myLanguagesKeysArray addObject:lObj.languageID];
+    }
+//    NSString *tempStr = [NSString stringWithString:mutableStr];
+//    if ([tempStr hasSuffix:@","]) {
+//        tempStr = [tempStr substringToIndex:[tempStr length]-1];
+//    }
+    //self.profileObject.myLanguagesKEYsString = tempStr;
 }
 @end

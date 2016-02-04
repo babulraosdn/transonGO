@@ -22,9 +22,6 @@
 #import "MessageManager.h"
 #define User_isInVideoView @"User_isInVideoView"
 
-
-
-
 #define APP_TOKEN_SETTINGS_KEY    @"12349983355077"
 #define LOG_LEVEL_SETTINGS_KEY    @"LOG_LEVEL_SETTINGS_KEY"
 #define APP_VIDEO_RENDER          @"APP_VIDEO_RENDER"
@@ -71,13 +68,7 @@
 #ifdef DEBUG
     NSLog(@"Debug mode no Hockey");
 #else
-    
-    
-    
-    
 #endif
-    
-    
     
     [UserDefaults setBool:NO ToKey:User_isInVideoView];
     
@@ -102,8 +93,7 @@
     NSLog(@"APP_VIDEO_RENDER---->%d",[UserDefaults getBoolForToKey:APP_VIDEO_RENDER]);
     
     
-    
-    application.applicationIconBadgeNumber = 0;
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
     // Handle launching from a notification
     UILocalNotification *localNotif =
@@ -154,7 +144,6 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(openWebView:) name:@"ApplicationOpenGoogleAuthNotification" object:nil];
     /////////////////////   Google_Plus END   ////////////////////////////////////
 }
-
 
 
 /*
@@ -279,38 +268,38 @@
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    //    [ooVooClient applicationWillResignActive];
-    //
-    //    bool isMessaging = [[[NSUserDefaults standardUserDefaults] stringForKey:APP_MESSAGING]boolValue];
-    //    if (!isMessaging) {
-    //        ooVooClient *sdk = [ooVooClient sharedInstance];
-    //        [sdk.Messaging disconnect];
-    //    }
+        [ooVooClient applicationWillResignActive];
+    
+        bool isMessaging = [[[NSUserDefaults standardUserDefaults] stringForKey:APP_MESSAGING]boolValue];
+        if (!isMessaging) {
+            ooVooClient *sdk = [ooVooClient sharedInstance];
+            [sdk.Messaging disconnect];
+        }
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     
     [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
     
-    //    [ooVooClient applicationDidEnterBackground];
-    //    ooVooClient *sdk = [ooVooClient sharedInstance];
-    //    [sdk.AVChat.VideoController stopTransmitVideo];
+        [ooVooClient applicationDidEnterBackground];
+        ooVooClient *sdk = [ooVooClient sharedInstance];
+        [sdk.AVChat.VideoController stopTransmitVideo];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    //    [ooVooClient applicationWillEnterForeground];
-    //    ooVooClient *sdk = [ooVooClient sharedInstance];
-    //    [sdk.AVChat.VideoController startTransmitVideo];
+        [ooVooClient applicationWillEnterForeground];
+        ooVooClient *sdk = [ooVooClient sharedInstance];
+        [sdk.AVChat.VideoController startTransmitVideo];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    //   [ooVooClient applicationDidBecomeActive];
-    //
-    //    bool isMessaging = [[[NSUserDefaults standardUserDefaults] stringForKey:APP_MESSAGING]boolValue];
-    //    if (!isMessaging) {
-    //        ooVooClient *sdk = [ooVooClient sharedInstance];
-    //        [sdk.Messaging connect];
-    //    }
+       [ooVooClient applicationDidBecomeActive];
+    
+        bool isMessaging = [[[NSUserDefaults standardUserDefaults] stringForKey:APP_MESSAGING]boolValue];
+        if (!isMessaging) {
+            ooVooClient *sdk = [ooVooClient sharedInstance];
+            [sdk.Messaging connect];
+        }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -604,9 +593,9 @@
 //                        }];
 //                    }
                     [self.naviController popToViewController:viewVideoControler animated:NO];
-                } else {
+                }else {
                     NSLog(@"ERROR:UNHANDLED EXCEPTION TYPE:%@", ex);
-                }
+              }
             }
             @finally {
                 //NSLog(@"finally");

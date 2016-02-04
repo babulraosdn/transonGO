@@ -12,7 +12,7 @@
 @protocol UserVideoPanelDELEGATE;
 
 
-@interface UserVideoPanel : ooVooVideoPanel {
+@interface UserVideoPanel : ooVooVideoPanel<UIGestureRecognizerDelegate> {
     UILabel *lblUserName;
     UIImageView *imgView;
      UILabel *lblVideoAlert;

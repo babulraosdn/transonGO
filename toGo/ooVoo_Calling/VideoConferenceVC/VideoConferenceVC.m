@@ -68,23 +68,32 @@ return @"UserVideoPanel";
         NSLog(@"---UserId-->%@",[ActiveUserManager activeUser].userId);
 
         self.videoPanelView.delegate=self;
-    [self.sdk.AVChat.VideoController bindVideoRender:[ActiveUserManager activeUser].userId render:self.videoPanelView];
-        [self animateVideoToFullSize];
+        [self.sdk.AVChat.VideoController bindVideoRender:[ActiveUserManager activeUser].userId render:self.videoPanelView];
+        //[self animateVideoToFullSize];
         [self.videoPanelViewRender removeFromSuperview];
         self.videoPanelViewRender = nil ;
 
+        //These line commented to make the "Me" video small left hand corner
+        _videoPanelView.alpha = 0.0;
+        [self performSelector:@selector(userVideoFrameSetting) withObject:nil afterDelay:7.0];
+        ////////////////////////
         
     }
+}
+
+-(void)userVideoFrameSetting{
+    [self UserMainPanel_Touched:_videoPanelView];
+    _videoPanelView.alpha = 1.0;
 }
 
 -(void)checkPanelSize:(id)currentFullScreenPanel{
  
     if (_videoPanelView  && (_videoPanelView == currentFullScreenPanel)){
-         [self UserMainPanel_Touched:_videoPanelView];
+         //[self UserMainPanel_Touched:_videoPanelView];
     }
     
     if (_videoPanelViewRender && (_videoPanelViewRender == currentFullScreenPanel)) {
-        [self UserMainPanel_Touched:_videoPanelViewRender];
+        //[self UserMainPanel_Touched:_videoPanelViewRender];
 
     }
 }
@@ -110,6 +119,15 @@ return @"UserVideoPanel";
         return;
     }
     
+    _videoPanelView = (UserVideoPanel *)panel;
+    int widht = 150;
+    int height = 150;
+    int trailingSpace = 15;
+    _videoPanelView.frame = CGRectMake(self.view.frame.size.width - height - trailingSpace, self.view.frame.size.height - 240, widht, height); //CGRectMake(155, 185, 150, 150);
+    currentFullScreenPanel = panel;
+    
+    //These line commented to make the "Me" video small left hand corner
+    /*
     if (panel == self.videoPanelViewRender || panel==self.videoPanelView)
     {
     
@@ -156,8 +174,8 @@ return @"UserVideoPanel";
     {
         [super somePanelTouched:panel];
     }
-        
-    }
+    */
+}
 
 -(void)viewWillDisappear:(BOOL)animated{
     

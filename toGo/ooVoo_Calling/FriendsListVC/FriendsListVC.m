@@ -251,7 +251,9 @@ int callAmount = 0 ; // saving the calling amount so if one of then rejects , th
         
     //    NSLog(@"Calling friend %@",userName);
         // sending a message of calling BUT if something is wrong cancel the call alert
-        [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Calling WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess) {
+        //[[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Calling WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess)
+        [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Calling WithConfID:@"togotest123" Compelition:^(BOOL CallSuccess)
+         {
             
           
             

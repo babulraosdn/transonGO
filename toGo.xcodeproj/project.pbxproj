@@ -296,17 +296,17 @@
 		ED52A0441C5F943400A53525 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		ED52A0491C5F97F600A53525 /* ooVooSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ooVooSDK.framework; sourceTree = "<group>"; };
 		ED62531AFBA3780A8A9F25E6 /* libPods-toGo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-toGo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		ED8B515D1C1EEF7000CA7306 /* TOGO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TOGO.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED8B515D1C1EEF7000CA7306 /* toGO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = toGO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED8B51611C1EEF7000CA7306 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		ED8B51631C1EEF7000CA7306 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		ED8B51641C1EEF7000CA7306 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		ED8B516A1C1EEF7000CA7306 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		ED8B516F1C1EEF7000CA7306 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED8B51711C1EEF7000CA7306 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		ED8B51761C1EEF7000CA7306 /* TOGO.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TOGO.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED8B51761C1EEF7000CA7306 /* toGO.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = toGO.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED8B517A1C1EEF7000CA7306 /* toGoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = toGoTests.m; sourceTree = "<group>"; };
 		ED8B517C1C1EEF7000CA7306 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		ED8B51811C1EEF7000CA7306 /* TOGO.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TOGO.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED8B51811C1EEF7000CA7306 /* toGO.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = toGO.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED8B51851C1EEF7000CA7306 /* toGoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = toGoUITests.m; sourceTree = "<group>"; };
 		ED8B51871C1EEF7000CA7306 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ED8B51F01C1EF00D00CA7306 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -562,7 +562,6 @@
 				ED1B7EDD1C2AA48600C49026 /* SlideMenu */,
 				EDA374761C3BBD9700288BA2 /* DashBoard_Interpreter */,
 				ED1B7ED11C2AA48600C49026 /* DashboardView */,
-				ED2F28151C316258003D8C82 /* ProfileUpdate */,
 				EDAFD9C81C3BD9EA008442A1 /* FeedBackList */,
 				EDAFD9C41C3BD8C0008442A1 /* Settings */,
 				ED1B7ECE1C2AA48600C49026 /* ContactsList */,
@@ -593,6 +592,7 @@
 			children = (
 				ED1B7ED21C2AA48600C49026 /* DashBoardViewController.h */,
 				ED1B7ED31C2AA48600C49026 /* DashBoardViewController.m */,
+				ED2F28151C316258003D8C82 /* ProfileUpdate */,
 			);
 			path = DashboardView;
 			sourceTree = "<group>";
@@ -709,7 +709,8 @@
 				ED2F28161C31629A003D8C82 /* ProfileViewEditViewController.h */,
 				ED2F28171C31629A003D8C82 /* ProfileViewEditViewController.m */,
 			);
-			path = ProfileUpdate;
+			name = ProfileUpdate;
+			path = ../ProfileUpdate;
 			sourceTree = "<group>";
 		};
 		ED2F28191C3162C5003D8C82 /* ProfileViewCustomCell */ = {
@@ -754,8 +755,8 @@
 				ED529FC51C5F92A400A53525 /* Call */,
 				ED529FC81C5F92A400A53525 /* CustomToolbarVC */,
 				ED529FCE1C5F92A400A53525 /* Extensions */,
-				ED529FD91C5F92A400A53525 /* FriendsListVC */,
 				ED529FDC1C5F92A400A53525 /* Images.xcassets */,
+				ED529FD91C5F92A400A53525 /* FriendsListVC */,
 				ED529FDD1C5F92A400A53525 /* InfoVC */,
 				ED529FE31C5F92A400A53525 /* InternetActivityView */,
 				ED529FF61C5F92A400A53525 /* TableList */,
@@ -1031,9 +1032,9 @@
 		ED8B515E1C1EEF7000CA7306 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				ED8B515D1C1EEF7000CA7306 /* TOGO.app */,
-				ED8B51761C1EEF7000CA7306 /* TOGO.xctest */,
-				ED8B51811C1EEF7000CA7306 /* TOGO.xctest */,
+				ED8B515D1C1EEF7000CA7306 /* toGO.app */,
+				ED8B51761C1EEF7000CA7306 /* toGO.xctest */,
+				ED8B51811C1EEF7000CA7306 /* toGO.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1325,7 +1326,7 @@
 			);
 			name = toGo;
 			productName = toGo;
-			productReference = ED8B515D1C1EEF7000CA7306 /* TOGO.app */;
+			productReference = ED8B515D1C1EEF7000CA7306 /* toGO.app */;
 			productType = "com.apple.product-type.application";
 		};
 		ED8B51751C1EEF7000CA7306 /* toGoTests */ = {
@@ -1343,7 +1344,7 @@
 			);
 			name = toGoTests;
 			productName = toGoTests;
-			productReference = ED8B51761C1EEF7000CA7306 /* TOGO.xctest */;
+			productReference = ED8B51761C1EEF7000CA7306 /* toGO.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		ED8B51801C1EEF7000CA7306 /* toGoUITests */ = {
@@ -1361,7 +1362,7 @@
 			);
 			name = toGoUITests;
 			productName = toGoUITests;
-			productReference = ED8B51811C1EEF7000CA7306 /* TOGO.xctest */;
+			productReference = ED8B51811C1EEF7000CA7306 /* toGO.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -1386,7 +1387,7 @@
 					};
 				};
 			};
-			buildConfigurationList = ED8B51581C1EEF7000CA7306 /* Build configuration list for PBXProject "TOGO" */;
+			buildConfigurationList = ED8B51581C1EEF7000CA7306 /* Build configuration list for PBXProject "toGO" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -1782,7 +1783,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.smartdata.interpreter;
-				PRODUCT_NAME = TOGO;
+				PRODUCT_NAME = toGO;
 				PROVISIONING_PROFILE = "faaf942e-6ee7-4350-8efc-fd2b82ca6267";
 			};
 			name = Debug;
@@ -1805,7 +1806,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.smartdata.interpreter;
-				PRODUCT_NAME = TOGO;
+				PRODUCT_NAME = toGO;
 				PROVISIONING_PROFILE = "faaf942e-6ee7-4350-8efc-fd2b82ca6267";
 			};
 			name = Release;
@@ -1818,9 +1819,9 @@
 				INFOPLIST_FILE = toGoTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.smartdata.toGoTests;
-				PRODUCT_NAME = TOGO;
+				PRODUCT_NAME = toGO;
 				PROVISIONING_PROFILE = "faaf942e-6ee7-4350-8efc-fd2b82ca6267";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TOGO.app/TOGO";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/toGO.app/toGO";
 			};
 			name = Debug;
 		};
@@ -1832,9 +1833,9 @@
 				INFOPLIST_FILE = toGoTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.smartdata.toGoTests;
-				PRODUCT_NAME = TOGO;
+				PRODUCT_NAME = toGO;
 				PROVISIONING_PROFILE = "faaf942e-6ee7-4350-8efc-fd2b82ca6267";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TOGO.app/TOGO";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/toGO.app/toGO";
 			};
 			name = Release;
 		};
@@ -1844,7 +1845,7 @@
 				INFOPLIST_FILE = toGoUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.smartdata.toGoUITests;
-				PRODUCT_NAME = TOGO;
+				PRODUCT_NAME = toGO;
 				TEST_TARGET_NAME = toGo;
 				USES_XCTRUNNER = YES;
 			};
@@ -1856,7 +1857,7 @@
 				INFOPLIST_FILE = toGoUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.smartdata.toGoUITests;
-				PRODUCT_NAME = TOGO;
+				PRODUCT_NAME = toGO;
 				TEST_TARGET_NAME = toGo;
 				USES_XCTRUNNER = YES;
 			};
@@ -1865,7 +1866,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		ED8B51581C1EEF7000CA7306 /* Build configuration list for PBXProject "TOGO" */ = {
+		ED8B51581C1EEF7000CA7306 /* Build configuration list for PBXProject "toGO" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				ED8B51881C1EEF7000CA7306 /* Debug */,

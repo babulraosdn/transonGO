@@ -1,4 +1,4 @@
-//
+  //
 //  WebServiceCall.m
 //  toGo
 
@@ -81,8 +81,7 @@
       {
           [SVProgressHUD dismiss];
           NSError *errorNIl = nil;
-          if (!error)
-          {
+          if (!error){
               NSDictionary *dictResponse =[NSDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&errorNIl]];
               NSLog(@" %@ Response dict--> %@",webServicename,dictResponse);
               successBlock([@"200" intValue],dictResponse);

@@ -32,7 +32,7 @@
     [self setPadding];
     [self setColors];
     [self setFonts];
-    
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {

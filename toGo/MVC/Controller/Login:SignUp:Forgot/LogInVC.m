@@ -38,6 +38,7 @@
     NSString *passwordString;
     AlertViewCustom *alertViewCustom;
 }
+
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property(nonatomic,readwrite)BOOL isChecked;
 @property (weak, nonatomic) IBOutlet UIImageView *rememberMeImageView;
@@ -152,8 +153,11 @@
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setShowsVerticalScrollIndicator:NO];
     
-    //self.txt_userId.text = @"testcustomer@gmail.com";
-    //self.txtDisplayName.text = @"Test@123";
+    self.txt_userId.text = @"testcustomer@gmail.com";
+    self.txtDisplayName.text = @"Test@123";
+    
+    self.txt_userId.text = @"testinterpreter2@gmail.com";
+    self.txtDisplayName.text = @"Test@123";
     
     //_txt_userId.text = [self randomUser];
     //_txtDisplayName.text=[self returnSavedDisplayname];
@@ -244,18 +248,18 @@
     return YES;
 }
 
-#pragma mark - Authorization Delegate
-
-- (void)AuthorizationDelegate_DidAuthorized {
-
-    [UIView animateWithDuration:1
-                     animations:^{
-
-                       //        self.viewAuthorization_Container.y=-self.viewAuthorization_Container.height;
-                       self.viewAuthorization_Container.alpha = 0;
-
-                     }];
-}
+//#pragma mark - Authorization Delegate
+//
+//- (void)AuthorizationDelegate_DidAuthorized {
+//
+//    [UIView animateWithDuration:1
+//                     animations:^{
+//
+//                       //        self.viewAuthorization_Container.y=-self.viewAuthorization_Container.height;
+//                       self.viewAuthorization_Container.alpha = 0;
+//
+//                     }];
+//}
 
 #pragma mark - IBAction
 
@@ -468,29 +472,6 @@
             }
         }];
     }
-    
-    /*
-    FBSDKLoginManager *facebookLoginManager = [[FBSDKLoginManager alloc] init];
-    facebookLoginManager.loginBehavior = FBSDKLoginBehaviorNative;
-    
-    if ([FBSDKAccessToken currentAccessToken]) {
-        [self fetchUserFacebookCredential];
-    }else{
-        
-        [facebookLoginManager logInWithReadPermissions:@[kPublicProfile,kEmail,kBirthday,kLocation] fromViewController:nil handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
-            
-            if (error) {
-            } else if (result.isCancelled) {
-            } else {
-                
-                if ([FBSDKAccessToken currentAccessToken]) {
-                    
-                    [self fetchUserFacebookCredential];
-                }
-            }
-        }];
-    }
-    */
 }
 
 

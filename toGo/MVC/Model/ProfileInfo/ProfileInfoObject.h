@@ -25,7 +25,8 @@
 @property(nonatomic,strong) NSString *phoneNumberString;
 @property(nonatomic,strong) NSString *bankAccountInfoString;
 @property(nonatomic,strong) NSString *myLanguagesString;
-@property(nonatomic,strong) NSString *myLanguagesKEYsString;
+//@property(nonatomic,strong) NSString *myLanguagesKEYsString;
+@property(nonatomic,strong) NSMutableArray *myLanguagesKeysArray;
 @property(nonatomic,strong) NSString *countryCodeString;
 @property(nonatomic,strong) NSString *stateCodeString;
 @property(nonatomic,strong) NSString *certificatesString;

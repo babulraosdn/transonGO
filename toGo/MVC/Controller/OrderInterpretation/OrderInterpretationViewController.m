@@ -80,7 +80,6 @@
     self.toImageView.layer.cornerRadius = self.fromImageView.frame.size.height /2;
     self.toImageView.layer.masksToBounds = YES;
     [self.toImageView setContentMode:UIViewContentModeScaleToFill];
-
 }
 
 
@@ -139,8 +138,27 @@
 }
 
 -(IBAction)confirmCancelButtonPressed:(UIButton *)sender{
+    
     if (sender.tag==1) {
         //appDelegate.callingUsers = arrFriends;
+        
+        NSString *alertString;
+        if ([self.fromDetailLabel.text isEqualToString:NSLOCALIZEDSTRING(@"LANGUAGE")]) {
+            alertString = [NSString messageWithSelectString:NSLOCALIZEDSTRING(@"FROM_LANGUAGE")];
+        }
+        else if ([self.toDetailLabel.text isEqualToString:NSLOCALIZEDSTRING(@"LANGUAGE")]) {
+            alertString = [NSString messageWithSelectString:NSLOCALIZEDSTRING(@"TO_LANGUAGE")];
+        }
+        else if ([self.fromDetailLabel.text isEqualToString:self.toDetailLabel.text]) {
+            alertString = NSLOCALIZEDSTRING(@"PLEASE_SELECT_2_LANGUAGES_DIFFERENT");
+        }
+        if (alertString.length>1) {
+            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                withMessage:alertString
+                                                     inView:self
+                                                  withStyle:UIAlertControllerStyleAlert];
+            return;
+        }
         
         myAlertView = [[UIAlertView alloc] initWithTitle:@"Calling" message:@""
                                                 delegate:self
@@ -154,34 +172,12 @@
         [myAlertView setValue:loading forKey:@"accessoryView"];
         [loading startAnimating];
         [myAlertView show];
-        
         [self callToFriends];
-        
-        NSMutableArray *arr = [NSMutableArray new];
-        [arr addObject:@"babul123"];
-        [[MessageManager sharedMessage]messageOtherUsers:[arr mutableCopy] WithMessageType:Calling WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess) {
-            
-            
-            
-            if (!CallSuccess) {
-                [myAlertView dismissWithClickedButtonIndex:0 animated:YES];
-            }
-            else
-            {
-                [self stopTimer];
-                timer=[NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timer_Tick:) userInfo:nil repeats:YES];
-                
-            }
-            
-        }];
-        //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //
-//        UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_ooVoo" bundle:[NSBundle mainBundle]];
-//        MenuConferenceVC *menu = (MenuConferenceVC *)[mainStoryboard instantiateViewControllerWithIdentifier:@"MenuConferenceVC"];
-//        [self.navigationController pushViewController:menu animated:YES];
-        //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil];
     }
     else{
-        
+        UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_USER_VIEW_CONTROLLER]];
+        self.revealController = [PKRevealController revealControllerWithFrontViewController:contentNavigationController leftViewController:[Utility_Shared_Instance getControllerForIdentifier:SLIDE_MENU_VIEW_CONTROLLER]];
+        App_Delegate.window.rootViewController = self.revealController;
     }
 }
 
@@ -270,8 +266,8 @@
 }
 
 
--(void)getProfileInfo
-{
+-(void)getProfileInfo{
+    
     //WEB Service CODE
     [Web_Service_Call serviceCallWithRequestType:nil requestType:GET_REQUEST includeHeader:YES includeBody:NO webServicename:PROFILE_INFO_W_USER SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         NSDictionary *responseDict=responseObject;
@@ -298,19 +294,19 @@
                                               placeholderImage:[UIImage defaultPicImage]];
                     }
                 }
-                else{
-                    NSString *str = [userDict objectForKey:KMYLANGUAGES_W];
-                    if (str.length) {
-                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageID beginswith[c] %@",str];
-                        NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
-                        if (sortedArray.count) {
-                            LanguageObject *lObj = [sortedArray lastObject];
-                            self.fromDetailLabel.text = lObj.languageName;
-                            [self.fromImageView sd_setImageWithURL:[NSURL URLWithString:lObj.imagePathString]
-                                                  placeholderImage:[UIImage defaultPicImage]];
-                        }
-                    }
-                }
+//                else{
+//                    NSString *str = [userDict objectForKey:KMYLANGUAGES_W];
+//                    if (str.length) {
+//                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageID beginswith[c] %@",str];
+//                        NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
+//                        if (sortedArray.count) {
+//                            LanguageObject *lObj = [sortedArray lastObject];
+//                            self.fromDetailLabel.text = lObj.languageName;
+//                            [self.fromImageView sd_setImageWithURL:[NSURL URLWithString:lObj.imagePathString]
+//                                                  placeholderImage:[UIImage defaultPicImage]];
+//                        }
+//                    }
+//                }
                 /////////////////
             
             });
@@ -328,8 +324,7 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
 -(void)callToFriends{
     
     callAmount1=[arrFriends count];
-    AppDelegate *appDelegate =(AppDelegate *)[[UIApplication sharedApplication]delegate];
-    appDelegate.callingUsers = arrFriends;
+    App_Delegate.callingUsers = arrFriends;
     __block index=0;
     
     //  for (int i=0; i<[arrFriends count]; i++)
@@ -338,7 +333,9 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
         
         //    NSLog(@"Calling friend %@",userName);
         // sending a message of calling BUT if something is wrong cancel the call alert
-        [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Calling WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess) {
+        //[[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Calling WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess)
+        [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Calling WithConfID:@"togotest123" Compelition:^(BOOL CallSuccess)
+         {
             
             
             
@@ -355,8 +352,6 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
         }];
         
     }
-    
-    
 }
 
 -(void)sendMsgToFriends:(NSString*)message{
@@ -377,9 +372,7 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
         }
         
     }];
-    
     //}
-    
 }
 
 -(void)timer_Tick:(NSTimer*)timer{
@@ -411,11 +404,11 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
         
     }];
     //  }
-    
 }
 
 
 -(void)stopTimer{
+    
     if (timer.valid) {
         [timer invalidate];
         secCounter=0;
@@ -423,6 +416,7 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
 }
 
 -(void)remoteUserIsOffLine:(NSNotification*)notif{
+    
     // some one rejected the call
     
     NSLog(@"notification %@",notif.userInfo);
