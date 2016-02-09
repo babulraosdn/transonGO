@@ -78,6 +78,31 @@
 }
 
 
+- (void)viewWillAppear:(BOOL)animated {
+    
+    [_scrollView setShowsHorizontalScrollIndicator:NO];
+    [_scrollView setShowsVerticalScrollIndicator:NO];
+    
+//    self.txt_userId.text = @"testcustomer@gmail.com";
+//    self.txtDisplayName.text = @"Test@123";
+//
+//    self.txt_userId.text = @"testinterpreter1@gmail.com";
+//    self.txtDisplayName.text = @"Test@123";
+    
+//    _txt_userId.text = [self randomUser];
+//    _txtDisplayName.text=[self returnSavedDisplayname];
+    
+    userIDString = _txt_userId.text;
+    passwordString = _txtDisplayName.text;
+    [self autorize];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    self.txt_userId.text = @"";
+    self.txtDisplayName.text = @"";
+}
+
+
 -(void)viewDidLayoutSubviews{
     
     if(IS_IPHONE_4S)
@@ -148,29 +173,6 @@
     [self.view endEditing:YES];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    
-    [_scrollView setShowsHorizontalScrollIndicator:NO];
-    [_scrollView setShowsVerticalScrollIndicator:NO];
-    
-    self.txt_userId.text = @"testcustomer@gmail.com";
-    self.txtDisplayName.text = @"Test@123";
-    
-    self.txt_userId.text = @"testinterpreter2@gmail.com";
-    self.txtDisplayName.text = @"Test@123";
-    
-    //_txt_userId.text = [self randomUser];
-    //_txtDisplayName.text=[self returnSavedDisplayname];
-    
-    userIDString = _txt_userId.text;
-    passwordString = _txtDisplayName.text;
-    [self autorize];
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    self.txt_userId.text = @"";
-    self.txtDisplayName.text = @"";
-}
 
 #pragma mark - Authorization ...
 
@@ -772,6 +774,10 @@
    // [self.sdk.Account login:@"babul123"
     //[self.sdk.Account login:self.txt_userId.text
                  completion:^(SdkResult *result) {
+                     
+                     dispatch_async(dispatch_get_main_queue(), ^{
+                         [SVProgressHUD dismiss];
+                     });
                      NSLog(@"result code=%d result description %@", result.Result, result.description);
                      [spinner stopAnimating];
                      if (result.Result != sdk_error_OK){

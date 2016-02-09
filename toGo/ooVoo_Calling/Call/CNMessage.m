@@ -49,6 +49,8 @@ NSString * const TYPE_END_CALL     = @"end_call";
 }
 
 +(CNMessageType) cnMessageStringToType:(NSString *) typeStr{
+    
+    NSLog(@"-cnMessageStringToType-typeStr-->%@",typeStr);
     if([typeStr isEqualToString:TYPE_CALLING])
         return Calling;
     else if([typeStr isEqualToString:TYPE_ANS_ACCEPT])
@@ -73,7 +75,8 @@ NSString * const TYPE_END_CALL     = @"end_call";
     [dictionary setValue:[CNMessage cnMessageTypeToString:type] forKey:MESSAGE_TYPE];
     [dictionary setValue:confId forKey:CONFERENCE_ID];
     [dictionary setValue:name forKey:DISPLAY_NAME];
-    [dictionary setValue:[[NSUUID UUID] UUIDString] forKey:UNIQUE_ID];
+    //[dictionary setValue:[[NSUUID UUID] UUIDString] forKey:UNIQUE_ID];
+    //[dictionary setValue:[Utility_Shared_Instance readStringUserPreference:KDEVICE_TOKEN] forKey:UNIQUE_ID];
   
     if(extra)
         [dictionary setValue:extra forKey:EXTRA_MESSAGE];
@@ -90,6 +93,7 @@ NSString * const TYPE_END_CALL     = @"end_call";
     NSLog(@"%@", aStr);
     
     // *base64Encoded = [jsonData base64EncodedStringWithOptions:0];
+    
     return aStr;
 }
 
@@ -104,6 +108,7 @@ NSString * const TYPE_END_CALL     = @"end_call";
                               JSONObjectWithData:data
                               options:kNilOptions
                               error:&error];
+    NSLog(@"decodeMessage--->%@",[dictionary description]);
     self.type = [CNMessage cnMessageStringToType:[dictionary valueForKey:MESSAGE_TYPE]];
     self.confId = [dictionary valueForKey:CONFERENCE_ID];
     self.displayName = [dictionary valueForKey:DISPLAY_NAME];
@@ -130,34 +135,78 @@ NSString * const TYPE_END_CALL     = @"end_call";
     
     //ddd
     ///response.from is nothing but the receiver ID
+    NSLog(@"@@@@@@@@@@@@@@@@@@@   start   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    NSLog(@"--initMessageWithResponse--from-%@",response.from);
+    NSLog(@"---to--%@",response.to);
+    NSLog(@"---body--%@",response.body);
+    NSLog(@"--messageId---%@",response.messageId);
+    NSLog(@"--timestamp---%llu",response.timestamp);
+    
+    NSTimeInterval seconds = [NSDate timeIntervalSinceReferenceDate];
+    double milliseconds = seconds*1000;
+    NSLog(@"-NSTimeInterval-timestamp---%f",milliseconds);
+    NSLog(@"@@@@@@@@@@@@@@@@@@@   END   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     self = [super initMessage:response.to[0] message:response.body];
     if(self){
         [self decodeMessage:response.body];
         self.fromUseriD=response.from;
     }
     AppDelegate *appDelegate =(AppDelegate *)[[UIApplication sharedApplication]delegate];
-    NSLog(@"--callingArray-->%@",[appDelegate.callingUsers description]);
+   // NSLog(@"--callingArray-->%@",[appDelegate.callingUsers description]);
     NSString * string = response.body;
     
     NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
     id dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-    NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"emailString beginswith[c] %@",[dict objectForKey:@"display name"]];
+    NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"uidString beginswith[c] %@",[dict objectForKey:@"display name"]];
     NSArray *sortedArray = [App_Delegate.interpreterListArray filteredArrayUsingPredicate:predicate];
+    
     InterpreterListObject *iObj;
     if (sortedArray.count) {
         iObj = [sortedArray lastObject];
+        //App_Delegate.acceptedInterpreter = iObj;
+        App_Delegate.cdrObject.receivedInterpreter = iObj;
     }
     NSDictionary *dictIs = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
     if ([[dictIs objectForKey:@"type"] isEqualToString:@"accept"]) {
         
-        [appDelegate.callingUsers removeObject:iObj.uidString];
+        App_Delegate.cdrObject.startTimeString = [Utility_Shared_Instance GetCurrentTimeStamp];
         
-        for (NSString *remainigUser in appDelegate.callingUsers) {
+//        NSLog(@"-accept-initMessageWithResponse--from-%@",response.from);
+//        NSLog(@"---to--%@",response.to);
+//        NSLog(@"---body--%@",response.body);
+//        NSLog(@"--messageId---%@",response.messageId);
+//        NSLog(@"--timestamp---%llu",response.timestamp);
+        
+        NSMutableArray *tempArray = [NSMutableArray new];
+        [tempArray addObjectsFromArray:appDelegate.callingUsers];
+        
+        //[appDelegate.callingUsers removeObject:iObj.uidString];
+        [tempArray removeObject:iObj.uidString];
+        
+        [appDelegate saveDisconnectedCallDetailsinServer:iObj isNoOnePicksCallorEndedByCustomer:NO];
+        
+        for (NSString *remainigUser in tempArray) {
             [[MessageManager sharedMessage]messageOtherUsers:[NSArray arrayWithObject:remainigUser] WithMessageType:Cancel WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess) {
                 
             }];
         }
+    }
+    
+    NSDictionary *dictIs1 = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    if ([[dictIs1 objectForKey:@"type"] isEqualToString:@"cancel"]) {
         
+        NSTimeInterval time = ([[NSDate date] timeIntervalSince1970]); // returned as a double
+        long digits = (long)time; // this is the first 10 digits
+        int decimalDigits = (int)(fmod(time, 1) * 1000); // this will get the 3 missing digits
+        long timestamp = (digits * 1000) + decimalDigits;
+        
+//        NSLog(@"-cancel-initMessageWithResponse--from-%@",response.from);
+//        NSLog(@"---to--%@",response.to);
+//        NSLog(@"---body--%@",response.body);
+//        NSLog(@"--messageId---%@",response.messageId);
+//        NSLog(@"--timestamp---%llu",response.timestamp);
+//        
+//        NSLog(@"-cancel-timestamp---%ld",timestamp);
     }
     
     

@@ -135,6 +135,7 @@
 		EDE22E711C3A9B3900923ADF /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EDE22E611C3A9B3900923ADF /* Roboto-Regular.ttf */; settings = {ASSET_TAGS = (); }; };
 		EDE22E721C3A9B3900923ADF /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EDE22E621C3A9B3900923ADF /* Roboto-Thin.ttf */; settings = {ASSET_TAGS = (); }; };
 		EDE22E731C3A9B3900923ADF /* Roboto-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EDE22E631C3A9B3900923ADF /* Roboto-ThinItalic.ttf */; settings = {ASSET_TAGS = (); }; };
+		EDE5723C1C6A15D700B2FBF8 /* CDRObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EDE5723B1C6A15D700B2FBF8 /* CDRObject.m */; settings = {ASSET_TAGS = (); }; };
 		EDEBB32A1C4E0A5D00BAC272 /* UITextView+toGo.m in Sources */ = {isa = PBXBuildFile; fileRef = EDEBB3291C4E0A5D00BAC272 /* UITextView+toGo.m */; settings = {ASSET_TAGS = (); }; };
 		EDF7CF0E1C4F4613009AA19A /* CountryStore.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF7CF0B1C4F4613009AA19A /* CountryStore.m */; settings = {ASSET_TAGS = (); }; };
 		EDF7CF0F1C4F4613009AA19A /* StoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF7CF0D1C4F4613009AA19A /* StoreManager.m */; settings = {ASSET_TAGS = (); }; };
@@ -365,6 +366,8 @@
 		EDE22E611C3A9B3900923ADF /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		EDE22E621C3A9B3900923ADF /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
 		EDE22E631C3A9B3900923ADF /* Roboto-ThinItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-ThinItalic.ttf"; sourceTree = "<group>"; };
+		EDE5723A1C6A15D700B2FBF8 /* CDRObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDRObject.h; sourceTree = "<group>"; };
+		EDE5723B1C6A15D700B2FBF8 /* CDRObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDRObject.m; sourceTree = "<group>"; };
 		EDEBB3281C4E0A5D00BAC272 /* UITextView+toGo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+toGo.h"; sourceTree = "<group>"; };
 		EDEBB3291C4E0A5D00BAC272 /* UITextView+toGo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+toGo.m"; sourceTree = "<group>"; };
 		EDF7CF0A1C4F4613009AA19A /* CountryStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountryStore.h; sourceTree = "<group>"; };
@@ -555,13 +558,14 @@
 		ED1B7EC41C2AA48600C49026 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				EDD802F91C56352600FC5AD0 /* OrderInterpretation */,
 				ED1B7EC51C2AA48600C49026 /* BaseViewController */,
 				ED90D3501C3FAFB500D72731 /* HomeView */,
-				ED1B7ED41C2AA48600C49026 /* Login:SignUp:Forgot */,
 				ED1B7EDD1C2AA48600C49026 /* SlideMenu */,
+				ED1B7ED41C2AA48600C49026 /* Login:SignUp:Forgot */,
+				EDD802F91C56352600FC5AD0 /* OrderInterpretation */,
 				EDA374761C3BBD9700288BA2 /* DashBoard_Interpreter */,
 				ED1B7ED11C2AA48600C49026 /* DashboardView */,
+				ED2F28151C316258003D8C82 /* ProfileUpdate */,
 				EDAFD9C81C3BD9EA008442A1 /* FeedBackList */,
 				EDAFD9C41C3BD8C0008442A1 /* Settings */,
 				ED1B7ECE1C2AA48600C49026 /* ContactsList */,
@@ -592,7 +596,6 @@
 			children = (
 				ED1B7ED21C2AA48600C49026 /* DashBoardViewController.h */,
 				ED1B7ED31C2AA48600C49026 /* DashBoardViewController.m */,
-				ED2F28151C316258003D8C82 /* ProfileUpdate */,
 			);
 			path = DashboardView;
 			sourceTree = "<group>";
@@ -624,6 +627,7 @@
 		ED1B7EE01C2AA48600C49026 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				EDE572391C6A15C800B2FBF8 /* CDR */,
 				ED19112A1C60CEA000EFEE95 /* InterpreterList */,
 				ED1493D11C50977000277DA8 /* Language */,
 				EDF7CF181C4F4FBD009AA19A /* Country */,
@@ -709,8 +713,7 @@
 				ED2F28161C31629A003D8C82 /* ProfileViewEditViewController.h */,
 				ED2F28171C31629A003D8C82 /* ProfileViewEditViewController.m */,
 			);
-			name = ProfileUpdate;
-			path = ../ProfileUpdate;
+			path = ProfileUpdate;
 			sourceTree = "<group>";
 		};
 		ED2F28191C3162C5003D8C82 /* ProfileViewCustomCell */ = {
@@ -1204,6 +1207,15 @@
 			path = Roboto_fonts;
 			sourceTree = "<group>";
 		};
+		EDE572391C6A15C800B2FBF8 /* CDR */ = {
+			isa = PBXGroup;
+			children = (
+				EDE5723A1C6A15D700B2FBF8 /* CDRObject.h */,
+				EDE5723B1C6A15D700B2FBF8 /* CDRObject.m */,
+			);
+			path = CDR;
+			sourceTree = "<group>";
+		};
 		EDEBB3271C4E09F400BAC272 /* UITextView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1580,6 +1592,7 @@
 				ED1B7EEB1C2AA48600C49026 /* BaseViewController.m in Sources */,
 				EDFD7E071C27C68100E4FEEB /* UIColor+toGo.m in Sources */,
 				ED52A03B1C5F92A400A53525 /* FriendCell.m in Sources */,
+				EDE5723C1C6A15D700B2FBF8 /* CDRObject.m in Sources */,
 				ED52A0241C5F92A400A53525 /* UserVideoPanel.m in Sources */,
 				ED437BFD1C1FD94800DB68E0 /* Utility.m in Sources */,
 				ED145A581C4612D600A5B211 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,

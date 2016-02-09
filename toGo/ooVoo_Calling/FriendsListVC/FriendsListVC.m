@@ -83,10 +83,10 @@
 
 -(void)unsubscribe{
     
-    NSString * uuid = [[NSUUID UUID] UUIDString] ;
+    //NSString * uuid = [[NSUUID UUID] UUIDString] ;
     NSString * token = [ActiveUserManager activeUser].token;
     if(token && token.length > 0){
-        [self.sdk.PushService unSubscribe:token deviceUid:uuid completion:^(SdkResult *result)
+        [self.sdk.PushService unSubscribe:token deviceUid:@"" completion:^(SdkResult *result)
         {
 
             NSString *msg ;
@@ -113,12 +113,12 @@
 
 -(void)subscribe{
     
-    NSString * uuid = [[NSUUID UUID] UUIDString] ;
+    //NSString * uuid = [[NSUUID UUID] UUIDString] ;
     NSString * token = [ActiveUserManager activeUser].token;
 
     if(token && token.length > 0)
     {
-        [self.sdk.PushService subscribe:token deviceUid:uuid completion:^(SdkResult *result){
+        [self.sdk.PushService subscribe:token deviceUid:@"" completion:^(SdkResult *result){
             
             NSString *msg ;
             if (result.Result == sdk_error_OK) {
@@ -251,8 +251,7 @@ int callAmount = 0 ; // saving the calling amount so if one of then rejects , th
         
     //    NSLog(@"Calling friend %@",userName);
         // sending a message of calling BUT if something is wrong cancel the call alert
-        //[[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Calling WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess)
-        [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Calling WithConfID:@"togotest123" Compelition:^(BOOL CallSuccess)
+        [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Calling WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess)
          {
             
           

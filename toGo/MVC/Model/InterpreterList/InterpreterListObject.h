@@ -15,4 +15,6 @@
 @property(nonatomic,strong) NSString *statusString;
 @property(nonatomic,strong) NSString *uidString;
 @property(nonatomic,strong) NSString *usernameString;
+@property(nonatomic,strong) NSString *idString;
+@property(nonatomic,strong) NSString *poolIdString;
 @end

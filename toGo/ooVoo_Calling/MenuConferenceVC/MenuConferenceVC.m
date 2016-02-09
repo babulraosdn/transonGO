@@ -13,7 +13,7 @@
 //#import "VideoConferenceVC.h"
 #import "FriendsListVC.h"
 #import "UserDefaults.h"
-
+#import "Headers.h"
 #define Segue_CallOrMessage @"Segue_CallOrMessage"
 
 @interface MenuConferenceVC ()
@@ -64,10 +64,10 @@
     
 }
 -(void)subscribeUser{
-    NSString * uuid = [[NSUUID UUID] UUIDString] ;
+    //NSString * uuid = [[NSUUID UUID] UUIDString] ;
     NSString * token = [ActiveUserManager activeUser].token;
     if(token && token.length > 0){
-        [self.sdk.PushService subscribe:token deviceUid:uuid completion:^(SdkResult *result){
+        [self.sdk.PushService subscribe:token deviceUid:@"" completion:^(SdkResult *result){
             [ActiveUserManager activeUser].isSubscribed = true;
         }];
     }
@@ -87,7 +87,7 @@
 
 -(void)actLogOut{
     [self.navigationController popViewControllerAnimated:YES];
-    NSString * uuid = [[NSUUID UUID] UUIDString] ;
+    //NSString * uuid = [[NSUUID UUID] UUIDString] ;
     NSString * token = [ActiveUserManager activeUser].token;
     if(token && token.length > 0){
         //[self.sdk.Account logout];

@@ -54,7 +54,7 @@
     [super viewWillAppear:YES];
     [Utility_Shared_Instance showProgress];
     [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
-    [App_Delegate getLanguages];
+
 }
 
 -(void)setLabelButtonNames{

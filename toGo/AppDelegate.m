@@ -20,6 +20,7 @@
 #import "ActiveUserManager.h"
 #import "MenuConferenceVC.h"
 #import "MessageManager.h"
+#import <QuartzCore/QuartzCore.h>
 #define User_isInVideoView @"User_isInVideoView"
 
 #define APP_TOKEN_SETTINGS_KEY    @"12349983355077"
@@ -47,6 +48,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
+    if (![Utility_Shared_Instance readStringUserPreference:KDEVICE_TOKEN]) {
+        [Utility_Shared_Instance writeStringUserPreference:KDEVICE_TOKEN value:@"gh22hh22hh22jj22jj22jj2222hhhh22"];
+    }
+    
+    self.cdrObject = [CDRObject new];
     self.interpreterListArray = [NSMutableArray new];
     [Fabric with:@[[Crashlytics class], [Twitter class]]];
     [self subscribePushNotifications:application];
@@ -460,12 +466,11 @@
     
     //    viewVideoControllerRender=nil;
     //    viewVideoControllerRender = (VideoConferenceVCWithRender*)[mainStoryboard instantiateViewControllerWithIdentifier:@"VideoConferenceVCWithRender"];
-    
-    
 }
 
 -(void)callCancel{
     // the caller canceled his call than remove alert
+    NSLog(@"------callCancel-->%f",[[NSDate date] timeIntervalSince1970]);
     [alert dismissWithClickedButtonIndex:2 animated:YES]; // no real index 2 button , means call canceled
 }
 
@@ -654,6 +659,8 @@
                           ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
     [ActiveUserManager activeUser].token = hexToken;
     
+    [Utility_Shared_Instance writeStringUserPreference:hexToken value:KDEVICE_TOKEN];
+    
     [UserDefaults setObject:hexToken ForKey:DEVICE_TOKEN];
     NSLog(@"My token is: %@", [ActiveUserManager activeUser].token);
     NSLog(@"[ActiveUserManager activeUser].userId--->: %@", [ActiveUserManager activeUser].userId);
@@ -756,6 +763,106 @@
 }
 
 ////////////
+
+-(void)saveDisconnectedCallDetailsinServer : (InterpreterListObject *)receivedInterpreter isNoOnePicksCallorEndedByCustomer:(BOOL)isNoOnePicksCallorEndedByCustomer{
+    
+    //WEB Service CODE
+    [Utility_Shared_Instance showProgress];
+    NSMutableArray *disconnectedInterpreters = [NSMutableArray new];
+    InterpreterListObject *tempObj;
+    for (InterpreterListObject *iObj in self.interpreterListArray) {
+        tempObj = iObj;
+        if (![receivedInterpreter.uidString isEqualToString:iObj.uidString]) {
+            [disconnectedInterpreters addObject:iObj.idString];
+        }
+    }
+
+    NSMutableDictionary *callDict= [NSMutableDictionary new];
+    
+    [callDict setObject:tempObj.poolIdString forKey:KPOOL_ID_W];
+    [callDict setObject:[Utility_Shared_Instance readStringUserPreference:KID_W] forKey:KUSER_ID_W];
+    [callDict setObject:disconnectedInterpreters forKey:KINTERPRETER_ID_W];
+    [callDict setObject:[Utility_Shared_Instance GetCurrentTimeStamp] forKey:KSTART_TIME_W];
+    
+    if (!isNoOnePicksCallorEndedByCustomer) {
+        [callDict setObject:receivedInterpreter.uidString forKey:KCALL_RECEIVED_BY_W];
+        [callDict setObject:self.conferenceIDString forKey:KCALLID_W];
+        [callDict setObject:[Utility_Shared_Instance GetCurrentTimeStamp] forKey:KSTART_TIME_W];
+    }
+    
+    [Web_Service_Call serviceCallWithRequestType:callDict requestType:POST_REQUEST includeHeader:YES includeBody:YES webServicename:SAVE_CALL_DETAILS SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+        NSDictionary *responseDict=responseObject;
+        
+        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+            });
+            NSMutableArray *dataArray = [responseDict objectForKey:KDATA_W];
+            for (id json in dataArray) {
+                LanguageObject *lObj = [LanguageObject new];
+                NSString *iconStr = [json objectForKey:KICON_W];
+                iconStr = [iconStr stringByReplacingOccurrencesOfString:@"<img src='" withString:@""];
+                iconStr = [iconStr stringByReplacingOccurrencesOfString:@"'  />" withString:@""];
+                lObj.imagePathString = [NSString stringWithFormat:@"%@%@",BASE_URL,iconStr];
+                lObj.languageName = [json objectForKey:KLANGUAGE_W];
+                lObj.languageID = [json objectForKey:KLANGUAGEID_W];
+                [self.languagesArray addObject:lObj];
+            }
+        }
+    } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+        });
+    }];
+}
+
+-(void)saveCDR{
+    
+    //WEB Service CODE
+    [Utility_Shared_Instance showProgress];
+    
+    NSMutableDictionary *callDict= [NSMutableDictionary new];
+    [callDict setObject:self.cdrObject.receivedInterpreter.poolIdString forKey:KPOOL_ID_W];
+    [callDict setObject:[Utility_Shared_Instance readStringUserPreference:KID_W] forKey:KUSER_ID_W];
+    NSMutableArray *interpreters = [NSMutableArray new];
+    for (InterpreterListObject *iObj in self.interpreterListArray) {
+        [interpreters addObject:iObj.idString];
+    }
+    [callDict setObject:interpreters forKey:KINTERPRETER_ID_W];
+    [callDict setObject:self.cdrObject.receivedInterpreter.uidString forKey:KCALL_RECEIVED_BY_W];
+    [callDict setObject:self.cdrObject.fromLanguageIDString forKey:KFROM_LANGUAGE_small_L_Leter_W];
+    [callDict setObject:self.cdrObject.toLanguageIDString forKey:KTO_LANGUAGE_small_L_Leter_W];
+    [callDict setObject:self.cdrObject.startTimeString forKey:KSTART_TIME_W];
+    [callDict setObject:self.cdrObject.endTimeString forKey:KEND_TIME_W];
+    [callDict setObject:self.cdrObject.costString forKey:KCOST_W];
+    
+    [Web_Service_Call serviceCallWithRequestType:callDict requestType:POST_REQUEST includeHeader:YES includeBody:YES webServicename:CREATE_CDR SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+        NSDictionary *responseDict=responseObject;
+        
+        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+            });
+            NSMutableArray *dataArray = [responseDict objectForKey:KDATA_W];
+            for (id json in dataArray) {
+                LanguageObject *lObj = [LanguageObject new];
+                NSString *iconStr = [json objectForKey:KICON_W];
+                iconStr = [iconStr stringByReplacingOccurrencesOfString:@"<img src='" withString:@""];
+                iconStr = [iconStr stringByReplacingOccurrencesOfString:@"'  />" withString:@""];
+                lObj.imagePathString = [NSString stringWithFormat:@"%@%@",BASE_URL,iconStr];
+                lObj.languageName = [json objectForKey:KLANGUAGE_W];
+                lObj.languageID = [json objectForKey:KLANGUAGEID_W];
+                [self.languagesArray addObject:lObj];
+            }
+        }
+    } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+        });
+    }];
+}
 
 @end
 

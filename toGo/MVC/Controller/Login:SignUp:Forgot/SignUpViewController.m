@@ -183,6 +183,7 @@
 
 
 -(IBAction)interpreterCustomerButtonClicked:(UIButton *)sender{
+    
     if (sender.tag==1) {
         //Interpreter
         self.interpreterImageView.image = [UIImage radioONImage];
@@ -193,8 +194,8 @@
         self.customerImageView.image = [UIImage radioONImage];
         self.interpreterImageView.image = [UIImage radioOffImage];
     }
+    
 }
-
 
 #pragma Mark UITextField Delegate Methods
 

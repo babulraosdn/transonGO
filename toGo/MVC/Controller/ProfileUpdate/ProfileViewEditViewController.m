@@ -91,26 +91,40 @@
     self.einTaxArray = [[NSMutableArray alloc]initWithObjects:@"India",@"Japan", nil];
     [Utility_Shared_Instance showProgress];
     
-    [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
-    
     [self addTapGesture];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(keyboardWillShow:)
+//                                                 name:UIKeyboardWillShowNotification
+//                                               object:nil];
+//    
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(keyboardWillHide:)
+//                                                 name:UIKeyboardWillHideNotification
+//                                               object:nil];
     
     
     self.headerLabel.font = [UIFont normalSize];
     self.headerLabel.text = NSLOCALIZEDSTRING(@"PROFILE");
     
-    [self getCountryList];
+    
     App_Delegate.naviController= self.navigationController;
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    self.tblView.backgroundColor = [UIColor backgroundColor];
+    //[NSThread detachNewThreadSelector:@selector(getCountryList) toTarget:self withObject:nil];
+   [self getCountryList];
+    if (App_Delegate.languagesArray.count<1) {
+        //[NSThread detachNewThreadSelector:@selector(getLanguages) toTarget:App_Delegate withObject:nil];
+
+        [App_Delegate getLanguages];
+    }
+    [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
+    
+    //[NSThread detachNewThreadSelector:@selector(getProfileInfo) toTarget:self withObject:nil];
+
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification
@@ -135,11 +149,7 @@
     self.tblView.scrollIndicatorInsets = UIEdgeInsetsZero;
 }
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    self.tblView.backgroundColor = [UIColor backgroundColor];
-    [App_Delegate getLanguages];
-}
+
 
 -(void)addTapGesture{
     tapGesture=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(removePickerViews)];
@@ -1676,9 +1686,11 @@
                     self.profileObject.expYearString = [Utility_Shared_Instance checkForNullString:[paymentDict objectForKey:KEXP_YEAR_W]];
                 }
                 ///////////////
-                [self changeTableLabelHeaders_Tax_EIN];
-                
-                [self.tblView reloadData];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self changeTableLabelHeaders_Tax_EIN];
+
+                    [self.tblView reloadData];
+                });
             });
         }
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
@@ -1761,6 +1773,9 @@
 
 -(void)countryButtonPressed{
     
+    if (self.countryArray.count<1) {
+        [self getCountryList];
+    }
     [self.view endEditing:YES];
     [self removeTapGesture];
     [self removePopUpView];

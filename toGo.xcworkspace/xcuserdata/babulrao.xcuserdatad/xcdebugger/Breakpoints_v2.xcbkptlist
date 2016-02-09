@@ -4,13 +4,19 @@
    version = "2.0">
    <Breakpoints>
       <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.ExceptionBreakpoint">
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            scope = "0"
-            stopOnStyle = "0">
+            filePath = "toGo/AppDelegate.m"
+            timestampString = "476719148.684292"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "781"
+            endingLineNumber = "781"
+            landmarkName = "-saveDisconnectedCallDetailsinServer:isNoOnePicksCallorEndedByCustomer:"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -19,12 +25,124 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "toGo/ooVoo_Calling/Call/CNMessage.m"
-            timestampString = "476191875.544985"
+            filePath = "toGo/AppDelegate.m"
+            timestampString = "476719301.477062"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "131"
-            endingLineNumber = "131"
+            startingLineNumber = "792"
+            endingLineNumber = "792"
+            landmarkName = "-saveDisconnectedCallDetailsinServer:isNoOnePicksCallorEndedByCustomer:"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[AppDelegate saveDisconnectedCallDetailsinServer:isNoOnePicksCallorEndedByCustomer:]"
+                  moduleName = "toGO"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/babulrao/DayUsers/babulrao/Official/Projects/toGo/toGo/toGo/AppDelegate.m"
+                  timestampString = "476719301.489627"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "793"
+                  endingLineNumber = "793"
+                  offsetFromSymbolStart = "1768">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__85-[AppDelegate saveDisconnectedCallDetailsinServer:isNoOnePicksCallorEndedByCustomer:]_block_invoke"
+                  moduleName = "toGO"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/babulrao/DayUsers/babulrao/Official/Projects/toGo/toGo/toGo/AppDelegate.m"
+                  timestampString = "476719301.489891"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "793"
+                  endingLineNumber = "793"
+                  offsetFromSymbolStart = "52">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "toGo/AppDelegate.m"
+            timestampString = "476719304.042813"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "788"
+            endingLineNumber = "788"
+            landmarkName = "-saveDisconnectedCallDetailsinServer:isNoOnePicksCallorEndedByCustomer:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "toGo/AppDelegate.m"
+            timestampString = "476719820.533773"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "839"
+            endingLineNumber = "839"
+            landmarkName = "-saveCDR"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[AppDelegate saveCDR]"
+                  moduleName = "toGO"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/babulrao/DayUsers/babulrao/Official/Projects/toGo/toGo/toGo/AppDelegate.m"
+                  timestampString = "476720207.164166"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "840"
+                  endingLineNumber = "840"
+                  offsetFromSymbolStart = "2096">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__22-[AppDelegate saveCDR]_block_invoke"
+                  moduleName = "toGO"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/babulrao/DayUsers/babulrao/Official/Projects/toGo/toGo/toGo/AppDelegate.m"
+                  timestampString = "476720207.164423"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "840"
+                  endingLineNumber = "840"
+                  offsetFromSymbolStart = "52">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "toGo/ooVoo_Calling/Call/CNMessage.m"
+            timestampString = "476719392.322813"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
             landmarkName = "-initMessageWithResponse:"
             landmarkType = "5">
          </BreakpointContent>
@@ -32,16 +150,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "toGo/MVC/Controller/OrderInterpretation/OrderInterpretationViewController.m"
-            timestampString = "476197469.761085"
+            filePath = "toGo/AppDelegate.m"
+            timestampString = "476719431.564245"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "195"
-            endingLineNumber = "195"
-            landmarkName = "-getLanguagePrice"
+            startingLineNumber = "826"
+            endingLineNumber = "826"
+            landmarkName = "-saveCDR"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -51,109 +169,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "toGo/ooVoo_Calling/BaseVideoConferenceVC/BaseVideoConferenceVC.m"
-            timestampString = "476256011.909677"
+            filePath = "toGo/AppDelegate.m"
+            timestampString = "476719820.533773"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "223"
-            endingLineNumber = "223"
-            landmarkName = "-fixOrientationLayout:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "toGo/ooVoo_Calling/BaseVideoConferenceVC/BaseVideoConferenceVC.m"
-            timestampString = "476282153.577047"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2259"
-            endingLineNumber = "2259"
-            landmarkName = "-UserVideoPanel_Touched:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "toGo/ooVoo_Calling/BaseVideoConferenceVC/BaseVideoConferenceVC.m"
-            timestampString = "476282153.577047"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2154"
-            endingLineNumber = "2154"
-            landmarkName = "-UserMainPanel_Touched:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "toGo/ooVoo_Calling/BaseVideoConferenceVC/BaseVideoConferenceVC.m"
-            timestampString = "476282153.577047"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2230"
-            endingLineNumber = "2230"
-            landmarkName = "-UserVideoPanel_Touched:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "toGo/ooVoo_Calling/BaseVideoConferenceVC/BaseVideoConferenceVC.m"
-            timestampString = "476282153.577047"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2158"
-            endingLineNumber = "2158"
-            landmarkName = "-panelReturnCorrectPanel:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "toGo/ooVoo_Calling/BaseVideoConferenceVC/BaseVideoConferenceVC.m"
-            timestampString = "476282153.577047"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2210"
-            endingLineNumber = "2210"
-            landmarkName = "-somePanelTouched:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "toGo/ooVoo_Calling/BaseVideoConferenceVC/BaseVideoConferenceVC.m"
-            timestampString = "476282153.577047"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1239"
-            endingLineNumber = "1239"
-            landmarkName = "-setPanel:inPosition:Animated:"
+            startingLineNumber = "842"
+            endingLineNumber = "842"
+            landmarkName = "-saveCDR"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

@@ -511,9 +511,6 @@
        //[self.sdk.AVChat.VideoController openCamera];
          id <ooVooEffect> effect = arrEffectList[0];
           [self handleEffectSelection:nil effectId:effect.effectID];
-        
-      
-
     }
     
     [self leaveSession];
@@ -521,6 +518,13 @@
 }
 
 -(void)leaveSession{
+    
+    App_Delegate.cdrObject.endTimeString = [Utility_Shared_Instance GetCurrentTimeStamp];
+    
+    if(![[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
+        [App_Delegate saveCDR];
+    }
+
     
     if (_isCommingFromCall) {
         [self closeViewAndGoBack];
@@ -533,9 +537,8 @@
     [self.sdk.AVChat.AudioController unInitAudio:^(SdkResult *result) {
         NSLog(@"unInit Resoult %d",result.Result);
     }];
-    
-    
 }
+
 -(void)closeViewAndGoBack{
     
     [self.sdk.AVChat.VideoController closeCamera];
@@ -1036,7 +1039,6 @@
         if ([panel isKindOfClass:[UserVideoPanel class]] && panel != [self videoPanel]) {
             panel.hidden=true;
             [self killPanel:panel];
-            
         }
     }
     
@@ -1051,8 +1053,7 @@
 }
 
 
-
--(void)resetAndShowNavigationBarbuttons:(BOOL)show{
+-(void)resetAndShowNavigationBarbuttons:(BOOL)show {
     
     if (show)
     {
@@ -1090,7 +1091,6 @@
             currentFullScreenPanel = NULL;
             [self refreshScrollViewContentSize];
         }
-        
         
         
         [self.videoPanels removeObjectForKey:participant.participantID];
@@ -1157,10 +1157,7 @@
     if (infoVC) {
         [self infoVCSetData];
     }
-    
 }
-
-
 
 
 -(void)removeLastEmptyObjects{
@@ -1171,7 +1168,6 @@
         [self removeLastEmptyObjects];
         
     }
-    
 }
 
 -(NSString*)stringFromSelectedClass{
@@ -1183,7 +1179,6 @@
 - (void)didParticipantJoin:(id<ooVooParticipant>)participant user_data:(NSString *)user_data;
 {
     [self onLog:LogLevelSample log:[NSString stringWithFormat:@"Participant %@ ",participant.participantID]];
-    
     
 //    UserVideoPanel *panel;
     

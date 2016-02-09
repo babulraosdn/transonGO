@@ -22,7 +22,6 @@
     
     NSString *fromLanguageKeyString;
     NSString *toLanguageKeyString;
-
 }
 @property (weak, nonatomic) IBOutlet UILabel *headerLabel;
 @property (weak, nonatomic) IBOutlet UILabel *fromLabel;
@@ -54,11 +53,40 @@
     [self setColors];
     [self setFonts];
     
+    if (App_Delegate.languagesArray.count<1) {
+        [App_Delegate getLanguages];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [Utility_Shared_Instance showProgress];
     [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
+    
+//    NSTimeInterval seconds1 = [NSDate timeIntervalSinceReferenceDate];
+//    double milliseconds = seconds1*1000;
+//    
+//    double seconds = milliseconds;
+//    
+//    NSTimeInterval timeInterval ;
+
+    //double timeInMS1 =(long) (floor([[NSDate date] timeIntervalSince1970]) * 1000 );
+    //NSInteger timeInMS1 = [[NSDate date] timeIntervalSince1970];
+
+   
+//    [self GetCurrentTimeStamp];
+
+//    NSLog(@"---%0ld",(long)timeInMS1);
+    
+//    NSDate *date = [NSDate dateWithTimeIntervalSince1970:(timeInMS1 * 1000)];
+    
+//    NSDateFormatter* df_utc = [[NSDateFormatter alloc] init];
+//    [df_utc setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+//    [df_utc setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//    NSString *Date=[df_utc stringFromDate:date];
+    
+    
+//    self.toDetailLabel.text = [NSString stringWithFormat:@"%@",Date];
+    
 }
 
 -(void)setLabelButtonNames{
@@ -142,6 +170,8 @@
     if (sender.tag==1) {
         //appDelegate.callingUsers = arrFriends;
         
+        
+        
         NSString *alertString;
         if ([self.fromDetailLabel.text isEqualToString:NSLOCALIZEDSTRING(@"LANGUAGE")]) {
             alertString = [NSString messageWithSelectString:NSLOCALIZEDSTRING(@"FROM_LANGUAGE")];
@@ -160,19 +190,8 @@
             return;
         }
         
-        myAlertView = [[UIAlertView alloc] initWithTitle:@"Calling" message:@""
-                                                delegate:self
-                                       cancelButtonTitle:@"Cancel"
-                                       otherButtonTitles:nil, nil];
-        myAlertView.tag=100; // call alert
+        [self getPoolOfInterpreters];
         
-        UIActivityIndicatorView *loading = [[UIActivityIndicatorView alloc]
-                                            initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        loading.frame=CGRectMake(0, 0, 16, 16);
-        [myAlertView setValue:loading forKey:@"accessoryView"];
-        [loading startAnimating];
-        [myAlertView show];
-        [self callToFriends];
     }
     else{
         UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_USER_VIEW_CONTROLLER]];
@@ -181,15 +200,16 @@
     }
 }
 
--(void)getLanguagePrice{
+-(void)getPoolOfInterpreters
+{
     //WEB Service CODE
     [Utility_Shared_Instance showProgress];
     NSMutableDictionary *languagePriceDict=[NSMutableDictionary new];
     [languagePriceDict setValue:fromLanguageKeyString forKey:KFROM_LANGUAGE_W];
     [languagePriceDict setValue:toLanguageKeyString forKey:KTO_LANGUAGE_W];
     [Web_Service_Call serviceCallWithRequestType:languagePriceDict requestType:POST_REQUEST includeHeader:YES includeBody:YES webServicename:GET_INTERPRETER_BY_LANGUAGE_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
-        NSDictionary *responseDict=responseObject;
         
+        NSDictionary *responseDict=responseObject;
         if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
         {
             NSMutableArray *array = [responseDict objectForKey:KDATA_W];
@@ -203,14 +223,75 @@
                     iObj.statusString  = [json objectForKey:KSTATUS_W];
                     iObj.uidString  = [json objectForKey:KUID_W];
                     iObj.usernameString  = [json objectForKey:KUSERNAME_W];
+                    iObj.idString = [json objectForKey:KID_W];
+                    iObj.poolIdString = [responseDict objectForKey:KPOOL_ID_W];
                     [App_Delegate.interpreterListArray addObject:iObj];
                     [arrFriends addObject:[json objectForKey:KUID_W]];
                 }
+                NSLog(@"-->%@",App_Delegate.interpreterListArray);
+
             }
             
-            NSMutableArray *priceArray = [responseDict objectForKey:KPRICE_W];
+            if (arrFriends.count) {
+                myAlertView = [[UIAlertView alloc] initWithTitle:@"Calling" message:@""
+                                                        delegate:self
+                                               cancelButtonTitle:@"Cancel"
+                                               otherButtonTitles:nil, nil];
+                myAlertView.tag=100; // call alert
+                
+                UIActivityIndicatorView *loading = [[UIActivityIndicatorView alloc]
+                                                    initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+                loading.frame=CGRectMake(0, 0, 16, 16);
+                [myAlertView setValue:loading forKey:@"accessoryView"];
+                [loading startAnimating];
+                [myAlertView show];
+                [self callToFriends];
+            }
+        }
+        else{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+                [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                    withMessage:[responseObject objectForKey:KMESSAGE_W]
+                                                         inView:self
+                                                      withStyle:UIAlertControllerStyleAlert];
+                
+            });
+        }
+    } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                withMessage:[responseObject objectForKey:KMESSAGE_W]
+                                                     inView:self
+                                                  withStyle:UIAlertControllerStyleAlert];
+        });
+    }];
+}
+
+-(void)getLanguagePrice{
+    //WEB Service CODE
+    [Utility_Shared_Instance showProgress];
+    NSMutableDictionary *languagePriceDict=[NSMutableDictionary new];
+    [languagePriceDict setValue:fromLanguageKeyString forKey:KFROM_LANGUAGE_W];
+    [languagePriceDict setValue:toLanguageKeyString forKey:KTO_LANGUAGE_W];
+    [Web_Service_Call serviceCallWithRequestType:languagePriceDict requestType:POST_REQUEST includeHeader:YES includeBody:YES webServicename:GET_LANGUAGE_PRICE_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+        NSDictionary *responseDict=responseObject;
+        
+        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
+        {
+            NSMutableArray *priceArray = [responseDict objectForKey:KDATA_W];
             if (priceArray.count) {
+                
                 NSMutableDictionary *priceDict = [priceArray lastObject];
+                
+                App_Delegate.cdrObject.fromLanguageIDString = fromLanguageKeyString;
+                App_Delegate.cdrObject.toLanguageIDString = toLanguageKeyString;
+                App_Delegate.cdrObject.fromLanguageString = self.fromDetailLabel.text;
+                App_Delegate.cdrObject.toLanguageString = self.toDetailLabel.text;
+                App_Delegate.cdrObject.toLanguageString = self.toDetailLabel.text;
+                App_Delegate.cdrObject.costString = [priceDict objectForKey:KLANGUAGE_PRICE_W];
+                
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.descriptionLabel.text = [NSString stringWithFormat:@"%@ $%.2f %@",NSLOCALIZEDSTRING(@"INTERPRETATION_SERVICE_CHARGE"),[[Utility_Shared_Instance checkForNullString:[priceDict objectForKey:KLANGUAGE_PRICE_W]] floatValue],NSLOCALIZEDSTRING(@"PER_MIN")];
                     [SVProgressHUD dismiss];
@@ -333,8 +414,7 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
         
         //    NSLog(@"Calling friend %@",userName);
         // sending a message of calling BUT if something is wrong cancel the call alert
-        //[[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Calling WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess)
-        [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Calling WithConfID:@"togotest123" Compelition:^(BOOL CallSuccess)
+        [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Calling WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess)
          {
             
             
@@ -397,7 +477,7 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
     [self stopTimer];
     
     callAmount1=0;
-    
+    [App_Delegate saveDisconnectedCallDetailsinServer:nil isNoOnePicksCallorEndedByCustomer:YES];
     // for (NSString *userName in arrFriends) {
     //     NSLog(@"Calling friend %@",userName);
     [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Cancel WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess) {
@@ -468,7 +548,7 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
     
 }
 
--(void)stopCallAndDismissView{
+-    (void)stopCallAndDismissView{
     [self stopTimer];
     [myAlertView dismissWithClickedButtonIndex:0 animated:YES];
     [[MessageManager sharedMessage]stopCallSound];
@@ -504,6 +584,7 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
         if (alertView.cancelButtonIndex == buttonIndex)
         {
             // cancell the call Send to the users
+            [App_Delegate saveDisconnectedCallDetailsinServer:nil isNoOnePicksCallorEndedByCustomer:YES];
             [self callCancelFriends];
             
             return;

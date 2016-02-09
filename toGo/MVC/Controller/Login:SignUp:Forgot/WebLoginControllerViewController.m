@@ -45,6 +45,7 @@
     // Pass the selected object to the new view controller.
 }
 */
+
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     
     if ([[[request URL] absoluteString] hasPrefix:@"com.smartdata.interpreter:/oauth2callback"]) {

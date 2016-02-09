@@ -137,6 +137,12 @@ static MessageManager *message = nil;
     CNMessage *messageLocal  =[[CNMessage alloc]initMessageWithResponse:message];
     NSLog(@"message %d recieved from %@",messageLocal.type,messageLocal.fromUseriD);
     
+    NSLog(@"--didMessageReceive--from-%@",message.from);
+    NSLog(@"---to--%@",message.to);
+    NSLog(@"---body--%@",message.body);
+    NSLog(@"--messageId---%@",message.messageId);
+    NSLog(@"--timestamp---%llu",message.timestamp);
+    
     /*
      Calling,
      AnswerAccept,

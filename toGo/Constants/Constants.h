@@ -131,6 +131,7 @@ _Pragma("clang diagnostic pop") \
 #define PROFILE_IMAGE               @"profile_icon_iPhone"
 #define PURCHASE_IMAGE              @"purchase_icon_iPhone"
 #define SETTINGS_IMAGE              @"Settings_icon_iPhone"
+
 ///
 
 //********************  Colors CODES  ****************************************
@@ -158,7 +159,7 @@ _Pragma("clang diagnostic pop") \
 #define PROFILE_INCOMPLETE          @"0"
 
 #define INTERPRETER_AVAILABLE       @"1"
-#define INTERPRETER_UN_AVAILABLE       @"0"
+#define INTERPRETER_UN_AVAILABLE    @"0"
 
 #define NORMAL_LOGIN                @"0"
 #define FACEBOOK_LOGIN              @"1"
@@ -166,7 +167,7 @@ _Pragma("clang diagnostic pop") \
 #define GOOGLE_LOGIN                @"1"
 #define POST_REQUEST                @"POST"
 #define GET_REQUEST                 @"GET"
-
+#define KDEVICE_TOKEN               @"DEVICE_TOKEN_IS"
 
 //********************  WebService Names  ****************************************
 #pragma mark WebService Calls
@@ -191,6 +192,8 @@ _Pragma("clang diagnostic pop") \
 #define UPDATE_USER_PROFILE_INFO_W          @"api/updateUserProfile"
 #define GET_LANGUAGES_W                     @"getLanguageList"
 #define GET_LANGUAGE_PRICE_W                @"getLanguagePrice"
+#define SAVE_CALL_DETAILS                   @"api/saveCallDetails"
+#define CREATE_CDR                          @"api/createCDR"
 
 //updateUserProfile
 //
@@ -254,16 +257,24 @@ _Pragma("clang diagnostic pop") \
 #define KSTATE_NAME_W                   @"stateName"
 
 #define KLANGUAGEID_W                   @"id"
+#define KLANGUAGE_ID_W                  @"languageid"
 #define KICON_W                         @"icon"
 #define KDATA_W                         @"data"
-#define KPRICE_W                            @"price"
+#define KPRICE_W                        @"price"
 #define KTO_LANGUAGE_W                  @"toLanguage"
 #define KFROM_LANGUAGE_W                @"fromLanguage"
+#define KTO_LANGUAGE_small_L_Leter_W    @"tolanguage"
+#define KFROM_LANGUAGE_small_L_Leter_W  @"fromlanguage"
 #define KLANGUAGE_PRICE_W               @"languagePrice"
 #define KLANGUAGE_NAME_W                @"languageName"
-
-#define K_W                            @""
-
+#define KPOOL_ID_W                      @"poolId"
+#define KUSER_ID_W                      @"userId"
+#define KINTERPRETER_ID_W               @"interpreterId"
+#define KCALL_RECEIVED_BY_W             @"callReceivedBy"
+#define KCALLID_W                       @"callId"
+#define KSTART_TIME_W                   @"start_time"
+#define KEND_TIME_W                     @"end_time"
+#define KCOST_W                     @"cost"
 
 //********************  WebService Response Parameters   ****************************************
 #define KSUCCESS                       ((int)200)

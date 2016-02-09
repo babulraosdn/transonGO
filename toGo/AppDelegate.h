@@ -17,6 +17,9 @@
 #import "VideoConferenceVC.h"
 #import <AVFoundation/AVAudioPlayer.h>
 
+@class InterpreterListObject;
+@class CDRObject;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 {
     UINavigationController *navigationController ;
@@ -24,16 +27,14 @@
     VideoConferenceVC *viewVideoControler ;
     
     AVAudioPlayer *_audioPlayer;
-    //  VideoConferenceVCWithRender *viewVideoControllerRender;
+    //VideoConferenceVCWithRender *viewVideoControllerRender;
 }
-
+@property(nonatomic,strong) CDRObject *cdrObject;
+//@property(nonatomic,strong)InterpreterListObject *acceptedInterpreter;
 @property (retain, nonatomic) ooVooClient *sdk;
 @property(nonatomic,strong)NSMutableArray *callingUsers;
 
-
 @property(nonatomic,strong) NSString *conferenceIDString;
-
-
 @property (strong, nonatomic) FBSDKLoginManager *facebookLoginManager;
 @property (strong, nonatomic) UINavigationController *naviController ;
 @property(nonatomic,strong) NSMutableArray *languagesArray;
@@ -44,5 +45,8 @@
 
 -(void)takeTour;
 -(void)getLanguages;
+
+-(void)saveDisconnectedCallDetailsinServer : (InterpreterListObject *)receivedInterpreter isNoOnePicksCallorEndedByCustomer:(BOOL)isNoOnePicksCallorEndedByCustomer;
+-(void)saveCDR;
 @end
 
