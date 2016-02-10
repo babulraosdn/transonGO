@@ -194,6 +194,7 @@ _Pragma("clang diagnostic pop") \
 #define GET_LANGUAGE_PRICE_W                @"getLanguagePrice"
 #define SAVE_CALL_DETAILS                   @"api/saveCallDetails"
 #define CREATE_CDR                          @"api/createCDR"
+#define GET_DASHBOARD_DATA                  @"getDashboardData"
 
 //updateUserProfile
 //
@@ -203,7 +204,8 @@ _Pragma("clang diagnostic pop") \
 #define KUSERNAME_W                    @"username"
 #define KEMAIL_W                       @"email"
 #define KPASSWORD_W                    @"password"
-#define KTYPE_W                        @"utype"
+#define KUSER_TYPE_W                   @"utype"
+#define KTYPE_W                        @"type"
 #define KLOGIN_TYPE_W                  @"logintype"
 #define KAUTHORIZATION_W               @"Authorization"
 #define KCOMPLETION_W                  @"completion"
@@ -274,7 +276,10 @@ _Pragma("clang diagnostic pop") \
 #define KCALLID_W                       @"callId"
 #define KSTART_TIME_W                   @"start_time"
 #define KEND_TIME_W                     @"end_time"
-#define KCOST_W                     @"cost"
+#define KCOST_W                         @"cost"
+#define KTOTAL_NO_CALLS_W               @"totalNoCalls"
+#define KTOTAL_CALL_MINUTES_W           @"totalCallMinutes"
+#define KTOTAL_CALL_AMOUNT_W            @"totalCallAmount"
 
 //********************  WebService Response Parameters   ****************************************
 #define KSUCCESS                       ((int)200)
@@ -295,6 +300,8 @@ _Pragma("clang diagnostic pop") \
 #define FEEDBACK_LIST_VIEW_CONTROLLER           @"FeedBackListViewController"
 #define HOME_VIEW_CONTROLLER                    @"HomeViewController"
 #define ORDER_INTERPRETATION_VIEW_CONTROLLER                    @"OrderInterpretationViewController"
+#define GIVE_FEEDBACK_VIEW_CONTROLLER           @"GiveFeedbackViewController"
+#define FAVOURITE_VIEW_CONTROLLER           @"FavouriteInterpreterViewController"
 
 //********************  Font Names   ****************************************
 #define KFontFamily_ROBOTO_REGULAR                        @"Roboto-Regular"

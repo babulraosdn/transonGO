@@ -95,7 +95,7 @@ static MessageManager *message = nil;
 
     AppDelegate *APPDEL = (AppDelegate *)[[UIApplication sharedApplication]delegate];
     APPDEL.conferenceIDString = strConfId;
-    
+    App_Delegate.cdrObject.conferenceIDString = strConfId;
     self.messageController =[[CNMessage alloc]initMessageWithParams:type confId:strConfId to:arrUsers name:[ActiveUserManager activeUser].userId userData:nil];
     [self.sdk.Messaging sendMessage:self.messageController completion:^(SdkResult *result) {
         // did the message sent well ?

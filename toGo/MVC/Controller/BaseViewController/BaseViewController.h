@@ -9,12 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "Headers.h"
 #import <PKRevealController/PKRevealController.h>
+#import <ooVooSDK/ooVooSDK.h>
+
 @class AppDelegate;
 
 @interface BaseViewController : UIViewController<PKRevealing>{
     AppDelegate  *appDelegate;
 }
 @property(nonatomic,strong) PKRevealController *revealController;
+@property (retain, nonatomic) ooVooClient *sdk;
+
 -(void)setSlideMenuButtonFornavigation;
 -(void)setLogoutButtonForNavigation;
 -(void)setCustomBackButtonForNavigation;

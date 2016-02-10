@@ -58,7 +58,7 @@
     [_scrollView setShowsVerticalScrollIndicator:NO];
     
     [Utility_Shared_Instance showProgress];
-    [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
+    [self performSelector:@selector(getDashBoardData) withObject:nil afterDelay:0.2];
     
 //    
 //    [self.sdk.Account login:[Utility_Shared_Instance readStringUserPreference:KUID_W]
@@ -89,7 +89,7 @@
     self.headerLabel.text = NSLOCALIZEDSTRING(@"DASHBOARD_SLIDE");
     self.noOfCallLabel.text = NSLOCALIZEDSTRING(@"No_OF_CALL");
     self.callMinutesLabel.text = NSLOCALIZEDSTRING(@"CALL_MINUTES");
-    self.callYtdEarningslabel.text = NSLOCALIZEDSTRING(@"CALL_YTD_EARNINIGS");
+    self.callYtdEarningslabel.text = NSLOCALIZEDSTRING(@"CALL_YTD_EARNINGS");
     self.statusLabel.text = NSLOCALIZEDSTRING(@"STATUS");
     [self.profileManagementButton setTitle:NSLOCALIZEDSTRING(@"PROFILE_MANAGEMENT") forState:UIControlStateNormal];
     [self.customerFeedBackButton setTitle:NSLOCALIZEDSTRING(@"CUSTOMER_FEEDBACK") forState:UIControlStateNormal];
@@ -186,60 +186,23 @@
 
 
 
--(void)getProfileInfo
+-(void)getDashBoardData
 {
+    NSMutableDictionary *dashboardDict=[NSMutableDictionary new];
+    [dashboardDict setValue:[Utility_Shared_Instance readStringUserPreference:KUID_W] forKey:KID_W];
+    [dashboardDict setValue:[Utility_Shared_Instance readStringUserPreference:USER_TYPE] forKey:KTYPE_W];
+    
     //WEB Service CODE
-    [Web_Service_Call serviceCallWithRequestType:nil requestType:GET_REQUEST includeHeader:YES includeBody:NO webServicename:PROFILE_INFO_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+    [Web_Service_Call serviceCallWithRequestType:dashboardDict requestType:POST_REQUEST includeHeader:YES includeBody:YES webServicename:GET_DASHBOARD_DATA SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         NSDictionary *responseDict=responseObject;
         
         if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [SVProgressHUD dismiss];
-                NSLog(@"dict-->%@",responseDict);
-                NSMutableDictionary *userDict = [responseDict objectForKey:@"user"];
-                [Utility_Shared_Instance writeStringUserPreference:KUID_W value:[userDict objectForKey:KUID_W]];
-                [Utility_Shared_Instance writeStringUserPreference:KID_W value:[userDict objectForKey:KID_W]];
-                
-                if ([userDict objectForKey:KNAME_W]) {
-                    NSDictionary *nameDict =  [userDict objectForKey:KNAME_W];
-                    self.interpreterName.text = [NSString stringWithFormat:@"%@ %@",[nameDict objectForKey:KFIRST_NAME_W],[nameDict objectForKey:KLAST_NAME_W]];
-                }
-                else{
-                    self.interpreterName.text = @"";
-                }
-                
-                
-                NSDictionary *profileImgDict =  [userDict objectForKey:KPROFILE_IMAGE_W];
-                [Utility_Shared_Instance writeStringUserPreference:KEMAIL_W value:[userDict objectForKey:KEMAIL_W]];
-                
-                
-                NSString *descriptionStr =@"An interpreter translates high-level instructions into an intermediate form, which it then executes. In contrast, a compiler translates high-level instructions directly into machine language. Compiled programs generally run faster than interpreted programs. The advantage of an interpreter, however, is that it does not need to go through the compilation stage during which machine instructions are generated. ";// [userDict objectForKey:KABOUT_USER_W];
-                
-                /*
-                CGFloat descriptionHeight =  [Utility_Shared_Instance heightOfTextViewWithString:descriptionStr withFont:[UIFont smallThin] andFixedWidth:self.view.frame.size.width];
-                self.descriptionTextViewHeightConstraint.constant = descriptionHeight-50;
-                [self.descriptionTextView.superview.superview updateConstraints];
-                */
-                self.descriptionTextView.text = [descriptionStr substringToIndex:159];
-                NSString *imageURLString = [profileImgDict objectForKey:KURL_W];
-                
-                if (imageURLString.length) {
-                    self.defaultImageView.layer.cornerRadius = self.defaultImageView.frame.size.height /2;
-                    self.defaultImageView.layer.masksToBounds = YES;
-                    [self.defaultImageView sd_setImageWithURL:[NSURL URLWithString:imageURLString]
-                                      placeholderImage:[UIImage defaultPicImage]];
-                }
-                
-               NSString *interpreterAvailabiltyString = [NSString stringWithFormat:@"%@",[Utility_Shared_Instance checkForNullString:[userDict objectForKey:KINTERPRETER_AVAILABILITY_W]]];
-                if ([interpreterAvailabiltyString isEqualToString:INTERPRETER_UN_AVAILABLE]) {
-                    [self.switchButton setImage:[UIImage switchOffImage] forState:UIControlStateNormal];
-                    [Utility_Shared_Instance writeStringUserPreference:KINTERPRETER_AVAILABILITY_W value:INTERPRETER_UN_AVAILABLE];
-                }
-                else{
-                    [self.switchButton setImage:[UIImage switchONImage] forState:UIControlStateNormal];
-                    [Utility_Shared_Instance writeStringUserPreference:KINTERPRETER_AVAILABILITY_W value:INTERPRETER_AVAILABLE];
-                }
+                self.noOfCallDetailLabel.text = [NSString stringWithFormat:@"%@",[responseDict objectForKey:KTOTAL_NO_CALLS_W]];
+                self.callMinutesDetailLabel.text = [NSString stringWithFormat:@"%@",[responseDict objectForKey:KTOTAL_CALL_MINUTES_W]];
+                self.callYtdEarningsDetailLabel.text = [NSString stringWithFormat:@"%@",[responseDict objectForKey:KTOTAL_CALL_AMOUNT_W]];
             });
             
         }

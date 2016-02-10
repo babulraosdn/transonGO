@@ -416,10 +416,8 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
         // sending a message of calling BUT if something is wrong cancel the call alert
         [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Calling WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess)
          {
-            
-            
-            
-            if (!CallSuccess) {
+
+             if (!CallSuccess) {
                 [myAlertView dismissWithClickedButtonIndex:0 animated:YES];
             }
             else

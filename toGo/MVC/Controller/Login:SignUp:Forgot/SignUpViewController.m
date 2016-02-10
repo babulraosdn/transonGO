@@ -149,7 +149,7 @@
     [signUpDictionary setObject:self.usernameTextField.text forKey:KUSERNAME_W];
     [signUpDictionary setObject:self.passwordTextField.text forKey:KPASSWORD_W];
     [signUpDictionary setObject:self.emaillTextField.text forKey:KEMAIL_W];
-    [signUpDictionary setObject:[Utility_Shared_Instance checkForNullString:[Utility_Shared_Instance readStringUserPreference:USER_TYPE]] forKey:KTYPE_W];
+    [signUpDictionary setObject:[Utility_Shared_Instance checkForNullString:[Utility_Shared_Instance readStringUserPreference:USER_TYPE]] forKey:KUSER_TYPE_W];
     
     [Web_Service_Call serviceCall:signUpDictionary webServicename:SIGNUP_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         NSDictionary *responseDict=responseObject;

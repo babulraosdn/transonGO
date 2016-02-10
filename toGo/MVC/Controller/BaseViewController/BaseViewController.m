@@ -7,6 +7,7 @@
 //
 
 #import "BaseViewController.h"
+#import "ActiveUserManager.h"
 
 @interface BaseViewController ()
 
@@ -84,6 +85,14 @@
 
 - (void)logOutButtonClicked{
     [self.view endEditing:YES];
+    
+    NSString * token = [ActiveUserManager activeUser].token;
+    if(token && token.length > 0){
+        [self.sdk.Account logout];
+    }else{
+        [self.sdk.Account logout];
+    }
+    
     [App_Delegate.facebookLoginManager logOut];
     [FBSDKAccessToken setCurrentAccessToken:nil];
     [FBSDKProfile setCurrentProfile:nil];

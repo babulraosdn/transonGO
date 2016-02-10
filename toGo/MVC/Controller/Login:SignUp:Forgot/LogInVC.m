@@ -83,10 +83,13 @@
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setShowsVerticalScrollIndicator:NO];
     
-//    self.txt_userId.text = @"testcustomer@gmail.com";
-//    self.txtDisplayName.text = @"Test@123";
+    self.txt_userId.text        =      @"testcustomer5@gmail.com";
+    self.txtDisplayName.text    =      @"Test@123";
 //
-//    self.txt_userId.text = @"testinterpreter1@gmail.com";
+//    self.txt_userId.text        =      @"pankaj.turkar@smartdatainc.net";
+//    self.txtDisplayName.text =     @"Test@123";
+//
+//    self.txt_userId.text = @"testinterpreter3@gmail.com";
 //    self.txtDisplayName.text = @"Test@123";
     
 //    _txt_userId.text = [self randomUser];
@@ -268,8 +271,8 @@
 - (IBAction)act_LogIn:(id)sender {
     
     
-    //[self createSidePanel];
-    //return;
+//    [self createSidePanel];
+//    return;
     
 //    AlertViewCustom *alertView = [[AlertViewCustom alloc]init];
 //    UIView *viewIs = [alertView showAlertViewWithMessage:@"Please confirm the Registration by clicking the verification link on email" headingLabel:@"Confirm Registration" confirmButtonName:@"Confirm" cancelButtonName:@"Cancel" viewIs:self.view];
@@ -302,7 +305,7 @@
     [loginDictionary setObject:passwordString forKey:KPASSWORD_W];
     [loginDictionary setObject:loginWith forKey:KLOGIN_TYPE_W];
     [loginDictionary setObject:userIDString forKey:KUSERNAME_W];
-    [loginDictionary setObject:[Utility_Shared_Instance checkForNullString:[Utility_Shared_Instance readStringUserPreference:USER_TYPE]] forKey:KTYPE_W];
+    [loginDictionary setObject:[Utility_Shared_Instance checkForNullString:[Utility_Shared_Instance readStringUserPreference:USER_TYPE]] forKey:KUSER_TYPE_W];
     
     [Web_Service_Call serviceCall:loginDictionary webServicename:LOGIN_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         

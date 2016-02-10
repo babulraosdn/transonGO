@@ -772,7 +772,8 @@
     InterpreterListObject *tempObj;
     for (InterpreterListObject *iObj in self.interpreterListArray) {
         tempObj = iObj;
-        if (![receivedInterpreter.uidString isEqualToString:iObj.uidString]) {
+        //if (![receivedInterpreter.uidString isEqualToString:iObj.uidString])
+        {
             [disconnectedInterpreters addObject:iObj.idString];
         }
     }
@@ -785,8 +786,8 @@
     [callDict setObject:[Utility_Shared_Instance GetCurrentTimeStamp] forKey:KSTART_TIME_W];
     
     if (!isNoOnePicksCallorEndedByCustomer) {
-        [callDict setObject:receivedInterpreter.uidString forKey:KCALL_RECEIVED_BY_W];
-        [callDict setObject:self.conferenceIDString forKey:KCALLID_W];
+        [callDict setObject:self.cdrObject.receivedInterpreter.uidString forKey:KCALL_RECEIVED_BY_W];
+        [callDict setObject:self.cdrObject.conferenceIDString forKey:KCALLID_W];
         [callDict setObject:[Utility_Shared_Instance GetCurrentTimeStamp] forKey:KSTART_TIME_W];
     }
     

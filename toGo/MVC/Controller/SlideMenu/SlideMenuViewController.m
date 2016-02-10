@@ -63,8 +63,8 @@
                                  DASHBOARD_SLIDE_IMAGE,
                                  PROFILE_IMAGE,
                                  CALL_HISTORY_IMAGE,
-                                 FAV_INTERPRETER_IMAGE,
                                  PURCHASE_IMAGE,
+                                 FAV_INTERPRETER_IMAGE,
                                  SETTINGS_IMAGE, nil];
     }
     else {
@@ -161,13 +161,20 @@
         
     }
     else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"FAVORITE_INTERPRETER")]){
-        
+        contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:FAVOURITE_VIEW_CONTROLLER]];
+        self.revealController.frontViewController = contentNaviationController ;
     }
     else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"SETTINGS")]){
         
         contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:SETTINGS_VIEW_CONTROLLER]];
         self.revealController.frontViewController = contentNaviationController ;
     }
+    else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"FEEDBACK")]){
+        
+        contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:GIVE_FEEDBACK_VIEW_CONTROLLER]];
+        self.revealController.frontViewController = contentNaviationController ;
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning {

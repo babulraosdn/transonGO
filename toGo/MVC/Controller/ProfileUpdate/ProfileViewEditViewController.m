@@ -384,7 +384,7 @@
                 [addressCell.contentView addSubview:starLabel];
                 
                 
-                UIImageView *imgViewEdit = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width-37, 10, 12, 12)];
+                UIImageView *imgViewEdit = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width-37, 5, 12, 12)];
                 imgViewEdit.tag = IMAGE_VIEW_TAG;
                 //imgViewEdit.backgroundColor = [UIColor redColor];
                 [addressCell.contentView addSubview:imgViewEdit];
@@ -451,7 +451,7 @@
                     [[descriptionCell viewWithTag:DESCRIPTION_TEXT_VIEW_TAG] removeFromSuperview];
                 }
                 
-                UIImageView *imgViewEdit = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width-37, 10, 12, 12)];
+                UIImageView *imgViewEdit = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width-37, 5, 12, 12)];
                 imgViewEdit.tag = IMAGE_VIEW_TAG;
                 //imgViewEdit.backgroundColor = [UIColor redColor];
                 [descriptionCell.contentView addSubview:imgViewEdit];
@@ -1688,7 +1688,7 @@
                 ///////////////
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self changeTableLabelHeaders_Tax_EIN];
-
+                    [self makeEditableMandatoryFields];
                     [self.tblView reloadData];
                 });
             });
@@ -1853,6 +1853,7 @@
     }
     
     [self getLanguageKeys];
+    [self makeEditableMandatoryFields];
     [self.tblView reloadData];
     [self performSelector:@selector(saveProfileInfo:) withObject:nil];
     [self addTapGesture];
@@ -1868,7 +1869,7 @@
         [self getStateList];
     }
     [self changeTableLabelHeaders_Tax_EIN];
-    
+    [self makeEditableMandatoryFields];
     [self.tblView reloadData];
     [self performSelector:@selector(saveProfileInfo:) withObject:nil];
     [self addTapGesture];
@@ -1881,6 +1882,7 @@
         StateObject *sObj = [selectedDataArray lastObject];
         self.profileObject.stateString = sObj.stateName;
     }
+    [self makeEditableMandatoryFields];
     [self.tblView reloadData];
     [self performSelector:@selector(saveProfileInfo:) withObject:nil];
     [self addTapGesture];
@@ -2284,7 +2286,7 @@
     }
     
     [self removePickerViews];
-    
+    [self makeEditableMandatoryFields];
     [self.tblView reloadData];
 }
 

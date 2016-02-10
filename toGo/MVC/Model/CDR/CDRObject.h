@@ -19,4 +19,5 @@
 @property(nonatomic,strong) NSString *callReceivedUserIDString;
 @property(nonatomic,strong) NSMutableArray *callingUsers;
 @property(nonatomic,strong) InterpreterListObject *receivedInterpreter;
+@property(nonatomic,strong) NSString *conferenceIDString;
 @end
