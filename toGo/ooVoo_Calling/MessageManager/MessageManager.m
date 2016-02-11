@@ -73,7 +73,12 @@ static MessageManager *message = nil;
             
             if (type == Calling)
             {
-                [self playSystemLineSound];
+                if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
+                    [self playSystemLineSound];
+                }
+                else{
+                     [self stopCallSound];
+                }
                 compelition(true);
             }
             else

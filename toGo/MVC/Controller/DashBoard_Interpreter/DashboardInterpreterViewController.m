@@ -189,7 +189,7 @@
 -(void)getDashBoardData
 {
     NSMutableDictionary *dashboardDict=[NSMutableDictionary new];
-    [dashboardDict setValue:[Utility_Shared_Instance readStringUserPreference:KUID_W] forKey:KID_W];
+    [dashboardDict setValue:[Utility_Shared_Instance readStringUserPreference:KID_W] forKey:KID_W];
     [dashboardDict setValue:[Utility_Shared_Instance readStringUserPreference:USER_TYPE] forKey:KTYPE_W];
     
     //WEB Service CODE
@@ -203,6 +203,38 @@
                 self.noOfCallDetailLabel.text = [NSString stringWithFormat:@"%@",[responseDict objectForKey:KTOTAL_NO_CALLS_W]];
                 self.callMinutesDetailLabel.text = [NSString stringWithFormat:@"%@",[responseDict objectForKey:KTOTAL_CALL_MINUTES_W]];
                 self.callYtdEarningsDetailLabel.text = [NSString stringWithFormat:@"%@",[responseDict objectForKey:KTOTAL_CALL_AMOUNT_W]];
+                
+                NSArray *profileArray = [responseDict objectForKey:KGET_PROFILE_INFO_W];
+                if (profileArray.count) {
+                    NSMutableDictionary *profileDict = [profileArray lastObject];
+                    if ([profileDict objectForKey:KNAME_W]) {
+                        NSDictionary *nameDict =  [profileDict objectForKey:KNAME_W];
+                        self.interpreterName.text = [NSString stringWithFormat:@"%@ %@",[nameDict objectForKey:KFIRST_NAME_W],[nameDict objectForKey:KLAST_NAME_W]];
+                    }
+                    else{
+                        self.interpreterName.text = @"";
+                    }
+                    NSDictionary *profileImgDict =  [profileDict objectForKey:KPROFILE_IMAGE_W];
+                    NSString *imageURLString = [profileImgDict objectForKey:KURL_W];
+                    
+                    if (imageURLString.length) {
+                        self.defaultImageView.layer.cornerRadius = self.defaultImageView.frame.size.height /2;
+                        self.defaultImageView.layer.masksToBounds = YES;
+                        [self.defaultImageView sd_setImageWithURL:[NSURL URLWithString:imageURLString]
+                                                 placeholderImage:[UIImage defaultPicImage]];
+                    }
+                    
+                    NSString *interpreterAvailabiltyString = [NSString stringWithFormat:@"%@",[Utility_Shared_Instance checkForNullString:[profileDict objectForKey:KINTERPRETER_AVAILABILITY_W]]];
+                    if ([interpreterAvailabiltyString isEqualToString:INTERPRETER_UN_AVAILABLE]) {
+                        [self.switchButton setImage:[UIImage switchOffImage] forState:UIControlStateNormal];
+                        [Utility_Shared_Instance writeStringUserPreference:KINTERPRETER_AVAILABILITY_W value:INTERPRETER_UN_AVAILABLE];
+                    }
+                    else{
+                        [self.switchButton setImage:[UIImage switchONImage] forState:UIControlStateNormal];
+                        [Utility_Shared_Instance writeStringUserPreference:KINTERPRETER_AVAILABILITY_W value:INTERPRETER_AVAILABLE];
+                    }
+                }
+                
             });
             
         }

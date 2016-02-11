@@ -1485,8 +1485,26 @@
         
         self.profileObject.eINtaxIDString = cell.descriptionTextField.text;
         
+        
         self.profileObject.isCertificatesEdit = NO;
         if(self.profileObject.isEinTaxEdit){
+            
+            NSString *alertMsgStr;
+            if ([cell.headerLabel.text isEqualToString:NSLOCALIZEDSTRING(@"EIN_TaxID")]){
+                alertMsgStr = NSLOCALIZEDSTRING(@"EIN_TaxID");
+            }
+            else{
+                alertMsgStr = NSLOCALIZEDSTRING(@"TaxID_EIN");
+            }
+            
+            if (cell.descriptionTextField.text.length<9) {
+                [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                    withMessage:[NSString stringWithFormat:@"%@ %@",alertMsgStr,NSLOCALIZEDSTRING(@"TIN_VALIDATION_MESSAGE")]
+                                                         inView:self
+                                                      withStyle:UIAlertControllerStyleAlert];
+                return;
+            }
+            
             editableString = @"";
             self.profileObject.isEinTaxEdit = NO;
             [self saveProfileInfo:indexpath];
@@ -2376,10 +2394,29 @@
     NSString *currentString = [textField.text stringByReplacingCharactersInRange:range withString:string];
     
     if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"FIRST_NAME")]||[textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"LAST_NAME")]){
-        if (currentString.length>13) {
+        if (currentString.length>FIRSTNAME_LASTNAME_LIMIT) {
             return NO;
         }
     }
+    
+    if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"NICK_NAME")]){
+        if (currentString.length>NICK_NAME_LIMIT) {
+            return NO;
+        }
+    }
+    
+    if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"TaxID_EIN")]){
+        if (currentString.length>TIN_LIMIT) {
+            return NO;
+        }
+    }
+    
+    if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"EIN_TaxID")]){
+        if (currentString.length>EIN_LIMIT) {
+            return NO;
+        }
+    }
+    
     
     if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"POSTAL_CODE")]||[textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"PHONE_NUMBER")]||[textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"CARD_NUMBER")]||[textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"CVV")]){
         

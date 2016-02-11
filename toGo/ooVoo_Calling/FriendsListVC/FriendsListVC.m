@@ -44,8 +44,6 @@
     if ([ActiveUserManager activeUser].token.length) {
         _isForCall?@"":[self setNavigationBarRightButton];
     }
-    
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -54,14 +52,16 @@
 }
 
 -(void)dealloc{
+    
     [[NSNotificationCenter defaultCenter]removeObserver:self];
     arrFriends=nil;
     [timer invalidate];
     timer=nil;
+    
 }
 
 
--(void)setNavigationBarRightButton{
+-(void)setNavigationBarRightButton {
     
     self.navigationItem.rightBarButtonItem=nil;
     
@@ -77,11 +77,10 @@
     
     self.navigationItem.rightBarButtonItem=btnSubscribe;
     self.navigationController.navigationBar.translucent = NO;
-    
 
 }
 
--(void)unsubscribe{
+-(void)unsubscribe {
     
     //NSString * uuid = [[NSUUID UUID] UUIDString] ;
     NSString * token = [ActiveUserManager activeUser].token;
@@ -135,7 +134,6 @@
             [alert show];
         }];
     }
-        
 }
 
 #pragma mark - Tableview Delegate
@@ -144,6 +142,7 @@
     
     return [arrFriends count]; // no data .
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
@@ -151,6 +150,7 @@
     
     return cell;
 }
+
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
@@ -188,8 +188,8 @@
         return NO;
     }
     return YES;
-    
 }
+
 - (IBAction)actCall:(id)sender {
     
     if (![self canSend]) {
@@ -230,7 +230,6 @@
     alertViewChangeName.tag = 200 ;
     
     [alertViewChangeName show];
-    
     
 }
 

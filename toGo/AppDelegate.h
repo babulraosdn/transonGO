@@ -48,5 +48,7 @@
 
 -(void)saveDisconnectedCallDetailsinServer : (InterpreterListObject *)receivedInterpreter isNoOnePicksCallorEndedByCustomer:(BOOL)isNoOnePicksCallorEndedByCustomer;
 -(void)saveCDR;
+- (void)SetNotificationObserversForCallMessaging;
+- (void)UnSetNotificationObserversForCallMessaging;
 @end
 

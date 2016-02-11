@@ -8,7 +8,7 @@
 
 #import "BaseViewController.h"
 #import "ActiveUserManager.h"
-
+#import "MessageManager.h"
 @interface BaseViewController ()
 
 @end
@@ -86,12 +86,19 @@
 - (void)logOutButtonClicked{
     [self.view endEditing:YES];
     
+    /* // 1. Not working to Logout  2. call is also coming to interpreter after this
     NSString * token = [ActiveUserManager activeUser].token;
     if(token && token.length > 0){
         [self.sdk.Account logout];
     }else{
         [self.sdk.Account logout];
     }
+    [[MessageManager sharedMessage]initSdkMessage];
+    */
+    //incomingCall
+    
+    
+    [App_Delegate UnSetNotificationObserversForCallMessaging];
     
     [App_Delegate.facebookLoginManager logOut];
     [FBSDKAccessToken setCurrentAccessToken:nil];

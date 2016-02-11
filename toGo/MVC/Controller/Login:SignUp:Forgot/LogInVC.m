@@ -80,23 +80,28 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
+    
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setShowsVerticalScrollIndicator:NO];
     
-    self.txt_userId.text        =      @"testcustomer5@gmail.com";
+    self.txt_userId.text        =      @"testcustomer@gmail.com";
+    self.txtDisplayName.text    =      @"Test@123";
+    
+    self.txt_userId.text        =      @"testinterpreter2@gmail.com";
     self.txtDisplayName.text    =      @"Test@123";
 //
 //    self.txt_userId.text        =      @"pankaj.turkar@smartdatainc.net";
 //    self.txtDisplayName.text =     @"Test@123";
 //
-//    self.txt_userId.text = @"testinterpreter3@gmail.com";
-//    self.txtDisplayName.text = @"Test@123";
+//    self.txt_userId.text = @"togo-ibq@ice-breakrr.com";
+//    self.txtDisplayName.text = @"Int@123";
     
 //    _txt_userId.text = [self randomUser];
 //    _txtDisplayName.text=[self returnSavedDisplayname];
     
     userIDString = _txt_userId.text;
     passwordString = _txtDisplayName.text;
+    
     [self autorize];
 }
 
@@ -681,10 +686,11 @@
 
 -(void)createSidePanel{
     
-    
     if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             
+            [App_Delegate SetNotificationObserversForCallMessaging];
             UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_INTERPRETER_VIEW_CONTROLLER]];//DashBoardViewController
             
             if ([[Utility_Shared_Instance readStringUserPreference:KCOMPLETION_W] isEqualToString:PROFILE_INCOMPLETE]) {
@@ -698,6 +704,7 @@
     }
     else{
         dispatch_async(dispatch_get_main_queue(), ^{
+            [App_Delegate UnSetNotificationObserversForCallMessaging];
             UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_USER_VIEW_CONTROLLER]];
             if ([[Utility_Shared_Instance readStringUserPreference:KCOMPLETION_W] isEqualToString:PROFILE_INCOMPLETE]) {
                 contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:PROFILE_VIEW_CONTROLLER]];//DashBoardViewController

@@ -77,6 +77,10 @@ _Pragma("clang diagnostic pop") \
 #define CVV_LIMIT 4
 #define PHONE_NUMBER_LIMIT 12
 #define POSTAL_CODE_LIMIT 6
+#define FIRSTNAME_LASTNAME_LIMIT 50
+#define NICK_NAME_LIMIT 20
+#define TIN_LIMIT 13
+#define EIN_LIMIT 9
 
 #define CHARACTER_LIMIT 10000000
 #define NUMBERS_ONLY @"0123456789."
@@ -194,7 +198,7 @@ _Pragma("clang diagnostic pop") \
 #define GET_LANGUAGE_PRICE_W                @"getLanguagePrice"
 #define SAVE_CALL_DETAILS                   @"api/saveCallDetails"
 #define CREATE_CDR                          @"api/createCDR"
-#define GET_DASHBOARD_DATA                  @"getDashboardData"
+#define GET_DASHBOARD_DATA                  @"api/getDashboardData"
 
 //updateUserProfile
 //
@@ -280,7 +284,7 @@ _Pragma("clang diagnostic pop") \
 #define KTOTAL_NO_CALLS_W               @"totalNoCalls"
 #define KTOTAL_CALL_MINUTES_W           @"totalCallMinutes"
 #define KTOTAL_CALL_AMOUNT_W            @"totalCallAmount"
-
+#define KGET_PROFILE_INFO_W            @"getProfileInfo"
 //********************  WebService Response Parameters   ****************************************
 #define KSUCCESS                       ((int)200)
 #define KCODE_W                        @"code"
@@ -299,9 +303,10 @@ _Pragma("clang diagnostic pop") \
 #define SLIDE_MENU_VIEW_CONTROLLER              @"SlideMenuViewController"
 #define FEEDBACK_LIST_VIEW_CONTROLLER           @"FeedBackListViewController"
 #define HOME_VIEW_CONTROLLER                    @"HomeViewController"
-#define ORDER_INTERPRETATION_VIEW_CONTROLLER                    @"OrderInterpretationViewController"
+#define ORDER_INTERPRETATION_VIEW_CONTROLLER    @"OrderInterpretationViewController"
 #define GIVE_FEEDBACK_VIEW_CONTROLLER           @"GiveFeedbackViewController"
-#define FAVOURITE_VIEW_CONTROLLER           @"FavouriteInterpreterViewController"
+#define REVENUE_VIEW_CONTROLLER               @"RevenueViewController"
+#define CALL_HISTORY_VIEW_CONTROLLER            @"CallHistoryViewController"
 
 //********************  Font Names   ****************************************
 #define KFontFamily_ROBOTO_REGULAR                        @"Roboto-Regular"

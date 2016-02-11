@@ -155,14 +155,14 @@
         
     }
     else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"CALL_HISTORY")]){
-        
+        contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:CALL_HISTORY_VIEW_CONTROLLER]];
+        self.revealController.frontViewController = contentNaviationController ;
     }
     else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"PURCHASES")]){
         
     }
     else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"FAVORITE_INTERPRETER")]){
-        contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:FAVOURITE_VIEW_CONTROLLER]];
-        self.revealController.frontViewController = contentNaviationController ;
+        
     }
     else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"SETTINGS")]){
         
@@ -172,6 +172,11 @@
     else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"FEEDBACK")]){
         
         contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:GIVE_FEEDBACK_VIEW_CONTROLLER]];
+        self.revealController.frontViewController = contentNaviationController ;
+    }
+    else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"REVENUE")]){
+        
+        contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:REVENUE_VIEW_CONTROLLER]];
         self.revealController.frontViewController = contentNaviationController ;
     }
     

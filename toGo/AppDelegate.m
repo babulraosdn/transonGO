@@ -67,9 +67,6 @@
     NSLog(@"My token is: %@", [ActiveUserManager activeUser].token);
     NSLog(@"[ActiveUserManager activeUser].userId--->: %@", [ActiveUserManager activeUser].userId);
     
-    
-    
-    self.sdk = [ooVooClient sharedInstance];
     self.callingUsers = [NSMutableArray new];
 #ifdef DEBUG
     NSLog(@"Debug mode no Hockey");
@@ -81,7 +78,8 @@
     [self setupConnectionParameters];
     
     
-    [[MessageManager sharedMessage]initSdkMessage]; // a singeltone for retrieve a message of a incoming call
+    [[MessageManager sharedMessage]initSdkMessage];
+    // a singeltone for retrieve a message of a incoming call
     
     {
         
@@ -93,7 +91,7 @@
     
     viewVideoControler = (VideoConferenceVC *)[mainStoryboard instantiateViewControllerWithIdentifier:@"VideoConferenceVC"];
     NSLog(@"***********************   didFinishLaunchingWithOptions  ****************************");
-    [self SetNotificationObserversForCallMessaging];
+    //[self SetNotificationObserversForCallMessaging];
     
     
     NSLog(@"APP_VIDEO_RENDER---->%d",[UserDefaults getBoolForToKey:APP_VIDEO_RENDER]);
@@ -274,6 +272,7 @@
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {
+        //1st when enter to Back ground
         [ooVooClient applicationWillResignActive];
     
         bool isMessaging = [[[NSUserDefaults standardUserDefaults] stringForKey:APP_MESSAGING]boolValue];
@@ -284,7 +283,7 @@
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    
+     //2nd when enter to Back ground
     [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
     
         [ooVooClient applicationDidEnterBackground];
@@ -293,12 +292,14 @@
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
+        //1st when enter to Fore ground
         [ooVooClient applicationWillEnterForeground];
         ooVooClient *sdk = [ooVooClient sharedInstance];
         [sdk.AVChat.VideoController startTransmitVideo];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
+     //2nd when enter to Fore ground
        [ooVooClient applicationDidBecomeActive];
     
         bool isMessaging = [[[NSUserDefaults standardUserDefaults] stringForKey:APP_MESSAGING]boolValue];
@@ -382,12 +383,14 @@
     
 }
 
-
-
+- (void)UnSetNotificationObserversForCallMessaging
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"incomingCall" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"AnswerAccept" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"killVideoController" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"callCancel" object:nil];
+}
 -(void)incomingCall:(NSNotification*)notif{
-    
-    
-    
     
     [self playSystemLineSound];
     UILocalNotification *localNotif = [[UILocalNotification alloc] init];
@@ -780,7 +783,7 @@
 
     NSMutableDictionary *callDict= [NSMutableDictionary new];
     
-    [callDict setObject:tempObj.poolIdString forKey:KPOOL_ID_W];
+    [callDict setObject:[Utility_Shared_Instance checkForNullString:tempObj.poolIdString] forKey:KPOOL_ID_W];
     [callDict setObject:[Utility_Shared_Instance readStringUserPreference:KID_W] forKey:KUSER_ID_W];
     [callDict setObject:disconnectedInterpreters forKey:KINTERPRETER_ID_W];
     [callDict setObject:[Utility_Shared_Instance GetCurrentTimeStamp] forKey:KSTART_TIME_W];

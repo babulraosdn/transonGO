@@ -1,20 +1,21 @@
 //
-//  FavouriteInterpreterViewController.h
+//  CallHistoryViewController.h
 //  toGO
 //
-//  Created by Babul Rao on 10/02/16.
+//  Created by Babul Rao on 11/02/16.
 //  Copyright © 2016 smartData. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import "Headers.h"
 
-@interface FavouriteCell : UITableViewCell
+@interface CallHistoryCell : UITableViewCell
 @property(nonatomic,weak) IBOutlet UIImageView *displayImageView;
 @property(nonatomic,weak) IBOutlet UILabel *titleLabel;
 @property(nonatomic,weak) IBOutlet UILabel *descriptionLabel;
 @property(nonatomic,weak) IBOutlet UIButton *favouriteButton;
 @end
-@interface FavouriteInterpreterViewController : BaseViewController
+
+@interface CallHistoryViewController : BaseViewController
 
 @end

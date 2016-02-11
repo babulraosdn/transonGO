@@ -93,8 +93,8 @@
     self.headerLabel.text = NSLOCALIZEDSTRING(@"SELCET_YOUR_INTERPRETATION_LANGUAGE");
     self.fromLabel.text = NSLOCALIZEDSTRING(@"FROM");
     self.toLabel.text = NSLOCALIZEDSTRING(@"TO");
-    [self.confirmButton setTitle:NSLOCALIZEDSTRING(@"CONFIRM") forState:UIControlStateNormal];
-    [self.cancelButton setTitle:NSLOCALIZEDSTRING(@"CANCEL") forState:UIControlStateNormal];
+    [self.confirmButton setTitle:NSLOCALIZEDSTRING(@"CONFIRM_CAPITAL") forState:UIControlStateNormal];
+    [self.cancelButton setTitle:NSLOCALIZEDSTRING(@"CANCEL_CAPITAL") forState:UIControlStateNormal];
 }
 
 -(void)setRoundCorners{
@@ -212,41 +212,47 @@
         NSDictionary *responseDict=responseObject;
         if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
         {
-            NSMutableArray *array = [responseDict objectForKey:KDATA_W];
-            if (array.count) {
-                arrFriends = [NSMutableArray new];
-                App_Delegate.interpreterListArray = [NSMutableArray new];
-                for (id json in array) {
-                    InterpreterListObject *iObj = [InterpreterListObject new];
-                    iObj.emailString  = [json objectForKey:KEMAIL_W];
-                    iObj.interpreter_availabilityString  = [json objectForKey:KINTERPRETER_AVAILABILITY_W];
-                    iObj.statusString  = [json objectForKey:KSTATUS_W];
-                    iObj.uidString  = [json objectForKey:KUID_W];
-                    iObj.usernameString  = [json objectForKey:KUSERNAME_W];
-                    iObj.idString = [json objectForKey:KID_W];
-                    iObj.poolIdString = [responseDict objectForKey:KPOOL_ID_W];
-                    [App_Delegate.interpreterListArray addObject:iObj];
-                    [arrFriends addObject:[json objectForKey:KUID_W]];
-                }
-                NSLog(@"-->%@",App_Delegate.interpreterListArray);
-
-            }
-            
-            if (arrFriends.count) {
-                myAlertView = [[UIAlertView alloc] initWithTitle:@"Calling" message:@""
-                                                        delegate:self
-                                               cancelButtonTitle:@"Cancel"
-                                               otherButtonTitles:nil, nil];
-                myAlertView.tag=100; // call alert
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
                 
-                UIActivityIndicatorView *loading = [[UIActivityIndicatorView alloc]
-                                                    initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-                loading.frame=CGRectMake(0, 0, 16, 16);
-                [myAlertView setValue:loading forKey:@"accessoryView"];
-                [loading startAnimating];
-                [myAlertView show];
-                [self callToFriends];
-            }
+                NSMutableArray *array = [responseDict objectForKey:KDATA_W];
+                if (array.count) {
+                    arrFriends = [NSMutableArray new];
+                    App_Delegate.interpreterListArray = [NSMutableArray new];
+                    for (id json in array) {
+                        InterpreterListObject *iObj = [InterpreterListObject new];
+                        iObj.emailString  = [json objectForKey:KEMAIL_W];
+                        iObj.interpreter_availabilityString  = [json objectForKey:KINTERPRETER_AVAILABILITY_W];
+                        iObj.statusString  = [json objectForKey:KSTATUS_W];
+                        iObj.uidString  = [json objectForKey:KUID_W];
+                        iObj.usernameString  = [json objectForKey:KUSERNAME_W];
+                        iObj.idString = [json objectForKey:KID_W];
+                        iObj.poolIdString = [responseDict objectForKey:KPOOL_ID_W];
+                        [App_Delegate.interpreterListArray addObject:iObj];
+                        [arrFriends addObject:[json objectForKey:KUID_W]];
+                    }
+                    NSLog(@"-->%@",App_Delegate.interpreterListArray);
+                    
+                }
+                
+                if (arrFriends.count) {
+                    myAlertView = [[UIAlertView alloc] initWithTitle:@"Calling" message:@""
+                                                            delegate:self
+                                                   cancelButtonTitle:@"Cancel"
+                                                   otherButtonTitles:nil, nil];
+                    myAlertView.tag=100; // call alert
+                    
+                    UIActivityIndicatorView *loading = [[UIActivityIndicatorView alloc]
+                                                        initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+                    loading.frame=CGRectMake(0, 0, 16, 16);
+                    [myAlertView setValue:loading forKey:@"accessoryView"];
+                    [loading startAnimating];
+                    [myAlertView show];
+                    [self callToFriends];
+                }
+            });
+            
+            
         }
         else{
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -341,7 +347,7 @@
         }
     }
     
-    if (self.fromDetailLabel.text.length && self.toDetailLabel.text.length) {
+    if((![self.fromDetailLabel.text isEqualToString:NSLOCALIZEDSTRING(@"LANGUAGE")]) && (![self.toDetailLabel.text isEqualToString:NSLOCALIZEDSTRING(@"LANGUAGE")])){
         [self getLanguagePrice];
     }
 }

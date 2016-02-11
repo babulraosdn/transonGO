@@ -49,7 +49,6 @@
 		ED437C0E1C1FDE0400DB68E0 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED437C0C1C1FDE0400DB68E0 /* Fabric.framework */; settings = {ASSET_TAGS = (); }; };
 		ED437C0F1C1FDE0400DB68E0 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED437C0D1C1FDE0400DB68E0 /* Crashlytics.framework */; settings = {ASSET_TAGS = (); }; };
 		ED528D161C6B36EF0084E1D5 /* GiveFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED528D151C6B36EF0084E1D5 /* GiveFeedbackViewController.m */; settings = {ASSET_TAGS = (); }; };
-		ED528D1D1C6B41760084E1D5 /* FavouriteInterpreterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED528D1C1C6B41760084E1D5 /* FavouriteInterpreterViewController.m */; settings = {ASSET_TAGS = (); }; };
 		ED52A0181C5F92A400A53525 /* ActiveUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ED529FB61C5F92A400A53525 /* ActiveUserManager.m */; settings = {ASSET_TAGS = (); }; };
 		ED52A0191C5F92A400A53525 /* AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED529FB91C5F92A400A53525 /* AlertView.m */; settings = {ASSET_TAGS = (); }; };
 		ED52A01A1C5F92A400A53525 /* AuthorizationLoaderVc.m in Sources */ = {isa = PBXBuildFile; fileRef = ED529FBC1C5F92A400A53525 /* AuthorizationLoaderVc.m */; settings = {ASSET_TAGS = (); }; };
@@ -83,6 +82,8 @@
 		ED52A0421C5F92A400A53525 /* video incoming call rev.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = ED52A0151C5F92A400A53525 /* video incoming call rev.mp3 */; settings = {ASSET_TAGS = (); }; };
 		ED52A0451C5F943400A53525 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED52A0441C5F943400A53525 /* ImageIO.framework */; };
 		ED52A04A1C5F97F600A53525 /* ooVooSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED52A0491C5F97F600A53525 /* ooVooSDK.framework */; settings = {ASSET_TAGS = (); }; };
+		ED791CD51C6CAA3800B33228 /* CallHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED791CD41C6CAA3800B33228 /* CallHistoryViewController.m */; settings = {ASSET_TAGS = (); }; };
+		ED791CD91C6CCA0000B33228 /* RevenueViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED791CD81C6CCA0000B33228 /* RevenueViewController.m */; settings = {ASSET_TAGS = (); }; };
 		ED8B51621C1EEF7000CA7306 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ED8B51611C1EEF7000CA7306 /* main.m */; };
 		ED8B51651C1EEF7000CA7306 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ED8B51641C1EEF7000CA7306 /* AppDelegate.m */; };
 		ED8B516B1C1EEF7000CA7306 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ED8B51691C1EEF7000CA7306 /* Main.storyboard */; };
@@ -243,8 +244,6 @@
 		ED437C0D1C1FDE0400DB68E0 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		ED528D141C6B36EF0084E1D5 /* GiveFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GiveFeedbackViewController.h; sourceTree = "<group>"; };
 		ED528D151C6B36EF0084E1D5 /* GiveFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GiveFeedbackViewController.m; sourceTree = "<group>"; };
-		ED528D1B1C6B41760084E1D5 /* FavouriteInterpreterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavouriteInterpreterViewController.h; sourceTree = "<group>"; };
-		ED528D1C1C6B41760084E1D5 /* FavouriteInterpreterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavouriteInterpreterViewController.m; sourceTree = "<group>"; };
 		ED529FB51C5F92A400A53525 /* ActiveUserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActiveUserManager.h; sourceTree = "<group>"; };
 		ED529FB61C5F92A400A53525 /* ActiveUserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActiveUserManager.m; sourceTree = "<group>"; };
 		ED529FB81C5F92A400A53525 /* AlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertView.h; sourceTree = "<group>"; };
@@ -303,6 +302,10 @@
 		ED52A0441C5F943400A53525 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		ED52A0491C5F97F600A53525 /* ooVooSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ooVooSDK.framework; sourceTree = "<group>"; };
 		ED62531AFBA3780A8A9F25E6 /* libPods-toGo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-toGo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED791CD31C6CAA3800B33228 /* CallHistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallHistoryViewController.h; sourceTree = "<group>"; };
+		ED791CD41C6CAA3800B33228 /* CallHistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallHistoryViewController.m; sourceTree = "<group>"; };
+		ED791CD71C6CCA0000B33228 /* RevenueViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RevenueViewController.h; sourceTree = "<group>"; };
+		ED791CD81C6CCA0000B33228 /* RevenueViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RevenueViewController.m; sourceTree = "<group>"; };
 		ED8B515D1C1EEF7000CA7306 /* toGO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = toGO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED8B51611C1EEF7000CA7306 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		ED8B51631C1EEF7000CA7306 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -564,6 +567,8 @@
 		ED1B7EC41C2AA48600C49026 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				ED791CD61C6CC9F500B33228 /* Revenue */,
+				ED791CD21C6CAA2900B33228 /* CallHistory */,
 				ED1B7EC51C2AA48600C49026 /* BaseViewController */,
 				ED90D3501C3FAFB500D72731 /* HomeView */,
 				ED1B7EDD1C2AA48600C49026 /* SlideMenu */,
@@ -573,7 +578,6 @@
 				ED1B7ED11C2AA48600C49026 /* DashboardView */,
 				ED2F28151C316258003D8C82 /* ProfileUpdate */,
 				EDAFD9C81C3BD9EA008442A1 /* FeedBackList */,
-				ED528D171C6B41130084E1D5 /* FavoriteInterpreter */,
 				EDAFD9C41C3BD8C0008442A1 /* Settings */,
 				ED1B7ECE1C2AA48600C49026 /* ContactsList */,
 			);
@@ -847,15 +851,6 @@
 			path = Application_GooglePlusFiles;
 			sourceTree = "<group>";
 		};
-		ED528D171C6B41130084E1D5 /* FavoriteInterpreter */ = {
-			isa = PBXGroup;
-			children = (
-				ED528D1B1C6B41760084E1D5 /* FavouriteInterpreterViewController.h */,
-				ED528D1C1C6B41760084E1D5 /* FavouriteInterpreterViewController.m */,
-			);
-			path = FavoriteInterpreter;
-			sourceTree = "<group>";
-		};
 		ED529FB41C5F92A400A53525 /* ActiveUser */ = {
 			isa = PBXGroup;
 			children = (
@@ -1033,6 +1028,24 @@
 				ED52A0121C5F92A400A53525 /* Settings.bundle */,
 			);
 			path = SettingBundle;
+			sourceTree = "<group>";
+		};
+		ED791CD21C6CAA2900B33228 /* CallHistory */ = {
+			isa = PBXGroup;
+			children = (
+				ED791CD31C6CAA3800B33228 /* CallHistoryViewController.h */,
+				ED791CD41C6CAA3800B33228 /* CallHistoryViewController.m */,
+			);
+			path = CallHistory;
+			sourceTree = "<group>";
+		};
+		ED791CD61C6CC9F500B33228 /* Revenue */ = {
+			isa = PBXGroup;
+			children = (
+				ED791CD71C6CCA0000B33228 /* RevenueViewController.h */,
+				ED791CD81C6CCA0000B33228 /* RevenueViewController.m */,
+			);
+			path = Revenue;
 			sourceTree = "<group>";
 		};
 		ED8B51541C1EEF7000CA7306 = {
@@ -1579,6 +1592,7 @@
 				ED52A03A1C5F92A400A53525 /* FileLogger.m in Sources */,
 				ED52A0291C5F92A400A53525 /* ParticipentCell.m in Sources */,
 				ED52A02C1C5F92A400A53525 /* MenuConferenceVC.m in Sources */,
+				ED791CD91C6CCA0000B33228 /* RevenueViewController.m in Sources */,
 				ED528D161C6B36EF0084E1D5 /* GiveFeedbackViewController.m in Sources */,
 				ED52A0211C5F92A400A53525 /* NSData+Base64.m in Sources */,
 				ED437C021C1FD98200DB68E0 /* Application.m in Sources */,
@@ -1617,7 +1631,6 @@
 				ED145A581C4612D600A5B211 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
 				EDFD7E091C27C68100E4FEEB /* UIImage+Image.m in Sources */,
 				ED52A0341C5F92A400A53525 /* VideoFrameUser.m in Sources */,
-				ED528D1D1C6B41760084E1D5 /* FavouriteInterpreterViewController.m in Sources */,
 				ED52A0351C5F92A400A53525 /* AppVideoPanel.m in Sources */,
 				EDF7CF1E1C4F4FBD009AA19A /* CountryObject.m in Sources */,
 				ED52A01E1C5F92A400A53525 /* CNMessage.m in Sources */,
@@ -1630,6 +1643,7 @@
 				EDAFD9CB1C3BDA06008442A1 /* FeedBackListViewController.m in Sources */,
 				ED1B7EF11C2AA48600C49026 /* ForgetPasswordViewController.m in Sources */,
 				EDA374791C3BBDAF00288BA2 /* DashboardInterpreterViewController.m in Sources */,
+				ED791CD51C6CAA3800B33228 /* CallHistoryViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
