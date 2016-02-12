@@ -50,6 +50,8 @@
     NSIndexPath *editingIndexPath;
     
     MyLanguagesView *languagesView;
+    
+    BOOL isViewDidLoad;
 }
 @property(nonatomic,strong) NSMutableArray *namesArray;
 @property(nonatomic,strong) NSMutableArray *selectedLanguagesArray;
@@ -71,6 +73,9 @@
 
 -(void)viewDidLoad{
     [super viewDidLoad];
+    
+    isViewDidLoad = YES;
+    
     _isInterpreter = [[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER];
     
     [_tblView setShowsHorizontalScrollIndicator:NO];
@@ -113,18 +118,25 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.tblView.backgroundColor = [UIColor backgroundColor];
-    //[NSThread detachNewThreadSelector:@selector(getCountryList) toTarget:self withObject:nil];
-   [self getCountryList];
-    if (App_Delegate.languagesArray.count<1) {
-        //[NSThread detachNewThreadSelector:@selector(getLanguages) toTarget:App_Delegate withObject:nil];
-
-        [App_Delegate getLanguages];
-    }
-    [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
     
-    //[NSThread detachNewThreadSelector:@selector(getProfileInfo) toTarget:self withObject:nil];
-
+    if (isViewDidLoad) {
+        isViewDidLoad=NO;
+        self.tblView.backgroundColor = [UIColor backgroundColor];
+        //[NSThread detachNewThreadSelector:@selector(getCountryList) toTarget:self withObject:nil];
+        [self getCountryList];
+        if (App_Delegate.languagesArray.count<1) {
+            //[NSThread detachNewThreadSelector:@selector(getLanguages) toTarget:App_Delegate withObject:nil];
+            
+            [App_Delegate getLanguages];
+        }
+        [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
+        
+        //[NSThread detachNewThreadSelector:@selector(getProfileInfo) toTarget:self withObject:nil];
+    }
+    else{
+        [Utility_Shared_Instance showProgress];
+        [self performSelector:@selector(uploadImageToServer) withObject:nil afterDelay:0.2];
+    }
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification
@@ -2190,9 +2202,11 @@
     // Dismiss the image selection, hide the picker and
     //show the image view with the picked image
     selectedImage=image;
-    [self dismissViewControllerAnimated:picker completion:nil];
-    [Utility_Shared_Instance showProgress];
-    [self performSelector:@selector(uploadImageToServer) withObject:nil afterDelay:0.3];
+    
+    
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
 //    dispatch_async(dispatch_get_main_queue(), ^{
 //        [self dismissViewControllerAnimated:picker completion:nil];
 //        [self.tblView reloadData];
@@ -2203,7 +2217,7 @@
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self dismissViewControllerAnimated:picker completion:nil];
+        [self dismissViewControllerAnimated:YES completion:nil];
     });
 }
 
@@ -2354,6 +2368,7 @@
         NSDictionary *responseDict=responseObject;
 
         dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tblView reloadData];
             [SVProgressHUD dismiss];
             [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
                                                 withMessage:[responseDict objectForKey:KMESSAGE_W]

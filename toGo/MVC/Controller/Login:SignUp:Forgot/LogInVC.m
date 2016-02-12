@@ -84,11 +84,12 @@
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setShowsVerticalScrollIndicator:NO];
     
-    self.txt_userId.text        =      @"testcustomer@gmail.com";
-    self.txtDisplayName.text    =      @"Test@123";
+//    self.txt_userId.text        =      @"testcustomer@gmail.com";
+//    self.txtDisplayName.text    =      @"Test@123";
+//    
+//    self.txt_userId.text        =      @"testinterpreter2@gmail.com";
+//    self.txtDisplayName.text    =      @"Test@123";
     
-    self.txt_userId.text        =      @"testinterpreter2@gmail.com";
-    self.txtDisplayName.text    =      @"Test@123";
 //
 //    self.txt_userId.text        =      @"pankaj.turkar@smartdatainc.net";
 //    self.txtDisplayName.text =     @"Test@123";
@@ -111,7 +112,7 @@
 }
 
 
--(void)viewDidLayoutSubviews{
+-(void)viewDidLayoutSubviews {
     
     if(IS_IPHONE_4S)
         _scrollView.contentSize=CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
@@ -185,6 +186,7 @@
 #pragma mark - Authorization ...
 
 - (void)autorize {
+    
     
     [Utility_Shared_Instance showProgress];
     NSString* token = @"MDAxMDAxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZUYVW%2BB1MwyBDpt22C0WvOeMPW7fH6mMOv8d%2FAPeFZ2QeCOguU288bRzsChrixFyZ%2BKzm9nrLmfOkZwyPrAO%2BDP8wgDiVtL%2F0w9mZQ78Az5Hk6imDbhYGNGRFMqo0H2virlVE4Q%2Bpf5S%2Fm50MO%2BMh";
@@ -371,6 +373,7 @@
                 }
                 else{
                     [Utility_Shared_Instance writeStringUserPreference:KUID_W value:[responseDict objectForKey:KUID_W]];
+                    [Utility_Shared_Instance writeStringUserPreference:KID_W value:[responseDict objectForKey:KID_W]];
                     [Utility_Shared_Instance writeStringUserPreference:KUSERNAME_W value:userIDString];
                     [self ooVooLogin];
                     //[self createSidePanel];
@@ -689,7 +692,7 @@
     if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            
+            [App_Delegate UnSetNotificationObserversForCallMessaging];
             [App_Delegate SetNotificationObserversForCallMessaging];
             UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_INTERPRETER_VIEW_CONTROLLER]];//DashBoardViewController
             
@@ -781,7 +784,7 @@
 //    [spinner startAnimating];
     
     [self.sdk.Account login:[Utility_Shared_Instance readStringUserPreference:KUID_W]
-   // [self.sdk.Account login:@"babul123"
+   //[self.sdk.Account login:@"babul123"
     //[self.sdk.Account login:self.txt_userId.text
                  completion:^(SdkResult *result) {
                      
@@ -833,7 +836,19 @@
     
     if (!error) {
         [ActiveUserManager activeUser].userId =[Utility_Shared_Instance readStringUserPreference:KUID_W];
+        
+        [UserDefaults setObject:[ActiveUserManager activeUser].token ForKey:[ActiveUserManager activeUser].userId];
+        
         [ActiveUserManager activeUser].displayName = [Utility_Shared_Instance readStringUserPreference:KUID_W];
+        
+        NSString * uuid = [[NSUUID UUID] UUIDString] ;
+        NSString * token = [ActiveUserManager activeUser].token;
+        if(token && token.length > 0){
+            [self.sdk.PushService subscribe:token deviceUid:uuid completion:^(SdkResult *result){
+                [ActiveUserManager activeUser].isSubscribed = true;
+            }];
+        }
+        
         //        NSString * uuid = [[NSUUID UUID] UUIDString] ;
         //        NSString * token = [ActiveUserManager activeUser].token;
         //        if(token && token.length > 0){

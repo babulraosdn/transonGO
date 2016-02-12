@@ -97,7 +97,7 @@
     NSLog(@"APP_VIDEO_RENDER---->%d",[UserDefaults getBoolForToKey:APP_VIDEO_RENDER]);
     
     
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    
     
     // Handle launching from a notification
     UILocalNotification *localNotif =
@@ -300,6 +300,9 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
      //2nd when enter to Fore ground
+    
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    
        [ooVooClient applicationDidBecomeActive];
     
         bool isMessaging = [[[NSUserDefaults standardUserDefaults] stringForKey:APP_MESSAGING]boolValue];
@@ -392,25 +395,25 @@
 }
 -(void)incomingCall:(NSNotification*)notif{
     
-    [self playSystemLineSound];
-    UILocalNotification *localNotif = [[UILocalNotification alloc] init];
-    localNotif.fireDate = [NSDate date];//date;  // date after 10 sec from now
-    localNotif.timeZone = [NSTimeZone defaultTimeZone];
-    
-    // Notification details
-    localNotif.alertBody =  @"Incoming Call, Please click here"; // text of you that you have fetched
-    // Set the action button
-    localNotif.alertAction = @"View";
-    
-    localNotif.soundName = UILocalNotificationDefaultSoundName;
-    localNotif.applicationIconBadgeNumber = 1;
-    
-    // Specify custom data for the notification
-    NSDictionary *infoDict = [NSDictionary dictionaryWithObject:@"someValue" forKey:@"someKey"];
-    localNotif.userInfo = infoDict;
-    
-    // Schedule the notification
-    [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
+//    //[self playSystemLineSound];
+//    UILocalNotification *localNotif = [[UILocalNotification alloc] init];
+//    localNotif.fireDate = [NSDate date];//date;  // date after 10 sec from now
+//    localNotif.timeZone = [NSTimeZone defaultTimeZone];
+//    
+//    // Notification details
+//    localNotif.alertBody =  @"Incoming Call, Please click here"; // text of you that you have fetched
+//    // Set the action button
+//    localNotif.alertAction = @"View";
+//    
+//    localNotif.soundName = UILocalNotificationDefaultSoundName;
+//    localNotif.applicationIconBadgeNumber = 1;
+//    
+//    // Specify custom data for the notification
+//    NSDictionary *infoDict = [NSDictionary dictionaryWithObject:@"someValue" forKey:@"someKey"];
+//    localNotif.userInfo = infoDict;
+//    
+//    // Schedule the notification
+//    [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
     
     
     NSLog(@"notification %@",notif.userInfo);
@@ -419,7 +422,7 @@
     // if we are in video "ROOM" and i am transmitting video on other session Than i am busy
     if ([navigationController.topViewController isKindOfClass:[VideoConferenceVC class]])
     {
-        VideoConferenceVC *viewController = navigationController.topViewController;
+        VideoConferenceVC *viewController = (VideoConferenceVC *) self.naviController.topViewController;
         
         if (viewController.isViewInTransmitMode && !viewController.conferenceId)
         {
@@ -650,6 +653,7 @@
                             stringByReplacingOccurrencesOfString:@"<"withString:@""]
                            stringByReplacingOccurrencesOfString:@">" withString:@""]
                           stringByReplacingOccurrencesOfString: @" " withString:@""];
+    
     NSLog(@"deviceToken:%@",devToken);
     
     
@@ -667,26 +671,9 @@
     [UserDefaults setObject:hexToken ForKey:DEVICE_TOKEN];
     NSLog(@"My token is: %@", [ActiveUserManager activeUser].token);
     NSLog(@"[ActiveUserManager activeUser].userId--->: %@", [ActiveUserManager activeUser].userId);
-    
-    
-    
-    /*
-     
-     [UserDefaults setObject:[ActiveUserManager activeUser].token ForKey:[ActiveUserManager activeUser].userId];
-     
-     NSString * uuid = [[NSUUID UUID] UUIDString] ;
-     NSString * token = [ActiveUserManager activeUser].token;
-     
-     if(token && token.length > 0){
-     [self.sdk.PushService subscribe:token deviceUid:uuid completion:^(SdkResult *result)
-     {
-     [ActiveUserManager activeUser].isSubscribed = true;
-     }];
-     
-     }
-     */
-    
+
 }
+
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
     NSLog(@"user info %@",userInfo);
     
@@ -704,68 +691,68 @@
 
 
 
--(void)playSystemSound{
-    
-    NSString *path = [NSString stringWithFormat:@"%@/video incoming call rev.mp3", [[NSBundle mainBundle] resourcePath]];
-    NSURL *soundUrl = [NSURL fileURLWithPath:path];
-    
-    // Create audio player object and initialize with URL to sound
-    
-    [self initAudioSoundWith:soundUrl];
-    
-    [_audioPlayer play];
-    
-}
-
--(void)initAudioSoundWith:(NSURL*)url{
-    
-    if (_audioPlayer) {
-        _audioPlayer.delegate=nil;
-        _audioPlayer=nil;
-    }
-    //_audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
-    //_audioPlayer.delegate=self;
-}
-
--(void)playSystemLineSound{
-    
-    NSString *path = [NSString stringWithFormat:@"%@/CallLine.mp3", [[NSBundle mainBundle] resourcePath]];
-    NSURL *soundUrl = [NSURL fileURLWithPath:path];
-    
-    [self initAudioSoundWith:soundUrl];
-    [_audioPlayer play];
-    
-    
-    UIBackgroundTaskIdentifier newTaskId = UIBackgroundTaskInvalid;
-    if([_audioPlayer play]){
-        newTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
-    }
-    [self initAudioSoundWith:soundUrl];
-    [_audioPlayer play];
-    
-    if([_audioPlayer play]){
-        newTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
-    }
-    [self initAudioSoundWith:soundUrl];
-    [_audioPlayer play];
-    
-    
-}
-
-#pragma mark - AVAudioFoundation Delegate
-
-- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag{
-    [player play];
-}
-
--(void)stopCallSound{
-    [_audioPlayer stop];
-    _audioPlayer.delegate=nil;
-    _audioPlayer=nil;
-    
-}
-
-////////////
+//-(void)playSystemSound{
+//    
+//    NSString *path = [NSString stringWithFormat:@"%@/video incoming call rev.mp3", [[NSBundle mainBundle] resourcePath]];
+//    NSURL *soundUrl = [NSURL fileURLWithPath:path];
+//    
+//    // Create audio player object and initialize with URL to sound
+//    
+//    [self initAudioSoundWith:soundUrl];
+//    
+//    [_audioPlayer play];
+//    
+//}
+//
+//-(void)initAudioSoundWith:(NSURL*)url{
+//    
+//    if (_audioPlayer) {
+//        _audioPlayer.delegate=nil;
+//        _audioPlayer=nil;
+//    }
+//    //_audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+//    //_audioPlayer.delegate=self;
+//}
+//
+//-(void)playSystemLineSound{
+//    
+//    NSString *path = [NSString stringWithFormat:@"%@/CallLine.mp3", [[NSBundle mainBundle] resourcePath]];
+//    NSURL *soundUrl = [NSURL fileURLWithPath:path];
+//    
+//    [self initAudioSoundWith:soundUrl];
+//    [_audioPlayer play];
+//    
+//    
+//    UIBackgroundTaskIdentifier newTaskId = UIBackgroundTaskInvalid;
+//    if([_audioPlayer play]){
+//        newTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
+//    }
+//    [self initAudioSoundWith:soundUrl];
+//    [_audioPlayer play];
+//    
+//    if([_audioPlayer play]){
+//        newTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
+//    }
+//    [self initAudioSoundWith:soundUrl];
+//    [_audioPlayer play];
+//    
+//    
+//}
+//
+//#pragma mark - AVAudioFoundation Delegate
+//
+//- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag{
+//    [player play];
+//}
+//
+//-(void)stopCallSound{
+//    [_audioPlayer stop];
+//    _audioPlayer.delegate=nil;
+//    _audioPlayer=nil;
+//    
+//}
+//
+//////////////
 
 -(void)saveDisconnectedCallDetailsinServer : (InterpreterListObject *)receivedInterpreter isNoOnePicksCallorEndedByCustomer:(BOOL)isNoOnePicksCallorEndedByCustomer{
     

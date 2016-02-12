@@ -17,6 +17,9 @@
 #import "VideoConferenceVC.h"
 #import <AVFoundation/AVAudioPlayer.h>
 
+//1. Profile image upload Spinner show
+//2. Background Audio Playing
+
 @class InterpreterListObject;
 @class CDRObject;
 
@@ -26,7 +29,8 @@
     UIStoryboard *mainStoryboard ;
     VideoConferenceVC *viewVideoControler ;
     
-    AVAudioPlayer *_audioPlayer;
+    //AVAudioPlayer *_audioPlayer;
+    //AVAudioPlayer *audioPlayer; //Plays the audio
     //VideoConferenceVCWithRender *viewVideoControllerRender;
 }
 @property(nonatomic,strong) CDRObject *cdrObject;

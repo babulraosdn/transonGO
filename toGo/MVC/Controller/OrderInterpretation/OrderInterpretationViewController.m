@@ -11,6 +11,7 @@
 #import "MessageManager.h"
 #import "ActiveUserManager.h"
 #define TimeOut 30
+
 @interface OrderInterpretationViewController ()<UIAlertViewDelegate>{
     UIButton *selectedButton;
     UIAlertView *myAlertView ;
@@ -38,7 +39,10 @@
 @property(nonatomic,strong) NSMutableArray *toLanguageArray;
 @end
 
+
 @implementation OrderInterpretationViewController
+@dynamic sdk;
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -232,8 +236,22 @@
                         [arrFriends addObject:[json objectForKey:KUID_W]];
                     }
                     NSLog(@"-->%@",App_Delegate.interpreterListArray);
-                    
+                    [self sendMsgToFriends:@"Callingggggggg1111"];
                 }
+                
+                
+                ooVooPushNotificationMessage * msg = [[ooVooPushNotificationMessage alloc] initMessageWithUsersArray:arrFriends message:@"Callinggggg 445" property:@"Im optional" timeToLeave:1000];
+                
+                [self.sdk.PushService sendPushMessage:msg completion:^(SdkResult *result){
+                    if(result.Result == sdk_error_OK)
+                    {
+                        NSLog(@"Send succeeded");
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sent Msg" message:@"Your msg has been sent ,Thanks ! " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+                        //[alert show];
+                        
+                    }
+                }];
+
                 
                 if (arrFriends.count) {
                     myAlertView = [[UIAlertView alloc] initWithTitle:@"Calling" message:@""
@@ -350,6 +368,23 @@
     if((![self.fromDetailLabel.text isEqualToString:NSLOCALIZEDSTRING(@"LANGUAGE")]) && (![self.toDetailLabel.text isEqualToString:NSLOCALIZEDSTRING(@"LANGUAGE")])){
         [self getLanguagePrice];
     }
+
+    
+//    NSMutableArray *array = [NSMutableArray new];
+//    [array addObject:@"Test123"];
+//    ooVooPushNotificationMessage * msg = [[ooVooPushNotificationMessage alloc] initMessageWithUsersArray:array message:@"Callinggggg" property:@"Im optional" timeToLeave:1000];
+//    
+//    [self.sdk.PushService sendPushMessage:msg completion:^(SdkResult *result){
+//        
+//        if(result.Result == sdk_error_OK)
+//        {
+//            NSLog(@"Send succeeded");
+//            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sent Msg" message:@"Your msg has been sent ,Thanks ! " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+//            //[alert show];
+//            
+//        }
+//    }];
+    
 }
 
 
@@ -420,6 +455,10 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
         
         //    NSLog(@"Calling friend %@",userName);
         // sending a message of calling BUT if something is wrong cancel the call alert
+        
+        NSLog(@"---subscribe-->%d",[ActiveUserManager activeUser].isSubscribed);
+        
+        
         [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Calling WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess)
          {
 
@@ -444,6 +483,10 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
     //no need for sending push for each user becuase message receives array of users and send the push to all of them
     //for (NSString *userName in arrFriends) {
     
+    //NSMutableArray *array = [NSMutableArray new];
+   //[array addObject:@"babul123"];
+
+    self.sdk = [ooVooClient sharedInstance];
     ooVooPushNotificationMessage * msg = [[ooVooPushNotificationMessage alloc] initMessageWithUsersArray:arrFriends message:message property:@"Im optional" timeToLeave:1000];
     
         [self.sdk.PushService sendPushMessage:msg completion:^(SdkResult *result){
@@ -453,6 +496,11 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sent Msg" message:@"Your msg has been sent ,Thanks ! " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
             [alert show];
             
+        }
+        else{
+            NSLog(@"---------------$$$$$$$$$$$$$$$  ERROR ***********************");
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sent FAILED" message:@"Your msg has been sent ,Thanks ! " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [alert show];
         }
         
     }];
@@ -619,6 +667,9 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
     // Dispose of any resources that can be recreated.
 }
 
+-(void)finishStateSelection:(NSMutableArray *)selectedDataArray{
+    
+}
 /*
 #pragma mark - Navigation
 

@@ -185,6 +185,10 @@
 		<string>Roboto-Bold.ttf</string>
 		<string>Roboto-Light.ttf</string>
 	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>App plays audio</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

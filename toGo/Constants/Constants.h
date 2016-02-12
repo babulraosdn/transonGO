@@ -105,7 +105,7 @@ _Pragma("clang diagnostic pop") \
 //********************  ooVoo App Details   ****************************************
 #pragma mark ooVoo App Details
 //#define ooVooAppID                  @"12349983355077"//OLD //2
-#define ooVooAppID                  @"12349983355392"//New //1
+//#define ooVooAppID                  @"12349983355392"//New //1
 
 
 //********************  Image Names   ****************************************
