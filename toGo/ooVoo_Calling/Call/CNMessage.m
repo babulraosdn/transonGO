@@ -142,9 +142,9 @@ NSString * const TYPE_END_CALL     = @"end_call";
     NSLog(@"--messageId---%@",response.messageId);
     NSLog(@"--timestamp---%llu",response.timestamp);
     
-    NSTimeInterval seconds = [NSDate timeIntervalSinceReferenceDate];
-    double milliseconds = seconds*1000;
-    NSLog(@"-NSTimeInterval-timestamp---%f",milliseconds);
+    //NSTimeInterval seconds = [NSDate timeIntervalSinceReferenceDate];
+    //double milliseconds = seconds*1000;
+    //NSLog(@"-NSTimeInterval-timestamp---%f",milliseconds);
     NSLog(@"@@@@@@@@@@@@@@@@@@@   END   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     self = [super initMessage:response.to[0] message:response.body];
     if(self){

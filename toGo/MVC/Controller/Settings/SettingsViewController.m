@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *emailFeddBackLabel;
 @property (weak, nonatomic) IBOutlet UIButton *languagesButton;
 @property (weak, nonatomic) IBOutlet UISwitch *notificationsSwitch;
+@property (weak, nonatomic) IBOutlet UILabel *headerLabel;
 
 @end
 
@@ -34,7 +35,7 @@
     
 }
 -(void)setLabelButtonNames{
-   
+    self.headerLabel.text = NSLOCALIZEDSTRING(@"SETTINGS");
     self.setYourPrefferedlanguageLabel.text = NSLOCALIZEDSTRING(@"SET_YOUR_PREFERENCED_LANGUAGE");
     self.prefferedLanguagesLabel.text = NSLOCALIZEDSTRING(@"PREFFERED_LANGUAGES");
     self.applicationActionLabel.text = NSLOCALIZEDSTRING(@"APPLICATION_ACTION");
@@ -60,6 +61,7 @@
 }
 
 -(void)setFonts{
+    self.headerLabel.font = [UIFont normalSize];
     self.setYourPrefferedlanguageLabel.font = [UIFont largeSize];
     self.prefferedLanguagesLabel.font = [UIFont normalSize];
     self.applicationActionLabel.font = [UIFont largeSize];
@@ -84,7 +86,6 @@
         
     }
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

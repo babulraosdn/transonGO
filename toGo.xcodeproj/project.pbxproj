@@ -12,6 +12,7 @@
 		ED145A571C4612D600A5B211 /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED145A531C4612D600A5B211 /* TPKeyboardAvoidingTableView.m */; settings = {ASSET_TAGS = (); }; };
 		ED145A581C4612D600A5B211 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = ED145A551C4612D600A5B211 /* UIScrollView+TPKeyboardAvoidingAdditions.m */; settings = {ASSET_TAGS = (); }; };
 		ED1493D41C50978B00277DA8 /* LanguageObject.m in Sources */ = {isa = PBXBuildFile; fileRef = ED1493D31C50978B00277DA8 /* LanguageObject.m */; settings = {ASSET_TAGS = (); }; };
+		ED174EEB1C7191D500ECEE86 /* ChangePasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED174EEA1C7191D500ECEE86 /* ChangePasswordViewController.m */; settings = {ASSET_TAGS = (); }; };
 		ED1911231C60815E00EFEE95 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = ED1911221C60815E00EFEE95 /* libstdc++.6.0.9.tbd */; };
 		ED1911251C60816400EFEE95 /* libz.1.1.3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = ED1911241C60816400EFEE95 /* libz.1.1.3.tbd */; };
 		ED1911271C60816D00EFEE95 /* libc.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = ED1911261C60816D00EFEE95 /* libc.tbd */; };
@@ -183,6 +184,8 @@
 		ED145A551C4612D600A5B211 /* UIScrollView+TPKeyboardAvoidingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+TPKeyboardAvoidingAdditions.m"; sourceTree = "<group>"; };
 		ED1493D21C50978B00277DA8 /* LanguageObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LanguageObject.h; sourceTree = "<group>"; };
 		ED1493D31C50978B00277DA8 /* LanguageObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LanguageObject.m; sourceTree = "<group>"; };
+		ED174EE91C7191D500ECEE86 /* ChangePasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangePasswordViewController.h; sourceTree = "<group>"; };
+		ED174EEA1C7191D500ECEE86 /* ChangePasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangePasswordViewController.m; sourceTree = "<group>"; };
 		ED1911221C60815E00EFEE95 /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
 		ED1911241C60816400EFEE95 /* libz.1.1.3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.1.1.3.tbd; path = usr/lib/libz.1.1.3.tbd; sourceTree = SDKROOT; };
 		ED1911261C60816D00EFEE95 /* libc.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libc.tbd; path = usr/lib/libc.tbd; sourceTree = SDKROOT; };
@@ -543,6 +546,15 @@
 				ED1493D31C50978B00277DA8 /* LanguageObject.m */,
 			);
 			path = Language;
+			sourceTree = "<group>";
+		};
+		ED174EE81C7191C900ECEE86 /* ChangePassword */ = {
+			isa = PBXGroup;
+			children = (
+				ED174EE91C7191D500ECEE86 /* ChangePasswordViewController.h */,
+				ED174EEA1C7191D500ECEE86 /* ChangePasswordViewController.m */,
+			);
+			path = ChangePassword;
 			sourceTree = "<group>";
 		};
 		ED19112A1C60CEA000EFEE95 /* InterpreterList */ = {
@@ -1155,6 +1167,7 @@
 			children = (
 				EDAFD9C51C3BD8CE008442A1 /* SettingsViewController.h */,
 				EDAFD9C61C3BD8CE008442A1 /* SettingsViewController.m */,
+				ED174EE81C7191C900ECEE86 /* ChangePassword */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -1610,6 +1623,7 @@
 				ED52A01F1C5F92A400A53525 /* CustomToolbarVC.m in Sources */,
 				EDDF16E61C3D4B64006E4DD7 /* MyLanguagesView.m in Sources */,
 				ED52A0311C5F92A400A53525 /* TableListVC.m in Sources */,
+				ED174EEB1C7191D500ECEE86 /* ChangePasswordViewController.m in Sources */,
 				ED1B7EF81C2AA48600C49026 /* SocialView.m in Sources */,
 				ED52A0331C5F92A400A53525 /* VideoConferenceVC.m in Sources */,
 				ED1B7EEF1C2AA48600C49026 /* ContactsListViewController.m in Sources */,

@@ -120,6 +120,11 @@
     return color;
 }
 
++ (UIColor *)RevenueLabelBackgroundColor{
+    static UIColor *color=nil;
+    if (!color) color = [UIColor REVENUE_LABEL_BACKGROUND_COLOR];
+    return color;
+}
 @end
 
 

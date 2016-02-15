@@ -86,7 +86,7 @@
     
 //    self.txt_userId.text        =      @"testcustomer@gmail.com";
 //    self.txtDisplayName.text    =      @"Test@123";
-//    
+//
 //    self.txt_userId.text        =      @"testinterpreter2@gmail.com";
 //    self.txtDisplayName.text    =      @"Test@123";
     
@@ -343,7 +343,7 @@
                 }
                 if ([responseDict objectForKey:KEMAIL_W])
                 {
-                    [Utility_Shared_Instance writeStringUserPreference:KEMAIL_W value:userIDString];
+                    [Utility_Shared_Instance writeStringUserPreference:KEMAIL_W value:[responseDict objectForKey:KEMAIL_W]];
                 }
                 if ([responseDict objectForKey:KCOMPLETION_W])
                 {

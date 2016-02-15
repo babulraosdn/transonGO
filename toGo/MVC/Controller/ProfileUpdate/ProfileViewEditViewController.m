@@ -2203,7 +2203,8 @@
     //show the image view with the picked image
     selectedImage=image;
     
-    
+    CGImageRef imageRef = [selectedImage CGImage];
+    selectedImage = [UIImage imageWithCGImage:imageRef scale:1.0 orientation:UIImageOrientationUp];
     
     [self dismissViewControllerAnimated:YES completion:nil];
     
@@ -2213,6 +2214,7 @@
 //        [self uploadImageToServer];
 //    });
 }
+
 
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{

@@ -188,6 +188,8 @@ _Pragma("clang diagnostic pop") \
 #define GET_COUNTRY_LIST_W            @"getCountryList"
 #define GET_STATE_LIST_W              @"getState?country="
 #define GET_INTERPRETER_BY_LANGUAGE_W @"getInterpreterByLanguage"//This will return price also
+#define CHANGE_PASSWORD_W             @"api/changePassword"
+#define GET_CDR_HISTORY_W             @"api/getCDRData"
 
 //getUserProfile
 //
@@ -285,6 +287,13 @@ _Pragma("clang diagnostic pop") \
 #define KTOTAL_CALL_MINUTES_W           @"totalCallMinutes"
 #define KTOTAL_CALL_AMOUNT_W            @"totalCallAmount"
 #define KGET_PROFILE_INFO_W            @"getProfileInfo"
+#define KCURRENT_PASSWORD_W            @"currentpassword"
+#define KNEW_PASSWORD_W                 @"newpassword"
+#define KCDR_DATA_W                     @"CDRData"
+#define KDURATION_W                     @"duration"
+#define KCALL_FROM_W                     @"call_from"
+#define KCALL_TO_W                     @"call_to"
+
 //********************  WebService Response Parameters   ****************************************
 #define KSUCCESS                       ((int)200)
 #define KCODE_W                        @"code"

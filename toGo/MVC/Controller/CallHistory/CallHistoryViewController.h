@@ -14,6 +14,8 @@
 @property(nonatomic,weak) IBOutlet UILabel *titleLabel;
 @property(nonatomic,weak) IBOutlet UILabel *descriptionLabel;
 @property(nonatomic,weak) IBOutlet UIButton *favouriteButton;
+@property(nonatomic,weak) IBOutlet UIButton *heartButton;
+@property(nonatomic,weak) IBOutlet UILabel *durationLabel;
 @end
 
 @interface CallHistoryViewController : BaseViewController

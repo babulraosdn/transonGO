@@ -29,6 +29,8 @@
 #define SLIDE_COLOR_ROW_6 colorWithRed:229.0/255.0 green:171.0/255.0 blue:68.0/255.0 alpha:1.0
 #define SLIDE_COLOR_ROW_7 colorWithRed:172.0/255.0 green:112.0/255.0 blue:32.0/255.0 alpha:1.0
 
+#define REVENUE_LABEL_BACKGROUND_COLOR colorWithRed:199.0/255.0 green:191.0/255.0 blue:171.0/255.0 alpha:1.0
+
 @interface UIColor (toGo)
 + (UIColor *)navigationBarColor;
 + (UIColor *)backgroundColor;
@@ -49,4 +51,6 @@
 + (UIColor *)slideMenuBackgroundColorRow5;
 + (UIColor *)slideMenuBackgroundColorRow6;
 + (UIColor *)slideMenuBackgroundColorRow7;
+
++ (UIColor *)RevenueLabelBackgroundColor;
 @end
