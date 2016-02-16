@@ -63,7 +63,6 @@
     [cancelBtn addTarget:self action:@selector(closeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [UIButton roundedCornerButton:cancelBtn];
     
-    [submitView setBackgroundColor:[UIColor clearColor]];
     [submitView addSubview:cancelBtn];
     
     [self addSubview:submitView];

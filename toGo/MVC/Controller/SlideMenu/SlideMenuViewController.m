@@ -9,7 +9,6 @@
 #import "SlideMenuViewController.h"
 #import "Headers.h"
 #import "AppDelegate.h"
-
 @implementation SlideMenuCell
 @end
 
@@ -30,26 +29,6 @@
     self.view.backgroundColor = [UIColor navigationBarColor];//This changes the statusbar Color
     self.tblView.backgroundColor = [UIColor slideMenuBackgroundColor];//This is table view back goring color
     appDelegate =(AppDelegate *) [[UIApplication sharedApplication]delegate];
-    
-    /* //Build menu
-    self.namesArray = [[NSMutableArray alloc]initWithObjects:
-                       NSLOCALIZEDSTRING(@"PROFILE"),
-                       NSLOCALIZEDSTRING(@"CALL_HISTORY"),
-                       NSLOCALIZEDSTRING(@"SETTINGS"), nil];
-    self.imagesNamesArray = [[NSMutableArray alloc]initWithObjects:
-                             PROFILE_IMAGE,
-                             CALL_HISTORY_IMAGE,
-                             SETTINGS_IMAGE, nil];
-    self.colorCodesArray = [[NSMutableArray alloc]initWithObjects:
-                            [UIColor slideMenuBackgroundColorRow1],
-                            [UIColor slideMenuBackgroundColorRow2],
-                            [UIColor slideMenuBackgroundColorRow3],
-                            [UIColor slideMenuBackgroundColorRow4],
-                            [UIColor slideMenuBackgroundColorRow5],
-                            [UIColor slideMenuBackgroundColorRow6], nil];
-    */
-    
-    ///*
     
     if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
         self.namesArray = [[NSMutableArray alloc]initWithObjects:
@@ -94,7 +73,6 @@
                             [UIColor slideMenuBackgroundColorRow5],
                             [UIColor slideMenuBackgroundColorRow6],
                             [UIColor slideMenuBackgroundColorRow7],nil];
-    //*/
 }
 
 #pragma Mark TableView Delegate Methods
@@ -120,19 +98,10 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-
-//[FBSDKAccessToken setCurrentAccessToken:nil];
-//    
-//    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/permissions" parameters:nil
-//                                       HTTPMethod:@"DELETE"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
-//        // ...
-//    }];
-//    
-//    FBSDKLoginManager *MANAGER  = [FBSDKLoginManager new];
-//    [MANAGER logOut];
+    
     
     [self.revealController resignPresentationModeEntirely:NO animated:YES completion:nil];
-    
+
     NSString *selectedRowString = [self.namesArray objectAtIndex:indexPath.row];
     UINavigationController *contentNaviationController;
     if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"DASHBOARD_SLIDE")]){
@@ -159,10 +128,12 @@
         self.revealController.frontViewController = contentNaviationController ;
     }
     else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"PURCHASES")]){
-        
+        contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:REVENUE_VIEW_CONTROLLER]];
+        self.revealController.frontViewController = contentNaviationController ;
     }
     else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"FAVORITE_INTERPRETER")]){
-        
+        contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:CALL_HISTORY_VIEW_CONTROLLER]];
+        self.revealController.frontViewController = contentNaviationController ;
     }
     else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"SETTINGS")]){
         

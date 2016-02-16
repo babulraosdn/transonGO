@@ -122,7 +122,7 @@
         cell.durationLabel.textColor = [UIColor whiteColor];
         cell.amountLabel.textColor = [UIColor whiteColor];
    }
-    else{
+    else {
         cell.fromLabel.backgroundColor = [UIColor clearColor];
         cell.toLabel.backgroundColor = [UIColor clearColor];
         cell.durationLabel.backgroundColor = [UIColor clearColor];
@@ -137,8 +137,6 @@
         cell.toLabel.textColor = [UIColor lightGrayColor];
         cell.durationLabel.textColor = [UIColor lightGrayColor];
         cell.amountLabel.textColor = [UIColor lightGrayColor];
-
-        
     }
     return cell;
 }

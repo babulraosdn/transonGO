@@ -10,6 +10,8 @@
 #import "ProfileImageTableViewCell.h"
 #import "Headers.h"
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "JBBarChartViewController.h"
+
 
 #define HEADER_HEIGHT 163
 #define DEFAULT_TABLE_CELL_HEIGHT 57
@@ -52,6 +54,8 @@
     MyLanguagesView *languagesView;
     
     BOOL isViewDidLoad;
+    
+    BOOL isCameraGallerySelected;
 }
 @property(nonatomic,strong) NSMutableArray *namesArray;
 @property(nonatomic,strong) NSMutableArray *selectedLanguagesArray;
@@ -134,8 +138,12 @@
         //[NSThread detachNewThreadSelector:@selector(getProfileInfo) toTarget:self withObject:nil];
     }
     else{
-        [Utility_Shared_Instance showProgress];
-        [self performSelector:@selector(uploadImageToServer) withObject:nil afterDelay:0.2];
+        if (isCameraGallerySelected) {
+            isCameraGallerySelected = NO;
+            [Utility_Shared_Instance showProgress];
+            [self performSelector:@selector(uploadImageToServer) withObject:nil afterDelay:0.2];
+        }
+        
     }
 }
 
@@ -1680,7 +1688,7 @@
                 if (langArray.count) {
                     self.selectedLanguagesArray = [NSMutableArray new];
                     for (id key in langArray) {
-                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageID beginswith[c] %@",key];
+                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageID like[c] %@",key];
                         NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
                         if (sortedArray.count) {
                             LanguageObject *lObj = [sortedArray lastObject];
@@ -1774,6 +1782,11 @@
 }
 
 -(void)languagesButtonPressed{
+    
+//    JBBarChartViewController *barChartController = [[JBBarChartViewController alloc] init];
+//    [self.navigationController pushViewController:barChartController animated:YES];
+//    return;
+    
     [self.view endEditing:YES];
     [self removeTapGesture];
     [self removePopUpView];
@@ -2145,7 +2158,7 @@
     return YES;
 }
 
-- (void)cameraGalleryButtonPressed{
+- (void)cameraGalleryButtonPressed {
     
 //    ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
 //    
@@ -2160,7 +2173,10 @@
     [alertView show];
 }
 
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    isCameraGallerySelected = YES;
+    
     UIImagePickerController *imagePickerController = [[UIImagePickerController alloc]init];
     imagePickerController.delegate = self;
     if (buttonIndex == 0) {
@@ -2195,6 +2211,7 @@
         [self presentViewController:imagePickerController animated:YES completion:nil];
     });
 }
+
 - (void)imagePickerController:(UIImagePickerController *)picker
         didFinishPickingImage:(UIImage *)image
                   editingInfo:(NSDictionary *)editingInfo
@@ -2202,9 +2219,7 @@
     // Dismiss the image selection, hide the picker and
     //show the image view with the picked image
     selectedImage=image;
-    
-    CGImageRef imageRef = [selectedImage CGImage];
-    selectedImage = [UIImage imageWithCGImage:imageRef scale:1.0 orientation:UIImageOrientationUp];
+    selectedImage = [self scaleAndRotateImage:selectedImage];
     
     [self dismissViewControllerAnimated:YES completion:nil];
     
@@ -2216,6 +2231,113 @@
 }
 
 
+- (UIImage *)scaleAndRotateImage:(UIImage *)image
+{
+    int kMaxResolution = 640;
+    
+    CGImageRef imgRef = image.CGImage;
+    
+    CGFloat width = CGImageGetWidth(imgRef);
+    CGFloat height = CGImageGetHeight(imgRef);
+    
+    CGAffineTransform transform = CGAffineTransformIdentity;
+    CGRect bounds = CGRectMake(0, 0, width, height);
+    if (width > kMaxResolution || height > kMaxResolution) {
+        CGFloat ratio = width/height;
+        if (ratio > 1) {
+            bounds.size.width = kMaxResolution;
+            bounds.size.height = bounds.size.width / ratio;
+        }
+        else {
+            bounds.size.height = kMaxResolution;
+            bounds.size.width = bounds.size.height * ratio;
+        }
+    }
+    
+    CGFloat scaleRatio = bounds.size.width / width;
+    CGSize imageSize = CGSizeMake(CGImageGetWidth(imgRef), CGImageGetHeight(imgRef));
+    CGFloat boundHeight;
+    UIImageOrientation orient = image.imageOrientation;
+    switch(orient) {
+            
+        case UIImageOrientationUp: //EXIF = 1
+            transform = CGAffineTransformIdentity;
+            break;
+            
+        case UIImageOrientationUpMirrored: //EXIF = 2
+            transform = CGAffineTransformMakeTranslation(imageSize.width, 0.0);
+            transform = CGAffineTransformScale(transform, -1.0, 1.0);
+            break;
+            
+        case UIImageOrientationDown: //EXIF = 3
+            transform = CGAffineTransformMakeTranslation(imageSize.width, imageSize.height);
+            transform = CGAffineTransformRotate(transform, M_PI);
+            break;
+            
+        case UIImageOrientationDownMirrored: //EXIF = 4
+            transform = CGAffineTransformMakeTranslation(0.0, imageSize.height);
+            transform = CGAffineTransformScale(transform, 1.0, -1.0);
+            break;
+            
+        case UIImageOrientationLeftMirrored: //EXIF = 5
+            boundHeight = bounds.size.height;
+            bounds.size.height = bounds.size.width;
+            bounds.size.width = boundHeight;
+            transform = CGAffineTransformMakeTranslation(imageSize.height, imageSize.width);
+            transform = CGAffineTransformScale(transform, -1.0, 1.0);
+            transform = CGAffineTransformRotate(transform, 3.0 * M_PI / 2.0);
+            break;
+            
+        case UIImageOrientationLeft: //EXIF = 6
+            boundHeight = bounds.size.height;
+            bounds.size.height = bounds.size.width;
+            bounds.size.width = boundHeight;
+            transform = CGAffineTransformMakeTranslation(0.0, imageSize.width);
+            transform = CGAffineTransformRotate(transform, 3.0 * M_PI / 2.0);
+            break;
+            
+        case UIImageOrientationRightMirrored: //EXIF = 7
+            boundHeight = bounds.size.height;
+            bounds.size.height = bounds.size.width;
+            bounds.size.width = boundHeight;
+            transform = CGAffineTransformMakeScale(-1.0, 1.0);
+            transform = CGAffineTransformRotate(transform, M_PI / 2.0);
+            break;
+            
+        case UIImageOrientationRight: //EXIF = 8
+            boundHeight = bounds.size.height;
+            bounds.size.height = bounds.size.width;
+            bounds.size.width = boundHeight;
+            transform = CGAffineTransformMakeTranslation(imageSize.height, 0.0);
+            transform = CGAffineTransformRotate(transform, M_PI / 2.0);
+            break;
+            
+        default:
+            [NSException raise:NSInternalInconsistencyException format:@"Invalid image orientation"];
+            
+    }
+    
+    UIGraphicsBeginImageContext(bounds.size);
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    if (orient == UIImageOrientationRight || orient == UIImageOrientationLeft) {
+        CGContextScaleCTM(context, -scaleRatio, scaleRatio);
+        CGContextTranslateCTM(context, -height, 0);
+    }
+    else {
+        CGContextScaleCTM(context, scaleRatio, -scaleRatio);
+        CGContextTranslateCTM(context, 0, -height);
+    }
+    
+    CGContextConcatCTM(context, transform);
+    
+    CGContextDrawImage(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, width, height), imgRef);
+    UIImage *imageCopy = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return imageCopy;
+}
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
     dispatch_async(dispatch_get_main_queue(), ^{

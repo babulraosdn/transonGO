@@ -30,6 +30,12 @@
     [self setFonts];
     
 }
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [App_Delegate UnSetNotificationObserversForCallMessaging];
+}
+
 -(void)setLabelButtonNames{
     
     [self.interpreterButton setTitle:NSLOCALIZEDSTRING(@"INTERPRETER") forState:UIControlStateNormal];

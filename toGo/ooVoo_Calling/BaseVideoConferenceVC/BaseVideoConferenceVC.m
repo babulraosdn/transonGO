@@ -519,13 +519,11 @@
 
 -(void)leaveSession{
     
-    App_Delegate.cdrObject.endTimeString = [Utility_Shared_Instance GetCurrentTimeStamp];
-    
-    if(![[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
+    if([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:CUSTOMER]) {
+        App_Delegate.cdrObject.endTimeString = [Utility_Shared_Instance GetCurrentTimeStamp];
         [App_Delegate saveCDR];
     }
 
-    
     if (_isCommingFromCall) {
         [self closeViewAndGoBack];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"killVideoController" object:nil];
@@ -540,6 +538,12 @@
 }
 
 -(void)closeViewAndGoBack{
+    
+//    NSMutableArray *array = [NSMutableArray new];
+//    [array addObject:App_Delegate.cdrObject.receivedInterpreter.uidString];
+//    [[MessageManager sharedMessage]messageOtherUsers:array WithMessageType:EndCall WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess) {
+//        
+//    }];
     
     [self.sdk.AVChat.VideoController closeCamera];
     [self removeDelegates];

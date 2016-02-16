@@ -29,7 +29,7 @@
     UIStoryboard *mainStoryboard ;
     VideoConferenceVC *viewVideoControler ;
     
-    //AVAudioPlayer *_audioPlayer;
+    AVAudioPlayer *_audioPlayer;
     //AVAudioPlayer *audioPlayer; //Plays the audio
     //VideoConferenceVCWithRender *viewVideoControllerRender;
 }

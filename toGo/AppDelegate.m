@@ -350,33 +350,6 @@
     
 }
 
-//// orientation
-//
-//- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
-//{
-//    if ([self isIpad]) {
-//        return UIInterfaceOrientationMaskAll;
-//    }
-//
-//    return ( UIInterfaceOrientationMaskPortraitUpsideDown | UIInterfaceOrientationMaskPortrait);
-//}
-//-(BOOL)shouldAutorotate
-//{
-//    return YES;
-//}
-
-
-//-(BOOL)isIpad{
-//#define IDIOM    UI_USER_INTERFACE_IDIOM()
-//#define IPAD     UIUserInterfaceIdiomPad
-//
-//    if ( IDIOM == IPAD ) {
-//        return true;
-//    } else {
-//        return  false;
-//    }
-//}
-
 - (void)SetNotificationObserversForCallMessaging {
     NSLog(@"@@@@@@@@@@@@@@@@@@@@@  SetNotificationObserversForCallMessaging  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(incomingCall:) name:@"incomingCall" object:nil];
@@ -395,25 +368,25 @@
 }
 -(void)incomingCall:(NSNotification*)notif{
     
-//    //[self playSystemLineSound];
-//    UILocalNotification *localNotif = [[UILocalNotification alloc] init];
-//    localNotif.fireDate = [NSDate date];//date;  // date after 10 sec from now
-//    localNotif.timeZone = [NSTimeZone defaultTimeZone];
-//    
-//    // Notification details
-//    localNotif.alertBody =  @"Incoming Call, Please click here"; // text of you that you have fetched
-//    // Set the action button
-//    localNotif.alertAction = @"View";
-//    
-//    localNotif.soundName = UILocalNotificationDefaultSoundName;
-//    localNotif.applicationIconBadgeNumber = 1;
-//    
-//    // Specify custom data for the notification
-//    NSDictionary *infoDict = [NSDictionary dictionaryWithObject:@"someValue" forKey:@"someKey"];
-//    localNotif.userInfo = infoDict;
-//    
-//    // Schedule the notification
-//    [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
+    //[self playSystemLineSound];
+    UILocalNotification *localNotif = [[UILocalNotification alloc] init];
+    localNotif.fireDate = [NSDate date];//date;  // date after 10 sec from now
+    localNotif.timeZone = [NSTimeZone defaultTimeZone];
+    
+    // Notification details
+    localNotif.alertBody =  @"Incoming Call, Please click here"; // text of you that you have fetched
+    // Set the action button
+    localNotif.alertAction = @"View";
+    
+    localNotif.soundName = UILocalNotificationDefaultSoundName;
+    localNotif.applicationIconBadgeNumber = 1;
+    
+    // Specify custom data for the notification
+    NSDictionary *infoDict = [NSDictionary dictionaryWithObject:@"someValue" forKey:@"someKey"];
+    localNotif.userInfo = infoDict;
+    
+    // Schedule the notification
+    [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
     
     
     NSLog(@"notification %@",notif.userInfo);
@@ -691,68 +664,68 @@
 
 
 
-//-(void)playSystemSound{
-//    
-//    NSString *path = [NSString stringWithFormat:@"%@/video incoming call rev.mp3", [[NSBundle mainBundle] resourcePath]];
-//    NSURL *soundUrl = [NSURL fileURLWithPath:path];
-//    
-//    // Create audio player object and initialize with URL to sound
-//    
-//    [self initAudioSoundWith:soundUrl];
-//    
-//    [_audioPlayer play];
-//    
-//}
-//
-//-(void)initAudioSoundWith:(NSURL*)url{
-//    
-//    if (_audioPlayer) {
-//        _audioPlayer.delegate=nil;
-//        _audioPlayer=nil;
-//    }
-//    //_audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
-//    //_audioPlayer.delegate=self;
-//}
-//
-//-(void)playSystemLineSound{
-//    
-//    NSString *path = [NSString stringWithFormat:@"%@/CallLine.mp3", [[NSBundle mainBundle] resourcePath]];
-//    NSURL *soundUrl = [NSURL fileURLWithPath:path];
-//    
-//    [self initAudioSoundWith:soundUrl];
-//    [_audioPlayer play];
-//    
-//    
-//    UIBackgroundTaskIdentifier newTaskId = UIBackgroundTaskInvalid;
-//    if([_audioPlayer play]){
-//        newTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
-//    }
-//    [self initAudioSoundWith:soundUrl];
-//    [_audioPlayer play];
-//    
-//    if([_audioPlayer play]){
-//        newTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
-//    }
-//    [self initAudioSoundWith:soundUrl];
-//    [_audioPlayer play];
-//    
-//    
-//}
-//
-//#pragma mark - AVAudioFoundation Delegate
-//
-//- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag{
-//    [player play];
-//}
-//
-//-(void)stopCallSound{
-//    [_audioPlayer stop];
-//    _audioPlayer.delegate=nil;
-//    _audioPlayer=nil;
-//    
-//}
-//
-//////////////
+-(void)playSystemSound{
+    
+    NSString *path = [NSString stringWithFormat:@"%@/video incoming call rev.mp3", [[NSBundle mainBundle] resourcePath]];
+    NSURL *soundUrl = [NSURL fileURLWithPath:path];
+    
+    // Create audio player object and initialize with URL to sound
+    
+    [self initAudioSoundWith:soundUrl];
+    
+    [_audioPlayer play];
+    
+}
+
+-(void)initAudioSoundWith:(NSURL*)url{
+    
+    if (_audioPlayer) {
+        _audioPlayer.delegate=nil;
+        _audioPlayer=nil;
+    }
+    //_audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+    //_audioPlayer.delegate=self;
+}
+
+-(void)playSystemLineSound{
+    
+    NSString *path = [NSString stringWithFormat:@"%@/CallLine.mp3", [[NSBundle mainBundle] resourcePath]];
+    NSURL *soundUrl = [NSURL fileURLWithPath:path];
+    
+    [self initAudioSoundWith:soundUrl];
+    [_audioPlayer play];
+    
+    
+    UIBackgroundTaskIdentifier newTaskId = UIBackgroundTaskInvalid;
+    if([_audioPlayer play]){
+        newTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
+    }
+    [self initAudioSoundWith:soundUrl];
+    [_audioPlayer play];
+    
+    if([_audioPlayer play]){
+        newTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
+    }
+    [self initAudioSoundWith:soundUrl];
+    [_audioPlayer play];
+    
+    
+}
+
+#pragma mark - AVAudioFoundation Delegate
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag{
+    [player play];
+}
+
+-(void)stopCallSound{
+    [_audioPlayer stop];
+    _audioPlayer.delegate=nil;
+    _audioPlayer=nil;
+    
+}
+
+////////////
 
 -(void)saveDisconnectedCallDetailsinServer : (InterpreterListObject *)receivedInterpreter isNoOnePicksCallorEndedByCustomer:(BOOL)isNoOnePicksCallorEndedByCustomer{
     

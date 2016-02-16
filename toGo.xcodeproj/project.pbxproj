@@ -85,6 +85,7 @@
 		ED52A04A1C5F97F600A53525 /* ooVooSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED52A0491C5F97F600A53525 /* ooVooSDK.framework */; settings = {ASSET_TAGS = (); }; };
 		ED791CD51C6CAA3800B33228 /* CallHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED791CD41C6CAA3800B33228 /* CallHistoryViewController.m */; settings = {ASSET_TAGS = (); }; };
 		ED791CD91C6CCA0000B33228 /* RevenueViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED791CD81C6CCA0000B33228 /* RevenueViewController.m */; settings = {ASSET_TAGS = (); }; };
+		ED8A5F241C736A1300FDD81B /* JBBarChartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED8A5F231C736A1300FDD81B /* JBBarChartViewController.m */; settings = {ASSET_TAGS = (); }; };
 		ED8B51621C1EEF7000CA7306 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ED8B51611C1EEF7000CA7306 /* main.m */; };
 		ED8B51651C1EEF7000CA7306 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ED8B51641C1EEF7000CA7306 /* AppDelegate.m */; };
 		ED8B516B1C1EEF7000CA7306 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ED8B51691C1EEF7000CA7306 /* Main.storyboard */; };
@@ -121,7 +122,6 @@
 		EDAFD9CB1C3BDA06008442A1 /* FeedBackListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EDAFD9CA1C3BDA06008442A1 /* FeedBackListViewController.m */; settings = {ASSET_TAGS = (); }; };
 		EDB1C5E81C4F95A300373358 /* MyLanguagesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EDB1C5E71C4F95A300373358 /* MyLanguagesCell.m */; settings = {ASSET_TAGS = (); }; };
 		EDB1C5EA1C4F95BA00373358 /* MyLanguagesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDB1C5E91C4F95BA00373358 /* MyLanguagesCell.xib */; settings = {ASSET_TAGS = (); }; };
-		EDD802FC1C56353A00FC5AD0 /* OrderInterpretationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EDD802FB1C56353A00FC5AD0 /* OrderInterpretationViewController.m */; settings = {ASSET_TAGS = (); }; };
 		EDDF16E61C3D4B64006E4DD7 /* MyLanguagesView.m in Sources */ = {isa = PBXBuildFile; fileRef = EDDF16E51C3D4B64006E4DD7 /* MyLanguagesView.m */; settings = {ASSET_TAGS = (); }; };
 		EDE22E641C3A9B3900923ADF /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EDE22E541C3A9B3900923ADF /* Roboto-Black.ttf */; settings = {ASSET_TAGS = (); }; };
 		EDE22E651C3A9B3900923ADF /* Roboto-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EDE22E551C3A9B3900923ADF /* Roboto-BlackItalic.ttf */; settings = {ASSET_TAGS = (); }; };
@@ -145,6 +145,8 @@
 		EDF7CF0F1C4F4613009AA19A /* StoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF7CF0D1C4F4613009AA19A /* StoreManager.m */; settings = {ASSET_TAGS = (); }; };
 		EDF7CF1E1C4F4FBD009AA19A /* CountryObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF7CF1A1C4F4FBD009AA19A /* CountryObject.m */; settings = {ASSET_TAGS = (); }; };
 		EDF7CF1F1C4F4FBD009AA19A /* StateObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF7CF1D1C4F4FBD009AA19A /* StateObject.m */; settings = {ASSET_TAGS = (); }; };
+		EDF900DD1C72E12E002DE0B5 /* CallSummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF900DC1C72E12E002DE0B5 /* CallSummaryViewController.m */; settings = {ASSET_TAGS = (); }; };
+		EDF900E31C72FCDC002DE0B5 /* OrderInterpretationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF900E21C72FCDC002DE0B5 /* OrderInterpretationViewController.m */; settings = {ASSET_TAGS = (); }; };
 		EDFD7E061C27C68100E4FEEB /* UIButton+toGo.m in Sources */ = {isa = PBXBuildFile; fileRef = EDFD7DF61C27C68100E4FEEB /* UIButton+toGo.m */; settings = {ASSET_TAGS = (); }; };
 		EDFD7E071C27C68100E4FEEB /* UIColor+toGo.m in Sources */ = {isa = PBXBuildFile; fileRef = EDFD7DF91C27C68100E4FEEB /* UIColor+toGo.m */; settings = {ASSET_TAGS = (); }; };
 		EDFD7E081C27C68100E4FEEB /* UIFont+Font.m in Sources */ = {isa = PBXBuildFile; fileRef = EDFD7DFC1C27C68100E4FEEB /* UIFont+Font.m */; settings = {ASSET_TAGS = (); }; };
@@ -309,6 +311,8 @@
 		ED791CD41C6CAA3800B33228 /* CallHistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallHistoryViewController.m; sourceTree = "<group>"; };
 		ED791CD71C6CCA0000B33228 /* RevenueViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RevenueViewController.h; sourceTree = "<group>"; };
 		ED791CD81C6CCA0000B33228 /* RevenueViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RevenueViewController.m; sourceTree = "<group>"; };
+		ED8A5F221C736A1300FDD81B /* JBBarChartViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JBBarChartViewController.h; sourceTree = "<group>"; };
+		ED8A5F231C736A1300FDD81B /* JBBarChartViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JBBarChartViewController.m; sourceTree = "<group>"; };
 		ED8B515D1C1EEF7000CA7306 /* toGO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = toGO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED8B51611C1EEF7000CA7306 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		ED8B51631C1EEF7000CA7306 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -358,8 +362,6 @@
 		EDB1C5E61C4F95A300373358 /* MyLanguagesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLanguagesCell.h; sourceTree = "<group>"; };
 		EDB1C5E71C4F95A300373358 /* MyLanguagesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLanguagesCell.m; sourceTree = "<group>"; };
 		EDB1C5E91C4F95BA00373358 /* MyLanguagesCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyLanguagesCell.xib; sourceTree = "<group>"; };
-		EDD802FA1C56353A00FC5AD0 /* OrderInterpretationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderInterpretationViewController.h; sourceTree = "<group>"; };
-		EDD802FB1C56353A00FC5AD0 /* OrderInterpretationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderInterpretationViewController.m; sourceTree = "<group>"; };
 		EDDF16E41C3D4B64006E4DD7 /* MyLanguagesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLanguagesView.h; sourceTree = "<group>"; };
 		EDDF16E51C3D4B64006E4DD7 /* MyLanguagesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLanguagesView.m; sourceTree = "<group>"; };
 		EDE22E541C3A9B3900923ADF /* Roboto-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Black.ttf"; sourceTree = "<group>"; };
@@ -390,6 +392,10 @@
 		EDF7CF1A1C4F4FBD009AA19A /* CountryObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountryObject.m; sourceTree = "<group>"; };
 		EDF7CF1C1C4F4FBD009AA19A /* StateObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateObject.h; sourceTree = "<group>"; };
 		EDF7CF1D1C4F4FBD009AA19A /* StateObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StateObject.m; sourceTree = "<group>"; };
+		EDF900DB1C72E12E002DE0B5 /* CallSummaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallSummaryViewController.h; sourceTree = "<group>"; };
+		EDF900DC1C72E12E002DE0B5 /* CallSummaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CallSummaryViewController.m; sourceTree = "<group>"; };
+		EDF900E11C72FCDC002DE0B5 /* OrderInterpretationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderInterpretationViewController.h; sourceTree = "<group>"; };
+		EDF900E21C72FCDC002DE0B5 /* OrderInterpretationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderInterpretationViewController.m; sourceTree = "<group>"; };
 		EDFD7DF51C27C68100E4FEEB /* UIButton+toGo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+toGo.h"; sourceTree = "<group>"; };
 		EDFD7DF61C27C68100E4FEEB /* UIButton+toGo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+toGo.m"; sourceTree = "<group>"; };
 		EDFD7DF81C27C68100E4FEEB /* UIColor+toGo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+toGo.h"; sourceTree = "<group>"; };
@@ -521,6 +527,8 @@
 		ED145A4E1C4612D600A5B211 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				ED8A5F221C736A1300FDD81B /* JBBarChartViewController.h */,
+				ED8A5F231C736A1300FDD81B /* JBBarChartViewController.m */,
 				ED145A4F1C4612D600A5B211 /* TPKeyboardAvoidingScrollView */,
 			);
 			path = ThirdParty;
@@ -579,6 +587,7 @@
 		ED1B7EC41C2AA48600C49026 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				EDF900DA1C72E121002DE0B5 /* CallSummary */,
 				ED791CD61C6CC9F500B33228 /* Revenue */,
 				ED791CD21C6CAA2900B33228 /* CallHistory */,
 				ED1B7EC51C2AA48600C49026 /* BaseViewController */,
@@ -1194,8 +1203,8 @@
 		EDD802F91C56352600FC5AD0 /* OrderInterpretation */ = {
 			isa = PBXGroup;
 			children = (
-				EDD802FA1C56353A00FC5AD0 /* OrderInterpretationViewController.h */,
-				EDD802FB1C56353A00FC5AD0 /* OrderInterpretationViewController.m */,
+				EDF900E11C72FCDC002DE0B5 /* OrderInterpretationViewController.h */,
+				EDF900E21C72FCDC002DE0B5 /* OrderInterpretationViewController.m */,
 			);
 			path = OrderInterpretation;
 			sourceTree = "<group>";
@@ -1296,6 +1305,15 @@
 				EDF7CF1D1C4F4FBD009AA19A /* StateObject.m */,
 			);
 			path = State;
+			sourceTree = "<group>";
+		};
+		EDF900DA1C72E121002DE0B5 /* CallSummary */ = {
+			isa = PBXGroup;
+			children = (
+				EDF900DB1C72E12E002DE0B5 /* CallSummaryViewController.h */,
+				EDF900DC1C72E12E002DE0B5 /* CallSummaryViewController.m */,
+			);
+			path = CallSummary;
 			sourceTree = "<group>";
 		};
 		EDFD7DF41C27C68100E4FEEB /* UIButton */ = {
@@ -1605,6 +1623,7 @@
 				ED52A03A1C5F92A400A53525 /* FileLogger.m in Sources */,
 				ED52A0291C5F92A400A53525 /* ParticipentCell.m in Sources */,
 				ED52A02C1C5F92A400A53525 /* MenuConferenceVC.m in Sources */,
+				EDF900DD1C72E12E002DE0B5 /* CallSummaryViewController.m in Sources */,
 				ED791CD91C6CCA0000B33228 /* RevenueViewController.m in Sources */,
 				ED528D161C6B36EF0084E1D5 /* GiveFeedbackViewController.m in Sources */,
 				ED52A0211C5F92A400A53525 /* NSData+Base64.m in Sources */,
@@ -1630,11 +1649,12 @@
 				ED2F280A1C311B89003D8C82 /* TakeTourView.m in Sources */,
 				ED52A01D1C5F92A400A53525 /* BaseVideoConferenceVC.m in Sources */,
 				EDFD7E061C27C68100E4FEEB /* UIButton+toGo.m in Sources */,
+				EDF900E31C72FCDC002DE0B5 /* OrderInterpretationViewController.m in Sources */,
 				ED52A0221C5F92A400A53525 /* UIActionSheet+Extensions.m in Sources */,
+				ED8A5F241C736A1300FDD81B /* JBBarChartViewController.m in Sources */,
 				ED52A0231C5F92A400A53525 /* UIView-Extensions.m in Sources */,
 				ED52A0281C5F92A400A53525 /* InfoViewController.m in Sources */,
 				ED1B7EF71C2AA48600C49026 /* DropDown.m in Sources */,
-				EDD802FC1C56353A00FC5AD0 /* OrderInterpretationViewController.m in Sources */,
 				ED1B7EFD1C2AA4A900C49026 /* Headers.m in Sources */,
 				ED1B7EEB1C2AA48600C49026 /* BaseViewController.m in Sources */,
 				EDFD7E071C27C68100E4FEEB /* UIColor+toGo.m in Sources */,

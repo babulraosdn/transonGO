@@ -7,7 +7,8 @@
 //
 
 #import "DashBoardViewController.h"
-
+#import "ActiveUserManager.h"
+#import "UserDefaults.h"
 @interface DashBoardViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *provideFeedBackButton;
 @property (weak, nonatomic) IBOutlet UIButton *viewPurchaseHistoryButton;
@@ -48,7 +49,54 @@
     [_scrollView setShowsVerticalScrollIndicator:NO];
     App_Delegate.naviController= self.navigationController;
     
+    [self ooVooLogin];
 }
+
+- (void)ooVooLogin{
+    
+    self.sdk = [ooVooClient sharedInstance];
+    [self.sdk.Account login:[Utility_Shared_Instance readStringUserPreference:KUID_W]
+                 completion:^(SdkResult *result) {
+                     dispatch_async(dispatch_get_main_queue(), ^{
+                         [SVProgressHUD dismiss];
+                     });
+                     if (result.Result == 37) {
+                         NSLog(@"377777777--> Failure Either Authorization  or ooVoo Server DOWN");
+                     }
+                     else if (result.Result == 0) {
+                         NSLog(@"0 --> SUCCESS");
+                     }
+                     NSLog(@"result code=%d result description %@", result.Result, result.description);
+                     if (result.Result != sdk_error_OK){
+                         [[[UIAlertView alloc] initWithTitle:@"ooVoo Server Error" message:result.description delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
+                     }
+                     else
+                     {
+                         [self onLogin:result.Result];
+                         if(![self.sdk.Messaging isConnected])
+                             [self.sdk.Messaging connect];
+                     }
+                 }];
+}
+
+- (void)onLogin:(BOOL)error {
+    
+    if (!error) {
+        [ActiveUserManager activeUser].userId =[Utility_Shared_Instance readStringUserPreference:KUID_W];
+        
+        [UserDefaults setObject:[ActiveUserManager activeUser].token ForKey:[ActiveUserManager activeUser].userId];
+        
+        [ActiveUserManager activeUser].displayName = [Utility_Shared_Instance readStringUserPreference:KUID_W];
+        ///NSString * uuid = [[NSUUID UUID] UUIDString] ;
+        NSString * token = [ActiveUserManager activeUser].token;
+        if(token && token.length > 0){
+            [self.sdk.PushService subscribe:token deviceUid:[ActiveUserManager activeUser].userId completion:^(SdkResult *result){
+                [ActiveUserManager activeUser].isSubscribed = true;
+            }];
+        }
+    }
+}
+
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:YES];

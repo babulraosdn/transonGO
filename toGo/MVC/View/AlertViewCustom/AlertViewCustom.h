@@ -17,4 +17,5 @@
 @property(nonatomic,weak) id <ALERTVIEWCUSTOMDELEGATE> delegate;
 +(void)showAlertViewWithMessage:(NSString *)messageString headingLabel:(NSString *)headerString confirmButtonName:(NSString *)confrirmSting cancelButtonName:(NSString *)cancelString viewIs:(UIViewController *)currentView;
 -(void)popUpButtonClicked:(UIButton *)sender;
++(void)showAlertViewWithInputField:(NSString *)headerString confirmButtonName:(NSString *)confrirmSting viewIs:(UIViewController *)currentController;
 @end

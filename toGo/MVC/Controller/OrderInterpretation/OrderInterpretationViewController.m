@@ -48,8 +48,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    App_Delegate.naviController = self.navigationController;
-    
     [self setSlideMenuButtonFornavigation];
     [self setLogoutButtonForNavigation];
     [self setLabelButtonNames];
@@ -60,37 +58,14 @@
     if (App_Delegate.languagesArray.count<1) {
         [App_Delegate getLanguages];
     }
+    
+    [App_Delegate SetNotificationObserversForCallMessaging];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [Utility_Shared_Instance showProgress];
     [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
-    
-//    NSTimeInterval seconds1 = [NSDate timeIntervalSinceReferenceDate];
-//    double milliseconds = seconds1*1000;
-//    
-//    double seconds = milliseconds;
-//    
-//    NSTimeInterval timeInterval ;
-
-    //double timeInMS1 =(long) (floor([[NSDate date] timeIntervalSince1970]) * 1000 );
-    //NSInteger timeInMS1 = [[NSDate date] timeIntervalSince1970];
-
-   
-//    [self GetCurrentTimeStamp];
-
-//    NSLog(@"---%0ld",(long)timeInMS1);
-    
-//    NSDate *date = [NSDate dateWithTimeIntervalSince1970:(timeInMS1 * 1000)];
-    
-//    NSDateFormatter* df_utc = [[NSDateFormatter alloc] init];
-//    [df_utc setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-//    [df_utc setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//    NSString *Date=[df_utc stringFromDate:date];
-    
-    
-//    self.toDetailLabel.text = [NSString stringWithFormat:@"%@",Date];
-    
 }
 
 -(void)setLabelButtonNames{
@@ -174,8 +149,6 @@
     if (sender.tag==1) {
         //appDelegate.callingUsers = arrFriends;
         
-        
-        
         NSString *alertString;
         if ([self.fromDetailLabel.text isEqualToString:NSLOCALIZEDSTRING(@"LANGUAGE")]) {
             alertString = [NSString messageWithSelectString:NSLOCALIZEDSTRING(@"FROM_LANGUAGE")];
@@ -236,7 +209,7 @@
                         [arrFriends addObject:[json objectForKey:KUID_W]];
                     }
                     NSLog(@"-->%@",App_Delegate.interpreterListArray);
-                    [self sendMsgToFriends:@"Callingggggggg1111"];
+                    [self sendMsgToFriends:@"Incoming Call....."];
                 }
                 
                 
@@ -407,7 +380,7 @@
                 NSArray *langArray = [userDict objectForKey:KMYLANGUAGES_W];//[ componentsSeparatedByString:@","];
                 if (langArray.count) {
                     fromLanguageKeyString = [langArray lastObject];
-                    NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageID beginswith[c] %@",[langArray objectAtIndex:0]];
+                    NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageID like[c] %@",[langArray objectAtIndex:0]];
                     NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
                     if (sortedArray.count) {
                         LanguageObject *lObj = [sortedArray lastObject];
@@ -494,13 +467,13 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
         {
             NSLog(@"Send succeeded");
             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sent Msg" message:@"Your msg has been sent ,Thanks ! " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-            [alert show];
+            //[alert show];
             
         }
         else{
             NSLog(@"---------------$$$$$$$$$$$$$$$  ERROR ***********************");
             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sent FAILED" message:@"Your msg has been sent ,Thanks ! " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-            [alert show];
+            //[alert show];
         }
         
     }];

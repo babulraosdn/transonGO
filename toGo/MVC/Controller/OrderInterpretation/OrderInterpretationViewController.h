@@ -11,6 +11,6 @@
 #import <ooVooSDK/ooVooSDK.h>
 
 @interface OrderInterpretationViewController : BaseViewController<MyLanguagesDelegate>
-//@property (retain, nonatomic) ooVooClient *sdk;
+@property (retain, nonatomic) ooVooClient *sdk;
 
 @end
