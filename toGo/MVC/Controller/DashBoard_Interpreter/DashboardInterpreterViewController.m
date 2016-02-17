@@ -7,7 +7,8 @@
 //
 
 #import "DashboardInterpreterViewController.h"
-
+#import "ActiveUserManager.h"
+#import "UserDefaults.h"
 @interface DashboardInterpreterViewController ()
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *descriptionTextViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet UILabel *interpreterName;
@@ -35,6 +36,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
     [self setSlideMenuButtonFornavigation];
     [self setLogoutButtonForNavigation];
     [self setLabelButtonNames];
@@ -50,14 +52,81 @@
         [self.switchButton setImage:[UIImage switchONImage] forState:UIControlStateNormal];
     }
     
+    [self ooVooLogin];
 }
+
+- (void)ooVooLogin{
+    
+    self.sdk = [ooVooClient sharedInstance];
+    [self.sdk.Account login:[Utility_Shared_Instance readStringUserPreference:KUID_W]
+                 completion:^(SdkResult *result) {
+                     dispatch_async(dispatch_get_main_queue(), ^{
+                         [SVProgressHUD dismiss];
+                     });
+                     if (result.Result == 37) {
+                         NSLog(@"377777777--> Failure Either Authorization  or ooVoo Server DOWN");
+                     }
+                     else if (result.Result == 0) {
+                         NSLog(@"0 --> SUCCESS");
+                     }
+                     NSLog(@"result code=%d result description %@", result.Result, result.description);
+                     if (result.Result != sdk_error_OK){
+                         [[[UIAlertView alloc] initWithTitle:@"ooVoo Server Error" message:result.description delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
+                     }
+                     else
+                     {
+                         [self onLogin:result.Result];
+                         if(![self.sdk.Messaging isConnected])
+                             [self.sdk.Messaging connect];
+                     }
+                 }];
+}
+
+- (void)onLogin:(BOOL)error {
+    
+    if (!error) {
+        [ActiveUserManager activeUser].userId =[Utility_Shared_Instance readStringUserPreference:KUID_W];
+        
+        [UserDefaults setObject:[ActiveUserManager activeUser].token ForKey:[ActiveUserManager activeUser].userId];
+        
+        [ActiveUserManager activeUser].displayName = [Utility_Shared_Instance readStringUserPreference:KUID_W];
+        ///NSString * uuid = [[NSUUID UUID] UUIDString] ;
+        NSString * token = [ActiveUserManager activeUser].token;
+        if(token && token.length > 0){
+            [self.sdk.PushService subscribe:token deviceUid:[ActiveUserManager activeUser].userId completion:^(SdkResult *result){
+                [ActiveUserManager activeUser].isSubscribed = true;
+            }];
+        }
+    }
+}
+
 
 -(void)viewWillAppear:(BOOL)animated{
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setShowsVerticalScrollIndicator:NO];
     
-    [Utility_Shared_Instance showProgress];
-    [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
+    [Utility_Shared_Instance showProgress]; 
+    [self performSelector:@selector(getDashBoardData) withObject:nil afterDelay:0.2];
+    
+//    
+//    [self.sdk.Account login:[Utility_Shared_Instance readStringUserPreference:KUID_W]
+//    // [self.sdk.Account login:@"babul123"
+//    //[self.sdk.Account login:self.txt_userId.text
+//completion:^(SdkResult *result) {
+//    NSLog(@"result code=%d result description %@", result.Result, result.description);
+//    if (result.Result != sdk_error_OK){
+//        [[[UIAlertView alloc] initWithTitle:@"Login Error" message:result.description delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
+//        //[self.loginButton setEnabled:true];
+//    }
+//    else
+//    {
+//        //[self onLogin:result.Result];
+//        if(![self.sdk.Messaging isConnected])
+//            [self.sdk.Messaging connect];
+//    }
+//    
+//}];
+    
 }
 
 -(void)viewDidLayoutSubviews{
@@ -68,7 +137,7 @@
     self.headerLabel.text = NSLOCALIZEDSTRING(@"DASHBOARD_SLIDE");
     self.noOfCallLabel.text = NSLOCALIZEDSTRING(@"No_OF_CALL");
     self.callMinutesLabel.text = NSLOCALIZEDSTRING(@"CALL_MINUTES");
-    self.callYtdEarningslabel.text = NSLOCALIZEDSTRING(@"CALL_YTD_EARNINIGS");
+    self.callYtdEarningslabel.text = NSLOCALIZEDSTRING(@"CALL_YTD_EARNINGS");
     self.statusLabel.text = NSLOCALIZEDSTRING(@"STATUS");
     [self.profileManagementButton setTitle:NSLOCALIZEDSTRING(@"PROFILE_MANAGEMENT") forState:UIControlStateNormal];
     [self.customerFeedBackButton setTitle:NSLOCALIZEDSTRING(@"CUSTOMER_FEEDBACK") forState:UIControlStateNormal];
@@ -106,61 +175,8 @@
     self.customerFeedBackButton.titleLabel.font = [UIFont largeSize];
 }
 
-// 1860 180 1290
-// 9am to 6 PM
--(void)getDashboardInfo
-{
-    [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"PLEASE_WAIT")]];
-    //WEB Service CODE
-    [Web_Service_Call getProfileInfoServiceCall:[Utility_Shared_Instance checkForNullString:[NSString stringWithFormat:@"%@%@",@"Bearer ",[Utility_Shared_Instance readStringUserPreference:USER_TOKEN]]] webServicename:PROFILE_INFO_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
-        NSDictionary *responseDict=responseObject;
-        
-        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [SVProgressHUD dismiss];
-                NSLog(@"dict-->%@",responseDict);
-             if ([responseDict objectForKey:KDASHBOARD_W]){
-                    NSMutableDictionary *dashBoardDict = [responseDict objectForKey:KDASHBOARD_W];
-                    NSString *idString;
-                    NSString *statusString;
-                    if ([dashBoardDict objectForKey:KID_W])
-                        idString = [dashBoardDict objectForKey:KID_W];
-                    if ([dashBoardDict objectForKey:KNAME_W])
-                        self.interpreterName.text = [dashBoardDict objectForKey:KNAME_W];
-                    if ([dashBoardDict objectForKey:KNO_OF_CALL_W])
-                        self.noOfCallDetailLabel.text = [dashBoardDict objectForKey:KNO_OF_CALL_W];
-                    if ([dashBoardDict objectForKey:KCALL_MINUTES_W])
-                        self.callMinutesDetailLabel.text = [dashBoardDict objectForKey:KCALL_MINUTES_W];
-                    if ([dashBoardDict objectForKey:KCALL_YTD_EARNINGS_W])
-                        self.callYtdEarningsDetailLabel.text = [dashBoardDict objectForKey:KCALL_YTD_EARNINGS_W];
-                    if ([dashBoardDict objectForKey:KSTATUS_W])
-                        statusString = [dashBoardDict objectForKey:KSTATUS_W];
-                    if ([dashBoardDict objectForKey:KDESCRIPTION_W])
-                        self.descriptionTextView.text = [dashBoardDict objectForKey:KDESCRIPTION_W];
-                    if ([dashBoardDict objectForKey:KPROFILE_IMAGE_W])
-                        [self.defaultImageView sd_setImageWithURL:[dashBoardDict objectForKey:KPROFILE_IMAGE_W]
-                                                 placeholderImage:[UIImage defaultPicImage]];
-            
-               }
-                
-            });
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-            });
-        }
-    } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD dismiss];
-            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                                withMessage:[responseObject objectForKey:KMESSAGE_W]
-                                                     inView:self
-                                                  withStyle:UIAlertControllerStyleAlert];
-        });
-    }];
-}
 
-- (void)changeAvailabilityStatus:(id)sender
+- (IBAction)changeAvailabilityStatus
 {
     NSMutableDictionary *statusDict=[NSMutableDictionary new];
    [statusDict setValue:[Utility_Shared_Instance readStringUserPreference:KID_W] forKey:KID_W];
@@ -218,58 +234,54 @@
 
 
 
--(void)getProfileInfo
+-(void)getDashBoardData
 {
+    NSMutableDictionary *dashboardDict=[NSMutableDictionary new];
+    [dashboardDict setValue:[Utility_Shared_Instance readStringUserPreference:KID_W] forKey:KID_W];
+    [dashboardDict setValue:[Utility_Shared_Instance readStringUserPreference:USER_TYPE] forKey:KTYPE_W];
+    
     //WEB Service CODE
-    [Web_Service_Call serviceCallWithRequestType:nil requestType:GET_REQUEST includeHeader:YES includeBody:NO webServicename:PROFILE_INFO_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+    [Web_Service_Call serviceCallWithRequestType:dashboardDict requestType:POST_REQUEST includeHeader:YES includeBody:YES webServicename:GET_DASHBOARD_DATA SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         NSDictionary *responseDict=responseObject;
         
         if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [SVProgressHUD dismiss];
-                NSLog(@"dict-->%@",responseDict);
-                NSMutableDictionary *userDict = [responseDict objectForKey:@"user"];
-                [Utility_Shared_Instance writeStringUserPreference:KID_W value:[userDict objectForKey:KID_W]];
-                
-                if ([userDict objectForKey:KNAME_W]) {
-                    NSDictionary *nameDict =  [userDict objectForKey:KNAME_W];
-                    self.interpreterName.text = [NSString stringWithFormat:@"%@ %@",[nameDict objectForKey:KFIRST_NAME_W],[nameDict objectForKey:KLAST_NAME_W]];
-                }
-                else{
-                    self.interpreterName.text = @"";
-                }
-                
-                
-                NSDictionary *profileImgDict =  [userDict objectForKey:KPROFILE_IMAGE_W];
-                [Utility_Shared_Instance writeStringUserPreference:KEMAIL_W value:[userDict objectForKey:KEMAIL_W]];
-                
-                
-                NSString *descriptionStr =@"An interpreter translates high-level instructions into an intermediate form, which it then executes. In contrast, a compiler translates high-level instructions directly into machine language. Compiled programs generally run faster than interpreted programs. The advantage of an interpreter, however, is that it does not need to go through the compilation stage during which machine instructions are generated. ";// [userDict objectForKey:KABOUT_USER_W];
-                
-                /*
-                CGFloat descriptionHeight =  [Utility_Shared_Instance heightOfTextViewWithString:descriptionStr withFont:[UIFont smallThin] andFixedWidth:self.view.frame.size.width];
-                self.descriptionTextViewHeightConstraint.constant = descriptionHeight-50;
-                [self.descriptionTextView.superview.superview updateConstraints];
-                */
-                self.descriptionTextView.text = [descriptionStr substringToIndex:159];
-                NSString *imageURLString = [profileImgDict objectForKey:KURL_W];
-                
-                if (imageURLString.length) {
-                    self.defaultImageView.layer.cornerRadius = self.defaultImageView.frame.size.height /2;
-                    self.defaultImageView.layer.masksToBounds = YES;
-                    [self.defaultImageView sd_setImageWithURL:[NSURL URLWithString:imageURLString]
-                                      placeholderImage:[UIImage defaultPicImage]];
-                }
-                
-               NSString *interpreterAvailabiltyString = [NSString stringWithFormat:@"%@",[Utility_Shared_Instance checkForNullString:[userDict objectForKey:KINTERPRETER_AVAILABILITY_W]]];
-                if ([interpreterAvailabiltyString isEqualToString:INTERPRETER_UN_AVAILABLE]) {
-                    [self.switchButton setImage:[UIImage switchONImage] forState:UIControlStateNormal];
-                    [Utility_Shared_Instance writeStringUserPreference:KINTERPRETER_AVAILABILITY_W value:INTERPRETER_UN_AVAILABLE];
-                }
-                else{
-                    [self.switchButton setImage:[UIImage switchOffImage] forState:UIControlStateNormal];
-                    [Utility_Shared_Instance writeStringUserPreference:KINTERPRETER_AVAILABILITY_W value:INTERPRETER_AVAILABLE];
+                self.noOfCallDetailLabel.text = [NSString stringWithFormat:@"%@",[responseDict objectForKey:KTOTAL_NO_CALLS_W]];
+                self.callMinutesDetailLabel.text = [NSString stringWithFormat:@"%@",[responseDict objectForKey:KTOTAL_CALL_MINUTES_W]];
+                self.callYtdEarningsDetailLabel.text = [NSString stringWithFormat:@"%@",[responseDict objectForKey:KTOTAL_CALL_AMOUNT_W]];
+                if ([[responseDict objectForKey:KGET_PROFILE_INFO_W] isKindOfClass:[NSArray class]]) {
+                    NSArray *profileArray = [responseDict objectForKey:KGET_PROFILE_INFO_W];
+                    if (profileArray.count) {
+                        NSMutableDictionary *profileDict = [profileArray lastObject];
+                        if ([profileDict objectForKey:KNAME_W]) {
+                            NSDictionary *nameDict =  [profileDict objectForKey:KNAME_W];
+                            self.interpreterName.text = [NSString stringWithFormat:@"%@ %@",[nameDict objectForKey:KFIRST_NAME_W],[nameDict objectForKey:KLAST_NAME_W]];
+                        }
+                        else{
+                            self.interpreterName.text = @"";
+                        }
+                        NSDictionary *profileImgDict =  [profileDict objectForKey:KPROFILE_IMAGE_W];
+                        NSString *imageURLString = [profileImgDict objectForKey:KURL_W];
+                        
+                        if (imageURLString.length) {
+                            self.defaultImageView.layer.cornerRadius = self.defaultImageView.frame.size.height /2;
+                            self.defaultImageView.layer.masksToBounds = YES;
+                            [self.defaultImageView sd_setImageWithURL:[NSURL URLWithString:imageURLString]
+                                                     placeholderImage:[UIImage defaultPicImage]];
+                        }
+                        
+                        NSString *interpreterAvailabiltyString = [NSString stringWithFormat:@"%@",[Utility_Shared_Instance checkForNullString:[profileDict objectForKey:KINTERPRETER_AVAILABILITY_W]]];
+                        if ([interpreterAvailabiltyString isEqualToString:INTERPRETER_UN_AVAILABLE]) {
+                            [self.switchButton setImage:[UIImage switchOffImage] forState:UIControlStateNormal];
+                            [Utility_Shared_Instance writeStringUserPreference:KINTERPRETER_AVAILABILITY_W value:INTERPRETER_UN_AVAILABLE];
+                        }
+                        else{
+                            [self.switchButton setImage:[UIImage switchONImage] forState:UIControlStateNormal];
+                            [Utility_Shared_Instance writeStringUserPreference:KINTERPRETER_AVAILABILITY_W value:INTERPRETER_AVAILABLE];
+                        }
+                    }
                 }
             });
             
@@ -297,5 +309,6 @@
         }];
         
     }
+    [self changeAvailabilityStatus];
 }
 @end

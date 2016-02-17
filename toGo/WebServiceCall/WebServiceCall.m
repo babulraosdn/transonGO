@@ -1,4 +1,4 @@
-//
+  //
 //  WebServiceCall.m
 //  toGo
 
@@ -56,39 +56,6 @@
 }
 
 
--(void)getProfileInfoServiceCall:(NSString*)headerString webServicename:(NSString *)webServicename SuccessfulBlock:(tResponseBlock)successBlock FailedCallBack:(tFailureResponse)failureBlock{
-    
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",BASE_URL,webServicename]];
-    
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    [request setTimeoutInterval:120.0f];
-    [request setHTTPMethod:@"GET"];
-    [request addValue:@"application/json; charset=UTF-8"  forHTTPHeaderField:@"Content-Type"];
-    [request addValue:headerString  forHTTPHeaderField:KAUTHORIZATION_W];
-
-    NSLog(@"\n=====================Request=================================\nURL String : %@\nParameters :\n%@\n=========================End Request=============================",request.URL.absoluteString,headerString);
-    
-    [[[NSURLSession sharedSession] dataTaskWithRequest:request
-                                     completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
-      {
-          [SVProgressHUD dismiss];
-          NSError *errorNIl = nil;
-          if (!error)
-          {
-              NSDictionary *dictResponse =[NSDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&errorNIl]];
-              NSLog(@" %@ Response dict--> %@",webServicename,dictResponse);
-              successBlock([@"200" intValue],dictResponse);
-          }
-          else{
-              NSLog(@" %@ FAILURE Description--> %@",webServicename,error.description);
-              failureBlock(nil,[@"404" intValue],error);
-          }
-      }] resume];
-}
-
-
-
-
 -(void)serviceCallWithRequestType:(NSMutableDictionary*)payload requestType:(NSString*)rquestTypeString includeHeader:(BOOL)isIncludeHeader includeBody:(BOOL)isIncludeBody webServicename:(NSString *)webServicename SuccessfulBlock:(tResponseBlock)successBlock FailedCallBack:(tFailureResponse)failureBlock{
     
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",BASE_URL,webServicename]];
@@ -114,8 +81,7 @@
       {
           [SVProgressHUD dismiss];
           NSError *errorNIl = nil;
-          if (!error)
-          {
+          if (!error){
               NSDictionary *dictResponse =[NSDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&errorNIl]];
               NSLog(@" %@ Response dict--> %@",webServicename,dictResponse);
               successBlock([@"200" intValue],dictResponse);

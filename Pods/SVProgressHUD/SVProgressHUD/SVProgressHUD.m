@@ -746,6 +746,7 @@ static const CGFloat SVProgressHUDUndefinedProgress = -1;
                                                       userInfo:userInfo];
     
     self.activityCount = 0;
+    
     [UIView animateWithDuration:0.15
                           delay:0
                         options:UIViewAnimationCurveEaseIn | UIViewAnimationOptionAllowUserInteraction

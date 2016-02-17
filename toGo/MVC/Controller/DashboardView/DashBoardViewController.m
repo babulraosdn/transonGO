@@ -7,7 +7,8 @@
 //
 
 #import "DashBoardViewController.h"
-
+#import "ActiveUserManager.h"
+#import "UserDefaults.h"
 @interface DashBoardViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *provideFeedBackButton;
 @property (weak, nonatomic) IBOutlet UIButton *viewPurchaseHistoryButton;
@@ -46,14 +47,64 @@
     
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setShowsVerticalScrollIndicator:NO];
+    App_Delegate.naviController= self.navigationController;
+    
+    [self ooVooLogin];
 }
+
+- (void)ooVooLogin{
+    
+    self.sdk = [ooVooClient sharedInstance];
+    [self.sdk.Account login:[Utility_Shared_Instance readStringUserPreference:KUID_W]
+                 completion:^(SdkResult *result) {
+                     dispatch_async(dispatch_get_main_queue(), ^{
+                         [SVProgressHUD dismiss];
+                     });
+                     if (result.Result == 37) {
+                         NSLog(@"377777777--> Failure Either Authorization  or ooVoo Server DOWN");
+                     }
+                     else if (result.Result == 0) {
+                         NSLog(@"0 --> SUCCESS");
+                     }
+                     NSLog(@"result code=%d result description %@", result.Result, result.description);
+                     if (result.Result != sdk_error_OK){
+                         [[[UIAlertView alloc] initWithTitle:@"ooVoo Server Error" message:result.description delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
+                     }
+                     else
+                     {
+                         [self onLogin:result.Result];
+                         if(![self.sdk.Messaging isConnected])
+                             [self.sdk.Messaging connect];
+                     }
+                 }];
+}
+
+- (void)onLogin:(BOOL)error {
+    
+    if (!error) {
+        [ActiveUserManager activeUser].userId =[Utility_Shared_Instance readStringUserPreference:KUID_W];
+        
+        [UserDefaults setObject:[ActiveUserManager activeUser].token ForKey:[ActiveUserManager activeUser].userId];
+        
+        [ActiveUserManager activeUser].displayName = [Utility_Shared_Instance readStringUserPreference:KUID_W];
+        ///NSString * uuid = [[NSUUID UUID] UUIDString] ;
+        NSString * token = [ActiveUserManager activeUser].token;
+        if(token && token.length > 0){
+            [self.sdk.PushService subscribe:token deviceUid:[ActiveUserManager activeUser].userId completion:^(SdkResult *result){
+                [ActiveUserManager activeUser].isSubscribed = true;
+            }];
+        }
+    }
+}
+
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:YES];
     [Utility_Shared_Instance showProgress];
     [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
-    [App_Delegate getLanguages];
+
 }
+
 -(void)setLabelButtonNames{
     self.headerLabel.text = NSLOCALIZEDSTRING(@"DASHBOARD_SLIDE");
     self.myLanguageLabel.text = NSLOCALIZEDSTRING(@"MY_LANGUAGE");
@@ -62,13 +113,13 @@
     [self.manageMyProfileButton setTitle:NSLOCALIZEDSTRING(@"MANAGE_MY_PROFILE")  forState: UIControlStateNormal];
     [self.viewPurchaseHistoryButton setTitle:NSLOCALIZEDSTRING(@"VIEW_PURCHASE_HISTORY")  forState: UIControlStateNormal];
     [self.provideFeedBackButton setTitle:NSLOCALIZEDSTRING(@"PROVIDE_FEEDBACK")  forState: UIControlStateNormal];
-    
 }
 
 -(void)setImages{
     [self.manageMyProfileButton setBackgroundImage:[UIImage imageNamed:LIGHT_BUTTON_IMAGE] forState:UIControlStateNormal];
     [self.viewPurchaseHistoryButton setBackgroundImage:[UIImage imageNamed:LIGHT_BUTTON_IMAGE] forState:UIControlStateNormal];
 }
+
 -(void)setRoundCorners{
     [UIButton roundedCornerButton:self.orderInterpretationButton];
     [UIButton roundedCornerButton:self.manageMyProfileButton];
@@ -118,9 +169,10 @@
                 [SVProgressHUD dismiss];
                 NSLog(@"dict-->%@",responseDict);
                 NSMutableDictionary *userDict = [responseDict objectForKey:@"user"];
+                [Utility_Shared_Instance writeStringUserPreference:KUID_W value:[userDict objectForKey:KUID_W]];
                 [Utility_Shared_Instance writeStringUserPreference:KID_W value:[userDict objectForKey:KID_W]];
 ;
-                self.descriptionTextView.text =[userDict objectForKey:KABOUT_USER_W];
+                self.descriptionTextView.text = [userDict objectForKey:KABOUT_USER_W];
                 
                 NSDictionary *profileImgDict =  [userDict objectForKey:KPROFILE_IMAGE_W];
                 NSString *imageURLString = [profileImgDict objectForKey:KURL_W];
@@ -144,11 +196,13 @@
                     self.countryLabel.text = [NSString stringWithFormat:@"@%@",self.countryLabel.text];
                 }
                 
+                /*
                 /////////// Languages
-                NSLog(@"--langArray -->%@",App_Delegate.languagesArray);
-                NSArray *langArray = [[userDict objectForKey:KMYLANGUAGES_W] componentsSeparatedByString:@","];
+               // NSLog(@"--langArray -->%@",App_Delegate.languagesArray);
+                 
+                NSArray *langArray = [userDict objectForKey:KMYLANGUAGES_W];//[ componentsSeparatedByString:@","];
                 if (langArray.count) {
-                    NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageCode beginswith[c] %@",[langArray objectAtIndex:0]];
+                    NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageID beginswith[c] %@",[langArray objectAtIndex:0]];
                     NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
                     if (sortedArray.count) {
                         LanguageObject *lObj = [sortedArray lastObject];
@@ -158,7 +212,7 @@
                 else{
                     NSString *str = [userDict objectForKey:KMYLANGUAGES_W];
                     if (str.length) {
-                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageCode beginswith[c] %@",str];
+                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageID beginswith[c] %@",str];
                         NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
                         if (sortedArray.count) {
                             LanguageObject *lObj = [sortedArray lastObject];
@@ -167,6 +221,8 @@
                     }
                 }
                 /////////////////
+                */
+                self.myLanguageDetailLabel.text = [responseDict objectForKey:KLANGUAGE_NAME_W];
             });
         }
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {

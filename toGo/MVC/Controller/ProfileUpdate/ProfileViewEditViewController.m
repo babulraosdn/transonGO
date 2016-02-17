@@ -9,6 +9,9 @@
 #import "ProfileViewEditViewController.h"
 #import "ProfileImageTableViewCell.h"
 #import "Headers.h"
+#import <AssetsLibrary/AssetsLibrary.h>
+#import "JBBarChartViewController.h"
+
 
 #define HEADER_HEIGHT 163
 #define DEFAULT_TABLE_CELL_HEIGHT 57
@@ -49,6 +52,10 @@
     NSIndexPath *editingIndexPath;
     
     MyLanguagesView *languagesView;
+    
+    BOOL isViewDidLoad;
+    
+    BOOL isCameraGallerySelected;
 }
 @property(nonatomic,strong) NSMutableArray *namesArray;
 @property(nonatomic,strong) NSMutableArray *selectedLanguagesArray;
@@ -70,6 +77,9 @@
 
 -(void)viewDidLoad{
     [super viewDidLoad];
+    
+    isViewDidLoad = YES;
+    
     _isInterpreter = [[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER];
     
     [_tblView setShowsHorizontalScrollIndicator:NO];
@@ -89,26 +99,52 @@
     
     self.einTaxArray = [[NSMutableArray alloc]initWithObjects:@"India",@"Japan", nil];
     [Utility_Shared_Instance showProgress];
-    [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
     
     [self addTapGesture];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(keyboardWillShow:)
+//                                                 name:UIKeyboardWillShowNotification
+//                                               object:nil];
+//    
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(keyboardWillHide:)
+//                                                 name:UIKeyboardWillHideNotification
+//                                               object:nil];
     
     
     self.headerLabel.font = [UIFont normalSize];
     self.headerLabel.text = NSLOCALIZEDSTRING(@"PROFILE");
     
-    [self getCountryList];
     
+    App_Delegate.naviController= self.navigationController;
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    if (isViewDidLoad) {
+        isViewDidLoad=NO;
+        self.tblView.backgroundColor = [UIColor backgroundColor];
+        //[NSThread detachNewThreadSelector:@selector(getCountryList) toTarget:self withObject:nil];
+        [self getCountryList];
+        if (App_Delegate.languagesArray.count<1) {
+            //[NSThread detachNewThreadSelector:@selector(getLanguages) toTarget:App_Delegate withObject:nil];
+            
+            [App_Delegate getLanguages];
+        }
+        [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
+        
+        //[NSThread detachNewThreadSelector:@selector(getProfileInfo) toTarget:self withObject:nil];
+    }
+    else{
+        if (isCameraGallerySelected) {
+            isCameraGallerySelected = NO;
+            [Utility_Shared_Instance showProgress];
+            [self performSelector:@selector(uploadImageToServer) withObject:nil afterDelay:0.2];
+        }
+        
+    }
 }
 
 - (void)keyboardWillShow:(NSNotification *)notification
@@ -133,11 +169,7 @@
     self.tblView.scrollIndicatorInsets = UIEdgeInsetsZero;
 }
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    self.tblView.backgroundColor = [UIColor backgroundColor];
-    [App_Delegate getLanguages];
-}
+
 
 -(void)addTapGesture{
     tapGesture=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(removePickerViews)];
@@ -372,7 +404,7 @@
                 [addressCell.contentView addSubview:starLabel];
                 
                 
-                UIImageView *imgViewEdit = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width-37, 10, 12, 12)];
+                UIImageView *imgViewEdit = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width-37, 5, 12, 12)];
                 imgViewEdit.tag = IMAGE_VIEW_TAG;
                 //imgViewEdit.backgroundColor = [UIColor redColor];
                 [addressCell.contentView addSubview:imgViewEdit];
@@ -387,7 +419,7 @@
                 [addressCell.contentView addSubview:editBtn];
 
                 
-                UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, self.view.frame.size.width-60, 20)];
+                UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, self.view.frame.size.width-60, 20)];
                 label.text = [self.namesArray objectAtIndex:indexPath.row];
                 label.tag = LABEL_TAG;
                 //label.backgroundColor = [UIColor redColor];
@@ -439,7 +471,7 @@
                     [[descriptionCell viewWithTag:DESCRIPTION_TEXT_VIEW_TAG] removeFromSuperview];
                 }
                 
-                UIImageView *imgViewEdit = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width-37, 10, 12, 12)];
+                UIImageView *imgViewEdit = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width-37, 5, 12, 12)];
                 imgViewEdit.tag = IMAGE_VIEW_TAG;
                 //imgViewEdit.backgroundColor = [UIColor redColor];
                 [descriptionCell.contentView addSubview:imgViewEdit];
@@ -1473,8 +1505,26 @@
         
         self.profileObject.eINtaxIDString = cell.descriptionTextField.text;
         
+        
         self.profileObject.isCertificatesEdit = NO;
         if(self.profileObject.isEinTaxEdit){
+            
+            NSString *alertMsgStr;
+            if ([cell.headerLabel.text isEqualToString:NSLOCALIZEDSTRING(@"EIN_TaxID")]){
+                alertMsgStr = NSLOCALIZEDSTRING(@"EIN_TaxID");
+            }
+            else{
+                alertMsgStr = NSLOCALIZEDSTRING(@"TaxID_EIN");
+            }
+            
+            if (cell.descriptionTextField.text.length<9) {
+                [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                    withMessage:[NSString stringWithFormat:@"%@ %@",alertMsgStr,NSLOCALIZEDSTRING(@"TIN_VALIDATION_MESSAGE")]
+                                                         inView:self
+                                                      withStyle:UIAlertControllerStyleAlert];
+                return;
+            }
+            
             editableString = @"";
             self.profileObject.isEinTaxEdit = NO;
             [self saveProfileInfo:indexpath];
@@ -1583,6 +1633,7 @@
                 NSLog(@"dict-->%@",responseDict);
                 NSMutableDictionary *userDict = [responseDict objectForKey:@"user"];
                 self.profileObject = [ProfileInfoObject new];
+                [Utility_Shared_Instance writeStringUserPreference:KUID_W value:[userDict objectForKey:KUID_W]];
                 self.profileObject.uIdString = [userDict objectForKey:KUID_W];
                 self.profileObject.idString = [userDict objectForKey:KID_W];
                 [Utility_Shared_Instance writeStringUserPreference:KID_W value:[userDict objectForKey:KID_W]];
@@ -1612,7 +1663,7 @@
                 self.profileObject.dobString = [userDict objectForKey:KDOB];
                 self.profileObject.postalCodeString = [userDict objectForKey:KPOSTALCODE_W];
                 self.profileObject.phoneNumberString = [userDict objectForKey:KPHONE_NUMBER_W];
-                self.profileObject.myLanguagesKEYsString = [NSString stringWithFormat:@"%@",[Utility_Shared_Instance checkForNullString:[userDict objectForKey:KMYLANGUAGES_W]]];
+                self.profileObject.myLanguagesKeysArray = [userDict objectForKey:KMYLANGUAGES_W];
                 
                 if ([userDict objectForKey:KEIN_TAXID_W]) {
                     NSString *einTempSting = [userDict objectForKey:KEIN_TAXID_W];
@@ -1632,12 +1683,12 @@
                 
                 self.profileObject.dobString = [self dateConvertion];
                 /////////// Languages
-                NSLog(@"--langArray -->%@",App_Delegate.languagesArray);
-                NSArray *langArray = [[userDict objectForKey:KMYLANGUAGES_W] componentsSeparatedByString:@","];
+                //NSLog(@"--langArray -->%@",App_Delegate.languagesArray);
+                NSArray *langArray = [userDict objectForKey:KMYLANGUAGES_W];//[ componentsSeparatedByString:@","];
                 if (langArray.count) {
                     self.selectedLanguagesArray = [NSMutableArray new];
                     for (id key in langArray) {
-                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageCode beginswith[c] %@",key];
+                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageID like[c] %@",key];
                         NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
                         if (sortedArray.count) {
                             LanguageObject *lObj = [sortedArray lastObject];
@@ -1646,6 +1697,7 @@
                     }
                 }
                 /////////////////
+                
                 
                 ///////////////// Get States With Country Name
                 if (self.profileObject.countryString.length) {
@@ -1672,9 +1724,11 @@
                     self.profileObject.expYearString = [Utility_Shared_Instance checkForNullString:[paymentDict objectForKey:KEXP_YEAR_W]];
                 }
                 ///////////////
-                [self changeTableLabelHeaders_Tax_EIN];
-                
-                [self.tblView reloadData];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self changeTableLabelHeaders_Tax_EIN];
+                    [self makeEditableMandatoryFields];
+                    [self.tblView reloadData];
+                });
             });
         }
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
@@ -1728,9 +1782,17 @@
 }
 
 -(void)languagesButtonPressed{
+    
+//    JBBarChartViewController *barChartController = [[JBBarChartViewController alloc] init];
+//    [self.navigationController pushViewController:barChartController animated:YES];
+//    return;
+    
     [self.view endEditing:YES];
     [self removeTapGesture];
     [self removePopUpView];
+    if (App_Delegate.languagesArray.count<1) {
+        [App_Delegate getLanguages];
+    }
     languagesView =[[MyLanguagesView alloc]initWithFrame:CGRectZero];
     languagesView.tag = 1000;
     languagesView.delegate = self;
@@ -1754,6 +1816,9 @@
 
 -(void)countryButtonPressed{
     
+    if (self.countryArray.count<1) {
+        [self getCountryList];
+    }
     [self.view endEditing:YES];
     [self removeTapGesture];
     [self removePopUpView];
@@ -1830,16 +1895,10 @@
         [self.selectedLanguagesArray addObjectsFromArray:selectedDataArray];
     }
     
-    NSMutableString *mutableStr = [NSMutableString new];
-    for (LanguageObject *lObj in self.selectedLanguagesArray) {
-            [mutableStr appendString:[NSString stringWithFormat:@"%@,",lObj.languageCode]];
-    }
-    NSString *tempStr = [NSString stringWithString:mutableStr];
-    if ([tempStr hasSuffix:@","]) {
-        tempStr = [tempStr substringToIndex:[tempStr length]-1];
-    }
-    self.profileObject.myLanguagesKEYsString = tempStr;
+    [self getLanguageKeys];
+    [self makeEditableMandatoryFields];
     [self.tblView reloadData];
+    [self performSelector:@selector(saveProfileInfo:) withObject:nil];
     [self addTapGesture];
 }
 
@@ -1853,8 +1912,9 @@
         [self getStateList];
     }
     [self changeTableLabelHeaders_Tax_EIN];
-    
+    [self makeEditableMandatoryFields];
     [self.tblView reloadData];
+    [self performSelector:@selector(saveProfileInfo:) withObject:nil];
     [self addTapGesture];
 }
 
@@ -1865,7 +1925,9 @@
         StateObject *sObj = [selectedDataArray lastObject];
         self.profileObject.stateString = sObj.stateName;
     }
+    [self makeEditableMandatoryFields];
     [self.tblView reloadData];
+    [self performSelector:@selector(saveProfileInfo:) withObject:nil];
     [self addTapGesture];
 }
 
@@ -1893,7 +1955,8 @@
 
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.nickNameString] forKey:KNICKNAME_W];
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.phoneNumberString] forKey:KPHONE_NUMBER_W];
-    [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.myLanguagesKEYsString] forKey:KMYLANGUAGE_W];
+    //NSArray *langKeysArray = [[Utility_Shared_Instance checkForNullString:self.profileObject.myLanguagesKEYsString] componentsSeparatedByString:@","];
+    [saveDict setValue:self.profileObject.myLanguagesKeysArray forKey:KMYLANGUAGE_W];
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.addressString] forKey:KADDRESS_W];
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.countryString] forKey:KCOUNTRY_W];
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.stateString] forKey:KSTATE_W];
@@ -1935,17 +1998,18 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
             NSLog(@"dict-->%@",responseDict);
-            [self.tblView beginUpdates];
-            [self.tblView reloadRowsAtIndexPaths:@[currentIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-            [self.tblView endUpdates];
+            [self.tblView reloadData];
+//            [self.tblView beginUpdates];
+//            [self.tblView reloadRowsAtIndexPaths:@[currentIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+//            [self.tblView endUpdates];
         });
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
-            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                                withMessage:[responseDict objectForKey:KMESSAGE_W]
-                                                     inView:self
-                                                  withStyle:UIAlertControllerStyleAlert];
+//            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+//                                                withMessage:[responseDict objectForKey:KMESSAGE_W]
+//                                                     inView:self
+//                                                  withStyle:UIAlertControllerStyleAlert];
             
         });
         
@@ -2002,7 +2066,7 @@
             else
                 alertString = NSLOCALIZEDSTRING(@"EIN_TaxID");
         }
-        else if (!self.profileObject.myLanguagesKEYsString.length) {
+        else if (self.profileObject.myLanguagesKeysArray.count<1) {
             alertString = NSLOCALIZEDSTRING(@"MY_LANGUAGES");
         }
     }
@@ -2043,7 +2107,7 @@
         else if (!self.profileObject.postalCodeString.length) {
             alertString = NSLOCALIZEDSTRING(@"POSTAL_CODE");
         }
-        else if (!self.profileObject.myLanguagesKEYsString.length) {
+        else if (self.profileObject.myLanguagesKeysArray.count<1) {
             alertString = NSLOCALIZEDSTRING(@"MY_LANGUAGES");
         }
         else if (!self.profileObject.cardTypeString.length && !_isInterpreter) {
@@ -2094,7 +2158,14 @@
     return YES;
 }
 
-- (void)cameraGalleryButtonPressed{
+- (void)cameraGalleryButtonPressed {
+    
+//    ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
+//    
+//    if (status != ALAuthorizationStatusAuthorized) {
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Attention" message:@"Please give this app permission to access your photo library in your settings app!" delegate:nil cancelButtonTitle:@"Close" otherButtonTitles:nil, nil];
+//        [alert show];
+//    }
     
     UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:NSLOCALIZEDSTRING(@"CHOOSE_PROFILE_IMAGE") message:@"" delegate:self cancelButtonTitle:NSLOCALIZEDSTRING(@"CAMERA") otherButtonTitles:NSLOCALIZEDSTRING(@"GALLERY"), nil];
     alertView.delegate = self;
@@ -2102,7 +2173,10 @@
     [alertView show];
 }
 
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    isCameraGallerySelected = YES;
+    
     UIImagePickerController *imagePickerController = [[UIImagePickerController alloc]init];
     imagePickerController.delegate = self;
     if (buttonIndex == 0) {
@@ -2137,6 +2211,7 @@
         [self presentViewController:imagePickerController animated:YES completion:nil];
     });
 }
+
 - (void)imagePickerController:(UIImagePickerController *)picker
         didFinishPickingImage:(UIImage *)image
                   editingInfo:(NSDictionary *)editingInfo
@@ -2144,9 +2219,10 @@
     // Dismiss the image selection, hide the picker and
     //show the image view with the picked image
     selectedImage=image;
-    [self dismissViewControllerAnimated:picker completion:nil];
-    [Utility_Shared_Instance showProgress];
-    [self performSelector:@selector(uploadImageToServer) withObject:nil afterDelay:0.3];
+    selectedImage = [self scaleAndRotateImage:selectedImage];
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
 //    dispatch_async(dispatch_get_main_queue(), ^{
 //        [self dismissViewControllerAnimated:picker completion:nil];
 //        [self.tblView reloadData];
@@ -2155,9 +2231,117 @@
 }
 
 
+- (UIImage *)scaleAndRotateImage:(UIImage *)image
+{
+    int kMaxResolution = 640;
+    
+    CGImageRef imgRef = image.CGImage;
+    
+    CGFloat width = CGImageGetWidth(imgRef);
+    CGFloat height = CGImageGetHeight(imgRef);
+    
+    CGAffineTransform transform = CGAffineTransformIdentity;
+    CGRect bounds = CGRectMake(0, 0, width, height);
+    if (width > kMaxResolution || height > kMaxResolution) {
+        CGFloat ratio = width/height;
+        if (ratio > 1) {
+            bounds.size.width = kMaxResolution;
+            bounds.size.height = bounds.size.width / ratio;
+        }
+        else {
+            bounds.size.height = kMaxResolution;
+            bounds.size.width = bounds.size.height * ratio;
+        }
+    }
+    
+    CGFloat scaleRatio = bounds.size.width / width;
+    CGSize imageSize = CGSizeMake(CGImageGetWidth(imgRef), CGImageGetHeight(imgRef));
+    CGFloat boundHeight;
+    UIImageOrientation orient = image.imageOrientation;
+    switch(orient) {
+            
+        case UIImageOrientationUp: //EXIF = 1
+            transform = CGAffineTransformIdentity;
+            break;
+            
+        case UIImageOrientationUpMirrored: //EXIF = 2
+            transform = CGAffineTransformMakeTranslation(imageSize.width, 0.0);
+            transform = CGAffineTransformScale(transform, -1.0, 1.0);
+            break;
+            
+        case UIImageOrientationDown: //EXIF = 3
+            transform = CGAffineTransformMakeTranslation(imageSize.width, imageSize.height);
+            transform = CGAffineTransformRotate(transform, M_PI);
+            break;
+            
+        case UIImageOrientationDownMirrored: //EXIF = 4
+            transform = CGAffineTransformMakeTranslation(0.0, imageSize.height);
+            transform = CGAffineTransformScale(transform, 1.0, -1.0);
+            break;
+            
+        case UIImageOrientationLeftMirrored: //EXIF = 5
+            boundHeight = bounds.size.height;
+            bounds.size.height = bounds.size.width;
+            bounds.size.width = boundHeight;
+            transform = CGAffineTransformMakeTranslation(imageSize.height, imageSize.width);
+            transform = CGAffineTransformScale(transform, -1.0, 1.0);
+            transform = CGAffineTransformRotate(transform, 3.0 * M_PI / 2.0);
+            break;
+            
+        case UIImageOrientationLeft: //EXIF = 6
+            boundHeight = bounds.size.height;
+            bounds.size.height = bounds.size.width;
+            bounds.size.width = boundHeight;
+            transform = CGAffineTransformMakeTranslation(0.0, imageSize.width);
+            transform = CGAffineTransformRotate(transform, 3.0 * M_PI / 2.0);
+            break;
+            
+        case UIImageOrientationRightMirrored: //EXIF = 7
+            boundHeight = bounds.size.height;
+            bounds.size.height = bounds.size.width;
+            bounds.size.width = boundHeight;
+            transform = CGAffineTransformMakeScale(-1.0, 1.0);
+            transform = CGAffineTransformRotate(transform, M_PI / 2.0);
+            break;
+            
+        case UIImageOrientationRight: //EXIF = 8
+            boundHeight = bounds.size.height;
+            bounds.size.height = bounds.size.width;
+            bounds.size.width = boundHeight;
+            transform = CGAffineTransformMakeTranslation(imageSize.height, 0.0);
+            transform = CGAffineTransformRotate(transform, M_PI / 2.0);
+            break;
+            
+        default:
+            [NSException raise:NSInternalInconsistencyException format:@"Invalid image orientation"];
+            
+    }
+    
+    UIGraphicsBeginImageContext(bounds.size);
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    if (orient == UIImageOrientationRight || orient == UIImageOrientationLeft) {
+        CGContextScaleCTM(context, -scaleRatio, scaleRatio);
+        CGContextTranslateCTM(context, -height, 0);
+    }
+    else {
+        CGContextScaleCTM(context, scaleRatio, -scaleRatio);
+        CGContextTranslateCTM(context, 0, -height);
+    }
+    
+    CGContextConcatCTM(context, transform);
+    
+    CGContextDrawImage(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, width, height), imgRef);
+    UIImage *imageCopy = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return imageCopy;
+}
+
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self dismissViewControllerAnimated:picker completion:nil];
+        [self dismissViewControllerAnimated:YES completion:nil];
     });
 }
 
@@ -2258,7 +2442,7 @@
     }
     
     [self removePickerViews];
-    
+    [self makeEditableMandatoryFields];
     [self.tblView reloadData];
 }
 
@@ -2271,8 +2455,16 @@
 -(void)taskDateDone{
     
 }
+
 -(void)taskDatePicked{
     self.profileObject.dobString=[NSString stringWithFormat:@"%@",datePicker.date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
+    NSDate *strTempDate = [dateFormatter dateFromString:self.profileObject.dobString];
+    
+    [dateFormatter setDateFormat:@"MM-dd-yyyy"];
+    NSString *str=[dateFormatter stringFromDate:strTempDate];
+    self.profileObject.dobString = str;
 }
 
 -(NSString *)dateConvertion
@@ -2300,6 +2492,7 @@
         NSDictionary *responseDict=responseObject;
 
         dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tblView reloadData];
             [SVProgressHUD dismiss];
             [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
                                                 withMessage:[responseDict objectForKey:KMESSAGE_W]
@@ -2340,10 +2533,29 @@
     NSString *currentString = [textField.text stringByReplacingCharactersInRange:range withString:string];
     
     if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"FIRST_NAME")]||[textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"LAST_NAME")]){
-        if (currentString.length>13) {
+        if (currentString.length>FIRSTNAME_LASTNAME_LIMIT) {
             return NO;
         }
     }
+    
+    if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"NICK_NAME")]){
+        if (currentString.length>NICK_NAME_LIMIT) {
+            return NO;
+        }
+    }
+    
+    if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"TaxID_EIN")]){
+        if (currentString.length>TIN_LIMIT) {
+            return NO;
+        }
+    }
+    
+    if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"EIN_TaxID")]){
+        if (currentString.length>EIN_LIMIT) {
+            return NO;
+        }
+    }
+    
     
     if ([textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"POSTAL_CODE")]||[textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"PHONE_NUMBER")]||[textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"CARD_NUMBER")]||[textField.placeholder isEqualToString:NSLOCALIZEDSTRING(@"CVV")]){
         
@@ -2592,6 +2804,22 @@
 
 -(void)languageDeleteButtonPressed:(UIButton *)sender{
     [self.selectedLanguagesArray removeObjectAtIndex:sender.tag];
+    [self getLanguageKeys];
+    [self performSelector:@selector(saveProfileInfo:) withObject:nil];
     [self.tblView reloadData];
+}
+
+-(void)getLanguageKeys{
+    //NSMutableString *mutableStr = [NSMutableString new];
+    self.profileObject.myLanguagesKeysArray = [NSMutableArray new];
+    for (LanguageObject *lObj in self.selectedLanguagesArray) {
+        //[mutableStr appendString:[NSString stringWithFormat:@"%@,",lObj.languageID]];
+        [self.profileObject.myLanguagesKeysArray addObject:lObj.languageID];
+    }
+//    NSString *tempStr = [NSString stringWithString:mutableStr];
+//    if ([tempStr hasSuffix:@","]) {
+//        tempStr = [tempStr substringToIndex:[tempStr length]-1];
+//    }
+    //self.profileObject.myLanguagesKEYsString = tempStr;
 }
 @end

@@ -62,4 +62,8 @@ typedef void (^getImage)(UIImage *image);
 - (CGFloat)heightOfTextViewWithString:(NSString *)string
                              withFont:(UIFont *)font
                         andFixedWidth:(CGFloat)fixedWidth;
+
+#pragma mark CurrentTimeStamp
+- (NSString *)GetCurrentTimeStamp;
+
 @end

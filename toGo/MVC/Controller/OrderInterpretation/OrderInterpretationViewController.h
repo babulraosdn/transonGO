@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "Headers.h"
+#import <ooVooSDK/ooVooSDK.h>
+
 @interface OrderInterpretationViewController : BaseViewController<MyLanguagesDelegate>
+@property (retain, nonatomic) ooVooClient *sdk;
 
 @end

@@ -149,15 +149,10 @@
     [signUpDictionary setObject:self.usernameTextField.text forKey:KUSERNAME_W];
     [signUpDictionary setObject:self.passwordTextField.text forKey:KPASSWORD_W];
     [signUpDictionary setObject:self.emaillTextField.text forKey:KEMAIL_W];
-    [signUpDictionary setObject:[Utility_Shared_Instance checkForNullString:[Utility_Shared_Instance readStringUserPreference:USER_TYPE]] forKey:KTYPE_W];
+    [signUpDictionary setObject:[Utility_Shared_Instance checkForNullString:[Utility_Shared_Instance readStringUserPreference:USER_TYPE]] forKey:KUSER_TYPE_W];
     
     [Web_Service_Call serviceCall:signUpDictionary webServicename:SIGNUP_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         NSDictionary *responseDict=responseObject;
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD dismiss];
-            [AlertViewCustom showAlertViewWithMessage:[responseDict objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self];
-        });
         
         if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
         {
@@ -167,7 +162,18 @@
             _confirmpasswordTextField.text= @"";
             
             dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+                [AlertViewCustom showAlertViewWithMessage:[responseDict objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self];
                 [self.navigationController popViewControllerAnimated:YES];
+            });
+        }
+        else{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+                [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                    withMessage:[responseDict objectForKey:KMESSAGE_W]
+                                                         inView:self
+                                                      withStyle:UIAlertControllerStyleAlert];
             });
         }
         
@@ -175,7 +181,10 @@
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
-            [AlertViewCustom showAlertViewWithMessage:[responseObject objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self];
+            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                withMessage:[responseObject objectForKey:KMESSAGE_W]
+                                                     inView:self
+                                                  withStyle:UIAlertControllerStyleAlert];
         });
     }];
 }
@@ -183,6 +192,7 @@
 
 
 -(IBAction)interpreterCustomerButtonClicked:(UIButton *)sender{
+    
     if (sender.tag==1) {
         //Interpreter
         self.interpreterImageView.image = [UIImage radioONImage];
@@ -193,8 +203,8 @@
         self.customerImageView.image = [UIImage radioONImage];
         self.interpreterImageView.image = [UIImage radioOffImage];
     }
+    
 }
-
 
 #pragma Mark UITextField Delegate Methods
 

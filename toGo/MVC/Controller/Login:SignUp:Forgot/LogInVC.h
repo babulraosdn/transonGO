@@ -9,10 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <ooVooSDK/ooVooSDK.h>
 #import "Headers.h"
-#import "AuthorizationLoaderVc.h"
 #import <GooglePlus/GooglePlus.h>
 #import <GoogleOpenSource/GoogleOpenSource.h>
-@interface LogInVC : BaseViewController <AuthorizationDelegate, ooVooAccount, SocialDelegate, GPPSignInDelegate,ALERTVIEWCUSTOMDELEGATE>
+@interface LogInVC : BaseViewController <ooVooAccount, SocialDelegate, GPPSignInDelegate,ALERTVIEWCUSTOMDELEGATE>
 
 
 @property (retain, nonatomic) ooVooClient *sdk;

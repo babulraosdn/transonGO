@@ -7,31 +7,52 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "VideoConferenceVC.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 #import "Headers.h"
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <TwitterKit/TwitterKit.h>
+
+#import "VideoConferenceVC.h"
+#import <AVFoundation/AVAudioPlayer.h>
+
+//1. Profile image upload Spinner show
+//2. Background Audio Playing
+
+@class InterpreterListObject;
+@class CDRObject;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 {
     UINavigationController *navigationController ;
     UIStoryboard *mainStoryboard ;
     VideoConferenceVC *viewVideoControler ;
+    
+    AVAudioPlayer *_audioPlayer;
+    //AVAudioPlayer *audioPlayer; //Plays the audio
+    //VideoConferenceVCWithRender *viewVideoControllerRender;
 }
-@property (strong, nonatomic) FBSDKLoginManager *facebookLoginManager;
-@property (strong, nonatomic) UINavigationController *navigationController ;
-@property (strong, nonatomic) UINavigationController *navController ;
-@property(nonatomic,strong) NSMutableArray *languagesArray;
-
-@property (strong, nonatomic) UIWindow *window;
+@property(nonatomic,strong) CDRObject *cdrObject;
+//@property(nonatomic,strong)InterpreterListObject *acceptedInterpreter;
 @property (retain, nonatomic) ooVooClient *sdk;
 @property(nonatomic,strong)NSMutableArray *callingUsers;
+
+@property(nonatomic,strong) NSString *conferenceIDString;
+@property (strong, nonatomic) FBSDKLoginManager *facebookLoginManager;
+@property (strong, nonatomic) UINavigationController *naviController ;
+@property(nonatomic,strong) NSMutableArray *languagesArray;
+@property(nonatomic,strong) NSMutableArray *interpreterListArray;
+@property (strong, nonatomic) UIWindow *window;
 @property(nonatomic,strong)NSString *emailString;
 -(void)subscribePushNotifications : (UIApplication *)application;
 
 -(void)takeTour;
 -(void)getLanguages;
+
+-(void)saveDisconnectedCallDetailsinServer : (InterpreterListObject *)receivedInterpreter isNoOnePicksCallorEndedByCustomer:(BOOL)isNoOnePicksCallorEndedByCustomer;
+-(void)saveCDR;
+- (void)SetNotificationObserversForCallMessaging;
+- (void)UnSetNotificationObserversForCallMessaging;
 @end
 

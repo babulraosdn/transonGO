@@ -9,7 +9,8 @@
 #import <Foundation/Foundation.h>
 
 @interface LanguageObject : NSObject
-@property(nonatomic,strong) NSString *languageCode;
+@property(nonatomic,strong) NSString *languageID;
+//@property(nonatomic,strong) NSString *languageCode;
 @property(nonatomic,strong) NSString *languageName;
 @property(nonatomic,strong) NSString *imagePathString;
 @end

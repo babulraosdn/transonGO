@@ -7,9 +7,22 @@
 //
 
 #import "OrderInterpretationViewController.h"
+#import "MenuConferenceVC.h"
+#import "MessageManager.h"
+#import "ActiveUserManager.h"
+#define TimeOut 30
 
-@interface OrderInterpretationViewController (){
+@interface OrderInterpretationViewController ()<UIAlertViewDelegate>{
     UIButton *selectedButton;
+    UIAlertView *myAlertView ;
+    
+    NSTimer *timer;
+    int secCounter;
+    
+    NSMutableArray *arrFriends ; // we create friend list in this view only
+    
+    NSString *fromLanguageKeyString;
+    NSString *toLanguageKeyString;
 }
 @property (weak, nonatomic) IBOutlet UILabel *headerLabel;
 @property (weak, nonatomic) IBOutlet UILabel *fromLabel;
@@ -26,17 +39,27 @@
 @property(nonatomic,strong) NSMutableArray *toLanguageArray;
 @end
 
+
 @implementation OrderInterpretationViewController
+@dynamic sdk;
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
     [self setSlideMenuButtonFornavigation];
     [self setLogoutButtonForNavigation];
     [self setLabelButtonNames];
     [self setRoundCorners];
     [self setColors];
     [self setFonts];
+    
+    if (App_Delegate.languagesArray.count<1) {
+        [App_Delegate getLanguages];
+    }
+    
+    [App_Delegate SetNotificationObserversForCallMessaging];
     
 }
 
@@ -49,8 +72,8 @@
     self.headerLabel.text = NSLOCALIZEDSTRING(@"SELCET_YOUR_INTERPRETATION_LANGUAGE");
     self.fromLabel.text = NSLOCALIZEDSTRING(@"FROM");
     self.toLabel.text = NSLOCALIZEDSTRING(@"TO");
-    [self.confirmButton setTitle:NSLOCALIZEDSTRING(@"CONFIRM") forState:UIControlStateNormal];
-    [self.cancelButton setTitle:NSLOCALIZEDSTRING(@"CANCEL") forState:UIControlStateNormal];
+    [self.confirmButton setTitle:NSLOCALIZEDSTRING(@"CONFIRM_CAPITAL") forState:UIControlStateNormal];
+    [self.cancelButton setTitle:NSLOCALIZEDSTRING(@"CANCEL_CAPITAL") forState:UIControlStateNormal];
 }
 
 -(void)setRoundCorners{
@@ -64,7 +87,6 @@
     self.toImageView.layer.cornerRadius = self.fromImageView.frame.size.height /2;
     self.toImageView.layer.masksToBounds = YES;
     [self.toImageView setContentMode:UIViewContentModeScaleToFill];
-
 }
 
 
@@ -123,31 +145,152 @@
 }
 
 -(IBAction)confirmCancelButtonPressed:(UIButton *)sender{
+    
     if (sender.tag==1) {
-        [self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil];
-    }
-    else{
+        //appDelegate.callingUsers = arrFriends;
+        
+        NSString *alertString;
+        if ([self.fromDetailLabel.text isEqualToString:NSLOCALIZEDSTRING(@"LANGUAGE")]) {
+            alertString = [NSString messageWithSelectString:NSLOCALIZEDSTRING(@"FROM_LANGUAGE")];
+        }
+        else if ([self.toDetailLabel.text isEqualToString:NSLOCALIZEDSTRING(@"LANGUAGE")]) {
+            alertString = [NSString messageWithSelectString:NSLOCALIZEDSTRING(@"TO_LANGUAGE")];
+        }
+        else if ([self.fromDetailLabel.text isEqualToString:self.toDetailLabel.text]) {
+            alertString = NSLOCALIZEDSTRING(@"PLEASE_SELECT_2_LANGUAGES_DIFFERENT");
+        }
+        if (alertString.length>1) {
+            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                withMessage:alertString
+                                                     inView:self
+                                                  withStyle:UIAlertControllerStyleAlert];
+            return;
+        }
+        
+        [self getPoolOfInterpreters];
         
     }
-    
+    else{
+        UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_USER_VIEW_CONTROLLER]];
+        self.revealController = [PKRevealController revealControllerWithFrontViewController:contentNavigationController leftViewController:[Utility_Shared_Instance getControllerForIdentifier:SLIDE_MENU_VIEW_CONTROLLER]];
+        App_Delegate.window.rootViewController = self.revealController;
+    }
+}
+
+-(void)getPoolOfInterpreters
+{
+    //WEB Service CODE
+    [Utility_Shared_Instance showProgress];
+    NSMutableDictionary *languagePriceDict=[NSMutableDictionary new];
+    [languagePriceDict setValue:fromLanguageKeyString forKey:KFROM_LANGUAGE_W];
+    [languagePriceDict setValue:toLanguageKeyString forKey:KTO_LANGUAGE_W];
+    [Web_Service_Call serviceCallWithRequestType:languagePriceDict requestType:POST_REQUEST includeHeader:YES includeBody:YES webServicename:GET_INTERPRETER_BY_LANGUAGE_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+        
+        NSDictionary *responseDict=responseObject;
+        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+                
+                NSMutableArray *array = [responseDict objectForKey:KDATA_W];
+                if (array.count) {
+                    arrFriends = [NSMutableArray new];
+                    App_Delegate.interpreterListArray = [NSMutableArray new];
+                    for (id json in array) {
+                        InterpreterListObject *iObj = [InterpreterListObject new];
+                        iObj.emailString  = [json objectForKey:KEMAIL_W];
+                        iObj.interpreter_availabilityString  = [json objectForKey:KINTERPRETER_AVAILABILITY_W];
+                        iObj.statusString  = [json objectForKey:KSTATUS_W];
+                        iObj.uidString  = [json objectForKey:KUID_W];
+                        iObj.usernameString  = [json objectForKey:KUSERNAME_W];
+                        iObj.idString = [json objectForKey:KID_W];
+                        iObj.poolIdString = [responseDict objectForKey:KPOOL_ID_W];
+                        [App_Delegate.interpreterListArray addObject:iObj];
+                        [arrFriends addObject:[json objectForKey:KUID_W]];
+                    }
+                    NSLog(@"-->%@",App_Delegate.interpreterListArray);
+                    [self sendMsgToFriends:@"Incoming Call....."];
+                }
+                
+                
+                ooVooPushNotificationMessage * msg = [[ooVooPushNotificationMessage alloc] initMessageWithUsersArray:arrFriends message:@"Callinggggg 445" property:@"Im optional" timeToLeave:1000];
+                
+                [self.sdk.PushService sendPushMessage:msg completion:^(SdkResult *result){
+                    if(result.Result == sdk_error_OK)
+                    {
+                        NSLog(@"Send succeeded");
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sent Msg" message:@"Your msg has been sent ,Thanks ! " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+                        //[alert show];
+                        
+                    }
+                }];
+
+                
+                if (arrFriends.count) {
+                    myAlertView = [[UIAlertView alloc] initWithTitle:@"Calling" message:@""
+                                                            delegate:self
+                                                   cancelButtonTitle:@"Cancel"
+                                                   otherButtonTitles:nil, nil];
+                    myAlertView.tag=100; // call alert
+                    
+                    UIActivityIndicatorView *loading = [[UIActivityIndicatorView alloc]
+                                                        initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+                    loading.frame=CGRectMake(0, 0, 16, 16);
+                    [myAlertView setValue:loading forKey:@"accessoryView"];
+                    [loading startAnimating];
+                    [myAlertView show];
+                    [self callToFriends];
+                }
+            });
+            
+            
+        }
+        else{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+                [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                    withMessage:[responseObject objectForKey:KMESSAGE_W]
+                                                         inView:self
+                                                      withStyle:UIAlertControllerStyleAlert];
+                
+            });
+        }
+    } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD dismiss];
+            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                withMessage:[responseObject objectForKey:KMESSAGE_W]
+                                                     inView:self
+                                                  withStyle:UIAlertControllerStyleAlert];
+        });
+    }];
 }
 
 -(void)getLanguagePrice{
     //WEB Service CODE
     [Utility_Shared_Instance showProgress];
     NSMutableDictionary *languagePriceDict=[NSMutableDictionary new];
-    [languagePriceDict setValue:self.fromDetailLabel.text forKey:KFROM_LANGUAGE_W];
-    [languagePriceDict setValue:self.toDetailLabel.text forKey:KTO_LANGUAGE_W];
+    [languagePriceDict setValue:fromLanguageKeyString forKey:KFROM_LANGUAGE_W];
+    [languagePriceDict setValue:toLanguageKeyString forKey:KTO_LANGUAGE_W];
     [Web_Service_Call serviceCallWithRequestType:languagePriceDict requestType:POST_REQUEST includeHeader:YES includeBody:YES webServicename:GET_LANGUAGE_PRICE_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         NSDictionary *responseDict=responseObject;
         
         if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
         {
-            NSMutableArray *array = [responseDict objectForKey:KDATA_W];
-            if (array.count) {
-                NSMutableDictionary *dict = [array lastObject];
+            NSMutableArray *priceArray = [responseDict objectForKey:KDATA_W];
+            if (priceArray.count) {
+                
+                NSMutableDictionary *priceDict = [priceArray lastObject];
+                
+                App_Delegate.cdrObject.fromLanguageIDString = fromLanguageKeyString;
+                App_Delegate.cdrObject.toLanguageIDString = toLanguageKeyString;
+                App_Delegate.cdrObject.fromLanguageString = self.fromDetailLabel.text;
+                App_Delegate.cdrObject.toLanguageString = self.toDetailLabel.text;
+                App_Delegate.cdrObject.toLanguageString = self.toDetailLabel.text;
+                App_Delegate.cdrObject.costString = [priceDict objectForKey:KLANGUAGE_PRICE_W];
+                
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    self.descriptionLabel.text = [NSString stringWithFormat:@"%@ $%.2f %@",NSLOCALIZEDSTRING(@"INTERPRETATION_SERVICE_CHARGE"),[[Utility_Shared_Instance checkForNullString:[dict objectForKey:KLANGUAGE_PRICE_W]] floatValue],NSLOCALIZEDSTRING(@"PER_MIN")];
+                    self.descriptionLabel.text = [NSString stringWithFormat:@"%@ $%.2f %@",NSLOCALIZEDSTRING(@"INTERPRETATION_SERVICE_CHARGE"),[[Utility_Shared_Instance checkForNullString:[priceDict objectForKey:KLANGUAGE_PRICE_W]] floatValue],NSLOCALIZEDSTRING(@"PER_MIN")];
                     [SVProgressHUD dismiss];
                 });
             }
@@ -178,6 +321,7 @@
         self.fromLanguageArray =  selectedDataArray;
         if (selectedDataArray.count) {
             LanguageObject *lObj = [selectedDataArray lastObject];
+            fromLanguageKeyString = lObj.languageID;
             self.fromDetailLabel.text = lObj.languageName;
             [self.fromImageView sd_setImageWithURL:[NSURL URLWithString:lObj.imagePathString]
                                      placeholderImage:[UIImage defaultPicImage]];
@@ -187,20 +331,38 @@
         self.toLanguageArray = selectedDataArray;
         if (selectedDataArray.count) {
             LanguageObject *lObj = [selectedDataArray lastObject];
+            toLanguageKeyString = lObj.languageID;
             self.toDetailLabel.text = lObj.languageName;
             [self.toImageView sd_setImageWithURL:[NSURL URLWithString:lObj.imagePathString]
                                   placeholderImage:[UIImage defaultPicImage]];
         }
     }
     
-    if (self.fromDetailLabel.text.length && self.toDetailLabel.text.length) {
+    if((![self.fromDetailLabel.text isEqualToString:NSLOCALIZEDSTRING(@"LANGUAGE")]) && (![self.toDetailLabel.text isEqualToString:NSLOCALIZEDSTRING(@"LANGUAGE")])){
         [self getLanguagePrice];
     }
+
+    
+//    NSMutableArray *array = [NSMutableArray new];
+//    [array addObject:@"Test123"];
+//    ooVooPushNotificationMessage * msg = [[ooVooPushNotificationMessage alloc] initMessageWithUsersArray:array message:@"Callinggggg" property:@"Im optional" timeToLeave:1000];
+//    
+//    [self.sdk.PushService sendPushMessage:msg completion:^(SdkResult *result){
+//        
+//        if(result.Result == sdk_error_OK)
+//        {
+//            NSLog(@"Send succeeded");
+//            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sent Msg" message:@"Your msg has been sent ,Thanks ! " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+//            //[alert show];
+//            
+//        }
+//    }];
+    
 }
 
 
--(void)getProfileInfo
-{
+-(void)getProfileInfo{
+    
     //WEB Service CODE
     [Web_Service_Call serviceCallWithRequestType:nil requestType:GET_REQUEST includeHeader:YES includeBody:NO webServicename:PROFILE_INFO_W_USER SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         NSDictionary *responseDict=responseObject;
@@ -214,10 +376,11 @@
                 [Utility_Shared_Instance writeStringUserPreference:KID_W value:[userDict objectForKey:KID_W]];
                 ;
                 /////////// Languages
-                NSLog(@"--langArray -->%@",App_Delegate.languagesArray);
-                NSArray *langArray = [[userDict objectForKey:KMYLANGUAGES_W] componentsSeparatedByString:@","];
+               // NSLog(@"--langArray -->%@",App_Delegate.languagesArray);
+                NSArray *langArray = [userDict objectForKey:KMYLANGUAGES_W];//[ componentsSeparatedByString:@","];
                 if (langArray.count) {
-                    NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageCode beginswith[c] %@",[langArray objectAtIndex:0]];
+                    fromLanguageKeyString = [langArray lastObject];
+                    NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageID like[c] %@",[langArray objectAtIndex:0]];
                     NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
                     if (sortedArray.count) {
                         LanguageObject *lObj = [sortedArray lastObject];
@@ -226,20 +389,21 @@
                                               placeholderImage:[UIImage defaultPicImage]];
                     }
                 }
-                else{
-                    NSString *str = [userDict objectForKey:KMYLANGUAGES_W];
-                    if (str.length) {
-                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageCode beginswith[c] %@",str];
-                        NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
-                        if (sortedArray.count) {
-                            LanguageObject *lObj = [sortedArray lastObject];
-                            self.fromDetailLabel.text = lObj.languageName;
-                            [self.fromImageView sd_setImageWithURL:[NSURL URLWithString:lObj.imagePathString]
-                                                  placeholderImage:[UIImage defaultPicImage]];
-                        }
-                    }
-                }
+//                else{
+//                    NSString *str = [userDict objectForKey:KMYLANGUAGES_W];
+//                    if (str.length) {
+//                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageID beginswith[c] %@",str];
+//                        NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
+//                        if (sortedArray.count) {
+//                            LanguageObject *lObj = [sortedArray lastObject];
+//                            self.fromDetailLabel.text = lObj.languageName;
+//                            [self.fromImageView sd_setImageWithURL:[NSURL URLWithString:lObj.imagePathString]
+//                                                  placeholderImage:[UIImage defaultPicImage]];
+//                        }
+//                    }
+//                }
                 /////////////////
+            
             });
         }
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
@@ -249,11 +413,236 @@
     }];
 }
 
+#pragma Mark ooVoo Call
+#pragma  mark - Call Methods CNMESSAGE
+int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , the call alert conyinue to show for the other friends call
+-(void)callToFriends{
+    
+    callAmount1=[arrFriends count];
+    App_Delegate.callingUsers = arrFriends;
+    __block index=0;
+    
+    //  for (int i=0; i<[arrFriends count]; i++)
+    {
+        //  NSString *userName = arrFriends[i];
+        
+        //    NSLog(@"Calling friend %@",userName);
+        // sending a message of calling BUT if something is wrong cancel the call alert
+        
+        NSLog(@"---subscribe-->%d",[ActiveUserManager activeUser].isSubscribed);
+        
+        
+        [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Calling WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess)
+         {
+
+             if (!CallSuccess) {
+                [myAlertView dismissWithClickedButtonIndex:0 animated:YES];
+            }
+            else
+            {
+                [self stopTimer];
+                timer=[NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timer_Tick:) userInfo:nil repeats:YES];
+                
+            }
+            
+        }];
+        
+    }
+}
+
+-(void)sendMsgToFriends:(NSString*)message{
+    NSLog(@"msg = %@",message);
+    
+    //no need for sending push for each user becuase message receives array of users and send the push to all of them
+    //for (NSString *userName in arrFriends) {
+    
+    //NSMutableArray *array = [NSMutableArray new];
+   //[array addObject:@"babul123"];
+
+    self.sdk = [ooVooClient sharedInstance];
+    ooVooPushNotificationMessage * msg = [[ooVooPushNotificationMessage alloc] initMessageWithUsersArray:arrFriends message:message property:@"Im optional" timeToLeave:1000];
+    
+        [self.sdk.PushService sendPushMessage:msg completion:^(SdkResult *result){
+        if(result.Result == sdk_error_OK)
+        {
+            NSLog(@"Send succeeded");
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sent Msg" message:@"Your msg has been sent ,Thanks ! " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            //[alert show];
+            
+        }
+        else{
+            NSLog(@"---------------$$$$$$$$$$$$$$$  ERROR ***********************");
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sent FAILED" message:@"Your msg has been sent ,Thanks ! " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            //[alert show];
+        }
+        
+    }];
+    //}
+}
+
+-(void)timer_Tick:(NSTimer*)timer{
+    secCounter++;
+    NSLog(@"Counter Timer %d",secCounter);
+    
+    if (secCounter>=TimeOut) {
+        [self callCancelFriends];
+        [timer invalidate];
+        secCounter=0;
+        if (myAlertView) {
+            [myAlertView dismissWithClickedButtonIndex:0 animated:YES];
+            
+        }
+    }
+}
+
+
+// if the caller canceled his call
+-(void)callCancelFriends{
+    
+    [self stopTimer];
+    
+    callAmount1=0;
+    [App_Delegate saveDisconnectedCallDetailsinServer:nil isNoOnePicksCallorEndedByCustomer:YES];
+    // for (NSString *userName in arrFriends) {
+    //     NSLog(@"Calling friend %@",userName);
+    [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Cancel WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess) {
+        
+    }];
+    //  }
+}
+
+
+-(void)stopTimer{
+    
+    if (timer.valid) {
+        [timer invalidate];
+        secCounter=0;
+    }
+}
+
+-(void)remoteUserIsOffLine:(NSNotification*)notif{
+    
+    // some one rejected the call
+    
+    NSLog(@"notification %@",notif.userInfo);
+    NSString *userName=[notif object];
+    
+    callAmount1--;
+    
+    if (!callAmount1) // if there are other friends we call to than dont remove the call spinner alert
+    {
+        [self stopCallAndDismissView];
+    }
+    
+    [self showAlertWithTitle:@"OffLine" WithMessage:[NSString stringWithFormat:@"Your friend %@ \n is Offline.",userName]  CancelButton:@"Ok" OkButton:nil];
+    
+}
+
+
+-(void)AnswerDecline:(NSNotification*)notif{
+    // some one rejected the call
+    
+    NSLog(@"notification %@",notif.userInfo);
+    CNMessage *message=[notif object];
+    
+    callAmount1--;
+    
+    if (!callAmount1) // if there are other friends we call to than dont remove the call spinner alert
+    {
+        [self stopCallAndDismissView];
+    }
+    
+    [self showAlertWithTitle:@"Rejected" WithMessage:[NSString stringWithFormat:@"Your friend %@ \n rejected the call.",message.displayName]  CancelButton:@"Ok" OkButton:nil];
+    
+}
+
+-(void)otherUserbusy:(NSNotification*)notif{
+    // some one rejected the call
+    
+    NSLog(@"notification %@",notif.userInfo);
+    CNMessage *message=[notif object];
+    
+    callAmount1--;
+    
+    if (!callAmount1) // if there are other friends we call to than dont remove the call spinner alert
+    {
+        [self stopCallAndDismissView];
+    }
+    
+    [self showAlertWithTitle:@"Busy" WithMessage:[NSString stringWithFormat:@"Your friend %@ \n is busy with another call.",message.displayName]  CancelButton:@"Ok" OkButton:nil];
+    
+}
+
+-    (void)stopCallAndDismissView{
+    [self stopTimer];
+    [myAlertView dismissWithClickedButtonIndex:0 animated:YES];
+    [[MessageManager sharedMessage]stopCallSound];
+    
+}
+
+-(void)AnswerAccept{
+    [myAlertView dismissWithClickedButtonIndex:0 animated:YES];
+    [self stopTimer];
+}
+
+
+
+-(void)showAlertWithTitle:(NSString*)title WithMessage:(NSString*)message CancelButton:(NSString*)cancel OkButton:(NSString*)Ok{
+    
+    UIAlertView *alertViewChangeName=[[UIAlertView alloc]initWithTitle:title message:message delegate:self cancelButtonTitle:cancel otherButtonTitles:Ok,nil];
+    
+    if (Ok!=nil) {
+        alertViewChangeName.alertViewStyle=UIAlertViewStylePlainTextInput;
+    }
+    
+    [alertViewChangeName show];
+    
+    
+}
+
+#pragma mark - AlertView Delegate
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+    if (alertView.tag==100) // call alert
+    {
+        if (alertView.cancelButtonIndex == buttonIndex)
+        {
+            // cancell the call Send to the users
+            [App_Delegate saveDisconnectedCallDetailsinServer:nil isNoOnePicksCallorEndedByCustomer:YES];
+            [self callCancelFriends];
+            
+            return;
+        }
+    }
+    
+    if (alertView.tag==200) // call alert
+    {
+        if (alertView.cancelButtonIndex != buttonIndex)
+        {
+            // cancell the call Send to the users
+            UITextField *text = [alertView textFieldAtIndex:0];
+            
+            [self sendMsgToFriends:text.text];
+            
+            return;
+        }
+    }
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [myAlertView dismissWithClickedButtonIndex:0 animated:YES];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
+-(void)finishStateSelection:(NSMutableArray *)selectedDataArray{
+    
+}
 /*
 #pragma mark - Navigation
 

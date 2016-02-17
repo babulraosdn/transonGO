@@ -256,4 +256,23 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info{
     return tempTV.frame.size.height;
 }
 
+#pragma mark CurrentTimeStamp
+- (NSString *)GetCurrentTimeStamp
+{
+    NSDate *past = [NSDate date];
+    NSTimeInterval oldTime = [past timeIntervalSince1970] * 1000;
+    NSString *timeStamp = [[NSString alloc] initWithFormat:@"%0.0f", oldTime];
+    return timeStamp;
+}
+
+- (NSString *) GetUTCDateTimeFromLocalTime:(NSString *)IN_strLocalTime
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSDate  *objDate    = [dateFormatter dateFromString:IN_strLocalTime];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+    NSString *strDateTime   = [dateFormatter stringFromDate:objDate];
+    return strDateTime;
+}
+
 @end
