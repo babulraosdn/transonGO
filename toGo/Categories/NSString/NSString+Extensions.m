@@ -20,6 +20,11 @@
     return [NSString stringWithFormat:@"%@ %@",NSLOCALIZEDSTRING(@"PLEASE_SAVE"),messsage];
 }
 
++(NSString *)messageWithSelectString:(NSString *)messsage{
+    
+    return [NSString stringWithFormat:@"%@ %@",NSLOCALIZEDSTRING(@"PLEASE_SELECT"),messsage];
+}
+
 +(NSString *)navigationBarTitle{
     return [NSString stringWithFormat:@"%@",NSLOCALIZEDSTRING(@"TOGO")];
 }

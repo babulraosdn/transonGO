@@ -25,6 +25,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *defaultPicBackgroundImageView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
+@property(nonatomic,weak) IBOutlet NSLayoutConstraint *myLanguageTopConstraint;
+@property(nonatomic,weak) IBOutlet NSLayoutConstraint *emailTopConstraint;
 @end
 
 @implementation DashBoardViewController
@@ -50,8 +52,10 @@
     [super viewWillAppear:YES];
     [Utility_Shared_Instance showProgress];
     [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
+    [App_Delegate getLanguages];
 }
 -(void)setLabelButtonNames{
+    self.headerLabel.text = NSLOCALIZEDSTRING(@"DASHBOARD_SLIDE");
     self.myLanguageLabel.text = NSLOCALIZEDSTRING(@"MY_LANGUAGE");
     self.emailIDLabel.text = NSLOCALIZEDSTRING(@"EMAIL_ID");
     [self.orderInterpretationButton setTitle:NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION")  forState: UIControlStateNormal];
@@ -91,9 +95,9 @@
     self.nameLabel.font = [UIFont largeSize];
     self.countryLabel.font = [UIFont normal];
     self.myLanguageLabel.font = [UIFont normal];
-    self.myLanguageDetailLabel.font = [UIFont normal];
+    self.myLanguageDetailLabel.font = [UIFont smallBig];
     self.emailIDLabel.font = [UIFont normal];
-    self.emailIDDetailLabel.font = [UIFont normal];
+    self.emailIDDetailLabel.font = [UIFont smallBig];
     self.descriptionTextView.font = [UIFont normal];
     
     self.orderInterpretationButton.titleLabel.font = [UIFont largeSize];
@@ -101,54 +105,6 @@
     self.viewPurchaseHistoryButton.titleLabel.font = [UIFont largeSize];
     self.provideFeedBackButton.titleLabel.font = [UIFont largeSize];
 }
-
--(void)getDashboardInfo
-{
-    [SVProgressHUD showWithStatus:[NSString stringWithFormat:NSLOCALIZEDSTRING(@"PLEASE_WAIT")]];
-    //WEB Service CODE
-    [Web_Service_Call getProfileInfoServiceCall:[Utility_Shared_Instance checkForNullString:[NSString stringWithFormat:@"%@%@",@"Bearer ",[Utility_Shared_Instance readStringUserPreference:USER_TOKEN]]] webServicename:PROFILE_INFO_W_USER SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
-        NSDictionary *responseDict=responseObject;
-        
-        if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [SVProgressHUD dismiss];
-                NSLog(@"dict-->%@",responseDict);
-             if ([responseDict objectForKey:KDASHBOARD_W]){
-                    NSMutableDictionary *dashBoardDict = [responseDict objectForKey:KDASHBOARD_W];
-                    NSString *idString;
-                    if ([dashBoardDict objectForKey:KID_W])
-                        idString = [dashBoardDict objectForKey:KID_W];
-                    if ([dashBoardDict objectForKey:KNAME_W])
-                        self.nameLabel.text = [dashBoardDict objectForKey:KNAME_W];
-                    if ([dashBoardDict objectForKey:KCOUNTRY_NAME_W])
-                        self.countryLabel.text = [dashBoardDict objectForKey:KCOUNTRY_NAME_W];
-                    if ([dashBoardDict objectForKey:KLANGUAGE_W])
-                        self.myLanguageDetailLabel.text = [dashBoardDict objectForKey:KLANGUAGE_W];
-                    if ([dashBoardDict objectForKey:KEMAIL_W])
-                        self.emailIDDetailLabel.text = [dashBoardDict objectForKey:KEMAIL_W];
-                    if ([dashBoardDict objectForKey:KDESCRIPTION_W])
-                        self.descriptionTextView.text = [dashBoardDict objectForKey:KDESCRIPTION_W];
-                    if ([dashBoardDict objectForKey:KPROFILE_IMAGE_W])
-                        self.defaultImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[dashBoardDict objectForKey:KPROFILE_IMAGE_W]]]];
-              }
-
-            });
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-            });
-        }
-    } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD dismiss];
-            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                                withMessage:[responseObject objectForKey:KMESSAGE_W]
-                                                     inView:self
-                                                  withStyle:UIAlertControllerStyleAlert];
-        });
-    }];
-}
-
 
 -(void)getProfileInfo
 {
@@ -163,23 +119,63 @@
                 NSLog(@"dict-->%@",responseDict);
                 NSMutableDictionary *userDict = [responseDict objectForKey:@"user"];
                 [Utility_Shared_Instance writeStringUserPreference:KID_W value:[userDict objectForKey:KID_W]];
+;
+                self.descriptionTextView.text =[userDict objectForKey:KABOUT_USER_W];
+                
                 NSDictionary *profileImgDict =  [userDict objectForKey:KPROFILE_IMAGE_W];
                 NSString *imageURLString = [profileImgDict objectForKey:KURL_W];
                 if (imageURLString.length) {
-                    self.defaultImageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURLString]]];
+                    [self.defaultImageView sd_setImageWithURL:[NSURL URLWithString:imageURLString]
+                                             placeholderImage:[UIImage defaultPicImage]];
                     self.defaultImageView.layer.cornerRadius = self.defaultImageView.frame.size.height /2;
                     self.defaultImageView.layer.masksToBounds = YES;
                 }
+                
+                self.emailIDDetailLabel.text = [userDict objectForKey:KEMAIL_W];
+                if ([userDict objectForKey:KNAME_W]) {
+                    NSDictionary *nameDict =  [userDict objectForKey:KNAME_W];
+                    self.nameLabel.text = [NSString stringWithFormat:@"%@ %@",[nameDict objectForKey:KFIRST_NAME_W],[nameDict objectForKey:KLAST_NAME_W]];
+                }
+                else{
+                    self.nameLabel.text = @"";
+                }
+                self.countryLabel.text = [userDict objectForKey:KCOUNTRY_W];
+                if (self.countryLabel.text.length) {
+                    self.countryLabel.text = [NSString stringWithFormat:@"@%@",self.countryLabel.text];
+                }
+                
+                /////////// Languages
+                NSLog(@"--langArray -->%@",App_Delegate.languagesArray);
+                NSArray *langArray = [[userDict objectForKey:KMYLANGUAGES_W] componentsSeparatedByString:@","];
+                if (langArray.count) {
+                    NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageCode beginswith[c] %@",[langArray objectAtIndex:0]];
+                    NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
+                    if (sortedArray.count) {
+                        LanguageObject *lObj = [sortedArray lastObject];
+                        self.myLanguageDetailLabel.text = lObj.languageName;
+                    }
+                }
+                else{
+                    NSString *str = [userDict objectForKey:KMYLANGUAGES_W];
+                    if (str.length) {
+                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageCode beginswith[c] %@",str];
+                        NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
+                        if (sortedArray.count) {
+                            LanguageObject *lObj = [sortedArray lastObject];
+                            self.myLanguageDetailLabel.text = lObj.languageName;
+                        }
+                    }
+                }
+                /////////////////
             });
-            
         }
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
         });
     }];
-    
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

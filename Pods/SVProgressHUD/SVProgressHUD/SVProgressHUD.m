@@ -750,7 +750,7 @@ static const CGFloat SVProgressHUDUndefinedProgress = -1;
                           delay:0
                         options:UIViewAnimationCurveEaseIn | UIViewAnimationOptionAllowUserInteraction
                      animations:^{
-                         self.hudView.transform = CGAffineTransformScale(self.hudView.transform, 0.8f, 0.8f);
+                         //self.hudView.transform = CGAffineTransformScale(self.hudView.transform, 0.8f, 0.8f);
                          if(self.isClear) // handle iOS 7 UIToolbar not answer well to hierarchy opacity change
                              self.hudView.alpha = 0.0f;
                          else

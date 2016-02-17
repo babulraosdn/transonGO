@@ -14,6 +14,7 @@
 + (UIFont *) boldFontWithSize:(CGFloat) fontSize;
 + (UIFont *) fontWithSize:(CGFloat) fontSize;
 + (UIFont *) thinFontWithSize:(CGFloat) fontSize;
++ (UIFont *) lightFontWithSize:(CGFloat) fontSize;
 
 + (UIFont *) hugeBold;
 + (UIFont *) largerBold;

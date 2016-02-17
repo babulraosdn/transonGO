@@ -33,9 +33,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+}
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     [self allocationsAndStaticText];
-    //[self registerForKeyboardNotifications];
     [self setCustomBackButtonForNavigation];
     [self setLabelButtonNames];
     [self setPlaceHolders];
@@ -45,43 +47,8 @@
     [self setFonts];
 }
 
--(void)viewDidLayoutSubviews{
-
-}
-
 -(void)allocationsAndStaticText{
     signUpDictionary = [NSMutableDictionary new];
-    //typeString = INTERPRETER;
-}
-
-- (void)registerForKeyboardNotifications
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification object:nil];
-}
-
-
--(void)keyboardWasShown:(NSNotification*)notification
-{
-    
-    
-    NSDictionary *info = [notification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(self.view.frame.origin.x,self.view.frame.origin.y, kbSize.height+100, 0);
-    self.scrollView.contentInset = contentInsets;
-    self.scrollView.scrollIndicatorInsets = contentInsets;
-    
-}
-
--(void)keyboardWillBeHidden:(NSNotification *)notification
-{
-    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-    self.scrollView.contentInset = contentInsets;
-    self.scrollView.scrollIndicatorInsets = contentInsets;
 }
 
 -(void)setLabelButtonNames{
@@ -187,15 +154,9 @@
     [Web_Service_Call serviceCall:signUpDictionary webServicename:SIGNUP_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         NSDictionary *responseDict=responseObject;
         
-        
         dispatch_async(dispatch_get_main_queue(), ^{
-            
             [SVProgressHUD dismiss];
-            
-            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                                withMessage:[responseDict objectForKey:KMESSAGE_W]
-                                                     inView:self
-                                                  withStyle:UIAlertControllerStyleAlert];
+            [AlertViewCustom showAlertViewWithMessage:[responseDict objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self];
         });
         
         if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
@@ -214,21 +175,12 @@
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
-            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                                withMessage:[responseObject objectForKey:KMESSAGE_W]
-                                                     inView:self
-                                                  withStyle:UIAlertControllerStyleAlert];
+            [AlertViewCustom showAlertViewWithMessage:[responseObject objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self];
         });
     }];
 }
 
--(void)signUpSuccess{
-    [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                        withMessage:NSLOCALIZEDSTRING(@"SIGNUP_SUCCESS")
-                                             inView:self
-                                          withStyle:UIAlertControllerStyleAlert];
-    
-}
+
 
 -(IBAction)interpreterCustomerButtonClicked:(UIButton *)sender{
     if (sender.tag==1) {
@@ -259,5 +211,10 @@
     return YES;
 }
 
+
+#pragma mark - AlertView Custom delegate
+-(void)finishAlertViewCustomAction:(UIButton *)sender{
+    [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
+}
 
 @end

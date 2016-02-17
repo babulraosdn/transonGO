@@ -1,4 +1,4 @@
-            //
+//
 //  LogInVC.m
 //  ooVooSdkSampleShow
 //
@@ -16,18 +16,11 @@
 #import "UserDefaults.h"
 #import "AppDelegate.h"
 #import "SlideMenuViewController.h"
-
+#import "MenuConferenceVC.h"
 #define User_isInVideoView @"User_isInVideoView"
-
-#define Segue_Authorization @"ToAuthorizationView"
-#define Segue_MenuConferenceVC @"Segue_MenuConferenceVC"
-
-#define Segue_VideoConference @"Segue_VideoConferenceVC"
-
 
 #define UserDefault_UserId @"UserID"
 #define UserDefault_DisplayName @"displayName"
-
 
 #import <ooVooSDK/ooVooPushService.h>
 
@@ -42,6 +35,7 @@
     UITextField *activeField;
     NSString *userIDString;
     NSString *passwordString;
+    AlertViewCustom *alertViewCustom;
 }
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property(nonatomic,readwrite)BOOL isChecked;
@@ -132,7 +126,7 @@
 
 -(void)setColors{
     self.orlabel.textColor = [UIColor buttonBackgroundColor];
-    self.connectWithLabel.textColor = [UIColor lightGrayConnectWithColor];
+    self.connectWithLabel.textColor = [UIColor textColorBlackColor];//lightGrayConnectWithColor
     self.loginButton.backgroundColor  = [UIColor buttonBackgroundColor];
     self.signUplabel.textColor = [UIColor textColorBlackColor];
 }
@@ -174,19 +168,26 @@
 
 - (void)autorize {
     
-    NSString* token =[UserDefaults getObjectforKey:@"APP_TOKEN_SETTINGS_KEY"];
-    NSLog(@"Token %@",token);
+    [Utility_Shared_Instance showProgress];
+    NSString* token = TOKEN;
+    NSLog(@"Token -->Login--->%@",token);
     
     [self.sdk authorizeClient:token
                    completion:^(SdkResult *result) {
                        
                        sdk_error err = result.Result;
                        if (err == sdk_error_OK) {
+                           dispatch_async(dispatch_get_main_queue(), ^{
+                               [SVProgressHUD dismiss];
+                           });
                            NSLog(@"good autorization");
                            sleep(0.5);
                            //[_delegate AuthorizationDelegate_DidAuthorized];
                        }
                        else {
+                           dispatch_async(dispatch_get_main_queue(), ^{
+                               [SVProgressHUD dismiss];
+                           });
                            NSLog(@"fail  autorization");
 //                           self.btn_Authorizate.hidden = false;
 //                           self.lbl_Status.font=[UIFont systemFontOfSize:13];
@@ -196,27 +197,28 @@
                                double delayInSeconds = 0.75;
                                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
                                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                                   
-                                   [[[UIAlertView alloc] initWithTitle:@"ooVoo Sdk"
-                                                               message:[NSString stringWithFormat:NSLocalizedString(@"Error: %@", nil), @"App Token probably invalid or might be empty.\n\nGet your App Token at http://developer.oovoo.com.\nGo to Settings->ooVooSample screen and set the values, or set @APP_TOKEN constants in code."]
-                                                              delegate:nil
-                                                     cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                                     otherButtonTitles:nil] show];
+                                   [SVProgressHUD dismiss];
+//                                   [[[UIAlertView alloc] initWithTitle:@"ooVoo Sdk"
+//                                                               message:[NSString stringWithFormat:NSLocalizedString(@"Error: %@", nil), @"App Token probably invalid or might be empty.\n\nGet your App Token at http://developer.oovoo.com.\nGo to Settings->ooVooSample screen and set the values, or set @APP_TOKEN constants in code."]
+//                                                              delegate:nil
+//                                                     cancelButtonTitle:NSLocalizedString(@"OK", nil)
+//                                                     otherButtonTitles:nil] show];
                                });
                               // [_spinner stopAnimating];
                                
                            }
                            else if (err != sdk_error_InvalidToken)
                            {
+                            
                                double delayInSeconds = 0.75;
                                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
                                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                                   
-                                   [[[UIAlertView alloc] initWithTitle:@"ooVoo Sdk"
-                                                               message:[NSString stringWithFormat:NSLocalizedString(@"Error: %@", nil), [result description]]
-                                                              delegate:nil
-                                                     cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                                     otherButtonTitles:nil] show];
+                                   [SVProgressHUD dismiss];
+//                                   [[[UIAlertView alloc] initWithTitle:@"ooVoo Sdk"
+//                                                               message:[NSString stringWithFormat:NSLocalizedString(@"Error: %@", nil), [result description]]
+//                                                              delegate:nil
+//                                                     cancelButtonTitle:NSLocalizedString(@"OK", nil)
+//                                                     otherButtonTitles:nil] show];
                                });
                                //[_spinner stopAnimating];
                            }
@@ -236,17 +238,6 @@
 //        }
 //    }
     return YES;
-}
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-
-    if ([segue.identifier isEqualToString:Segue_Authorization]) {
-        AuthorizationLoaderVc *authoVC = segue.destinationViewController;
-        authoVC.delegate = self;
-    }
 }
 
 #pragma mark - Authorization Delegate
@@ -269,10 +260,13 @@
     //[self createSidePanel];
     //return;
     
-    AlertViewCustom *alertView = [[AlertViewCustom alloc]init];
-    UIView *viewIs = [alertView showAlertViewWithMessage:@"Please confirm the Registration by clicking the verification link on email" headingLabel:@"Confirm Registration" confirmButtonName:@"Confirm" cancelButtonName:@"Cancel" viewIs:self.view];
+//    AlertViewCustom *alertView = [[AlertViewCustom alloc]init];
+//    UIView *viewIs = [alertView showAlertViewWithMessage:@"Please confirm the Registration by clicking the verification link on email" headingLabel:@"Confirm Registration" confirmButtonName:@"Confirm" cancelButtonName:@"Cancel" viewIs:self.view];
     //[self.view addSubview:viewIs]; //Alert View Custom
     //[App_Delegate takeTour];//Take a Tour
+    
+    [UserDefaults setObject:_txt_userId.text ForKey:UserDefault_UserId];
+    [UserDefaults setObject:_txtDisplayName.text ForKey:UserDefault_DisplayName];
     
     if (self.txt_userId.text.length<1)
         [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
@@ -291,7 +285,7 @@
     }
 }
 
--(void)loginWebServiceCall:(NSString *)loginWith{
+-(void)loginWebServiceCall:(NSString *)loginWith {
     
     [loginDictionary setObject:userIDString forKey:KEMAIL_W];
     [loginDictionary setObject:passwordString forKey:KPASSWORD_W];
@@ -299,14 +293,11 @@
     [loginDictionary setObject:userIDString forKey:KUSERNAME_W];
     [loginDictionary setObject:[Utility_Shared_Instance checkForNullString:[Utility_Shared_Instance readStringUserPreference:USER_TYPE]] forKey:KTYPE_W];
     
-    //[loginDictionary setObject:@"obaidr@yopmail.com" forKey:KEMAIL_W];
-    //[loginDictionary setObject:@"Obaid@123" forKey:KPASSWORD_W];
-    //[loginDictionary setObject:@"togo-ibq@ice-breakrr.com" forKey:KEMAIL_W];
-    
     [Web_Service_Call serviceCall:loginDictionary webServicename:LOGIN_W SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         
         NSDictionary *responseDict=responseObject;
 
+        /*
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
             [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
@@ -314,10 +305,17 @@
                                                      inView:self
                                                   withStyle:UIAlertControllerStyleAlert];
         });
+        */
         
         if ([responseDict objectForKey:KCODE_W]){
+            
+            [App_Delegate.facebookLoginManager logOut];
+            [FBSDKAccessToken setCurrentAccessToken:nil];
+            [FBSDKProfile setCurrentProfile:nil];
+            
             if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
             {
+                //[App_Delegate getLanguages];
                 if ([responseDict objectForKey:KTOKEN_W])
                 {
                     [Utility_Shared_Instance writeStringUserPreference:USER_TOKEN value:[responseDict objectForKey:KTOKEN_W]];
@@ -333,51 +331,55 @@
                     [Utility_Shared_Instance writeStringUserPreference:KCOMPLETION_W value:[Utility_Shared_Instance checkForNullString:[responseDict objectForKey:KCOMPLETION_W]]];
                     //[Utility_Shared_Instance writeStringUserPreference:KCOMPLETION_W value:@"0"];//Test
                 }
-                
-                //[self ooVooLogin];
-                [self createSidePanel];
+                if ([[Utility_Shared_Instance readStringUserPreference:KCOMPLETION_W] isEqualToString:PROFILE_INCOMPLETE]){
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [SVProgressHUD dismiss];
+                        
+//                        AlertViewCustom *alertView = [AlertViewCustom new];
+//                        
+//                        alertView.delegate = self;
+////                        UIView *viewIs
+//                        alertView = (AlertViewCustom*)
+                        [AlertViewCustom showAlertViewWithMessage:NSLOCALIZEDSTRING(@"PLEASE_COMPLETE_YOUR_PROFILE") headingLabel:NSLOCALIZEDSTRING(@"COMPLETE_PROFILE_INFO") confirmButtonName:NSLOCALIZEDSTRING(@"CONFIRM") cancelButtonName:NSLOCALIZEDSTRING(@"CANCEL") viewIs:self];
+                        
+//                        [self.view addSubview:alertView];
+                        
+                        
+//                        [self ooVooLogin];
+//                        [self createSidePanel];
+                    });
+                    
+                }
+                else{
+                    [Utility_Shared_Instance writeStringUserPreference:KUSERNAME_W value:userIDString];
+                    [self ooVooLogin];
+                    [self createSidePanel];
+                }
+            }
+            else{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [SVProgressHUD dismiss];
+                    [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                        withMessage:[responseObject objectForKey:KMESSAGE_W]
+                                                             inView:self
+                                                          withStyle:UIAlertControllerStyleAlert];
+                });
             }
         }
+        
         [self reportAuthStatus];//This is to clear google cookies
         
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD dismiss];
-            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                                withMessage:[responseObject objectForKey:KMESSAGE_W]
-                                                     inView:self
-                                                  withStyle:UIAlertControllerStyleAlert];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+                [AlertViewCustom showAlertViewWithMessage:NSLOCALIZEDSTRING(@"PLEASE_COMPLETE_YOUR_PROFILE") headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self];
+            });
         });
     }];
 }
 
 
--(void)ooVooLogin{
-    [UserDefaults setObject:_txt_userId.text ForKey:UserDefault_UserId];
-    [UserDefaults setObject:_txtDisplayName.text ForKey:UserDefault_DisplayName];
-    //[sender setEnabled:false];
-    //[spinner startAnimating];
-    
-    [self.sdk.Account login:self.txt_userId.text
-                 completion:^(SdkResult *result) {
-                     NSLog(@"result code=%d result description %@", result.Result, result.description);
-                     //[spinner stopAnimating];
-                     if (result.Result != sdk_error_OK){
-                         [SVProgressHUD dismiss];
-                         [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                                             withMessage:@"USERID SHOULD BE MINIUMUM 6 CHARACTERS"
-                                                                  inView:self
-                                                               withStyle:UIAlertControllerStyleAlert];
-                     }
-                     else
-                     {
-                         [SVProgressHUD dismiss];
-                         [self onLogin:result.Result];
-                         if(![self.sdk.Messaging isConnected])
-                             [self.sdk.Messaging connect];
-                     }
-                 }];
-}
 
 
 -(IBAction)loginWithSoicalAccounts:(id)sender{
@@ -439,6 +441,29 @@
 
 - (void)btnFacebookSigninClicked{
     
+    App_Delegate.facebookLoginManager = [[FBSDKLoginManager alloc] init];
+    App_Delegate.facebookLoginManager.loginBehavior = FBSDKLoginBehaviorWeb;
+    //App_Delegate.facebookLoginManager.loginBehavior = FBSDKLoginBehaviorNative;
+    
+    if ([FBSDKAccessToken currentAccessToken]) {
+        [self fetchUserFacebookCredential];
+    }else{
+        
+        [App_Delegate.facebookLoginManager logInWithReadPermissions:@[kPublicProfile,kEmail,kBirthday,kLocation] fromViewController:nil handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+            
+            if (error) {
+            } else if (result.isCancelled) {
+            } else {
+                
+                if ([FBSDKAccessToken currentAccessToken]) {
+                    
+                    [self fetchUserFacebookCredential];
+                }
+            }
+        }];
+    }
+    
+    /*
     FBSDKLoginManager *facebookLoginManager = [[FBSDKLoginManager alloc] init];
     facebookLoginManager.loginBehavior = FBSDKLoginBehaviorNative;
     
@@ -459,6 +484,7 @@
             }
         }];
     }
+    */
 }
 
 
@@ -681,7 +707,9 @@
     else{
         dispatch_async(dispatch_get_main_queue(), ^{
             UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_USER_VIEW_CONTROLLER]];
-            
+            if ([[Utility_Shared_Instance readStringUserPreference:KCOMPLETION_W] isEqualToString:PROFILE_INCOMPLETE]) {
+                contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:PROFILE_VIEW_CONTROLLER]];//DashBoardViewController
+            }
             self.revealController = [PKRevealController revealControllerWithFrontViewController:contentNavigationController leftViewController:[Utility_Shared_Instance getControllerForIdentifier:SLIDE_MENU_VIEW_CONTROLLER]];
             appDelegate.window.rootViewController = self.revealController;
             
@@ -690,45 +718,64 @@
 }
 
 
--(void)popUpButtonClicked:(UIButton *)sender{
-   
-    if (sender.tag == 1) {
-        //Confirm Button
-        NSLog(@"Confirm Selected");
-    }
-    else if (sender.tag == 2) {
-        //Cancel Button
-        NSLog(@"Cancel Selected");
-        [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
-    }
+#pragma mark - private methods
+
+-(void)ooVooLogin{
+    
+    //[self.sdk.Account login:[Utility_Shared_Instance readStringUserPreference:KUSERNAME_W]
+    [self.sdk.Account login:@"test123"
+    //[self.sdk.Account login:@"babul123"
+                 completion:^(SdkResult *result) {
+                     NSLog(@"result code=%d result description %@", result.Result, result.description);
+                     //[spinner stopAnimating];
+                     if (result.Result != sdk_error_OK){
+                         [SVProgressHUD dismiss];
+                         ///*
+                         [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                             withMessage:@"USERID SHOULD BE MINIUMUM 6 CHARACTERS"
+                                                                  inView:self
+                                                               withStyle:UIAlertControllerStyleAlert];
+                         //*/
+                     }
+                     else
+                     {
+                         [SVProgressHUD dismiss];
+                         [self onLogin:result.Result];
+                         if(![self.sdk.Messaging isConnected])
+                             [self.sdk.Messaging connect];
+                     }
+                 }];
+    
 }
 
 
-
-#pragma mark - private methods
-
 - (void)onLogin:(BOOL)error {
     if (!error) {
+        
         [ActiveUserManager activeUser].userId = self.txt_userId.text;
         [ActiveUserManager activeUser].displayName = self.txtDisplayName.text;
-//        NSString * uuid = [[NSUUID UUID] UUIDString] ;
-//        NSString * token = [ActiveUserManager activeUser].token;
-//        if(token && token.length > 0){
-//        [self.sdk.PushService subscribe:token deviceUid:uuid completion:^(SdkResult *result){
-//        [ActiveUserManager activeUser].isSubscribed = true;
-//            [self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
-//        }];
-//        }
-//        
-//        else
-//        {
-        [self createSidePanel];
-        //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
-//        }
-       
+        
+        [UserDefaults setObject:[ActiveUserManager activeUser].userId ForKey:[ActiveUserManager activeUser].userId];
+        [UserDefaults setObject:[ActiveUserManager activeUser].displayName ForKey:[ActiveUserManager activeUser].displayName];
+        
+        NSString * uuid = [[NSUUID UUID] UUIDString] ;
+        NSString * token = [ActiveUserManager activeUser].token;
+        if(token && token.length > 0){
+            [self.sdk.PushService subscribe:token deviceUid:uuid completion:^(SdkResult *result){
+                [ActiveUserManager activeUser].isSubscribed = true;
+                //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
+            }];
+        }
+        
+        else
+        {
+            //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
+        }
+        
     }else{
         [self.loginButton setEnabled:true];
     }
+    
 }
 
 - (NSString *)randomUser {
@@ -781,9 +828,6 @@
     
 }
 
-
-
-
 #pragma mark - ooVoo Account delegate
 
 - (void)didAccountLogIn:(id<ooVooAccount>)account {
@@ -792,6 +836,16 @@
 
 - (void)didAccountLogOut:(id<ooVooAccount>)account {
     
+}
+
+#pragma mark - AlertView Custom delegate
+-(void)finishAlertViewCustomAction:(UIButton *)sender{
+    if (sender.tag ==1) {
+        [self createSidePanel];
+    }else{
+        [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
+    }
+   
 }
 
 @end

@@ -69,6 +69,22 @@
     self.languagesButton.titleLabel.font = [UIFont largeSize];
 }
 
+- (IBAction)switchButtonPressed:(UIButton *)sender {
+    
+    if ([sender.currentImage isEqual:[UIImage switchONImage] ]) {
+        [UIView animateWithDuration:0.5 animations:^{
+            [sender setImage:[UIImage switchOffImage] forState:UIControlStateNormal];
+        }];
+        
+    }
+    else{
+        [UIView animateWithDuration:0.5 animations:^{
+            [sender setImage:[UIImage switchONImage] forState:UIControlStateNormal];
+        }];
+        
+    }
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

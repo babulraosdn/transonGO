@@ -14,14 +14,17 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <TwitterKit/TwitterKit.h>
-//pod 'PKRevealController'
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 {
     UINavigationController *navigationController ;
     UIStoryboard *mainStoryboard ;
     VideoConferenceVC *viewVideoControler ;
 }
+@property (strong, nonatomic) FBSDKLoginManager *facebookLoginManager;
 @property (strong, nonatomic) UINavigationController *navigationController ;
+@property (strong, nonatomic) UINavigationController *navController ;
+@property(nonatomic,strong) NSMutableArray *languagesArray;
+
 @property (strong, nonatomic) UIWindow *window;
 @property (retain, nonatomic) ooVooClient *sdk;
 @property(nonatomic,strong)NSMutableArray *callingUsers;
@@ -29,6 +32,6 @@
 -(void)subscribePushNotifications : (UIApplication *)application;
 
 -(void)takeTour;
-
+-(void)getLanguages;
 @end
 

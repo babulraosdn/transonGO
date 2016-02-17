@@ -36,7 +36,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [self viewWillAppear:animated];
+    //[self viewWillAppear:animated];
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setShowsVerticalScrollIndicator:NO];
 }
@@ -107,13 +107,17 @@
                 //[self.navigationController popViewControllerAnimated:YES];//Not Working
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [SVProgressHUD dismiss];
+                    [AlertViewCustom showAlertViewWithMessage:[responseDict objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(@"FORGET_PASSWORD") confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self];
+                });
+                
+            }
+            else{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [SVProgressHUD dismiss];
                     [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                                        withMessage:[responseDict objectForKey:KMESSAGE_W]
+                                                        withMessage:[responseObject objectForKey:KMESSAGE_W]
                                                              inView:self
                                                           withStyle:UIAlertControllerStyleAlert];
-                    
-                });
-                dispatch_async(dispatch_get_main_queue(), ^{
                     
                 });
             }
@@ -124,6 +128,7 @@
                                                     withMessage:[responseObject objectForKey:KMESSAGE_W]
                                                          inView:self
                                                       withStyle:UIAlertControllerStyleAlert];
+               
             });
         }];
     }
@@ -143,6 +148,9 @@
     return YES;
 }
 
-
+#pragma mark - AlertView Custom delegate
+-(void)finishAlertViewCustomAction:(UIButton *)sender{
+    [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
+}
 
 @end

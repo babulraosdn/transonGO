@@ -13,5 +13,6 @@
 
 +(NSString *)messageWithString:(NSString *)messsage;
 +(NSString *)messageWithSAVEString:(NSString *)messsage;
++(NSString *)messageWithSelectString:(NSString *)messsage;
 +(NSString *)navigationBarTitle;
 @end

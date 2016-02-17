@@ -9,7 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "Headers.h"
 
+@protocol ALERTVIEWCUSTOMDELEGATE <NSObject>
+-(void)finishAlertViewCustomAction:(UIButton *)sender;
+@end
+
 @interface AlertViewCustom : UIView
--(UIView *)showAlertViewWithMessage:(NSString *)messageString headingLabel:(NSString *)headerString confirmButtonName:(NSString *)confrirmSting cancelButtonName:(NSString *)cancelString viewIs:(UIView *)currentView;
+@property(nonatomic,weak) id <ALERTVIEWCUSTOMDELEGATE> delegate;
++(void)showAlertViewWithMessage:(NSString *)messageString headingLabel:(NSString *)headerString confirmButtonName:(NSString *)confrirmSting cancelButtonName:(NSString *)cancelString viewIs:(UIViewController *)currentView;
 -(void)popUpButtonClicked:(UIButton *)sender;
 @end

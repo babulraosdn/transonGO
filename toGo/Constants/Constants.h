@@ -14,6 +14,36 @@
 #define App_Delegate         ((AppDelegate*)[[UIApplication sharedApplication]delegate])
 #endif
 
+
+//1
+///*
+#define APP_TOKEN_SETTINGS_KEY    @"12349983355392"
+#define LOG_LEVEL_SETTINGS_KEY    @"LOG_LEVEL_SETTINGS_KEY"
+#define APP_VIDEO_RENDER            @"APP_VIDEO_RENDER"
+#define APP_MESSAGING            @"APP_MESSAGING"
+
+
+#ifndef TOKEN
+
+#define TOKEN @"MDAxMDAxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACs5wargiqXmlwM3bTZvfNOocpZHMgFFy9TaEfqCu4GrTO7y6TKXQZXtPLNmO1fWi4w1oUzY5wcXlSuiLl5YHFJx2%2FZP6baqkSrDP5ywPkbVGsHlvRUHkLmE%2B6%2BeY4LVVAxLwTliCn%2FDCPSve1wV6hT"
+#endif
+//*/
+
+/* //2
+ #define APP_TOKEN_SETTINGS_KEY    @"12349983355077"
+ #define LOG_LEVEL_SETTINGS_KEY    @"LOG_LEVEL_SETTINGS_KEY"
+ #define APP_VIDEO_RENDER            @"APP_VIDEO_RENDER"
+ #define APP_MESSAGING            @"APP_MESSAGING"
+ 
+ 
+ #ifndef TOKEN
+ 
+ #define TOKEN @"MDAxMDAxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZUYVW%2BB1MwyBDpt22C0WvOeMPW7fH6mMOv8d%2FAPeFZ2QeCOguU288bRzsChrixFyZ%2BKzm9nrLmfOkZwyPrAO%2BDP8wgDiVtL%2F0w9mZQ78Az5Hk6imDbhYGNGRFMqo0H2virlVE4Q%2Bpf5S%2Fm50MO%2BMh"
+ #endif
+ */
+
+
+
 #define APPLICATION_NAME             NSLOCALIZEDSTRING([[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"])
 
 #define IS_IPHONE                   (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
@@ -43,6 +73,15 @@ Stuff; \
 _Pragma("clang diagnostic pop") \
 } while (0)
 
+#define CARD_NUMBER_LIMIT 16
+#define CVV_LIMIT 4
+#define PHONE_NUMBER_LIMIT 12
+#define POSTAL_CODE_LIMIT 6
+
+#define CHARACTER_LIMIT 10000000
+#define NUMBERS_ONLY @"0123456789."
+#define ACCEPTABLE_CHARACTERS_NAME @" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+
 //********************  Social   ****************************************
 #pragma mark Social Calls
 #define LinkedIn_RedirectURL          @"http://www.testapp.com/testapp"
@@ -61,7 +100,8 @@ _Pragma("clang diagnostic pop") \
 
 //********************  ooVoo App Details   ****************************************
 #pragma mark ooVoo App Details
-#define ooVooAppID                  @"12349983355077"
+//#define ooVooAppID                  @"12349983355077"//OLD //2
+#define ooVooAppID                  @"12349983355392"//New //1
 
 
 //********************  Image Names   ****************************************
@@ -75,10 +115,10 @@ _Pragma("clang diagnostic pop") \
 #define PASSWORD_PADDING_IMAGE      @"password_icon_iPhone"
 #define DEFAULT_PIC_IMAGE           @"default_pic_iPhone"
 #define EDIT_PEN_IMAGE              @"Edit_iPhone"
-#define LIGHT_BUTTON_IMAGE           @"light-button"
-#define SWITCH_OFF_IMAGE           @"status-bar-off"
-#define SWITCH_ON_IMAGE           @"status-bar-on"
-#define CLOSE_LANGUAGES_IMAGE           @"close_iPhone"
+#define LIGHT_BUTTON_IMAGE          @"light-button"
+#define SWITCH_OFF_IMAGE            @"toggle_off_iPhone"
+#define SWITCH_ON_IMAGE             @"toggle_on_iPhone"
+#define CLOSE_LANGUAGES_IMAGE       @"close_iPhone"
 #define CheckOrTick_IMAGE           @"Tick_iPhone"
 
 
@@ -117,6 +157,9 @@ _Pragma("clang diagnostic pop") \
 #define PROFILE_COMPLETE            @"1"
 #define PROFILE_INCOMPLETE          @"0"
 
+#define INTERPRETER_AVAILABLE       @"1"
+#define INTERPRETER_UN_AVAILABLE       @"0"
+
 #define NORMAL_LOGIN                @"0"
 #define FACEBOOK_LOGIN              @"1"
 #define TWITTER_LOGIN               @"1"
@@ -128,7 +171,7 @@ _Pragma("clang diagnostic pop") \
 //********************  WebService Names  ****************************************
 #pragma mark WebService Calls
 #define BASE_URL                    @"http://54.153.22.179:3000/"      //LIVE URL
-//#define BASE_URL                      @"http://172.10.55.110:3000/"  //Local URL
+//#define BASE_URL                  @"http://172.10.55.110:3000/"      //Local URL
 
 #define LOGIN_W                       @"authenticate"
 #define SIGNUP_W                      @"signup"
@@ -137,12 +180,16 @@ _Pragma("clang diagnostic pop") \
 #define PROFILE_INFO_W                @"api/getAgentInfo"
 #define PROFILE_INFO_W_USER           @"api/getUserProfile"
 #define PROFILE_IMAGE_UPLOAD_W        @"api/upload"
+#define GET_COUNTRY_LIST_W            @"getCountryList"
+#define GET_STATE_LIST_W              @"getState?country="
 
 //getUserProfile
 //
-#define UPDATE_INTERPRETER_STATUS_W   @"api/updateAgentAvailability"
-#define UPDATE_INTERPRETER_PROFILE_INFO_W    @"api/updateAgentProfile"
-#define UPDATE_USER_PROFILE_INFO_W                @"api/updateUserProfile"
+#define UPDATE_INTERPRETER_STATUS_W         @"api/updateAgentAvailability"
+#define UPDATE_INTERPRETER_PROFILE_INFO_W   @"api/updateAgentProfile"
+#define UPDATE_USER_PROFILE_INFO_W          @"api/updateUserProfile"
+#define GET_LANGUAGES_W                     @"getLanguageList"
+#define GET_LANGUAGE_PRICE_W                     @"getLanguagePrice"
 
 //updateUserProfile
 //
@@ -186,19 +233,35 @@ _Pragma("clang diagnostic pop") \
 #define KCALL_YTD_EARNINGS_W           @"callYtdEarnings"
 #define KSTATUS_W                      @"status"
 #define KID_W                          @"id"
-#define KUID_W                          @"uid"
+#define KUID_W                         @"uid"
 #define KINTERPRETER_AVAILABILITY_W    @"interpreter_availability"
-#define KMYLANGUAGE_W                   @"mylanguage"
-#define KCOUNTRY_W                      @"country"
+#define KMYLANGUAGE_W                  @"mylanguage"
+#define KCOUNTRY_W                     @"country"
 #define KSTATE_W                       @"state"
-#define KCITY_W                         @"city"
-#define KPOSTALCODE_W                    @"zipcode"
-#define KEIN_TAXID_W                      @"ein_taxId"
-#define KURL_W                            @"url"
-#define KSERVICE_TYPE_W                            @"service_type"
-#define KFILE_W                            @"file"
+#define KCITY_W                        @"city"
+#define KPOSTALCODE_W                  @"zipcode"
+#define KEIN_TAXID_W                   @"ein_taxId"
+#define KURL_W                         @"url"
+#define KSERVICE_TYPE_W                @"service_type"
+#define KFILE_W                        @"file"
+#define KINTERPRETER_AVAILABILITY_W    @"interpreter_availability"
+
+#define KCOUNTRY_CODE_W                 @"countryCode"
+#define KCOUNTRY_NAME_W                 @"countryName"
+#define KCREATED_AT_W                   @"createdAt"
+#define KCOUNTRY_ID_W                   @"countryId"
+#define KSTATE_NAME_W                   @"stateName"
+
+#define KLANGUAGEID_W                   @"languageId"
+#define KICON_W                         @"icon"
+#define KDATA_W                         @"data"
+
+#define KTO_LANGUAGE_W                  @"toLanguage"
+#define KFROM_LANGUAGE_W                @"fromLanguage"
+#define KLANGUAGE_PRICE_W               @"languagePrice"
 
 #define K_W                            @""
+
 
 //********************  WebService Response Parameters   ****************************************
 #define KSUCCESS                       ((int)200)
@@ -218,7 +281,7 @@ _Pragma("clang diagnostic pop") \
 #define SLIDE_MENU_VIEW_CONTROLLER              @"SlideMenuViewController"
 #define FEEDBACK_LIST_VIEW_CONTROLLER           @"FeedBackListViewController"
 #define HOME_VIEW_CONTROLLER                    @"HomeViewController"
-
+#define ORDER_INTERPRETATION_VIEW_CONTROLLER                    @"OrderInterpretationViewController"
 
 //********************  Font Names   ****************************************
 #define KFontFamily_ROBOTO_REGULAR                        @"Roboto-Regular"
@@ -226,4 +289,7 @@ _Pragma("clang diagnostic pop") \
 #define KFontFamily_ROBOTO_BOLD                           @"Roboto-Bold"
 #define KFontFamily_ROBOTO_MEDIUM                         @"Roboto-Medium"
 #define KFontFamily_ROBOTO_THIN                           @"Roboto-Thin"
+
+//********************  Segue Identifiers   ****************************************
+#define Segue_MenuConferenceVC @"Segue_MenuConferenceVC"
 #endif

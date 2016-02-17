@@ -43,7 +43,7 @@
 
 - (void)autorize {
     
-    NSString* token =[UserDefaults getObjectforKey:@"APP_TOKEN_SETTINGS_KEY"];
+    NSString* token = @"12349983355392";//[UserDefaults getObjectforKey:@"APP_TOKEN_SETTINGS_KEY"];//Token is the ooVoo APPID
     NSLog(@"Token %@",token);
 
     [self.sdk authorizeClient:token

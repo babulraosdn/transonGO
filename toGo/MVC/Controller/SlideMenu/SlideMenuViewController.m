@@ -53,9 +53,25 @@
     
     if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
         self.namesArray = [[NSMutableArray alloc]initWithObjects:
-                           NSLOCALIZEDSTRING(@"DASHBOARD"),
+                           NSLOCALIZEDSTRING(@"DASHBOARD_SLIDE"),
                            NSLOCALIZEDSTRING(@"PROFILE"),
-                           NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION"),
+                           NSLOCALIZEDSTRING(@"CALL_HISTORY"),
+                           NSLOCALIZEDSTRING(@"REVENUE"),
+                           NSLOCALIZEDSTRING(@"FEEDBACK"),
+                           NSLOCALIZEDSTRING(@"SETTINGS"), nil];
+        self.imagesNamesArray = [[NSMutableArray alloc]initWithObjects:
+                                 DASHBOARD_SLIDE_IMAGE,
+                                 PROFILE_IMAGE,
+                                 CALL_HISTORY_IMAGE,
+                                 FAV_INTERPRETER_IMAGE,
+                                 PURCHASE_IMAGE,
+                                 SETTINGS_IMAGE, nil];
+    }
+    else {
+        self.namesArray = [[NSMutableArray alloc]initWithObjects:
+                           NSLOCALIZEDSTRING(@"DASHBOARD_SLIDE"),
+                           NSLOCALIZEDSTRING(@"PROFILE"),
+                           NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION_SLIDE"),
                            NSLOCALIZEDSTRING(@"CALL_HISTORY"),
                            NSLOCALIZEDSTRING(@"PURCHASES"),
                            NSLOCALIZEDSTRING(@"FAVORITE_INTERPRETER"),
@@ -67,22 +83,6 @@
                                  CALL_HISTORY_IMAGE,
                                  PURCHASE_IMAGE,
                                  FAV_INTERPRETER_IMAGE,
-                                 SETTINGS_IMAGE, nil];
-    }
-    else {
-        self.namesArray = [[NSMutableArray alloc]initWithObjects:
-                           NSLOCALIZEDSTRING(@"DASHBOARD"),
-                           NSLOCALIZEDSTRING(@"PROFILE"),
-                           NSLOCALIZEDSTRING(@"CALL_HISTORY"),
-                           NSLOCALIZEDSTRING(@"REVENUE"),
-                           NSLOCALIZEDSTRING(@"FEEDBACK"),
-                           NSLOCALIZEDSTRING(@"SETTINGS"), nil];
-        self.imagesNamesArray = [[NSMutableArray alloc]initWithObjects:
-                                 DASHBOARD_SLIDE_IMAGE,
-                                 PROFILE_IMAGE,
-                                 CALL_HISTORY_IMAGE,
-                                 PROFILE_IMAGE,
-                                 PURCHASE_IMAGE,
                                  SETTINGS_IMAGE, nil];
     }
     
@@ -113,13 +113,15 @@
     cell.displayImageView.image = [UIImage imageNamed:[self.imagesNamesArray objectAtIndex:indexPath.row]];
     cell.displayLabel.text = [self.namesArray objectAtIndex:indexPath.row];
     cell.displayLabel.font = [UIFont smallBig];
+    UIImage *img = [UIImage imageNamed:[self.imagesNamesArray objectAtIndex:indexPath.row]];
+    cell.displayImageView.frame = CGRectMake(111, 33, img.size.width, img.size.height);
     cell.contentView.backgroundColor = [self.colorCodesArray objectAtIndex:indexPath.row];
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
-    //[FBSDKAccessToken setCurrentAccessToken:nil];
+//[FBSDKAccessToken setCurrentAccessToken:nil];
 //    
 //    [[[FBSDKGraphRequest alloc] initWithGraphPath:@"me/permissions" parameters:nil
 //                                       HTTPMethod:@"DELETE"] startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
@@ -133,7 +135,7 @@
     
     NSString *selectedRowString = [self.namesArray objectAtIndex:indexPath.row];
     UINavigationController *contentNaviationController;
-    if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"DASHBOARD")]){
+    if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"DASHBOARD_SLIDE")]){
         
         if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
             contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_INTERPRETER_VIEW_CONTROLLER]];
@@ -147,7 +149,9 @@
         contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:PROFILE_VIEW_CONTROLLER]];
         self.revealController.frontViewController = contentNaviationController ;
     }
-    else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION")]){
+    else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"ORDER_INTERPRETATION_SLIDE")]){
+        contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:ORDER_INTERPRETATION_VIEW_CONTROLLER]];
+        self.revealController.frontViewController = contentNaviationController ;
         
     }
     else if([selectedRowString isEqualToString:NSLOCALIZEDSTRING(@"CALL_HISTORY")]){
@@ -163,18 +167,6 @@
         
         contentNaviationController = [[UINavigationController alloc]initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:SETTINGS_VIEW_CONTROLLER]];
         self.revealController.frontViewController = contentNaviationController ;
-        return;
-        
-        FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
-        if ( [FBSDKAccessToken currentAccessToken] ){
-            [login logOut];
-        }
-        
-        [FBSDKAccessToken setCurrentAccessToken:nil];
-        [FBSDKProfile setCurrentProfile:nil];
-        
-        UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:@"LoginViewController"]];
-        appDelegate.window.rootViewController = contentNavigationController;
     }
 }
 

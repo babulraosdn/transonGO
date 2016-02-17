@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "ED8B515C1C1EEF7000CA7306"
-               BuildableName = "toGo.app"
+               BuildableName = "TOGO.temp_caseinsensitive_rename.app"
                BlueprintName = "toGo"
-               ReferencedContainer = "container:toGo.xcodeproj">
+               ReferencedContainer = "container:TOGO.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "ED8B51751C1EEF7000CA7306"
-               BuildableName = "toGoTests.xctest"
+               BuildableName = "TOGO.xctest"
                BlueprintName = "toGoTests"
-               ReferencedContainer = "container:toGo.xcodeproj">
+               ReferencedContainer = "container:TOGO.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "ED8B51801C1EEF7000CA7306"
-               BuildableName = "toGoUITests.xctest"
+               BuildableName = "TOGO.xctest"
                BlueprintName = "toGoUITests"
-               ReferencedContainer = "container:toGo.xcodeproj">
+               ReferencedContainer = "container:TOGO.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -53,9 +53,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "ED8B515C1C1EEF7000CA7306"
-            BuildableName = "toGo.app"
+            BuildableName = "TOGO.temp_caseinsensitive_rename.app"
             BlueprintName = "toGo"
-            ReferencedContainer = "container:toGo.xcodeproj">
+            ReferencedContainer = "container:TOGO.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -76,11 +76,17 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "ED8B515C1C1EEF7000CA7306"
-            BuildableName = "toGo.app"
+            BuildableName = "TOGO.temp_caseinsensitive_rename.app"
             BlueprintName = "toGo"
-            ReferencedContainer = "container:toGo.xcodeproj">
+            ReferencedContainer = "container:TOGO.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = ""
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -95,9 +101,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "ED8B515C1C1EEF7000CA7306"
-            BuildableName = "toGo.app"
+            BuildableName = "TOGO.temp_caseinsensitive_rename.app"
             BlueprintName = "toGo"
-            ReferencedContainer = "container:toGo.xcodeproj">
+            ReferencedContainer = "container:TOGO.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

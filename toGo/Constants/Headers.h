@@ -31,6 +31,13 @@
 #import "MyLanguagesView.h"
 #import "BaseViewController.h"
 
+#import "StoreManager.h"
+#import "CountryStore.h"
+#import "CountryObject.h"
+#import "StateObject.h"
+#import "LanguageObject.h"
+#import "MyLanguagesCell.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 @interface Headers : NSObject
 
 @end

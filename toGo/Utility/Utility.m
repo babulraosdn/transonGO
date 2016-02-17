@@ -235,11 +235,25 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info{
 
 #pragma mark Image Encoding
 - (NSString *)encodeToBase64String:(UIImage *)image {
-    NSData * data = [UIImagePNGRepresentation(image) base64EncodedDataWithOptions:NSDataBase64Encoding64CharacterLineLength];
-    return [NSString stringWithUTF8String:[data bytes]];
-    //NSData* data = UIImageJPEGRepresentation(image, 1.0f);
-    //NSString *strEncoded = [Base64 encode:data];
-    //return [UIImagePNGRepresentation(image) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    NSString *str = [UIImagePNGRepresentation(image) base64EncodedStringWithOptions:0];
+    return str;
+}
+
+
+- (CGFloat)heightOfTextViewWithString:(NSString *)string
+                             withFont:(UIFont *)font
+                        andFixedWidth:(CGFloat)fixedWidth
+{
+    UITextView *tempTV = [[UITextView alloc]initWithFrame:CGRectMake(0, 0, fixedWidth, 1)];
+    tempTV.text = [string uppercaseString];
+    tempTV.font = font;
+    
+    CGSize newSize = [tempTV sizeThatFits:CGSizeMake(fixedWidth, MAXFLOAT)];
+    CGRect newFrame = tempTV.frame;
+    newFrame.size = CGSizeMake(fmaxf(newSize.width, fixedWidth), newSize.height);
+    tempTV.frame = newFrame;
+    
+    return tempTV.frame.size.height;
 }
 
 @end

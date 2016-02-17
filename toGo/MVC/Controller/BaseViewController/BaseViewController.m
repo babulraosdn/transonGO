@@ -69,12 +69,24 @@
 }
 
 - (void)navigationBarLeftButtonClicked {
+    [self.view endEditing:YES];
+    if ([[Utility_Shared_Instance readStringUserPreference:KCOMPLETION_W] isEqualToString:PROFILE_INCOMPLETE]){
+        [AlertViewCustom showAlertViewWithMessage:NSLOCALIZEDSTRING(@"PLEASE_COMPLETE_YOUR_PROFILE") headingLabel:NSLOCALIZEDSTRING(@"COMPLETE_PROFILE_INFO") confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self];
+    }
+    else
+    {
+        PKRevealController *revealController = (PKRevealController *) App_Delegate.window.rootViewController;
+        [revealController showViewController:revealController.leftViewController];
+    }
     
-    PKRevealController *revealController = (PKRevealController *) App_Delegate.window.rootViewController;
-    [revealController showViewController:revealController.leftViewController];
 }
 
 - (void)logOutButtonClicked{
+    [self.view endEditing:YES];
+    [App_Delegate.facebookLoginManager logOut];
+    [FBSDKAccessToken setCurrentAccessToken:nil];
+    [FBSDKProfile setCurrentProfile:nil];
+    
     UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:HOME_VIEW_CONTROLLER]];
     App_Delegate.window.rootViewController = contentNavigationController;
 }
@@ -83,10 +95,16 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-
 -(IBAction)webServiceCall:(id)sender{
     
 }
+
+
+#pragma mark - AlertView Custom delegate
+-(void)finishAlertViewCustomAction:(UIButton *)sender{
+    [[[[UIApplication sharedApplication] keyWindow] viewWithTag:999] removeFromSuperview];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
