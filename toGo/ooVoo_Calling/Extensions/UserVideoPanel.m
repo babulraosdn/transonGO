@@ -84,7 +84,8 @@
     if (!lblUserName) {
         
         UIView *viewGrayBackground = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 20)];
-        viewGrayBackground.backgroundColor = [UIColor grayColor];
+        //viewGrayBackground.backgroundColor = [UIColor grayColor];
+        viewGrayBackground.backgroundColor = [UIColor clearColor];
         viewGrayBackground.alpha = 0.5;
         viewGrayBackground.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [self addSubview:viewGrayBackground];
@@ -92,10 +93,10 @@
         lblUserName = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 20)];
         
         if (_strUserId) {
-            lblUserName.text = _strUserId;
+            //lblUserName.text = _strUserId;
         }
         else{
-             lblUserName.text = @"Me";
+             //lblUserName.text = @"Me";
         }
         
         [self addSubview:lblUserName];

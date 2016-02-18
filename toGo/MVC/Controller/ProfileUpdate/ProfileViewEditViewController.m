@@ -1731,6 +1731,15 @@
                 });
             });
         }
+        else{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+                [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                    withMessage:[responseDict objectForKey:KMESSAGE_W]
+                                                         inView:self
+                                                      withStyle:UIAlertControllerStyleAlert];
+            });
+        }
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
@@ -2006,17 +2015,22 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];
-//            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-//                                                withMessage:[responseDict objectForKey:KMESSAGE_W]
-//                                                     inView:self
-//                                                  withStyle:UIAlertControllerStyleAlert];
-            
         });
         
         if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
         {
             [Utility_Shared_Instance writeStringUserPreference:KCOMPLETION_W value:PROFILE_COMPLETE];
         }
+        else{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+                [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                    withMessage:[responseDict objectForKey:KMESSAGE_W]
+                                                         inView:self
+                                                      withStyle:UIAlertControllerStyleAlert];
+            });
+        }
+        
     }
       FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
           dispatch_async(dispatch_get_main_queue(), ^{
@@ -2692,6 +2706,7 @@
             });
 
         }
+        
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [SVProgressHUD dismiss];

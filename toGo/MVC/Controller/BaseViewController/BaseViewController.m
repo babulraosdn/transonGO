@@ -99,6 +99,8 @@
     
     
     [App_Delegate UnSetNotificationObserversForCallMessaging];
+    self.sdk = [ooVooClient sharedInstance];
+    [self.sdk.Account logout];
     
     [App_Delegate.facebookLoginManager logOut];
     [FBSDKAccessToken setCurrentAccessToken:nil];

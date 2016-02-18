@@ -352,6 +352,12 @@
 
 - (void)SetNotificationObserversForCallMessaging {
     NSLog(@"@@@@@@@@@@@@@@@@@@@@@  SetNotificationObserversForCallMessaging  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"incomingCall" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"AnswerAccept" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"killVideoController" object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"callCancel" object:nil];
+    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(incomingCall:) name:@"incomingCall" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(AnswerAccept:) name:@"AnswerAccept" object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(killVideoController) name:@"killVideoController" object:nil];
@@ -368,63 +374,72 @@
 }
 -(void)incomingCall:(NSNotification*)notif{
     
-    //[self playSystemLineSound];
-    UILocalNotification *localNotif = [[UILocalNotification alloc] init];
-    localNotif.fireDate = [NSDate date];//date;  // date after 10 sec from now
-    localNotif.timeZone = [NSTimeZone defaultTimeZone];
-    
-    // Notification details
-    localNotif.alertBody =  @"Incoming Call, Please click here"; // text of you that you have fetched
-    // Set the action button
-    localNotif.alertAction = @"View";
-    
-    localNotif.soundName = UILocalNotificationDefaultSoundName;
-    localNotif.applicationIconBadgeNumber = 1;
-    
-    // Specify custom data for the notification
-    NSDictionary *infoDict = [NSDictionary dictionaryWithObject:@"someValue" forKey:@"someKey"];
-    localNotif.userInfo = infoDict;
-    
-    // Schedule the notification
-    [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
-    
-    
-    NSLog(@"notification %@",notif.userInfo);
-    CNMessage *message=[notif object];
-    
-    // if we are in video "ROOM" and i am transmitting video on other session Than i am busy
-    if ([navigationController.topViewController isKindOfClass:[VideoConferenceVC class]])
-    {
-        VideoConferenceVC *viewController = (VideoConferenceVC *) self.naviController.topViewController;
+    if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]){
+        //[self playSystemLineSound];
+        UILocalNotification *localNotif = [[UILocalNotification alloc] init];
+        localNotif.fireDate = [NSDate date];//date;  // date after 10 sec from now
+        localNotif.timeZone = [NSTimeZone defaultTimeZone];
         
-        if (viewController.isViewInTransmitMode && !viewController.conferenceId)
+        // Notification details
+        localNotif.alertBody =  @"Incoming Call, Please click here"; // text of you that you have fetched
+        // Set the action button
+        localNotif.alertAction = @"View";
+        
+        localNotif.soundName = UILocalNotificationDefaultSoundName;
+        localNotif.applicationIconBadgeNumber = 1;
+        
+        // Specify custom data for the notification
+        NSDictionary *infoDict = [NSDictionary dictionaryWithObject:@"someValue" forKey:@"someKey"];
+        localNotif.userInfo = infoDict;
+        
+        // Schedule the notification
+        [[UIApplication sharedApplication] scheduleLocalNotification:localNotif];
+        
+        
+        NSLog(@"notification %@",notif.userInfo);
+        CNMessage *message=[notif object];
+        
+        // if we are in video "ROOM" and i am transmitting video on other session Than i am busy
+        if ([navigationController.topViewController isKindOfClass:[VideoConferenceVC class]])
         {
-            [[MessageManager sharedMessage]messageOtherUsers:[NSArray arrayWithObject:message.fromUseriD]  WithMessageType:Busy WithConfID:viewVideoControler.conferenceId Compelition:^(BOOL CallSuccess) {
-                
-            }];
+            VideoConferenceVC *viewController = (VideoConferenceVC *) self.naviController.topViewController;
             
-            return;
+            if (viewController.isViewInTransmitMode && !viewController.conferenceId)
+            {
+                [[MessageManager sharedMessage]messageOtherUsers:[NSArray arrayWithObject:message.fromUseriD]  WithMessageType:Busy WithConfID:viewVideoControler.conferenceId Compelition:^(BOOL CallSuccess) {
+                    
+                }];
+                
+                return;
+            }
+            
         }
+        //    else if ([navigationController.topViewController isKindOfClass:[VideoConferenceVCWithRender class]])
+        //    {
+        //        VideoConferenceVCWithRender *viewController = navigationController.topViewController;
+        //
+        //        if (viewController.isViewInTransmitMode && !viewController.conferenceId)
+        //        {
+        //            [[MessageManager sharedMessage]messageOtherUser:message.fromUseriD WithMessageType:Busy WithConfID:viewVideoControllerRender.conferenceId];
+        //            return;
+        //        }
+        //
+        //    }
         
+        
+        NSLog(@"################### incomingCall ###########################");
+        alert = [[AlertView alloc]initWithTitle:@"Incoming Call" message:message.fromUseriD delegate:self cancelButtonTitle:@"Reject" otherButtonTitles:@"Answer", nil];
+        alert.from=message.fromUseriD;
+        alert.conferenceID=message.confId;
+        
+        [alert show];
     }
-    //    else if ([navigationController.topViewController isKindOfClass:[VideoConferenceVCWithRender class]])
-    //    {
-    //        VideoConferenceVCWithRender *viewController = navigationController.topViewController;
-    //
-    //        if (viewController.isViewInTransmitMode && !viewController.conferenceId)
-    //        {
-    //            [[MessageManager sharedMessage]messageOtherUser:message.fromUseriD WithMessageType:Busy WithConfID:viewVideoControllerRender.conferenceId];
-    //            return;
-    //        }
-    //
-    //    }
-    
-    NSLog(@"################### incomingCall ###########################");
-    alert = [[AlertView alloc]initWithTitle:@"Incoming Call" message:message.fromUseriD delegate:self cancelButtonTitle:@"Reject" otherButtonTitles:@"Answer", nil];
-    alert.from=message.fromUseriD;
-    alert.conferenceID=message.confId;
-    
-    [alert show];
+
+}
+
+-(void)orderInterpreattionObservers{
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(killVideoController) name:@"killVideoController" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(callCancel) name:@"callCancel" object:nil];
 }
 
 -(void)AnswerAccept:(NSNotification*)notif // after i called other user HE accepted my call
@@ -722,12 +737,11 @@
     [_audioPlayer stop];
     _audioPlayer.delegate=nil;
     _audioPlayer=nil;
-    
 }
 
 ////////////
 
--(void)saveDisconnectedCallDetailsinServer : (InterpreterListObject *)receivedInterpreter isNoOnePicksCallorEndedByCustomer:(BOOL)isNoOnePicksCallorEndedByCustomer{
+-(void)saveDisconnectedCallDetailsinServer : (InterpreterListObject *)receivedInterpreter isNoOnePicksCallorEndedByCustomer:(BOOL)isNoOnePicksCallorEndedByCustomer {
     
     //WEB Service CODE
     [Utility_Shared_Instance showProgress];
@@ -749,7 +763,7 @@
     [callDict setObject:[Utility_Shared_Instance GetCurrentTimeStamp] forKey:KSTART_TIME_W];
     
     if (!isNoOnePicksCallorEndedByCustomer) {
-        [callDict setObject:self.cdrObject.receivedInterpreter.uidString forKey:KCALL_RECEIVED_BY_W];
+        [callDict setObject:[Utility_Shared_Instance checkForNullString:self.cdrObject.receivedInterpreter.uidString] forKey:KCALL_RECEIVED_BY_W];
         [callDict setObject:self.cdrObject.conferenceIDString forKey:KCALLID_W];
         [callDict setObject:[Utility_Shared_Instance GetCurrentTimeStamp] forKey:KSTART_TIME_W];
     }
@@ -783,25 +797,66 @@
 
 -(void)saveCDR{
     
+    if(!self.isCallDisconnectOrCallEndDefault){
+        //WEB Service CODE
+        [Utility_Shared_Instance showProgress];
+        
+        NSMutableDictionary *callDict= [NSMutableDictionary new];
+        [callDict setObject:self.cdrObject.receivedInterpreter.poolIdString forKey:KPOOL_ID_W];
+        [callDict setObject:[Utility_Shared_Instance readStringUserPreference:KID_W] forKey:KUSER_ID_W];
+        NSMutableArray *interpreters = [NSMutableArray new];
+        for (InterpreterListObject *iObj in self.interpreterListArray) {
+            [interpreters addObject:iObj.idString];
+        }
+        [callDict setObject:interpreters forKey:KINTERPRETER_ID_W];
+        [callDict setObject:[Utility_Shared_Instance checkForNullString:self.cdrObject.receivedInterpreter.uidString] forKey:KCALL_RECEIVED_BY_W];
+        [callDict setObject:self.cdrObject.fromLanguageIDString forKey:KFROM_LANGUAGE_small_L_Leter_W];
+        [callDict setObject:self.cdrObject.toLanguageIDString forKey:KTO_LANGUAGE_small_L_Leter_W];
+        [callDict setObject:self.cdrObject.startTimeString forKey:KSTART_TIME_W];
+        [callDict setObject:self.cdrObject.endTimeString forKey:KEND_TIME_W];
+        [callDict setObject:self.cdrObject.costString forKey:KCOST_W];
+        
+        [Web_Service_Call serviceCallWithRequestType:callDict requestType:POST_REQUEST includeHeader:YES includeBody:YES webServicename:CREATE_CDR SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+            NSDictionary *responseDict=responseObject;
+            
+            if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [SVProgressHUD dismiss];
+                });
+                NSMutableArray *dataArray = [responseDict objectForKey:KDATA_W];
+                for (id json in dataArray) {
+                    LanguageObject *lObj = [LanguageObject new];
+                    NSString *iconStr = [json objectForKey:KICON_W];
+                    iconStr = [iconStr stringByReplacingOccurrencesOfString:@"<img src='" withString:@""];
+                    iconStr = [iconStr stringByReplacingOccurrencesOfString:@"'  />" withString:@""];
+                    lObj.imagePathString = [NSString stringWithFormat:@"%@%@",BASE_URL,iconStr];
+                    lObj.languageName = [json objectForKey:KLANGUAGE_W];
+                    lObj.languageID = [json objectForKey:KLANGUAGEID_W];
+                    [self.languagesArray addObject:lObj];
+                }
+            }
+        } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+            });
+        }];
+    }
+}
+
+
+-(void)updateInterpreterCallStatus {
+    
     //WEB Service CODE
     [Utility_Shared_Instance showProgress];
     
     NSMutableDictionary *callDict= [NSMutableDictionary new];
-    [callDict setObject:self.cdrObject.receivedInterpreter.poolIdString forKey:KPOOL_ID_W];
-    [callDict setObject:[Utility_Shared_Instance readStringUserPreference:KID_W] forKey:KUSER_ID_W];
-    NSMutableArray *interpreters = [NSMutableArray new];
-    for (InterpreterListObject *iObj in self.interpreterListArray) {
-        [interpreters addObject:iObj.idString];
-    }
-    [callDict setObject:interpreters forKey:KINTERPRETER_ID_W];
-    [callDict setObject:self.cdrObject.receivedInterpreter.uidString forKey:KCALL_RECEIVED_BY_W];
-    [callDict setObject:self.cdrObject.fromLanguageIDString forKey:KFROM_LANGUAGE_small_L_Leter_W];
-    [callDict setObject:self.cdrObject.toLanguageIDString forKey:KTO_LANGUAGE_small_L_Leter_W];
-    [callDict setObject:self.cdrObject.startTimeString forKey:KSTART_TIME_W];
-    [callDict setObject:self.cdrObject.endTimeString forKey:KEND_TIME_W];
-    [callDict setObject:self.cdrObject.costString forKey:KCOST_W];
+    int yourInt = 0;
+    [callDict setObject:[Utility_Shared_Instance readStringUserPreference:KUID_W] forKey:@"id"];
+    [callDict setObject:[NSNumber numberWithInt:yourInt] forKey:KCALL_STATUS_W];
+    [callDict setObject:[Utility_Shared_Instance readStringUserPreference:KEMAIL_W] forKey:KEMAIL_ID_W];
     
-    [Web_Service_Call serviceCallWithRequestType:callDict requestType:POST_REQUEST includeHeader:YES includeBody:YES webServicename:CREATE_CDR SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
+    [Web_Service_Call serviceCallWithRequestType:callDict requestType:POST_REQUEST includeHeader:YES includeBody:YES webServicename:UPDATE_INTERPRETER_CALL_STATUS SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
         NSDictionary *responseDict=responseObject;
         
         if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
@@ -827,6 +882,5 @@
         });
     }];
 }
-
 @end
 

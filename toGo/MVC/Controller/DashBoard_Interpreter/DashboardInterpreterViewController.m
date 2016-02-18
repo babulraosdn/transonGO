@@ -55,7 +55,7 @@
     [self ooVooLogin];
 }
 
-- (void)ooVooLogin{
+- (void)ooVooLogin {
     
     self.sdk = [ooVooClient sharedInstance];
     [self.sdk.Account login:[Utility_Shared_Instance readStringUserPreference:KUID_W]
@@ -102,34 +102,22 @@
 
 
 -(void)viewWillAppear:(BOOL)animated{
+    
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setShowsVerticalScrollIndicator:NO];
     
-    [Utility_Shared_Instance showProgress]; 
-    [self performSelector:@selector(getDashBoardData) withObject:nil afterDelay:0.2];
+}
+
+-(void)viewDidAppear:(BOOL)animated{
     
-//    
-//    [self.sdk.Account login:[Utility_Shared_Instance readStringUserPreference:KUID_W]
-//    // [self.sdk.Account login:@"babul123"
-//    //[self.sdk.Account login:self.txt_userId.text
-//completion:^(SdkResult *result) {
-//    NSLog(@"result code=%d result description %@", result.Result, result.description);
-//    if (result.Result != sdk_error_OK){
-//        [[[UIAlertView alloc] initWithTitle:@"Login Error" message:result.description delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
-//        //[self.loginButton setEnabled:true];
-//    }
-//    else
-//    {
-//        //[self onLogin:result.Result];
-//        if(![self.sdk.Messaging isConnected])
-//            [self.sdk.Messaging connect];
-//    }
-//    
-//}];
+    [super viewDidAppear:animated];
+    [Utility_Shared_Instance showProgress];
+    [self performSelector:@selector(getDashBoardData) withObject:nil afterDelay:0.2];
     
 }
 
 -(void)viewDidLayoutSubviews{
+    
     _scrollView.contentSize=CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-64);
 }
 

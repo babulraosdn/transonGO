@@ -201,6 +201,7 @@ _Pragma("clang diagnostic pop") \
 #define SAVE_CALL_DETAILS                   @"api/saveCallDetails"
 #define CREATE_CDR                          @"api/createCDR"
 #define GET_DASHBOARD_DATA                  @"api/getDashboardData"
+#define UPDATE_INTERPRETER_CALL_STATUS      @"updateInterepreterCallStatus"
 
 //updateUserProfile
 //
@@ -209,6 +210,7 @@ _Pragma("clang diagnostic pop") \
 #pragma mark WebService Parameters
 #define KUSERNAME_W                    @"username"
 #define KEMAIL_W                       @"email"
+#define KEMAIL_ID_W                     @"emailid"
 #define KPASSWORD_W                    @"password"
 #define KUSER_TYPE_W                   @"utype"
 #define KTYPE_W                        @"type"
@@ -293,6 +295,7 @@ _Pragma("clang diagnostic pop") \
 #define KDURATION_W                     @"duration"
 #define KCALL_FROM_W                     @"call_from"
 #define KCALL_TO_W                     @"call_to"
+#define KCALL_STATUS_W                  @"callstatus"
 
 //********************  WebService Response Parameters   ****************************************
 #define KSUCCESS                       ((int)200)

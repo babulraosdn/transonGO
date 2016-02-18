@@ -85,51 +85,64 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.cdrArray = [NSMutableArray new];
                 if ([responseDict objectForKey:KCDR_DATA_W]) {
-                    for (id cdrJson in [responseDict objectForKey:KCDR_DATA_W]) {
-                        CDRObject *cObj = [CDRObject new];
-                        
-                        if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
-                            //Interpreter
-                            NSDictionary *callFromDict =  [cdrJson objectForKey:KCALL_FROM_W];
-                            if ([callFromDict isKindOfClass:[NSDictionary class]]) {
-                                NSDictionary *profileImgDict =  [callFromDict objectForKey:KPROFILE_IMAGE_W];
-                                cObj.imageURLString = [profileImgDict objectForKey:KURL_W];
-                                cObj.nickNameString = [callFromDict objectForKey:KNICKNAME_W];
-                            }
-                        }
-                        else{
-                            //USER
-                            NSDictionary *callToDict =  [cdrJson objectForKey:KCALL_TO_W];
-                            if ([callToDict isKindOfClass:[NSDictionary class]]) {
-                                NSDictionary *profileImgDict =  [callToDict objectForKey:KPROFILE_IMAGE_W];
-                                cObj.imageURLString = [profileImgDict objectForKey:KURL_W];
-                                cObj.nickNameString = [callToDict objectForKey:KNICKNAME_W];
-                            }
-                        }
-                        
-                        
-                        
-                        
-                        if ([Utility_Shared_Instance checkForNullString:[cdrJson objectForKey:KDURATION_W]].length) {
-                            int minutes = [[cdrJson objectForKey:KDURATION_W] intValue] / 60;
+                    if ([[responseDict objectForKey:KCDR_DATA_W] isKindOfClass:[NSArray class]]) {
+                        for (id cdrJson in [responseDict objectForKey:KCDR_DATA_W]) {
+                            CDRObject *cObj = [CDRObject new];
                             
-                            int seconds = [[cdrJson objectForKey:KDURATION_W] intValue] % 60;
-                            if (seconds>0) {
-                                minutes = minutes +1;
-                                cObj.durationString = [NSString stringWithFormat:@"%d min",minutes];
+                            if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
+                                //Interpreter
+                                NSDictionary *callFromDict =  [cdrJson objectForKey:KCALL_FROM_W];
+                                if ([callFromDict isKindOfClass:[NSDictionary class]]) {
+                                    NSDictionary *profileImgDict =  [callFromDict objectForKey:KPROFILE_IMAGE_W];
+                                    cObj.imageURLString = [profileImgDict objectForKey:KURL_W];
+                                    
+                                    cObj.nickNameString = [callFromDict objectForKey:KNICKNAME_W];
+                                }
+                            }
+                            else{
+                                //USER
+                                NSDictionary *callToDict =  [cdrJson objectForKey:KCALL_TO_W];
+                                if ([callToDict isKindOfClass:[NSDictionary class]]) {
+                                    NSDictionary *profileImgDict =  [callToDict objectForKey:KPROFILE_IMAGE_W];
+                                    cObj.imageURLString = [profileImgDict objectForKey:KURL_W];
+                                    cObj.nickNameString = [callToDict objectForKey:KNICKNAME_W];
+                                }
                             }
                             
+                            
+                            
+                            
+                            if ([Utility_Shared_Instance checkForNullString:[cdrJson objectForKey:KDURATION_W]].length) {
+                                int minutes = [[cdrJson objectForKey:KDURATION_W] intValue] / 60;
+                                
+                                int seconds = [[cdrJson objectForKey:KDURATION_W] intValue] % 60;
+                                if (seconds>0) {
+                                    minutes = minutes +1;
+                                    cObj.durationString = [NSString stringWithFormat:@"%d min",minutes];
+                                }
+                                
+                            }
+                            
+                            
+                            NSDictionary *fromLangDict =  [cdrJson objectForKey:KFROM_LANGUAGE_small_L_Leter_W];
+                            cObj.fromLanguageString = [fromLangDict objectForKey:KLANGUAGE_W];
+                            
+                            NSDictionary *toLangDict =  [cdrJson objectForKey:KTO_LANGUAGE_small_L_Leter_W];
+                            cObj.toLanguageString = [toLangDict objectForKey:KLANGUAGE_W];
+                            
+                            [self.cdrArray addObject:cObj];
                         }
-                        
-                        
-                        NSDictionary *fromLangDict =  [cdrJson objectForKey:KFROM_LANGUAGE_small_L_Leter_W];
-                        cObj.fromLanguageString = [fromLangDict objectForKey:KLANGUAGE_W];
-                        
-                        NSDictionary *toLangDict =  [cdrJson objectForKey:KTO_LANGUAGE_small_L_Leter_W];
-                        cObj.toLanguageString = [toLangDict objectForKey:KLANGUAGE_W];
-                        
-                        [self.cdrArray addObject:cObj];
                     }
+                    
+                }
+                else{
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [SVProgressHUD dismiss];
+                        [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                            withMessage:[responseDict objectForKey:KCDR_DATA_W]
+                                                                 inView:self
+                                                              withStyle:UIAlertControllerStyleAlert];
+                    });
                 }
                 [self.tblView reloadData];
                 [SVProgressHUD dismiss];
