@@ -249,6 +249,8 @@
                 NSString *iconStr = [json objectForKey:KICON_W];
                 iconStr = [iconStr stringByReplacingOccurrencesOfString:@"<img src='" withString:@""];
                 iconStr = [iconStr stringByReplacingOccurrencesOfString:@"'  />" withString:@""];
+                iconStr = [iconStr stringByReplacingOccurrencesOfString:@"  >" withString:@""];
+                iconStr = [iconStr stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
                 lObj.imagePathString = [NSString stringWithFormat:@"%@%@",BASE_URL,iconStr];
                 lObj.languageName = [json objectForKey:KLANGUAGE_W];
                 lObj.languageID = [json objectForKey:KLANGUAGEID_W];
@@ -764,7 +766,7 @@
     
     if (!isNoOnePicksCallorEndedByCustomer) {
         [callDict setObject:[Utility_Shared_Instance checkForNullString:self.cdrObject.receivedInterpreter.uidString] forKey:KCALL_RECEIVED_BY_W];
-        [callDict setObject:self.cdrObject.conferenceIDString forKey:KCALLID_W];
+        [callDict setObject:[Utility_Shared_Instance checkForNullString:self.cdrObject.conferenceIDString] forKey:KCALLID_W];
         [callDict setObject:[Utility_Shared_Instance GetCurrentTimeStamp] forKey:KSTART_TIME_W];
     }
     

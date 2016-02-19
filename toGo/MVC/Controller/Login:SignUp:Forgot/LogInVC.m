@@ -86,7 +86,7 @@
     
 //    self.txt_userId.text        =      @"testcustomer@gmail.com";
 //    self.txtDisplayName.text    =      @"Test@123";
-//    
+//
 //    //
 //    self.txt_userId.text        =      @"testinterpreter5@gmail.com";
 //    self.txtDisplayName.text    =      @"Test@123";
@@ -351,7 +351,10 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             dispatch_async(dispatch_get_main_queue(), ^{
                 [SVProgressHUD dismiss];
-                [AlertViewCustom showAlertViewWithMessage:NSLOCALIZEDSTRING(@"PLEASE_COMPLETE_YOUR_PROFILE") headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self];
+                [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
+                                                    withMessage:[responseObject objectForKey:KMESSAGE_W]
+                                                         inView:self
+                                                      withStyle:UIAlertControllerStyleAlert];
             });
         });
     }];

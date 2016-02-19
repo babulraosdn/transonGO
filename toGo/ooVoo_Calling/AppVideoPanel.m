@@ -126,6 +126,7 @@
     [_delegate UserVideoPanel_Touched:self];
     
 }
+
 - (void)setUserName {
     
     if (!lblUserName) {
@@ -171,7 +172,6 @@
         [self addConstraint:[self constraintToRightFor:imgView]];
         [imgView setTranslatesAutoresizingMaskIntoConstraints:NO];
     }
-    
 }
 
 - (void)setLabelVideoAlert{
@@ -190,7 +190,6 @@
         [self addConstraint:[self constraintToRightFor:lblVideoAlert]];
         [lblVideoAlert setTranslatesAutoresizingMaskIntoConstraints:NO];
     }
-    
 }
 
 
