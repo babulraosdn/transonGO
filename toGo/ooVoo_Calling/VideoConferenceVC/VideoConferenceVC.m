@@ -75,7 +75,7 @@ return @"UserVideoPanel";
 
         //These line commented to make the "Me" video small left hand corner
         _videoPanelView.alpha = 0.0;
-        [self performSelector:@selector(userVideoFrameSetting) withObject:nil afterDelay:7.0];
+        [self performSelector:@selector(userVideoFrameSetting) withObject:nil afterDelay:9.0];
         ////////////////////////
         
     }

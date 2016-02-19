@@ -86,8 +86,9 @@
     
 //    self.txt_userId.text        =      @"testcustomer@gmail.com";
 //    self.txtDisplayName.text    =      @"Test@123";
-//
-//    self.txt_userId.text        =      @"testinterpreter2@gmail.com";
+//    
+//    //
+//    self.txt_userId.text        =      @"testinterpreter5@gmail.com";
 //    self.txtDisplayName.text    =      @"Test@123";
     
 //
@@ -97,6 +98,7 @@
 //    self.txt_userId.text = @"togo-ibq@ice-breakrr.com";
 //    self.txtDisplayName.text = @"Int@123";
     
+    //rakeshp@ice-breakrr.com/Admin@123@123 -- Customer
 //    _txt_userId.text = [self randomUser];
 //    _txtDisplayName.text=[self returnSavedDisplayname];
     
@@ -104,6 +106,7 @@
     passwordString = _txtDisplayName.text;
     
     [self autorize];
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -642,7 +645,7 @@
     if ([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER]) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            //[App_Delegate UnSetNotificationObserversForCallMessaging];
+            [App_Delegate UnSetNotificationObserversForCallMessaging];
             [App_Delegate SetNotificationObserversForCallMessaging];
             UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_INTERPRETER_VIEW_CONTROLLER]];//DashBoardViewController
             

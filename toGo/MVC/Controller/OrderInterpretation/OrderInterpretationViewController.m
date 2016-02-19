@@ -23,6 +23,8 @@
     
     NSString *fromLanguageKeyString;
     NSString *toLanguageKeyString;
+    
+    BOOL isViewDidLoad;
 }
 @property (weak, nonatomic) IBOutlet UILabel *headerLabel;
 @property (weak, nonatomic) IBOutlet UILabel *fromLabel;
@@ -59,13 +61,22 @@
         [App_Delegate getLanguages];
     }
     
+    [App_Delegate UnSetNotificationObserversForCallMessaging];
     [App_Delegate SetNotificationObserversForCallMessaging];
+    //[App_Delegate orderInterpreattionObservers];
+    
+    isViewDidLoad = YES;
+    
     
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [Utility_Shared_Instance showProgress];
-    [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
+    if (isViewDidLoad) {
+        isViewDidLoad = NO;
+        [Utility_Shared_Instance showProgress];
+        [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
+    }
+    
 }
 
 -(void)setLabelButtonNames{
@@ -179,6 +190,7 @@
 
 -(void)getPoolOfInterpreters
 {
+    App_Delegate.isConnected = NO;
     //WEB Service CODE
     [Utility_Shared_Instance showProgress];
     NSMutableDictionary *languagePriceDict=[NSMutableDictionary new];
@@ -213,7 +225,7 @@
                 }
                 
                 
-                ooVooPushNotificationMessage * msg = [[ooVooPushNotificationMessage alloc] initMessageWithUsersArray:arrFriends message:@"Callinggggg 445" property:@"Im optional" timeToLeave:1000];
+                ooVooPushNotificationMessage * msg = [[ooVooPushNotificationMessage alloc] initMessageWithUsersArray:arrFriends message:@"Incoming Call....." property:@"Im optional" timeToLeave:1000];
                 
                 [self.sdk.PushService sendPushMessage:msg completion:^(SdkResult *result){
                     if(result.Result == sdk_error_OK)
@@ -502,7 +514,12 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
     [self stopTimer];
     
     callAmount1=0;
-    [App_Delegate saveDisconnectedCallDetailsinServer:nil isNoOnePicksCallorEndedByCustomer:YES];
+    if (!App_Delegate.isConnected) {
+        [App_Delegate saveDisconnectedCallDetailsinServer:nil isNoOnePicksCallorEndedByCustomer:YES];
+    }
+    else{
+        
+    }
     // for (NSString *userName in arrFriends) {
     //     NSLog(@"Calling friend %@",userName);
     [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Cancel WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess) {

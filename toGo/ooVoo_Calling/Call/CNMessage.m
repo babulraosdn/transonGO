@@ -69,8 +69,6 @@ NSString * const TYPE_END_CALL     = @"end_call";
 
 +(NSString *) buildMessage:(CNMessageType) type confId:(NSString *) confId to:(NSArray *) to name:(NSString *) name userData:(NSString*) extra{
     
-    
-    
     NSMutableDictionary * dictionary  = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[CNMessage cnMessageTypeToString:type] forKey:MESSAGE_TYPE];
     [dictionary setValue:confId forKey:CONFERENCE_ID];
@@ -119,9 +117,10 @@ NSString * const TYPE_END_CALL     = @"end_call";
 
 - (instancetype) initMessageWithParams:(CNMessageType) type confId:(NSString *) confId to:(NSArray*)arrTo name:(NSString *) name userData:(NSString*) extra{
     
-    
-    
-    
+    if (type == AnswerDecline) {
+        App_Delegate.isCallDisconnectOrCallEndDefault = YES;
+        [App_Delegate updateInterpreterCallStatus];
+    }
 //    self = [super initMessage:to message:[CNMessage buildMessage:type confId:confId to:to name:name userData:extra]];
     self = [super initMessageWithArrayUsers:arrTo message:[CNMessage buildMessage:type confId:confId to:arrTo name:name userData:extra]];
 
@@ -151,7 +150,9 @@ NSString * const TYPE_END_CALL     = @"end_call";
         [self decodeMessage:response.body];
         self.fromUseriD=response.from;
     }
+    
     AppDelegate *appDelegate =(AppDelegate *)[[UIApplication sharedApplication]delegate];
+    appDelegate.callerIDString = response.from;
    // NSLog(@"--callingArray-->%@",[appDelegate.callingUsers description]);
     NSString * string = response.body;
     
@@ -170,7 +171,7 @@ NSString * const TYPE_END_CALL     = @"end_call";
     if ([[dictIs objectForKey:@"type"] isEqualToString:@"accept"]) {
         
         App_Delegate.cdrObject.startTimeString = [Utility_Shared_Instance GetCurrentTimeStamp];
-        
+        App_Delegate.isCallDisconnectOrCallEndDefault = NO;
 //        NSLog(@"-accept-initMessageWithResponse--from-%@",response.from);
 //        NSLog(@"---to--%@",response.to);
 //        NSLog(@"---body--%@",response.body);
@@ -183,6 +184,8 @@ NSString * const TYPE_END_CALL     = @"end_call";
         //[appDelegate.callingUsers removeObject:iObj.uidString];
         [tempArray removeObject:iObj.uidString];
         
+        App_Delegate.isConnected = YES;
+        
         [appDelegate saveDisconnectedCallDetailsinServer:iObj isNoOnePicksCallorEndedByCustomer:NO];
         
         for (NSString *remainigUser in tempArray) {
@@ -194,7 +197,7 @@ NSString * const TYPE_END_CALL     = @"end_call";
     
     NSDictionary *dictIs1 = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
     if ([[dictIs1 objectForKey:@"type"] isEqualToString:@"cancel"]) {
-        
+        //App_Delegate.isCallDisconnectOrCallEndDefault = YES;
         NSTimeInterval time = ([[NSDate date] timeIntervalSince1970]); // returned as a double
         long digits = (long)time; // this is the first 10 digits
         int decimalDigits = (int)(fmod(time, 1) * 1000); // this will get the 3 missing digits
@@ -209,6 +212,9 @@ NSString * const TYPE_END_CALL     = @"end_call";
 //        NSLog(@"-cancel-timestamp---%ld",timestamp);
     }
     
+    if ([[dictIs objectForKey:@"type"] isEqualToString:@"decline"]) {
+        //App_Delegate.isCallDisconnectOrCallEndDefault = YES;
+    }
     
     return self;
 }
