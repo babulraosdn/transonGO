@@ -245,7 +245,7 @@
                         NSMutableDictionary *profileDict = [profileArray lastObject];
                         if ([profileDict objectForKey:KNAME_W]) {
                             NSDictionary *nameDict =  [profileDict objectForKey:KNAME_W];
-                            self.interpreterName.text = [NSString stringWithFormat:@"%@ %@",[nameDict objectForKey:KFIRST_NAME_W],[nameDict objectForKey:KLAST_NAME_W]];
+                            self.interpreterName.text = [NSString stringWithFormat:@"%@ %@",[nameDict  objectForKey:KFIRST_NAME_W],[nameDict objectForKey:KLAST_NAME_W]];
                         }
                         else{
                             self.interpreterName.text = @"";
