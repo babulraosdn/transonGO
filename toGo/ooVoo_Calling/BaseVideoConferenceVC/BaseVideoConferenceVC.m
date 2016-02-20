@@ -526,10 +526,15 @@
         
     }
 
-    if (_isCommingFromCall) {
+    if (_isCommingFromCall)
+    {
         [self closeViewAndGoBack];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"killVideoController" object:nil];
         return;
+    }
+    else{
+        [self closeViewAndGoBack];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"killVideoController" object:nil];
     }
     
     [self.sdk.AVChat.VideoController unbindVideoRender:nil render:[self videoPanel]];
@@ -545,7 +550,7 @@
     {
         NSMutableArray *array = [NSMutableArray new];
         [array addObject:App_Delegate.callerIDString];
-        [[MessageManager sharedMessage]messageOtherUsers:array WithMessageType:EndCall WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess) {
+        [[MessageManager sharedMessage]messageOtherUsers:array WithMessageType:EndCall WithConfID:App_Delegate.conferenceIDString Compelition:^(BOOL CallSuccess) {
             
         }];
     }
@@ -849,11 +854,11 @@
 //    }
 //    else
     {
-    // video constrain
-    self.constrainRightViewVideo.constant = [arrDefultConstrain[1] integerValue];
-    self.constrainBottomViewVideo.constant = [arrDefultConstrain[2] integerValue];
-    self.constrainLeftViewVideo.constant = [arrDefultConstrain[3] integerValue];
-    self.constrainTopViewVideo.constant = [arrDefultConstrain[4] integerValue];
+        // video constrain
+        self.constrainRightViewVideo.constant = [arrDefultConstrain[1] integerValue];
+        self.constrainBottomViewVideo.constant = [arrDefultConstrain[2] integerValue];
+        self.constrainLeftViewVideo.constant = [arrDefultConstrain[3] integerValue];
+        self.constrainTopViewVideo.constant = [arrDefultConstrain[4] integerValue];
     }
     [self animateConstraints];
     
@@ -1205,7 +1210,6 @@
     NSString *panelClassType=[self stringFromSelectedClass];
     id panel = [[NSClassFromString(panelClassType) alloc] initWithFrame:[self videoPanel].frame WithName:strName];
 
-
     
     [self setPanel:panel inPosition:emptySlot Animated:YES];
     
@@ -1461,10 +1465,14 @@
     NSString * des;
     switch (code) {
             
-        case sdk_error_InvalidParameter:                // Invalid Parameter
+        case sdk_error_InvalidParameter:
+            // Invalid Parameter
             des = @"Invalid Parameter.";
             break;
-        case sdk_error_InvalidOperation:               // Invalid Operation
+        case sdk_error_InvalidOperation:
+            // Invalid Operation
+            //This case the screen is in Video Panel View. have to pop the view from this
+            [App_Delegate saveDisconnectedCallDetailsinServer:nil isNoOnePicksCallorEndedByCustomer:YES];
             des = @"Invalid Operation.";
             break;
         case sdk_error_DeviceNotFound:
@@ -1507,6 +1515,8 @@
             des = @" Not Initialized.";
             break;
         case sdk_error_Error:
+            [App_Delegate saveDisconnectedCallDetailsinServer:nil isNoOnePicksCallorEndedByCustomer:YES];
+            [App_Delegate killVideoView];
             des = @"Conference Error.";
             break;
         case sdk_error_NotAuthorized:
@@ -1516,6 +1526,8 @@
             des = @"Connection Timeout.";
             break;
         case sdk_error_DisconnectedByPeer:
+            [App_Delegate saveDisconnectedCallDetailsinServer:nil isNoOnePicksCallorEndedByCustomer:YES];
+            [App_Delegate killVideoView];
             des = @"Disconnected by peer.";
             break;
         case sdk_error_InvalidToken:
@@ -1555,6 +1567,7 @@
             des = @"Access Denied.";
             break;
         case sdk_error_ConnectionLost:
+            [App_Delegate saveDisconnectedCallDetailsinServer:nil isNoOnePicksCallorEndedByCustomer:YES];
             des = @"Connection Lost.";
             break;
         case sdk_error_NotEnoughMemory:
@@ -1569,11 +1582,14 @@
             break;
             
         default:
+            [App_Delegate saveDisconnectedCallDetailsinServer:nil isNoOnePicksCallorEndedByCustomer:YES];
             des = [NSString stringWithFormat:@"Error Code %d", code];
             break;
     }
+    
     return des;
 }
+
 
 - (void)didConferenceStateChange:(ooVooAVChatState)state error:(sdk_error)code {
     [self showAndRunSpinner:NO];

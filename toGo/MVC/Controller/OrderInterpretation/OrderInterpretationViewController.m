@@ -10,6 +10,7 @@
 #import "MenuConferenceVC.h"
 #import "MessageManager.h"
 #import "ActiveUserManager.h"
+#import "UserDefaults.h"
 #define TimeOut 30
 
 @interface OrderInterpretationViewController ()<UIAlertViewDelegate>{
@@ -79,15 +80,18 @@
     
 }
 
--(void)setLabelButtonNames{
+-(void)setLabelButtonNames {
+    
     self.headerLabel.text = NSLOCALIZEDSTRING(@"SELCET_YOUR_INTERPRETATION_LANGUAGE");
     self.fromLabel.text = NSLOCALIZEDSTRING(@"FROM");
     self.toLabel.text = NSLOCALIZEDSTRING(@"TO");
     [self.confirmButton setTitle:NSLOCALIZEDSTRING(@"CONFIRM_CAPITAL") forState:UIControlStateNormal];
     [self.cancelButton setTitle:NSLOCALIZEDSTRING(@"CANCEL_CAPITAL") forState:UIControlStateNormal];
+    
 }
 
--(void)setRoundCorners{
+-(void)setRoundCorners {
+    
     [UIButton roundedCornerButton:self.confirmButton];
     [UIButton roundedCornerButton:self.cancelButton];
     
@@ -178,6 +182,18 @@
             return;
         }
         
+        
+        NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        NSMutableString *randomString = [NSMutableString stringWithCapacity:8];
+        
+        for (int i = 0; i < 8; i++) {
+            [randomString appendFormat:@"%C", [letters characterAtIndex:arc4random() % [letters length]]];
+            App_Delegate.conferenceIDString=randomString;
+        }
+        
+        
+        [self autorize];
+        
         [self getPoolOfInterpreters];
         
     }
@@ -185,6 +201,51 @@
         UINavigationController *contentNavigationController = [[UINavigationController alloc] initWithRootViewController:[Utility_Shared_Instance getControllerForIdentifier:DASHBOARD_USER_VIEW_CONTROLLER]];
         self.revealController = [PKRevealController revealControllerWithFrontViewController:contentNavigationController leftViewController:[Utility_Shared_Instance getControllerForIdentifier:SLIDE_MENU_VIEW_CONTROLLER]];
         App_Delegate.window.rootViewController = self.revealController;
+    }
+}
+
+- (void)ooVooLogin {
+    
+    self.sdk = [ooVooClient sharedInstance];
+    [self.sdk.Account login:[Utility_Shared_Instance readStringUserPreference:KUID_W]
+                 completion:^(SdkResult *result) {
+                     dispatch_async(dispatch_get_main_queue(), ^{
+                         [SVProgressHUD dismiss];
+                     });
+                     if (result.Result == 37) {
+                         NSLog(@"377777777--> Failure Either Authorization  or ooVoo Server DOWN");
+                     }
+                     else if (result.Result == 0) {
+                         NSLog(@"0 --> SUCCESS");
+                     }
+                     NSLog(@"result code=%d result description %@", result.Result, result.description);
+                     if (result.Result != sdk_error_OK){
+                         [[[UIAlertView alloc] initWithTitle:@"ooVoo Server Error" message:result.description delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
+                     }
+                     else
+                     {
+                         [self onLogin:result.Result];
+                         if(![self.sdk.Messaging isConnected])
+                             [self.sdk.Messaging connect];
+                     }
+                 }];
+}
+
+- (void)onLogin:(BOOL)error {
+    
+    if (!error) {
+        [ActiveUserManager activeUser].userId =[Utility_Shared_Instance readStringUserPreference:KUID_W];
+        
+        [UserDefaults setObject:[ActiveUserManager activeUser].token ForKey:[ActiveUserManager activeUser].userId];
+        
+        [ActiveUserManager activeUser].displayName = [Utility_Shared_Instance readStringUserPreference:KUID_W];
+        ///NSString * uuid = [[NSUUID UUID] UUIDString] ;
+        NSString * token = [ActiveUserManager activeUser].token;
+        if(token && token.length > 0){
+            [self.sdk.PushService subscribe:token deviceUid:[ActiveUserManager activeUser].userId completion:^(SdkResult *result){
+                [ActiveUserManager activeUser].isSubscribed = true;
+            }];
+        }
     }
 }
 
@@ -221,11 +282,11 @@
                         [arrFriends addObject:[json objectForKey:KUID_W]];
                     }
                     NSLog(@"-->%@",App_Delegate.interpreterListArray);
-                    [self sendMsgToFriends:@"Incoming Call....."];
+                    [self sendMsgToFriends:@"Someone is calling you for interpretation."];
                 }
                 
                 
-                ooVooPushNotificationMessage * msg = [[ooVooPushNotificationMessage alloc] initMessageWithUsersArray:arrFriends message:@"Incoming Call....." property:@"Im optional" timeToLeave:1000];
+                ooVooPushNotificationMessage * msg = [[ooVooPushNotificationMessage alloc] initMessageWithUsersArray:arrFriends message:@"Someone is calling you for interpretation." property:@"Im optional" timeToLeave:1000];
                 
                 [self.sdk.PushService sendPushMessage:msg completion:^(SdkResult *result){
                     if(result.Result == sdk_error_OK)
@@ -444,7 +505,7 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
         NSLog(@"---subscribe-->%d",[ActiveUserManager activeUser].isSubscribed);
         
         
-        [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Calling WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess)
+        [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Calling WithConfID:App_Delegate.conferenceIDString Compelition:^(BOOL CallSuccess)
          {
 
              if (!CallSuccess) {
@@ -522,9 +583,15 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
     }
     // for (NSString *userName in arrFriends) {
     //     NSLog(@"Calling friend %@",userName);
-    [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Cancel WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess) {
+//    [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Cancel WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess) {
+//        
+//    }];
+    
+    [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Cancel WithConfID:App_Delegate.conferenceIDString Compelition:^(BOOL CallSuccess) {
         
     }];
+    
+    
     //  }
 }
 
@@ -651,6 +718,79 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
     [super viewWillDisappear:animated];
     [myAlertView dismissWithClickedButtonIndex:0 animated:YES];
 }
+
+
+- (void)autorize {
+    
+    
+    [Utility_Shared_Instance showProgress];
+    NSString* token = @"MDAxMDAxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZUYVW%2BB1MwyBDpt22C0WvOeMPW7fH6mMOv8d%2FAPeFZ2QeCOguU288bRzsChrixFyZ%2BKzm9nrLmfOkZwyPrAO%2BDP8wgDiVtL%2F0w9mZQ78Az5Hk6imDbhYGNGRFMqo0H2virlVE4Q%2Bpf5S%2Fm50MO%2BMh";
+    NSLog(@"Token -->Login--->%@",token);
+    
+    if (![self.sdk IsAuthorized]) {
+        [self.sdk authorizeClient:token
+                       completion:^(SdkResult *result) {
+                           
+                           sdk_error err = result.Result;
+                           if (err == sdk_error_OK) {
+                               dispatch_async(dispatch_get_main_queue(), ^{
+                                   [SVProgressHUD dismiss];
+                               });
+                               
+                               NSLog(@"good autorization");
+                               sleep(0.5);
+                               [self ooVooLogin];
+                               //[_delegate AuthorizationDelegate_DidAuthorized];
+                           }
+                           else {
+                               dispatch_async(dispatch_get_main_queue(), ^{
+                                   [SVProgressHUD dismiss];
+                               });
+                               NSLog(@"fail  autorization");
+                               //                           self.btn_Authorizate.hidden = false;
+                               //                           self.lbl_Status.font=[UIFont systemFontOfSize:13];
+                               //                           self.lbl_Status.text = @"Authorization Failed.";
+                               
+                               if (err == sdk_error_InvalidToken) {
+                                   double delayInSeconds = 0.75;
+                                   dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                                   dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                                       [SVProgressHUD dismiss];
+                                       //                                   [[[UIAlertView alloc] initWithTitle:@"ooVoo Sdk"
+                                       //                                                               message:[NSString stringWithFormat:NSLocalizedString(@"Error: %@", nil), @"App Token probably invalid or might be empty.\n\nGet your App Token at http://developer.oovoo.com.\nGo to Settings->ooVooSample screen and set the values, or set @APP_TOKEN constants in code."]
+                                       //                                                              delegate:nil
+                                       //                                                     cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                       //                                                     otherButtonTitles:nil] show];
+                                   });
+                                   // [_spinner stopAnimating];
+                                   
+                               }
+                               else if (err != sdk_error_InvalidToken)
+                               {
+                                   
+                                   double delayInSeconds = 0.75;
+                                   dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                                   dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                                       [SVProgressHUD dismiss];
+                                       //                                   [[[UIAlertView alloc] initWithTitle:@"ooVoo Sdk"
+                                       //                                                               message:[NSString stringWithFormat:NSLocalizedString(@"Error: %@", nil), [result description]]
+                                       //                                                              delegate:nil
+                                       //                                                     cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                       //                                                     otherButtonTitles:nil] show];
+                                   });
+                                   //[_spinner stopAnimating];
+                               }
+                           }
+                           
+                       }];
+    }
+    else{
+        [self ooVooLogin];
+    }
+    
+}
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -249,6 +249,8 @@
                 NSString *iconStr = [json objectForKey:KICON_W];
                 iconStr = [iconStr stringByReplacingOccurrencesOfString:@"<img src='" withString:@""];
                 iconStr = [iconStr stringByReplacingOccurrencesOfString:@"'  />" withString:@""];
+                iconStr = [iconStr stringByReplacingOccurrencesOfString:@"  >" withString:@""];
+                iconStr = [iconStr stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
                 lObj.imagePathString = [NSString stringWithFormat:@"%@%@",BASE_URL,iconStr];
                 lObj.languageName = [json objectForKey:KLANGUAGE_W];
                 lObj.languageID = [json objectForKey:KLANGUAGEID_W];
@@ -381,7 +383,7 @@
         localNotif.timeZone = [NSTimeZone defaultTimeZone];
         
         // Notification details
-        localNotif.alertBody =  @"Incoming Call, Please click here"; // text of you that you have fetched
+        localNotif.alertBody =  @"Someone is calling you for interpretation."; // text of you that you have fetched
         // Set the action button
         localNotif.alertAction = @"View";
         
@@ -428,7 +430,8 @@
         
         
         NSLog(@"################### incomingCall ###########################");
-        alert = [[AlertView alloc]initWithTitle:@"Incoming Call" message:message.fromUseriD delegate:self cancelButtonTitle:@"Reject" otherButtonTitles:@"Answer", nil];
+        //alert = [[AlertView alloc]initWithTitle:@"Someone is calling you for interpretation." message:message.fromUseriD delegate:self cancelButtonTitle:@"Reject" otherButtonTitles:@"Answer", nil];
+        alert = [[AlertView alloc]initWithTitle:@"Someone is calling you for interpretation." message:@"" delegate:self cancelButtonTitle:@"Reject" otherButtonTitles:@"Answer", nil];
         alert.from=message.fromUseriD;
         alert.conferenceID=message.confId;
         
@@ -606,7 +609,6 @@
         {
             
         }
-        
     }
     //    else
     //    {
@@ -739,6 +741,14 @@
     _audioPlayer=nil;
 }
 
+-(void)killVideoView{
+     self.sdk = [ooVooClient sharedInstance];
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"killVideoController" object:nil];
+    [self.sdk.AVChat leave];
+    [self.sdk.AVChat.AudioController unInitAudio:^(SdkResult *result) {
+        NSLog(@"unInit Resoult %d",result.Result);
+    }];
+}
 ////////////
 
 -(void)saveDisconnectedCallDetailsinServer : (InterpreterListObject *)receivedInterpreter isNoOnePicksCallorEndedByCustomer:(BOOL)isNoOnePicksCallorEndedByCustomer {
@@ -758,14 +768,14 @@
     NSMutableDictionary *callDict= [NSMutableDictionary new];
     
     [callDict setObject:[Utility_Shared_Instance checkForNullString:tempObj.poolIdString] forKey:KPOOL_ID_W];
-    [callDict setObject:[Utility_Shared_Instance readStringUserPreference:KID_W] forKey:KUSER_ID_W];
+    [callDict setObject:[Utility_Shared_Instance checkForNullString:[Utility_Shared_Instance readStringUserPreference:KID_W]] forKey:KUSER_ID_W];
     [callDict setObject:disconnectedInterpreters forKey:KINTERPRETER_ID_W];
     [callDict setObject:[Utility_Shared_Instance GetCurrentTimeStamp] forKey:KSTART_TIME_W];
     
     if (!isNoOnePicksCallorEndedByCustomer) {
         [callDict setObject:[Utility_Shared_Instance checkForNullString:self.cdrObject.receivedInterpreter.uidString] forKey:KCALL_RECEIVED_BY_W];
-        [callDict setObject:self.cdrObject.conferenceIDString forKey:KCALLID_W];
-        [callDict setObject:[Utility_Shared_Instance GetCurrentTimeStamp] forKey:KSTART_TIME_W];
+        [callDict setObject:[Utility_Shared_Instance checkForNullString:self.cdrObject.conferenceIDString] forKey:KCALLID_W];
+        [callDict setObject:[Utility_Shared_Instance checkForNullString:[Utility_Shared_Instance GetCurrentTimeStamp]] forKey:KSTART_TIME_W];
     }
     
     [Web_Service_Call serviceCallWithRequestType:callDict requestType:POST_REQUEST includeHeader:YES includeBody:YES webServicename:SAVE_CALL_DETAILS SuccessfulBlock:^(NSInteger responseCode, id responseObject) {
@@ -776,17 +786,25 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [SVProgressHUD dismiss];
             });
-            NSMutableArray *dataArray = [responseDict objectForKey:KDATA_W];
-            for (id json in dataArray) {
-                LanguageObject *lObj = [LanguageObject new];
-                NSString *iconStr = [json objectForKey:KICON_W];
-                iconStr = [iconStr stringByReplacingOccurrencesOfString:@"<img src='" withString:@""];
-                iconStr = [iconStr stringByReplacingOccurrencesOfString:@"'  />" withString:@""];
-                lObj.imagePathString = [NSString stringWithFormat:@"%@%@",BASE_URL,iconStr];
-                lObj.languageName = [json objectForKey:KLANGUAGE_W];
-                lObj.languageID = [json objectForKey:KLANGUAGEID_W];
-                [self.languagesArray addObject:lObj];
+            if ([responseDict objectForKey:KDATA_W]) {
+                NSMutableArray *dataArray = [responseDict objectForKey:KDATA_W];
+                for (id json in dataArray) {
+                    LanguageObject *lObj = [LanguageObject new];
+                    NSString *iconStr = [json objectForKey:KICON_W];
+                    iconStr = [iconStr stringByReplacingOccurrencesOfString:@"<img src='" withString:@""];
+                    iconStr = [iconStr stringByReplacingOccurrencesOfString:@"'  />" withString:@""];
+                    lObj.imagePathString = [NSString stringWithFormat:@"%@%@",BASE_URL,iconStr];
+                    lObj.languageName = [json objectForKey:KLANGUAGE_W];
+                    lObj.languageID = [json objectForKey:KLANGUAGEID_W];
+                    [self.languagesArray addObject:lObj];
+                }
             }
+            
+        }
+        else{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [SVProgressHUD dismiss];
+            });
         }
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{

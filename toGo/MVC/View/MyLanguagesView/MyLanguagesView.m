@@ -63,6 +63,7 @@
     [cancelBtn addTarget:self action:@selector(closeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [UIButton roundedCornerButton:cancelBtn];
     
+    [UIView roundedCornerView:submitView];
     [submitView addSubview:cancelBtn];
     
     [self addSubview:submitView];

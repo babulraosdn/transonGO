@@ -11,7 +11,7 @@
 #import "Headers.h"
 #import <GooglePlus/GooglePlus.h>
 #import <GoogleOpenSource/GoogleOpenSource.h>
-@interface LogInVC : BaseViewController <ooVooAccount, SocialDelegate, GPPSignInDelegate,ALERTVIEWCUSTOMDELEGATE>
+@interface LogInVC : BaseViewController <SocialDelegate, GPPSignInDelegate,ALERTVIEWCUSTOMDELEGATE>
 
 
 @property (retain, nonatomic) ooVooClient *sdk;
