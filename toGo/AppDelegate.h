@@ -22,6 +22,7 @@
 
 @class InterpreterListObject;
 @class CDRObject;
+@class VideoConferenceVC;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 {
@@ -58,5 +59,6 @@
 - (void)UnSetNotificationObserversForCallMessaging;
 -(void)updateInterpreterCallStatus;
 -(void)orderInterpreattionObservers;
+-(void)killVideoView;
 @end
 

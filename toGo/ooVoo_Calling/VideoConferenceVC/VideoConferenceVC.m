@@ -112,6 +112,7 @@ return @"UserVideoPanel";
     self.videoPanelView.strUserId = @"Me";
 }
 
+
 -(void)UserMainPanel_Touched:(id)panel{
 
     if (!isCameraStateOn && (panel == self.videoPanelViewRender || panel==self.videoPanelView))
@@ -120,10 +121,10 @@ return @"UserVideoPanel";
     }
     
     _videoPanelView = (UserVideoPanel *)panel;
-    int widht = 150;
-    int height = 150;
-    int trailingSpace = 15;
-    _videoPanelView.frame = CGRectMake(self.view.frame.size.width - height - trailingSpace, self.view.frame.size.height - 240, widht, height); //CGRectMake(155, 185, 150, 150);
+    int widht = 125;
+    int height = 125;
+    int trailingSpace = 0;
+    _videoPanelView.frame = CGRectMake(self.view.frame.size.width - height - trailingSpace, self.view.frame.size.height - 167, widht, height); //CGRectMake(155, 185, 150, 150);
     currentFullScreenPanel = panel;
     
     //These line commented to make the "Me" video small left hand corner

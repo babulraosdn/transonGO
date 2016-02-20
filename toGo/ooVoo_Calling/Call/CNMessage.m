@@ -189,7 +189,7 @@ NSString * const TYPE_END_CALL     = @"end_call";
         [appDelegate saveDisconnectedCallDetailsinServer:iObj isNoOnePicksCallorEndedByCustomer:NO];
         
         for (NSString *remainigUser in tempArray) {
-            [[MessageManager sharedMessage]messageOtherUsers:[NSArray arrayWithObject:remainigUser] WithMessageType:Cancel WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess) {
+            [[MessageManager sharedMessage]messageOtherUsers:[NSArray arrayWithObject:remainigUser] WithMessageType:Cancel WithConfID:App_Delegate.conferenceIDString Compelition:^(BOOL CallSuccess) {
                 
             }];
         }

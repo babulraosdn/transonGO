@@ -80,15 +80,14 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
-    
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setShowsVerticalScrollIndicator:NO];
     
 //    self.txt_userId.text        =      @"testcustomer@gmail.com";
 //    self.txtDisplayName.text    =      @"Test@123";
-//
-//    //
-//    self.txt_userId.text        =      @"testinterpreter5@gmail.com";
+////
+////    //
+//    self.txt_userId.text        =      @"testinterpreter3@gmail.com";
 //    self.txtDisplayName.text    =      @"Test@123";
     
 //
@@ -101,6 +100,7 @@
     //rakeshp@ice-breakrr.com/Admin@123@123 -- Customer
 //    _txt_userId.text = [self randomUser];
 //    _txtDisplayName.text=[self returnSavedDisplayname];
+    
     
     userIDString = _txt_userId.text;
     passwordString = _txtDisplayName.text;

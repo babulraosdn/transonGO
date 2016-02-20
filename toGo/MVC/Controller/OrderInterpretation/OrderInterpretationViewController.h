@@ -10,7 +10,7 @@
 #import "Headers.h"
 #import <ooVooSDK/ooVooSDK.h>
 
-@interface OrderInterpretationViewController : BaseViewController<MyLanguagesDelegate>
+@interface OrderInterpretationViewController : BaseViewController<MyLanguagesDelegate,ooVooAccount>
 @property (retain, nonatomic) ooVooClient *sdk;
 
 @end
