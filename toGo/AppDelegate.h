@@ -17,9 +17,6 @@
 #import "VideoConferenceVC.h"
 #import <AVFoundation/AVAudioPlayer.h>
 
-//1. Profile image upload Spinner show
-//2. Background Audio Playing
-
 @class InterpreterListObject;
 @class CDRObject;
 @class VideoConferenceVC;
@@ -31,11 +28,9 @@
     VideoConferenceVC *viewVideoControler ;
     
     AVAudioPlayer *_audioPlayer;
-    //AVAudioPlayer *audioPlayer; //Plays the audio
-    //VideoConferenceVCWithRender *viewVideoControllerRender;
+    
 }
 @property(nonatomic,strong) CDRObject *cdrObject;
-//@property(nonatomic,strong)InterpreterListObject *acceptedInterpreter;
 @property (retain, nonatomic) ooVooClient *sdk;
 @property(nonatomic,strong)NSMutableArray *callingUsers;
 @property(nonatomic,readwrite)BOOL isCallDisconnectOrCallEndDefault;

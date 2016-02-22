@@ -80,9 +80,7 @@
 
 - (void)setBackButton {
     
-//    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStyleBordered target:self action:@selector(actLogOut)];
-//    self.navigationItem.hidesBackButton = YES;
-//    self.navigationItem.leftBarButtonItem = item;
+
 }
 
 -(void)actLogOut{

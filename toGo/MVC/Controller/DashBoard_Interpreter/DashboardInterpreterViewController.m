@@ -90,7 +90,6 @@
         [UserDefaults setObject:[ActiveUserManager activeUser].token ForKey:[ActiveUserManager activeUser].userId];
         
         [ActiveUserManager activeUser].displayName = [Utility_Shared_Instance readStringUserPreference:KUID_W];
-        ///NSString * uuid = [[NSUUID UUID] UUIDString] ;
         NSString * token = [ActiveUserManager activeUser].token;
         if(token && token.length > 0){
             [self.sdk.PushService subscribe:token deviceUid:[ActiveUserManager activeUser].userId completion:^(SdkResult *result){

@@ -12,12 +12,10 @@
 #import <ooVooSDK/ooVooSDK.h>
 #import "MessageManager.h"
 #import "InterpreterListObject.h"
-//#import <AffdexPlugin/AffdexPlugin.h>
-//#import "ViewController.h"
+
 #import "UIView-Extensions.h"
 #import "ActiveUserManager.h"
 #import "UserDefaults.h"
-//#import "EffectSampleFactoryIOS.h"
 #import "UIActionSheet+Extensions.h"
 #import "TableListVC.h"
 #import "FileLogger.h"
@@ -32,7 +30,7 @@
 #define space 4
 
 
-@interface BaseVideoConferenceVC ()<CustomToolBarVC_DELEGATE, UIActionSheetDelegate,UserVideoPanelDELEGATE,InfoViewController_DELEGATE,TableList_DELEGATE,UIScrollViewDelegate/*, AffdexDetectorDelegate*/>
+@interface BaseVideoConferenceVC ()<CustomToolBarVC_DELEGATE, UIActionSheetDelegate,UserVideoPanelDELEGATE,InfoViewController_DELEGATE,TableList_DELEGATE,UIScrollViewDelegate>
 @end
 
 @implementation BaseVideoConferenceVC
@@ -70,8 +68,6 @@
     [super didReceiveMemoryWarning];
 }
 - (void)viewDidDisappear:(BOOL)animated {
-    //[UserDefaults setBool:NO ToKey:User_isInVideoView];
-    //_pageControl.hidden=true;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -94,10 +90,7 @@
     [self saveMaxFrameSize];
     infoVC=nil;
     [self saveDefaultFrameSize];
-    
-//    if (_isCommingFromCall) {
-//        [self act_joinConference:nil];
-//    }
+
     
 }
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -451,22 +444,6 @@
     self.sdk.AVChat.VideoController.delegate = self;
     currentRes = [self.sdk.AVChat.VideoController getConfig:ooVooVideoControllerConfigKeyResolution];
 
-//    AffdexPluginSettings* afffdexSettings  = [AffdexPluginSettings new];
-//    afffdexSettings.allExpressions     = YES;
-//    afffdexSettings.allEmotions        = YES;
-//    afffdexSettings.smile              = YES;
-//    afffdexSettings.browFurrow         = YES;
-//    afffdexSettings.browRaise          = YES;
-//    afffdexSettings.browFurrow         = YES;
-//    afffdexSettings.lipCornerDepressor = YES;
-//    afffdexSettings.valence            = YES;
-//    afffdexSettings.engagement         = YES;
-//    
-//    [afffdexSettings setClassifierPath:[[NSBundle mainBundle] pathForResource:@"data" ofType:nil]];
-//    
-//    AffdexPluginFactory* affdexPluginFactory = [[AffdexPluginFactory alloc] initWithSettings:afffdexSettings delegate:self];
-//    [self.sdk.AVChat registerPlugin:affdexPluginFactory];
-
     [self setVideoPanel];
     [self.sdk.AVChat.VideoController openCamera];
     arrEffectList = [self.sdk.AVChat.VideoController getEffectsList];
@@ -493,7 +470,6 @@
 }
 
 - (void)checkAndGoBack {
-//    _isCommingFromCall?[self onHangUp:nil]:[self closeViewAndGoBack];
     if ([self.navigationItem.leftBarButtonItem.title isEqualToString:@"Back"])
     {
         [self closeViewAndGoBack];
@@ -508,7 +484,6 @@
 - (void)onHangUp:(id)sender {
     
     if (isCameraStateOn) {
-       //[self.sdk.AVChat.VideoController openCamera];
          id <ooVooEffect> effect = arrEffectList[0];
           [self handleEffectSelection:nil effectId:effect.effectID];
     }
@@ -546,7 +521,6 @@
 
 -(void)closeViewAndGoBack{
     
-    //if([[Utility_Shared_Instance readStringUserPreference:USER_TYPE] isEqualToString:INTERPRETER])
     {
         NSMutableArray *array = [NSMutableArray new];
         [array addObject:App_Delegate.callerIDString];
@@ -598,10 +572,7 @@
     
     UIBarButtonItem *btnSecurity = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"Lock"] style:UIBarButtonItemStyleDone target:self action:nil];
     btnSecurity.tag=200;
-    
-    // [btnSecurity setTintColor: [UIColor clearColor]];
-    //self.navigationItem.rightBarButtonItems = @[ btnEditUserInfo, /* fixedSpaceBarButtonItem,  */ btnInternetConnection,btnSecurity];
-    
+
     
 //    disable navigation bar translucent.
     self.navigationController.navigationBar.translucent = NO;
@@ -730,9 +701,7 @@
         if([self currentEffect])
             [self.sdk.AVChat.VideoController setConfig:[self currentEffect] forKey:ooVooVideoControllerConfigKeyEffectId];
         
-        //NSLog(@"result %d description ", result.Result, result.description);
         
-        //[self.sdk updateConfig:^(SdkResult *result){
             NSString *displayName = [[ActiveUserManager activeUser].displayName length] > 0 ? [ActiveUserManager activeUser].displayName : [ActiveUserManager activeUser].userId;
             [self.sdk.AVChat.VideoController startTransmitVideo];
             if (_isCommingFromCall)
@@ -747,7 +716,6 @@
                 [self.sdk.AVChat join:APPDEL.conferenceIDString user_data:displayName];
             }
         }];
-    //}];
 }
 
 #pragma mark - VideoControllerDelegate
@@ -844,15 +812,6 @@
     self.contrainTopViewText.constant = [arrDefultConstrain[0] integerValue];
     [self animateConstraints];
 
-    //These line commented to make the "Me" video small left hand corner
-//    if ([self isCustomRenderView])
-//    {
-//        self.constrainRightViewVideoRender.constant = [arrDefultConstrain[1] integerValue];
-//        self.constrainBottomViewVideoRender.constant = [arrDefultConstrain[2] integerValue];
-//        self.constrainLeftViewVideoRender.constant = [arrDefultConstrain[3] integerValue];
-//        self.constrainTopViewVideoRender.constant = [arrDefultConstrain[4] integerValue];
-//    }
-//    else
     {
         // video constrain
         self.constrainRightViewVideo.constant = [arrDefultConstrain[1] integerValue];
@@ -873,15 +832,7 @@
         arrDefultConstrain = [[NSMutableArray alloc] initWithCapacity:5];
         [arrDefultConstrain addObject:[NSNumber numberWithInt:self.contrainTopViewText.constant]];      // 0
 
-        //These line commented to make the "Me" video small left hand corner
-//        if ([self isCustomRenderView])
-//        {
-//            [arrDefultConstrain addObject:[NSNumber numberWithInt:self.constrainRightViewVideoRender.constant]];  // 1
-//            [arrDefultConstrain addObject:[NSNumber numberWithInt:self.constrainBottomViewVideoRender.constant]]; // 2
-//            [arrDefultConstrain addObject:[NSNumber numberWithInt:self.constrainLeftViewVideoRender.constant]]; // 3
-//            [arrDefultConstrain addObject:[NSNumber numberWithInt:self.constrainTopViewVideoRender.constant]]; // 4
-//        }
-//        else
+        
         {
             [arrDefultConstrain addObject:[NSNumber numberWithInt:self.constrainRightViewVideo.constant]];  // 1
             [arrDefultConstrain addObject:[NSNumber numberWithInt:self.constrainBottomViewVideo.constant]]; // 2
@@ -899,31 +850,7 @@
         [self animateConstraints];
           [arrBackupConstrain addObject:[NSNumber numberWithInt:self.contrainTopViewText.constant]];      // 0
 
-        //These line commented to make the "Me" video small left hand corner
-//        if ([self isCustomRenderView]) {
-//            // video constrain
-//            self.constrainRightViewVideoRender.constant += (self.viewForVideoSizeAdjest.width/2)+space;
-//            self.constrainLeftViewVideoRender.constant =space;
-//            
-//            self.constrainBottomViewVideoRender.constant += (self.viewForVideoSizeAdjest.height/2)+space;
-//            self.constrainBottomViewVideoRender.constant += self.viewCustomTollbar_container.height;
-//            self.constrainTopViewVideoRender.constant=space;
-//            _isViewInTransmitMode = true;
-//            
-//            // saving the small size video constrains
-//            // if (!arrBackupConstrain)
-//            
-//            arrBackupConstrain=nil;
-//            arrBackupConstrain = [[NSMutableArray alloc] initWithCapacity:5];
-//            [arrBackupConstrain addObject:[NSNumber numberWithInt:self.contrainTopViewText.constant]];      // 0
-//            [arrBackupConstrain addObject:[NSNumber numberWithInt:self.constrainRightViewVideoRender.constant]];  // 1
-//            [arrBackupConstrain addObject:[NSNumber numberWithInt:self.constrainBottomViewVideoRender.constant]]; // 2
-//            [arrBackupConstrain addObject:[NSNumber numberWithInt:self.constrainLeftViewVideoRender.constant]]; // 2
-//            [arrBackupConstrain addObject:[NSNumber numberWithInt:self.constrainTopViewVideoRender.constant]]; // 2
-//
-//        }
-//        else
-        {
+            {
             // video constrain
             self.constrainRightViewVideo.constant += (self.viewForVideoSizeAdjest.width/2)+space;
             self.constrainLeftViewVideo.constant =space;
@@ -951,8 +878,7 @@
         
         [self restoreVideoConstrains];
         
-        //        _isViewInTransmitMode = false;
-        //          [self resetAll];
+       
     }
     
     [self animateConstraints];
@@ -965,14 +891,7 @@
     
         self.contrainTopViewText.constant=[arrBackupConstrain[0]integerValue];
     
-    //These line commented to make the "Me" video small left hand corner
-//    if ([self isCustomRenderView]) {
-//        self.constrainRightViewVideoRender.constant=[arrBackupConstrain[1]integerValue];
-//        self.constrainBottomViewVideoRender.constant=[arrBackupConstrain[2]integerValue];
-//        self.constrainLeftViewVideoRender.constant=[arrBackupConstrain[3]integerValue];
-//        self.constrainTopViewVideoRender.constant=[arrBackupConstrain[4]integerValue];
-//    }
-//    else
+ 
     {
         self.constrainRightViewVideo.constant=[arrBackupConstrain[1]integerValue];
         self.constrainBottomViewVideo.constant=[arrBackupConstrain[2]integerValue];
@@ -986,20 +905,10 @@
 }
 
 -(void)animateVideoToFullSize{
-    //self.contrainTopViewText.constant = 0;
-   
-    // video constrain
+    
     self.contrainTopViewText.constant=0;
      [self animateConstraints];
     
-    //These line commented to make the "Me" video small left hand corner
-//    if ([self isCustomRenderView]) {
-//        self.constrainRightViewVideoRender.constant = 0;
-//        self.constrainBottomViewVideoRender.constant = 0;
-//        self.constrainTopViewVideoRender.constant = 0;
-//        self.constrainLeftViewVideoRender.constant=0;
-//    }
-//    else
     {
         self.constrainRightViewVideo.constant = 0;
         self.constrainBottomViewVideo.constant = 0;
@@ -1011,26 +920,14 @@
 }
 
 - (void)animateConstraints {
-    //    [UIView animateWithDuration:0.1
-    //                     animations:^{
+    
     [self.view layoutIfNeeded];
-    //                     }];
 }
 
 
 #pragma mark - ConferenceToolbarDelegate
 
 - (NSArray *)getParticipantsNameList {
-    
-    //    NSMutableArray *arrUidsName = [NSMutableArray new];
-    //    // get all panel uid names which are not me !
-    //    for (NSString *uid in [participants allKeys]) {
-    //        if (![uid isEqualToString:[ActiveUserManager activeUser].userId]) {
-    //            NSString* displayName = [participants objectForKey:uid];
-    //            [arrUidsName addObject:displayName];
-    //        }
-    //    }
-    //    return [arrUidsName mutableCopy];
     
     return [participants allKeys];
 }
@@ -1090,7 +987,6 @@
 
 - (void)didParticipantLeave:(id<ooVooParticipant>)participant;
 {
-    //    NSLog(@"participant %@",participant.participantID);
     [self onLog:LogLevelSample log:[NSString stringWithFormat:@"Participant id %@",participant.participantID]];
     NSLog(@"arr taken slot %@",arrTakenSlot);
     
@@ -1262,171 +1158,15 @@
         if ([obj isKindOfClass:[UIImageView class]]) {
             UIImageView *img = (UIImageView *)obj;
             
-        }else if([obj isKindOfClass:[UserVideoPanel class]]){
-//            UserVideoPanel *user = [UserVideoPanel new];;
-//
-//            CGRect userVideoPanelFrame = CGRectMake(50, 250, 200, 200);
-//            [user initWithFrame:userVideoPanelFrame];
-           // UserVideoPanel.imgView.view.frame = userVideoPanelFrame;
-
-            
-//            if (currentUserVideoPanelFullScreenPanel == obj) {
-//                UserVideoPanel *viedip = (UserVideoPanel *)obj;
-//                //viedip.userInteractionEnabled = NO;
-//            }
-        }
+        }else if([obj isKindOfClass:[UserVideoPanel class]]){        }
     } ];
     
     
-    /*
-    [self saveDefaultFrameSize];
-    [self saveMaxFrameSize];
-    
-    int viewNumber = emptySlot / 4  ; // 4 videos in a view
-    
-    NSLog(@"view number %d",viewNumber);
-    
-    panel.frame=rectDefaultPanelSize;//self.videoPanelView.frame;
-    
-    int position;
-    
-    panel.frame=rectDefaultPanelSize;//self.videoPanelView.frame;
-    
-    emptySlot=  emptySlot%4;
-    
-    if ([self isIpad]) {
-        
-        float viewSize= viewNumber*_viewForVideoSizeAdjest.width;
-        
-        switch (emptySlot) {
-                
-            case 0: {
-                //panel.y=self.videoPanelView.y;
-                // panel.x += panel.width + space; // set the x at the end of the first
-                position = panel.x +viewSize;                  // save the real location
-                panel.x = _viewForVideoSizeAdjest.width +viewSize ; // take the panel to the right for animation
-                
-            } break;
-                
-                
-                
-            case 1: {
-                //panel.y=self.videoPanelView.y;
-                panel.x += panel.width +viewSize +space; // set the x at the end of the first
-                position = panel.x;                  // save the real location
-                panel.x = _viewForVideoSizeAdjest.width+viewSize; // take the panel to the right for animation
-                
-            } break;
-                
-            case 2: {
-                panel.x += viewSize ;
-                panel.y += rectDefaultPanelSize.size.height+space;
-                position = panel.x;                  // save the real location
-                panel.x = -_viewForVideoSizeAdjest.width+viewSize; // take the panel to the Left for animation
-                panel.height+=space;
-                //      panel.strUserId = participant.participantID;
-            } break;
-                
-            case 3: {
-                panel.y += rectDefaultPanelSize.size.height+space;
-                panel.x += panel.width+viewSize +space; // set the x at the end of the first
-                position = panel.x;                  // save the real location
-                panel.x = _viewForVideoSizeAdjest.width+viewSize; // take the panel to the Left for animation
-                panel.height+=space;
-                //      panel.strUserId = participant.participantID;
-            } break;
-        }//switch
-        
-    } // ipad
-    else
-    {
-        
-        float viewSize= viewNumber*_viewForVideoSizeAdjest.height;
-        
-        switch (emptySlot) {
-                
-            case 0: {
-                panel.y+=viewSize;
-                position = panel.x;                  // save the real location
-                panel.x = _viewForVideoSizeAdjest.width; // take the panel to the right for animation
-            } break;
-                
-            case 1:
-            {
-                panel.y+= viewSize;
-                panel.x += panel.width +viewSize +space; // set the x at the end of the first
-                position = panel.x;                  // save the real location
-                panel.x = _viewForVideoSizeAdjest.width; // take the panel to the right for animation
-                
-            } break;
-                
-            case 2: {
-                
-                panel.y+= panel.height + viewSize + space ;
-                position = panel.x;                  // save the real location
-                panel.x = _viewForVideoSizeAdjest.width; // take the panel to the right for animation
-                panel.height+=space;
-            } break;
-                
-            case 3: {
-                panel.y+= panel.height + viewSize +space ;
-                panel.x += panel.width +space; // set the x at the end of the first
-                
-                position = panel.x;                  // save the real location
-                panel.x = _viewForVideoSizeAdjest.width; // take the panel to the right for animation
-                panel.height+=space;
-            } break;
-        }//switch
-        
-    }
-    
-    NSLog(@"rect default size %@",NSStringFromCGRect(rectDefaultPanelSize));
-  //  NSLog(@"rect self %@",NSStringFromCGRect(self.videoPanelView.frame));
-    NSLog(@"rect panel %@",NSStringFromCGRect(panel.frame));
-    
-    if (!panel.delegate) {
-        panel.delegate=self;
-        panel.clipsToBounds=YES;
-    }
-    
-    if(currentFullScreenPanel == NULL)
-        [self.viewScroll addSubview:panel];
-    else
-        [self.viewScroll insertSubview:panel belowSubview:currentFullScreenPanel];
-    
-    
-    if (animated) {
-        
-        [UIView animateWithDuration:0.1
-                         animations:^{
-                             panel.x = position;
-                         }];
-        
-    }
-    else
-    {
-        panel.x = position;
-    }
-    */
-    //[self refreshScrollViewContentSize];
-    
-   // NSLog(@"the resolution before join %@",currentRes);
     currentRes = [self.sdk.AVChat.VideoController getConfig:ooVooVideoControllerConfigKeyResolution];
-   // NSLog(@"the resolution after join %@",currentRes);
     
 }
 
 
-/*
- ooVooNotCreated,
- ooVooTurningOn,
- ooVooTurnedOn,
- ooVooTurningOff,
- ooVooTurnedOff,
- ooVooRestarting,
- ooVooOnHold
- 
- */
 
 +(NSString*)getStateDescription:(ooVooDeviceState)code{
     
@@ -1740,17 +1480,6 @@
         case toolbar_hangUp:
             
             if (_isCommingFromCall) {
-                
-//                AppDelegate *appDelegate =(AppDelegate *)[[UIApplication sharedApplication]delegate];
-//                
-//                for (InterpreterListObject *iObj in appDelegate.interpreterListArray) {
-//                    NSMutableArray *array = [NSMutableArray new];
-//                    [array addObject:iObj.uidString];
-//                    [[MessageManager sharedMessage]messageOtherUsers:array WithMessageType:Cancel WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess) {
-//                        
-//                    }];
-//                }
-                
                 [self leaveSession];
             }
             else{
@@ -1779,14 +1508,6 @@
 }
 
 -(void)closeCallConversation{
-    
-    //    if (_isCommingFromCall) {
-    //          [self leaveSession];
-    //    }
-    //    else{
-    //    [self leaveSession];
-    //    [self closeViewAndGoBack];
-    
     
 }
 #pragma mark - ACTION SHEET
@@ -1961,7 +1682,6 @@ typedef enum {
             
             actionSheet.destructiveButtonIndex=index+1;
             
-//            [[[actionSheet valueForKey:@"_buttons"] lastObject] setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         }
         index++;
     }
@@ -1970,7 +1690,6 @@ typedef enum {
     }
     
     [actionSheet showInView:self.view];
-    //[actionSheet showInView:[UIApplication sharedApplication].keyWindow.rootViewController.view];
     
 }
 
@@ -1989,16 +1708,8 @@ typedef enum {
         }
     }
     
-    
-    
-    
-    
-//    if ([UIAlertController class]) {
-//        [self openAlertController:allowedResolutions];
-//    }
-//    else {
+
         [self openActionSheet:allowedResolutions];
-  //  }
 }
 
 -(BOOL)isIpadMini{
@@ -2119,8 +1830,7 @@ typedef enum {
         } else // user want's to mute camera
         {
             if (isCameraStateOn) {
-                //  [self.videoPanelView showAvatar:YES];
-                //[self.sdk.AVChat.VideoController closePreview];
+                
                 [self.sdk.AVChat.VideoController stopTransmitVideo];
                 [self.sdk.AVChat.VideoController closeCamera];
                 [toolBar setCameraImageForButtonIsOn:false];
@@ -2134,9 +1844,7 @@ typedef enum {
                 }
 
             } else {
-                // remove avatar
-                //   [self.videoPanelView showAvatar:false];
-                //[self.sdk.AVChat.VideoController openCamera];
+                
                 [self.sdk.AVChat.VideoController startTransmitVideo];
                 [toolBar setCameraImageForButtonIsOn:true];
                 //[self.sdk.AVChat.VideoController openPreview];
@@ -2193,17 +1901,7 @@ typedef enum {
    
     UIView *videoPanel= [self panelReturnCorrectPanel:panel];
     
-//    if ([panel isKindOfClass:[UserVideoPanel class]])
-//    {
-//        videoPanel=(UserVideoPanel*)panel;
-//    }
-//    else
-//    {
-//        videoPanel=(UserVideoPanelRender*)panel;
-//    }
-    
     NSString *uid = [_videoPanels allKeysForObject:videoPanel][0];
-    NSLog(@"-@@@@@@@@@@@@@@@@@@@--uid-->%@",uid);
     BOOL stateCameraOn = [ParticipentState[uid]boolValue];
     
     if (!stateCameraOn) // if the remote video is on mute than dont change to big size.
@@ -2256,52 +1954,23 @@ typedef enum {
             return;
         }
         else if  (currentFullScreenPanel &&  (currentFullScreenPanel = panel)){
-            //[self.viewScroll sendSubviewToBack:panel];
               [self UserMainPanel_Touched:panel];
         }
         else{
-            //[self.viewScroll sendSubviewToBack:panel];
             [self UserMainPanel_Touched:panel];
         }
 }
     
-    ///*
-    NSLog(@"UserVideoPanel_Touched Panel is -->%@",panel);
-//    if (panel = currentFullScreenPanel) {
-        [_viewScroll.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSLog(@"User pack :%@",obj);
-            if ([obj isKindOfClass:[UIImageView class]]) {
-                UIImageView *img = (UIImageView *)obj;
-                //img.userInteractionEnabled = YES;
-                //[self.viewScroll sendSubviewToBack:currentFullScreenPanel];
-
-            }else if([obj isKindOfClass:[UserVideoPanel class]]){
-                if (currentFullScreenPanel == obj) {
-                    UserVideoPanel *viedip = (UserVideoPanel *)obj;
-                    //viedip.userInteractionEnabled = NO;
-                }
-                
-            }
-           
-        } ];
-    //*/
-//    }
-
 }
 
 
 //#define TopSpace 10
 -(void)saveMaxFrameSize{
-    NSLog(@"viewForVideoSizeAdjest.size.width2 %f",_viewForVideoSizeAdjest.width);
-    NSLog(@"rectMaxSize.size.width %f",rectMaxSize.size.width);
-
 
     rectMaxSize.origin.x=0;
     rectMaxSize.origin.y=0;
     rectMaxSize.size.width=self.view.width;
-    rectMaxSize.size.height=self.viewScroll.height;  //self.view.height-_viewCustomTollbar_container.height+2;
-    NSLog(@"viewForVideoSizeAdjest.size.width3 %f",_viewForVideoSizeAdjest.width);
-    NSLog(@"rectMaxSize.size.width %f",rectMaxSize.size.width);
+    rectMaxSize.size.height=self.viewScroll.height;
 
 }
 
@@ -2331,14 +2000,8 @@ typedef enum {
 -(void)animate:(id)somePanel ToFrame:(CGRect)frame{
     UIView *panel=[self panelReturnCorrectPanel:somePanel];
     
-    // [panel animateImageFrame:frame];
-    //  [UIView animateWithDuration:0.5 animations:^{
     panel.frame=frame;
-    //    view.imgView.frame=frame;
-    
-    //  }];
-    
-    
+
 }
 
 
@@ -2430,36 +2093,5 @@ typedef enum {
          return YES;
     return NO;
 }
-
-//#pragma mark - Affdex detector delgate
-//
-//- (void)detectorHasResults:(NSArray *)metrics atTime:(NSTimeInterval)time
-//{
-//    //NSLog(@"Timestamp => %ld", time);
-//    
-//    for (AffdexPluginMetric *metric in metrics) {
-//        NSLog(@"Metric %@ value = %@", [metric name], [[metric value] stringValue]);
-//    }
-//}
-//
-//-(void)detectorError:(NSError*)error
-//{
-//    NSLog(@"error => %@", [error localizedDescription]);
-//}
-//
-//- (void)detectorDidFinishProcessing
-//{
-//    NSLog(@"detectorDidFinishProcessing");
-//}
-//
-//- (void)detectorDidStartDetectingFace
-//{
-//    NSLog(@"detectorDidStartDetectingFace");
-//}
-//
-//- (void)detectorDidStopDetectingFace
-//{
-//    NSLog(@"detectorDidStopDetectingFace");
-//}
 
 @end

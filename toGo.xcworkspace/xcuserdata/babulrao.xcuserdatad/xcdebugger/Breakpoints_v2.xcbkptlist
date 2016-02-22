@@ -58,28 +58,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "toGo/MVC/Controller/OrderInterpretation/OrderInterpretationViewController.m"
-            timestampString = "477662736.590164"
+            timestampString = "477823972.855865"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "577"
-            endingLineNumber = "577"
+            startingLineNumber = "528"
+            endingLineNumber = "528"
             landmarkName = "-callCancelFriends"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "toGo/ooVoo_Calling/Call/CNMessage.m"
-            timestampString = "477662741.57432"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "189"
-            endingLineNumber = "189"
-            landmarkName = "-initMessageWithResponse:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

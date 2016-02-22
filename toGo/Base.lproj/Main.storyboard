@@ -2686,7 +2686,7 @@
                                     <action selector="act_ToolbarButtonPressed:" destination="zfm-xQ-8ZJ" eventType="touchUpInside" id="G4w-kf-wqv"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3ad-72-g0h">
+                            <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3ad-72-g0h">
                                 <rect key="frame" x="196" y="0.0" width="44" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="44" id="x7A-Nm-xZe"/>

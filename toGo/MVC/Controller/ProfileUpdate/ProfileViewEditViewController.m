@@ -102,17 +102,6 @@
     
     [self addTapGesture];
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(keyboardWillShow:)
-//                                                 name:UIKeyboardWillShowNotification
-//                                               object:nil];
-//    
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(keyboardWillHide:)
-//                                                 name:UIKeyboardWillHideNotification
-//                                               object:nil];
-    
-    
     self.headerLabel.font = [UIFont normalSize];
     self.headerLabel.text = NSLOCALIZEDSTRING(@"PROFILE");
     
@@ -126,16 +115,11 @@
     if (isViewDidLoad) {
         isViewDidLoad=NO;
         self.tblView.backgroundColor = [UIColor backgroundColor];
-        //[NSThread detachNewThreadSelector:@selector(getCountryList) toTarget:self withObject:nil];
         [self getCountryList];
         if (App_Delegate.languagesArray.count<1) {
-            //[NSThread detachNewThreadSelector:@selector(getLanguages) toTarget:App_Delegate withObject:nil];
-            
             [App_Delegate getLanguages];
         }
         [self performSelector:@selector(getProfileInfo) withObject:nil afterDelay:0.2];
-        
-        //[NSThread detachNewThreadSelector:@selector(getProfileInfo) toTarget:self withObject:nil];
     }
     else{
         if (isCameraGallerySelected) {
@@ -174,11 +158,9 @@
 -(void)addTapGesture{
     tapGesture=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(removePickerViews)];
     tapGesture.numberOfTouchesRequired=1;
-    //[self.view addGestureRecognizer:tapGesture];
 }
 
 -(void)removeTapGesture{
-    //[self.view removeGestureRecognizer:tapGesture];
 }
 
 -(void)allocationsAndStaticText{
@@ -270,17 +252,13 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    //return UITableViewAutomaticDimension;
     if (indexPath.row==0) {
         return HEADER_HEIGHT;
     }
     else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Address"] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Description"]) {
-        //return 100;
-        //return UITableViewAutomaticDimension;
         if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Address"]){
             int defaultHeight = 0;
             if (self.profileObject.addressString.length<TEXT_MINIMUM_HEIGHT) {
-                //defaultHeight = DEFAULT_HEIGHT;
                 return DEFAULT_TABLE_CELL_HEIGHT;
             }
             
@@ -289,7 +267,6 @@
         else{
             int defaultHeight = 0;
             if (self.profileObject.descriptionString.length<TEXT_MINIMUM_HEIGHT) {
-                //defaultHeight = DEFAULT_HEIGHT;
                 return DEFAULT_TABLE_CELL_HEIGHT;
             }
             return [self heightOfTextViewWithString:self.profileObject.descriptionString withFont:[UIFont normal] andFixedWidth:self.view.frame.size.width]+defaultHeight;
@@ -310,12 +287,9 @@
         return HEADER_HEIGHT;
     }
     else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Address"] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Description"]) {
-        //return 100;
-        //return UITableViewAutomaticDimension;
         if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:@"Address"]){
             int defaultHeight = 0;
             if (self.profileObject.addressString.length<TEXT_MINIMUM_HEIGHT) {
-                //defaultHeight = DEFAULT_HEIGHT;
                 return DEFAULT_TABLE_CELL_HEIGHT;
             }
             
@@ -324,7 +298,6 @@
         else{
             int defaultHeight = 0;
             if (self.profileObject.descriptionString.length<TEXT_MINIMUM_HEIGHT) {
-                //defaultHeight = DEFAULT_HEIGHT;
                 return DEFAULT_TABLE_CELL_HEIGHT;
             }
             return [self heightOfTextViewWithString:self.profileObject.descriptionString withFont:[UIFont normal] andFixedWidth:self.view.frame.size.width]+defaultHeight;
@@ -359,8 +332,6 @@
                                         cell.profileImageView.image = image;
                                     }
                                 }];
-//            [cell.profileImageView sd_setImageWithURL:[NSURL URLWithString:self.profileObject.imageURLString]
-//                                     placeholderImage:[UIImage defaultPicImage]];
             
         }
         if (selectedImage) {
@@ -473,14 +444,12 @@
                 
                 UIImageView *imgViewEdit = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width-37, 5, 12, 12)];
                 imgViewEdit.tag = IMAGE_VIEW_TAG;
-                //imgViewEdit.backgroundColor = [UIColor redColor];
                 [descriptionCell.contentView addSubview:imgViewEdit];
                 
                 UIButton *editBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width-50, 5, 40, 40)];
                 ///////////// Text/Data/Button Actions Assigning
                 editBtn.tag = DESCRIPTION_BUTTON_TAG;
                 
-                //editBtn.backgroundColor = [UIColor blackColor];
                 [editBtn addTarget:self action:@selector(editButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
                 [descriptionCell.contentView addSubview:editBtn];
                 
@@ -488,7 +457,6 @@
                 UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, self.view.frame.size.width-60, 20)];
                 label.text = [self.namesArray objectAtIndex:indexPath.row];
                 label.tag = LABEL_TAG;
-                //label.backgroundColor = [UIColor redColor];
                 [descriptionCell.contentView addSubview:label];
                 
                 UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(10, 23, self.view.frame.size.width-20, [self heightOfTextViewWithString:self.profileObject.descriptionString withFont:[UIFont normal] andFixedWidth:280])];
@@ -536,9 +504,6 @@
         CGSize size = [[self.namesArray objectAtIndex:indexPath.row] sizeWithAttributes:
                        @{NSFontAttributeName:[UIFont normal]}];
     
-        //cell.mandatoryLabel.frame = CGRectMake(size.width, 3, 18, 20);
-        
-        //[UIButton roundedCornerButton:cell.languagesButton];
         ///////////// Styles
         [cell.descriptionTextField setBorderStyle:UITextBorderStyleNone];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -563,8 +528,6 @@
         }
         cell.headerLabel.text = [self.namesArray objectAtIndex:indexPath.row];
         [cell.editButton addTarget:self action:@selector(editButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-//        [cell.languagesButton addTarget:self action:nil forControlEvents:UIControlEventTouchUpInside];
-
         /////////
         if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"UID")]) {
             cell.mandatoryLabel.hidden = YES;
@@ -814,16 +777,8 @@
             else{
                 languagesScrollView.contentSize = CGSizeMake(languagesScrollView.frame.size.width, sizeOfContent);
             }
-            
-            
-            //[languagesScrollView setContentSize:CGSizeMake(width, [self.selectedDataArray allKeys].count*height)];
-            
             [cell addSubview:languagesScrollView];
-            /*
-             if (self.profileObject.myLanguagesString.length) {
-             [cell.languagesButton setTitle:self.profileObject.myLanguagesString forState:UIControlStateNormal];
-             }
-             */
+            
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"CARD_NUMBER")]) {
             cell.editImageView.hidden = NO;
@@ -1039,7 +994,6 @@
         self.profileObject.isEinTaxEdit = NO;
         self.profileObject.isDOBEdit = NO;
         if(self.profileObject.isDescriptionEdit){
-            //self.profileObject.descriptionString = txtView.text;
             self.profileObject.isDescriptionEdit = NO;
             [self.view endEditing:YES];
             [self saveProfileInfo:indexpath];
@@ -1613,9 +1567,6 @@
     }
     
     if (isEditMode) {
-        //[self.tblView beginUpdates];
-        //[self.tblView reloadRowsAtIndexPaths:@[indexpath] withRowAnimation:UITableViewRowAnimationFade];
-        //[self.tblView endUpdates];
         [self.tblView reloadData];
     }
 }
@@ -1683,8 +1634,7 @@
                 
                 self.profileObject.dobString = [self dateConvertion];
                 /////////// Languages
-                //NSLog(@"--langArray -->%@",App_Delegate.languagesArray);
-                NSArray *langArray = [userDict objectForKey:KMYLANGUAGES_W];//[ componentsSeparatedByString:@","];
+                NSArray *langArray = [userDict objectForKey:KMYLANGUAGES_W];
                 if (langArray.count) {
                     self.selectedLanguagesArray = [NSMutableArray new];
                     for (id key in langArray) {
@@ -1749,7 +1699,6 @@
 
 -(void)makeEditableMandatoryFields{
     
-    //if ([[Utility_Shared_Instance readStringUserPreference:KCOMPLETION_W] isEqualToString:PROFILE_INCOMPLETE])
     {
         if (!self.profileObject.firstNameString.length) {
             self.profileObject.isFirstNameEdit = YES;
@@ -1791,11 +1740,7 @@
 }
 
 -(void)languagesButtonPressed{
-    
-//    JBBarChartViewController *barChartController = [[JBBarChartViewController alloc] init];
-//    [self.navigationController pushViewController:barChartController animated:YES];
-//    return;
-    
+
     [self.view endEditing:YES];
     [self removeTapGesture];
     [self removePopUpView];
@@ -1851,7 +1796,6 @@
     if (self.countryArray.count) {
         languagesView.dataArray = self.countryArray;
     }
-    //languagesView.countriesStatesArray = [[NSMutableArray alloc]initWithObjects:@"Afghanistan",@"Albania",@"Algeria",@"India",@"United Kingdom",@"USA", nil];
     [languagesView.tblView reloadData];
     [self.view addSubview:languagesView];
 }
@@ -1871,7 +1815,6 @@
         if (self.stateArray.count) {
             languagesView.dataArray = self.stateArray;
         }
-        //languagesView.countriesStatesArray = [[NSMutableArray alloc]initWithObjects:@"Maryland",@"Oklahoma",@"Oregon",@"Nevada", nil];
         [languagesView.tblView reloadData];
         [self.view addSubview:languagesView];
     }
@@ -1956,7 +1899,6 @@
     NSMutableDictionary *saveDict=[NSMutableDictionary new];
     [saveDict setValue:[Utility_Shared_Instance readStringUserPreference:KID_W] forKey:KID_W];
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.emailString] forKey:KEMAIL_W];
-    //[saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.nameString] forKey:KNAME_W];
     NSMutableDictionary *dictName = [NSMutableDictionary new];
     [dictName setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.firstNameString] forKey:KFIRST_NAME_W];
     [dictName setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.lastNameString] forKey:KLAST_NAME_W];
@@ -1964,7 +1906,6 @@
 
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.nickNameString] forKey:KNICKNAME_W];
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.phoneNumberString] forKey:KPHONE_NUMBER_W];
-    //NSArray *langKeysArray = [[Utility_Shared_Instance checkForNullString:self.profileObject.myLanguagesKEYsString] componentsSeparatedByString:@","];
     [saveDict setValue:self.profileObject.myLanguagesKeysArray forKey:KMYLANGUAGE_W];
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.addressString] forKey:KADDRESS_W];
     [saveDict setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.countryString] forKey:KCOUNTRY_W];
@@ -2008,9 +1949,6 @@
             [SVProgressHUD dismiss];
             NSLog(@"dict-->%@",responseDict);
             [self.tblView reloadData];
-//            [self.tblView beginUpdates];
-//            [self.tblView reloadRowsAtIndexPaths:@[currentIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            [self.tblView endUpdates];
         });
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -2173,13 +2111,7 @@
 }
 
 - (void)cameraGalleryButtonPressed {
-    
-//    ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
-//    
-//    if (status != ALAuthorizationStatusAuthorized) {
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Attention" message:@"Please give this app permission to access your photo library in your settings app!" delegate:nil cancelButtonTitle:@"Close" otherButtonTitles:nil, nil];
-//        [alert show];
-//    }
+
     
     UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:NSLOCALIZEDSTRING(@"CHOOSE_PROFILE_IMAGE") message:@"" delegate:self cancelButtonTitle:NSLOCALIZEDSTRING(@"CAMERA") otherButtonTitles:NSLOCALIZEDSTRING(@"GALLERY"), nil];
     alertView.delegate = self;
@@ -2207,19 +2139,9 @@
         }
     }
     else{
-        //if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary])
         {
             imagePickerController.sourceType =  UIImagePickerControllerSourceTypePhotoLibrary;
         }
-        /*
-        else
-        {
-            [Utility_Shared_Instance showAlertViewWithTitle:NSLOCALIZEDSTRING(APPLICATION_NAME)
-                                                withMessage:NSLOCALIZEDSTRING(@"DEVICE_NO_PHOTO_LIBRARY")
-                                                     inView:self
-                                                  withStyle:UIAlertControllerStyleAlert];
-        }
-        */
     }
     dispatch_async(dispatch_get_main_queue(), ^{
         [self presentViewController:imagePickerController animated:YES completion:nil];
@@ -2237,11 +2159,6 @@
     
     [self dismissViewControllerAnimated:YES completion:nil];
     
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self dismissViewControllerAnimated:picker completion:nil];
-//        [self.tblView reloadData];
-//        [self uploadImageToServer];
-//    });
 }
 
 
@@ -2389,7 +2306,6 @@
         datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(0,40,[UIScreen mainScreen].bounds.size.width, 260)];
         datePicker.datePickerMode=UIDatePickerModeDate;
         //Setting user selected date as the date picker default
-        //[datePicker setDate:date animated:YES];
         [datePicker addTarget:self action:@selector(taskDatePicked)forControlEvents:UIControlEventValueChanged];
         [_backPickerview addSubview:datePicker];
     }
@@ -2684,9 +2600,6 @@
         NSDictionary *responseDict=responseObject;
         if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
         {
-            //CountryStore *store = [[CountryStore alloc]initWithJsonDictionary:responseDict];
-           // NSMutableArray *array = [[StoreManager sharedManager] getCountryObject];
-            
             NSMutableArray *countryTemp = [NSMutableArray new];
             NSArray *dataArray = [responseDict objectForKey:@"data"];
             for (id jsonObject in dataArray) {
@@ -2726,9 +2639,6 @@
         NSDictionary *responseDict=responseObject;
         if ([[responseDict objectForKey:KCODE_W] intValue] == KSUCCESS)
         {
-            //CountryStore *store = [[CountryStore alloc]initWithJsonDictionary:responseDict];
-            // NSMutableArray *array = [[StoreManager sharedManager] getCountryObject];
-            
             self.stateArray = [NSMutableArray new];
             NSArray *dataArray = [responseDict objectForKey:@"data"];
             for (id jsonObject in dataArray) {
@@ -2825,16 +2735,9 @@
 }
 
 -(void)getLanguageKeys{
-    //NSMutableString *mutableStr = [NSMutableString new];
     self.profileObject.myLanguagesKeysArray = [NSMutableArray new];
     for (LanguageObject *lObj in self.selectedLanguagesArray) {
-        //[mutableStr appendString:[NSString stringWithFormat:@"%@,",lObj.languageID]];
         [self.profileObject.myLanguagesKeysArray addObject:lObj.languageID];
     }
-//    NSString *tempStr = [NSString stringWithString:mutableStr];
-//    if ([tempStr hasSuffix:@","]) {
-//        tempStr = [tempStr substringToIndex:[tempStr length]-1];
-//    }
-    //self.profileObject.myLanguagesKEYsString = tempStr;
 }
 @end

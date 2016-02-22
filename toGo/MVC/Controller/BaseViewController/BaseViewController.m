@@ -41,7 +41,6 @@
     [backBtn setBackgroundImage:img1 forState:UIControlStateNormal];
     [backBtn addTarget:self action:@selector(navigationBarLeftButtonClicked)
       forControlEvents:UIControlEventTouchUpInside];
-    //[backBtn setShowsTouchWhenHighlighted:YES];
     UIBarButtonItem *barButton=[[UIBarButtonItem alloc]initWithCustomView:backBtn];
     self.navigationItem.leftBarButtonItem=barButton;
 }
@@ -53,7 +52,6 @@
     [backBtn setBackgroundImage:img1 forState:UIControlStateNormal];
     [backBtn addTarget:self action:@selector(logOutButtonClicked)
       forControlEvents:UIControlEventTouchUpInside];
-    //[backBtn setShowsTouchWhenHighlighted:YES];
     UIBarButtonItem *barButton=[[UIBarButtonItem alloc]initWithCustomView:backBtn];
     self.navigationItem.rightBarButtonItem=barButton;
 }
@@ -65,7 +63,6 @@
     [backBtn setBackgroundImage:img1 forState:UIControlStateNormal];
     [backBtn addTarget:self action:@selector(backButtonPressed)
       forControlEvents:UIControlEventTouchUpInside];
-    //[backBtn setShowsTouchWhenHighlighted:YES];
     UIBarButtonItem *barButton=[[UIBarButtonItem alloc]initWithCustomView:backBtn];
     self.navigationItem.leftBarButtonItem=barButton;
 }
@@ -85,18 +82,6 @@
 
 - (void)logOutButtonClicked{
     [self.view endEditing:YES];
-    
-    /* // 1. Not working to Logout  2. call is also coming to interpreter after this
-    NSString * token = [ActiveUserManager activeUser].token;
-    if(token && token.length > 0){
-        [self.sdk.Account logout];
-    }else{
-        [self.sdk.Account logout];
-    }
-    [[MessageManager sharedMessage]initSdkMessage];
-    */
-    //incomingCall
-    
     
     [App_Delegate UnSetNotificationObserversForCallMessaging];
     self.sdk = [ooVooClient sharedInstance];
