@@ -1212,6 +1212,7 @@
         case sdk_error_InvalidOperation:
             // Invalid Operation
             //This case the screen is in Video Panel View. have to pop the view from this
+            NSLog(@"***************************************  sdk_error_InvalidOperation ******************************************************************************************************************************************************");
             [App_Delegate saveDisconnectedCallDetailsinServer:nil isNoOnePicksCallorEndedByCustomer:YES];
             des = @"Invalid Operation.";
             break;
@@ -1255,6 +1256,7 @@
             des = @" Not Initialized.";
             break;
         case sdk_error_Error:
+            NSLog(@"***************************************  sdk_error_Error ******************************************************************************************************************************************************");
             [App_Delegate saveDisconnectedCallDetailsinServer:nil isNoOnePicksCallorEndedByCustomer:YES];
             [App_Delegate killVideoView];
             des = @"Conference Error.";
@@ -1266,6 +1268,7 @@
             des = @"Connection Timeout.";
             break;
         case sdk_error_DisconnectedByPeer:
+            NSLog(@"***************************************  sdk_error_DisconnectedByPeer ******************************************************************************************************************************************************");
             [App_Delegate saveDisconnectedCallDetailsinServer:nil isNoOnePicksCallorEndedByCustomer:YES];
             [App_Delegate killVideoView];
             des = @"Disconnected by peer.";
@@ -1307,6 +1310,7 @@
             des = @"Access Denied.";
             break;
         case sdk_error_ConnectionLost:
+            NSLog(@"***************************************  sdk_error_ConnectionLost ******************************************************************************************************************************************************");
             [App_Delegate saveDisconnectedCallDetailsinServer:nil isNoOnePicksCallorEndedByCustomer:YES];
             des = @"Connection Lost.";
             break;
@@ -1322,6 +1326,7 @@
             break;
             
         default:
+            NSLog(@"***************************************  default ******************************************************************************************************************************************************");
             [App_Delegate saveDisconnectedCallDetailsinServer:nil isNoOnePicksCallorEndedByCustomer:YES];
             des = [NSString stringWithFormat:@"Error Code %d", code];
             break;

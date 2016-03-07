@@ -87,12 +87,12 @@ return @"UserVideoPanel";
 
 
 #pragma mark - Orientation
+
 -(id)videoPanel{
     if (self.videoPanelView)
         return self.videoPanelView;
     else
         return self.videoPanelViewRender;
-    
 }
 
 -(void)setVideoPanelName{

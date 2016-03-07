@@ -196,8 +196,8 @@
                            NSLOCALIZEDSTRING(@"POSTAL_CODE"),
                            NSLOCALIZEDSTRING(@"PHONE_NUMBER"),
                            NSLOCALIZEDSTRING(@"EIN_TaxID"),
-                           NSLOCALIZEDSTRING(@"MY_LANGUAGES"),
-                           NSLOCALIZEDSTRING(@"CERTIFICATES"), nil];
+                           NSLOCALIZEDSTRING(@"MY_LANGUAGES"),nil];
+                           //NSLOCALIZEDSTRING(@"CERTIFICATES"), nil];
     }
     else
     {
@@ -369,7 +369,7 @@
                 }
                 
                 UILabel *starLabel = [[UILabel alloc]initWithFrame:CGRectMake(125, 5, 18, 21)];
-                starLabel.text = @"*";
+                starLabel.text = @"";//*
                 starLabel.textColor = [UIColor redColor];
                 starLabel.tag = 789;
                 [addressCell.contentView addSubview:starLabel];
@@ -378,7 +378,7 @@
                 UIImageView *imgViewEdit = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width-37, 5, 12, 12)];
                 imgViewEdit.tag = IMAGE_VIEW_TAG;
                 //imgViewEdit.backgroundColor = [UIColor redColor];
-                [addressCell.contentView addSubview:imgViewEdit];
+                //[addressCell.contentView addSubview:imgViewEdit];
                 
                 UIButton *editBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width-50, 5, 40, 40)];
                 ///////////// Text/Data/Button Actions Assigning
@@ -387,7 +387,7 @@
                 
                 //editBtn.backgroundColor = [UIColor blackColor];
                 [editBtn addTarget:self action:@selector(editButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-                [addressCell.contentView addSubview:editBtn];
+                //[addressCell.contentView addSubview:editBtn];
 
                 
                 UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, self.view.frame.size.width-60, 20)];
@@ -444,14 +444,14 @@
                 
                 UIImageView *imgViewEdit = [[UIImageView alloc]initWithFrame:CGRectMake(self.view.frame.size.width-37, 5, 12, 12)];
                 imgViewEdit.tag = IMAGE_VIEW_TAG;
-                [descriptionCell.contentView addSubview:imgViewEdit];
+                //[descriptionCell.contentView addSubview:imgViewEdit];
                 
                 UIButton *editBtn = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width-50, 5, 40, 40)];
                 ///////////// Text/Data/Button Actions Assigning
                 editBtn.tag = DESCRIPTION_BUTTON_TAG;
                 
                 [editBtn addTarget:self action:@selector(editButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-                [descriptionCell.contentView addSubview:editBtn];
+                //[descriptionCell.contentView addSubview:editBtn];
                 
                 
                 UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(10, 5, self.view.frame.size.width-60, 20)];
@@ -593,7 +593,9 @@
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"GENDER")]) {
             cell.editImageView.hidden = NO;
+            cell.editImageView.hidden = YES;
             cell.editButton.hidden = NO;
+            cell.editButton.hidden = YES;
             cell.editButton.tag = indexPath.row;
             
             cell.descriptionTextField.userInteractionEnabled = NO;
@@ -606,7 +608,9 @@
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"DOB")]) {
             cell.editImageView.hidden = NO;
+            cell.editImageView.hidden = YES;
             cell.editButton.hidden = NO;
+            cell.editButton.hidden = YES;
             cell.editButton.tag = indexPath.row;
             
             cell.descriptionTextField.userInteractionEnabled = NO;
@@ -651,7 +655,9 @@
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"CITY")]) {
             cell.editImageView.hidden = NO;
+            cell.editImageView.hidden = YES;
             cell.editButton.hidden = NO;
+            cell.editButton.hidden = YES;
             cell.editButton.tag = indexPath.row;
             if (self.profileObject.isCityEdit) {
                 cell.editImageView.image = [UIImage CheckOrTickImage];
@@ -670,7 +676,9 @@
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"POSTAL_CODE")]) {
             cell.editImageView.hidden = NO;
+            cell.editImageView.hidden = YES;
             cell.editButton.hidden = NO;
+            cell.editButton.hidden = YES;
             cell.editButton.tag = indexPath.row;
             cell.descriptionTextField.keyboardType  = UIKeyboardTypeNumbersAndPunctuation;
             if (self.profileObject.isPostalCodeEdit) {
@@ -690,7 +698,9 @@
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"PHONE_NUMBER")]) {
             cell.descriptionTextField.keyboardType  = UIKeyboardTypeNumbersAndPunctuation;
             cell.editImageView.hidden = NO;
+            cell.editImageView.hidden = YES;
             cell.editButton.hidden = NO;
+            cell.editButton.hidden = YES;
             cell.editButton.tag = indexPath.row;
             
             if (self.profileObject.isPhoneNumberEdit) {
@@ -782,7 +792,9 @@
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"CARD_NUMBER")]) {
             cell.editImageView.hidden = NO;
+            cell.editImageView.hidden = YES;
             cell.editButton.hidden = NO;
+            cell.editButton.hidden = YES;
             cell.editButton.tag = indexPath.row;
             cell.descriptionTextField.keyboardType  = UIKeyboardTypeNumbersAndPunctuation;
             if (self.profileObject.isCardNumberEdit) {
@@ -801,7 +813,9 @@
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"CARD_TYPE")]) {
             cell.editImageView.hidden = NO;
+            cell.editImageView.hidden = YES;
             cell.editButton.hidden = NO;
+            cell.editButton.hidden = YES;
             cell.editButton.tag = indexPath.row;
             
             cell.descriptionTextField.userInteractionEnabled = NO;
@@ -815,7 +829,9 @@
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"CVV")]) {
             cell.descriptionTextField.secureTextEntry = YES;
             cell.editImageView.hidden = NO;
+            cell.editImageView.hidden = YES;
             cell.editButton.hidden = NO;
+            cell.editButton.hidden = YES;
             cell.editButton.tag = indexPath.row;
             cell.descriptionTextField.keyboardType  = UIKeyboardTypeNumbersAndPunctuation;
             if (self.profileObject.isCVVEdit) {
@@ -833,7 +849,9 @@
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"EXPIRY_YEAR")]) {
             cell.editImageView.hidden = NO;
+            cell.editImageView.hidden = YES;
             cell.editButton.hidden = NO;
+            cell.editButton.hidden = YES;
             cell.editButton.tag = indexPath.row;
             
             cell.descriptionTextField.userInteractionEnabled = NO;
@@ -846,7 +864,9 @@
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"EXPIRY_MONTH")]) {
             cell.editImageView.hidden = NO;
+            cell.editImageView.hidden = YES;
             cell.editButton.hidden = NO;
+            cell.editButton.hidden = YES;
             cell.editButton.tag = indexPath.row;
             
             cell.descriptionTextField.userInteractionEnabled = NO;
@@ -860,7 +880,9 @@
         
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"EIN_TaxID")] || [[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"TaxID_EIN")]) {
             cell.editImageView.hidden = NO;
+            cell.editImageView.hidden = YES;
             cell.editButton.hidden = NO;
+            cell.editButton.hidden = YES;
             cell.editButton.tag = indexPath.row;
             cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.eINtaxIDString];
             if (self.profileObject.isEinTaxEdit) {
@@ -877,7 +899,9 @@
         }
         else if ([[self.namesArray objectAtIndex:indexPath.row] isEqualToString:NSLOCALIZEDSTRING(@"CERTIFICATES")]) {
             cell.editImageView.hidden = NO;
+            cell.editImageView.hidden = YES;
             cell.editButton.hidden = NO;
+            cell.editButton.hidden = YES;
             cell.editButton.tag = indexPath.row;
             cell.mandatoryLabel.hidden = YES;
             cell.descriptionTextField.text = [Utility_Shared_Instance checkForNullString:self.profileObject.certificatesString];
@@ -1918,10 +1942,14 @@
     if (!_isInterpreter) {
         NSMutableDictionary *dictName1 = [NSMutableDictionary new];
         [dictName1 setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.cardTypeString] forKey:KCARD_TYPE_W];
-        [dictName1 setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.cardNumberString] forKey:KCARD_NUMBER_W];
+        //[dictName1 setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.cardNumberString] forKey:KCARD_NUMBER_W];
         [dictName1 setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.expMonthString] forKey:KEXP_MONTH_W];
         [dictName1 setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.expYearString] forKey:KEXP_YEAR_W];
         [dictName1 setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.CVVString] forKey:KCVV_W];
+        [dictName1 setValue:@"4111111111111111" forKey:KCARD_NUMBER_W];
+//        [dictName1 setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.expMonthString] forKey:@"02"];
+//        [dictName1 setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.expYearString] forKey:@"2017"];
+//        [dictName1 setValue:[Utility_Shared_Instance checkForNullString:self.profileObject.CVVString] forKey:@"123"];
         
         [saveDict setValue:dictName1 forKey:KPAYMENT_INFO_W];
         
@@ -2271,6 +2299,8 @@
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
+    isCameraGallerySelected = NO;
+
     dispatch_async(dispatch_get_main_queue(), ^{
         [self dismissViewControllerAnimated:YES completion:nil];
     });
@@ -2695,8 +2725,8 @@
                                NSLOCALIZEDSTRING(@"POSTAL_CODE"),
                                NSLOCALIZEDSTRING(@"PHONE_NUMBER"),
                                NSLOCALIZEDSTRING(@"TaxID_EIN"),
-                               NSLOCALIZEDSTRING(@"MY_LANGUAGES"),
-                               NSLOCALIZEDSTRING(@"CERTIFICATES"), nil];
+                               NSLOCALIZEDSTRING(@"MY_LANGUAGES"),nil];
+                               //NSLOCALIZEDSTRING(@"CERTIFICATES"), nil];
         }
         else{
             self.namesArray = [[NSMutableArray alloc]initWithObjects:@"",
@@ -2712,8 +2742,8 @@
                                NSLOCALIZEDSTRING(@"POSTAL_CODE"),
                                NSLOCALIZEDSTRING(@"PHONE_NUMBER"),
                                NSLOCALIZEDSTRING(@"EIN_TaxID"),
-                               NSLOCALIZEDSTRING(@"MY_LANGUAGES"),
-                               NSLOCALIZEDSTRING(@"CERTIFICATES"), nil];
+                               NSLOCALIZEDSTRING(@"MY_LANGUAGES"),nil];
+                               //NSLOCALIZEDSTRING(@"CERTIFICATES"), nil];
         }
     }
 }

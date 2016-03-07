@@ -78,8 +78,6 @@
 	<array>
 		<string>fbauth2</string>
 		<string>fbapi</string>
-		<string>youtube</string>
-		<string>twitter</string>
 		<string>com-google-gidconsent-google</string>
 		<string>com.googleusercontent.apps.965557524622-unoravj9tql2v9rp00cti31p7pmv21sq</string>
 		<string>com-google-gidconsent-youtube</string>
@@ -202,9 +200,6 @@
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>

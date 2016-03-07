@@ -262,22 +262,22 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application {
         //1st when enter to Back ground
-        [ooVooClient applicationWillResignActive];
-    
-        bool isMessaging = [[[NSUserDefaults standardUserDefaults] stringForKey:APP_MESSAGING]boolValue];
-        if (!isMessaging) {
-            ooVooClient *sdk = [ooVooClient sharedInstance];
-            [sdk.Messaging disconnect];
-        }
+//        [ooVooClient applicationWillResignActive];
+//    
+//        bool isMessaging = [[[NSUserDefaults standardUserDefaults] stringForKey:APP_MESSAGING]boolValue];
+//        if (!isMessaging) {
+//            ooVooClient *sdk = [ooVooClient sharedInstance];
+//            [sdk.Messaging disconnect];
+//        }
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
      //2nd when enter to Back ground
-    [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
-    
-        [ooVooClient applicationDidEnterBackground];
-        ooVooClient *sdk = [ooVooClient sharedInstance];
-        [sdk.AVChat.VideoController stopTransmitVideo];
+//    [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
+//    
+//        [ooVooClient applicationDidEnterBackground];
+//        ooVooClient *sdk = [ooVooClient sharedInstance];
+//        [sdk.AVChat.VideoController stopTransmitVideo];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -680,6 +680,7 @@
     [callDict setObject:[Utility_Shared_Instance GetCurrentTimeStamp] forKey:KSTART_TIME_W];
     
     if (!isNoOnePicksCallorEndedByCustomer) {
+        
         [callDict setObject:[Utility_Shared_Instance checkForNullString:self.cdrObject.receivedInterpreter.uidString] forKey:KCALL_RECEIVED_BY_W];
         [callDict setObject:[Utility_Shared_Instance checkForNullString:self.cdrObject.conferenceIDString] forKey:KCALLID_W];
         [callDict setObject:[Utility_Shared_Instance checkForNullString:[Utility_Shared_Instance GetCurrentTimeStamp]] forKey:KSTART_TIME_W];
