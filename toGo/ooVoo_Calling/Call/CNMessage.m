@@ -150,6 +150,7 @@ Updating Disconnected users status in DB.
         iObj = [sortedArray lastObject];
         App_Delegate.cdrObject.receivedInterpreter = iObj;
     }
+    
     NSDictionary *dictIs = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
     if ([[dictIs objectForKey:@"type"] isEqualToString:@"accept"]) {
         

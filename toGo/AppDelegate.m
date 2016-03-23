@@ -673,7 +673,6 @@
     }
 
     NSMutableDictionary *callDict= [NSMutableDictionary new];
-    
     [callDict setObject:[Utility_Shared_Instance checkForNullString:tempObj.poolIdString] forKey:KPOOL_ID_W];
     [callDict setObject:[Utility_Shared_Instance checkForNullString:[Utility_Shared_Instance readStringUserPreference:KID_W]] forKey:KUSER_ID_W];
     [callDict setObject:disconnectedInterpreters forKey:KINTERPRETER_ID_W];
