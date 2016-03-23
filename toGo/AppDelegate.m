@@ -68,10 +68,11 @@
     NSLog(@"[ActiveUserManager activeUser].userId--->: %@", [ActiveUserManager activeUser].userId);
     
     self.callingUsers = [NSMutableArray new];
-#ifdef DEBUG
-    NSLog(@"Debug mode no Hockey");
-#else
-#endif
+    
+    #ifdef DEBUG
+        NSLog(@"Debug mode no Hockey");
+    #else
+    #endif
     
     [UserDefaults setBool:NO ToKey:User_isInVideoView];
     
@@ -90,9 +91,6 @@
     
     
     viewVideoControler = (VideoConferenceVC *)[mainStoryboard instantiateViewControllerWithIdentifier:@"VideoConferenceVC"];
-    NSLog(@"***********************   didFinishLaunchingWithOptions  ****************************");
-    //[self SetNotificationObserversForCallMessaging];
-    
     
     NSLog(@"APP_VIDEO_RENDER---->%d",[UserDefaults getBoolForToKey:APP_VIDEO_RENDER]);
     
@@ -108,7 +106,7 @@
     
     
     if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-#ifdef __IPHONE_8_0
+    #ifdef __IPHONE_8_0
         UIUserNotificationType types = UIUserNotificationTypeBadge |
         UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
         //
@@ -117,7 +115,7 @@
         //
         [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
         [application registerForRemoteNotifications];
-#endif
+    #endif
     } else {
         UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
         [application registerForRemoteNotificationTypes:myTypes];
@@ -149,12 +147,6 @@
     /////////////////////   Google_Plus END   ////////////////////////////////////
 }
 
-
-/*
-- (IBAction)crashButtonTapped:(id)sender {
-    [[Crashlytics sharedInstance] crash];
-}
-*/
 
 #pragma mark - Push notification
 
@@ -201,11 +193,6 @@
                                                        annotation:annotation] ||[GPPURLHandler handleURL:url
                                                                                        sourceApplication:sourceApplication
                                                                                               annotation:annotation];
-    /*
-    return [GPPURLHandler handleURL:url
-                  sourceApplication:sourceApplication
-                         annotation:annotation];
-    */
 }
 
 #pragma mark - GPPDeepLinkDelegate
@@ -275,22 +262,22 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application {
         //1st when enter to Back ground
-        [ooVooClient applicationWillResignActive];
-    
-        bool isMessaging = [[[NSUserDefaults standardUserDefaults] stringForKey:APP_MESSAGING]boolValue];
-        if (!isMessaging) {
-            ooVooClient *sdk = [ooVooClient sharedInstance];
-            [sdk.Messaging disconnect];
-        }
+//        [ooVooClient applicationWillResignActive];
+//    
+//        bool isMessaging = [[[NSUserDefaults standardUserDefaults] stringForKey:APP_MESSAGING]boolValue];
+//        if (!isMessaging) {
+//            ooVooClient *sdk = [ooVooClient sharedInstance];
+//            [sdk.Messaging disconnect];
+//        }
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
      //2nd when enter to Back ground
-    [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
-    
-        [ooVooClient applicationDidEnterBackground];
-        ooVooClient *sdk = [ooVooClient sharedInstance];
-        [sdk.AVChat.VideoController stopTransmitVideo];
+//    [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
+//    
+//        [ooVooClient applicationDidEnterBackground];
+//        ooVooClient *sdk = [ooVooClient sharedInstance];
+//        [sdk.AVChat.VideoController stopTransmitVideo];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -416,21 +403,9 @@
             }
             
         }
-        //    else if ([navigationController.topViewController isKindOfClass:[VideoConferenceVCWithRender class]])
-        //    {
-        //        VideoConferenceVCWithRender *viewController = navigationController.topViewController;
-        //
-        //        if (viewController.isViewInTransmitMode && !viewController.conferenceId)
-        //        {
-        //            [[MessageManager sharedMessage]messageOtherUser:message.fromUseriD WithMessageType:Busy WithConfID:viewVideoControllerRender.conferenceId];
-        //            return;
-        //        }
-        //
-        //    }
-        
-        
+
         NSLog(@"################### incomingCall ###########################");
-        //alert = [[AlertView alloc]initWithTitle:@"Someone is calling you for interpretation." message:message.fromUseriD delegate:self cancelButtonTitle:@"Reject" otherButtonTitles:@"Answer", nil];
+        
         alert = [[AlertView alloc]initWithTitle:@"Someone is calling you for interpretation." message:@"" delegate:self cancelButtonTitle:@"Reject" otherButtonTitles:@"Answer", nil];
         alert.from=message.fromUseriD;
         alert.conferenceID=message.confId;
@@ -460,9 +435,6 @@
 -(void)killVideoController{
     viewVideoControler=nil;
     viewVideoControler = (VideoConferenceVC *)[mainStoryboard instantiateViewControllerWithIdentifier:@"VideoConferenceVC"];
-    
-    //    viewVideoControllerRender=nil;
-    //    viewVideoControllerRender = (VideoConferenceVCWithRender*)[mainStoryboard instantiateViewControllerWithIdentifier:@"VideoConferenceVCWithRender"];
 }
 
 -(void)callCancel{
@@ -483,7 +455,6 @@
     }
     if (buttonIndex!=alertView.cancelButtonIndex) // I accepted the call
     {
-        //     if (![UserDefaults getBoolForToKey:@"APP_VIDEO_RENDER"]) // if it's oovoo panel render
         {
             if (viewVideoControler.conferenceId)
             { // if there is allready a conference id send it
@@ -515,37 +486,6 @@
             }
             
         }
-        //        else{
-        //
-        //            if (viewVideoControllerRender.conferenceId)
-        //            { // if there is allready a conference id send it
-        //                [[MessageManager sharedMessage]messageOtherUser:alertView.from WithMessageType:AnswerAccept WithConfID:viewVideoControler.conferenceId];
-        //            }
-        //            else
-        //            { // this a new conference so we take the id from the user that called
-        //
-        //
-        //                [[MessageManager sharedMessage]messageOtherUser:alertView.from WithMessageType:AnswerAccept WithConfID:alertView.conferenceID];
-        //
-        //                // if i am in the room video but not is a transmited mode then make it be i transmitted mode
-        //                if ([navigationController.topViewController isKindOfClass:[VideoConferenceVCWithRender class]])
-        //                {
-        //                    VideoConferenceVCWithRender *viewController = navigationController.topViewController;
-        //                    viewController.isCommingFromCall=true;
-        //                    viewController.conferenceId=alertView.conferenceID;
-        //                    viewController.isCommingFromCall=true;
-        //                    [viewController act_joinConference:nil];
-        //                }
-        //                else
-        //                {
-        //                    [self passToVideoConferenceWithConferenceId:alertView.conferenceID fromUserID:alertView.from];
-        //                }
-        //            }
-        //
-        //        }
-        
-        
-        
     }
     else // I rejected the call
     {
@@ -561,7 +501,6 @@
 
 -(void)passToVideoConferenceWithConferenceId:(NSString*)confID fromUserID:(NSString*)userID{
     
-    //  if (![UserDefaults getBoolForToKey:@"APP_VIDEO_RENDER"]) // if it's oovoo panel render
     {
         viewVideoControler.isCommingFromCall=true;
         viewVideoControler.conferenceId=confID;
@@ -589,11 +528,6 @@
                 
                 if ([ex.name isEqualToString:@"NSInvalidArgumentException"] &&
                     range.location != NSNotFound) {
-                    //view controller already exists in the stack - just pop back to it
-//                    for (NSString *remainigUser in self.callingUsers) {
-//                        [[MessageManager sharedMessage]messageOtherUsers:[NSArray arrayWithObject:remainigUser] WithMessageType:Cancel WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess) {
-//                        }];
-//                    }
                     [self.naviController popToViewController:viewVideoControler animated:NO];
                 }else {
                     NSLog(@"ERROR:UNHANDLED EXCEPTION TYPE:%@", ex);
@@ -610,28 +544,6 @@
             
         }
     }
-    //    else
-    //    {
-    //        viewVideoControllerRender.isCommingFromCall=true;
-    //        viewVideoControllerRender.conferenceId=confID;
-    //
-    //
-    //        NSLog(@"In Pass to video converence PUSH with conferenceid %@",confID);
-    //
-    //
-    //        if(![navigationController.topViewController isKindOfClass:[VideoConferenceVCWithRender class]])
-    //        {// if view controller is not shown yet
-    //            [navigationController pushViewController:viewVideoControllerRender animated:YES];
-    //        }
-    //        else // view is allready on
-    //        {
-    //
-    //        }
-    //    }
-    
-    
-    
-    
 }
 
 #pragma mark - Push notification
@@ -648,7 +560,7 @@
     
     
     NSLog(@"My token is: %@", deviceToken);
-    NSLog(@"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%d%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   didRegisterForRemoteNotificationsWithDeviceToken");
+    
     const unsigned *tokenBytes = [deviceToken bytes];
     NSString *hexToken = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
                           ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
@@ -667,16 +579,13 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
     NSLog(@"user info %@",userInfo);
     
-    NSLog(@"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% didReceiveRemoteNotification");
+    NSLog(@"%% didReceiveRemoteNotification");
     
     
 }
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
 {
     NSLog(@"Failed to get token, error: %@", error);
-    
-    NSLog(@"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   didFailToRegisterForRemoteNotificationsWithError");
-    
 }
 
 
@@ -700,8 +609,7 @@
         _audioPlayer.delegate=nil;
         _audioPlayer=nil;
     }
-    //_audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
-    //_audioPlayer.delegate=self;
+
 }
 
 -(void)playSystemLineSound{
@@ -759,20 +667,19 @@
     InterpreterListObject *tempObj;
     for (InterpreterListObject *iObj in self.interpreterListArray) {
         tempObj = iObj;
-        //if (![receivedInterpreter.uidString isEqualToString:iObj.uidString])
         {
             [disconnectedInterpreters addObject:iObj.idString];
         }
     }
 
     NSMutableDictionary *callDict= [NSMutableDictionary new];
-    
     [callDict setObject:[Utility_Shared_Instance checkForNullString:tempObj.poolIdString] forKey:KPOOL_ID_W];
     [callDict setObject:[Utility_Shared_Instance checkForNullString:[Utility_Shared_Instance readStringUserPreference:KID_W]] forKey:KUSER_ID_W];
     [callDict setObject:disconnectedInterpreters forKey:KINTERPRETER_ID_W];
     [callDict setObject:[Utility_Shared_Instance GetCurrentTimeStamp] forKey:KSTART_TIME_W];
     
     if (!isNoOnePicksCallorEndedByCustomer) {
+        
         [callDict setObject:[Utility_Shared_Instance checkForNullString:self.cdrObject.receivedInterpreter.uidString] forKey:KCALL_RECEIVED_BY_W];
         [callDict setObject:[Utility_Shared_Instance checkForNullString:self.cdrObject.conferenceIDString] forKey:KCALLID_W];
         [callDict setObject:[Utility_Shared_Instance checkForNullString:[Utility_Shared_Instance GetCurrentTimeStamp]] forKey:KSTART_TIME_W];

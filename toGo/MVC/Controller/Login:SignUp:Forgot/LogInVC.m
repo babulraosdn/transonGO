@@ -85,10 +85,10 @@
     
 //    self.txt_userId.text        =      @"testcustomer@gmail.com";
 //    self.txtDisplayName.text    =      @"Test@123";
-////
-////    //
+//
 //    self.txt_userId.text        =      @"testinterpreter3@gmail.com";
 //    self.txtDisplayName.text    =      @"Test@123";
+    
     
 //
 //    self.txt_userId.text        =      @"pankaj.turkar@smartdatainc.net";
@@ -100,7 +100,6 @@
     //rakeshp@ice-breakrr.com/Admin@123@123 -- Customer
 //    _txt_userId.text = [self randomUser];
 //    _txtDisplayName.text=[self returnSavedDisplayname];
-    
     
     userIDString = _txt_userId.text;
     passwordString = _txtDisplayName.text;
@@ -330,7 +329,6 @@
                     [Utility_Shared_Instance writeStringUserPreference:KUID_W value:[responseDict objectForKey:KUID_W]];
                     [Utility_Shared_Instance writeStringUserPreference:KID_W value:[responseDict objectForKey:KID_W]];
                     [Utility_Shared_Instance writeStringUserPreference:KUSERNAME_W value:userIDString];
-                    //[self ooVooLogin];
                     [self createSidePanel];
                 }
             }
@@ -394,7 +392,6 @@
                               NSLog(@"User Description is %@",dict);
                               [self socialLoginSuccess:TWITTER_LOGIN userID:user.screenName password:user.screenName];
                           }
-                          //[self createSidePanel];
                           
                       } else {
                       }
@@ -484,38 +481,6 @@
     }
 }
 
-#pragma mark - twitter Signin
--(IBAction)twitterLogin:(id)sender
-{
-    
-    [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error){
-        if (session)
-        {
-            [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID]
-                                                      completion:^(TWTRUser *user,
-                                                                   NSError *error)
-             {
-                 // handle the response or error
-                 if (![error isEqual:nil]) {
-                     NSLog(@"Twitter info   -> user = %@ ",user.description);
-                     NSMutableDictionary *dict =[[NSMutableDictionary alloc]init];
-                     [dict setValue:user.userID forKey:@"id"];
-                     [dict setValue:user.name forKey:@"name"];
-                     [dict setValue:user.screenName forKey:@"screenName"];
-                     NSLog(@"User Description is %@",dict);
-                     
-                 } else {
-                 }
-             }];
-            
-        } else {
-            NSLog(@"error: %@", [error localizedDescription]);
-        }
-    }];
-}
-
-
-
 -(void)socialLoginSuccess:(NSString *)mediaType userID:(NSString *)userID password:(NSString *)password
 {
     userIDString = userID;
@@ -560,11 +525,7 @@
             [[NSUserDefaults standardUserDefaults]setObject:auth.accessToken forKey:@"auth.accessToken"];
             [[NSUserDefaults standardUserDefaults]synchronize];
         }
-        // NSString *data = [NSString stringWithFormat:@"code=%@&client_id=%@&client_secret=%@&redirect_uri=%@&grant_type=authorization_code", auth.code,auth.clientID,kClientSecret,auth.redirectURI];
-        // NSString *pdata = [NSString stringWithFormat:@"type=3&token=%@&secret=123&login=%@", auth.refreshToken, @"0"];
-        //  NSString *pdata = [NSString stringWithFormat:@"type=3&token=%@&secret=123&login=%@",[tokenData accessToken.secret,self.isLogin];
         
-        //  [dconnection fetch:1 withPostdata:pdata withGetData:@"" isSilent:NO];
         
         NSString *str =  [NSString stringWithFormat:@"https://www.googleapis.com/oauth2/v1/userinfo?access_token=%@",auth.accessToken];
         NSString* escapedUrl = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -574,22 +535,9 @@
         
         proDic=[NSJSONSerialization JSONObjectWithData:[jsonData dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableLeaves error:nil];
         
-        /*
-         {
-         "id": "103451016822416832111",
-         "name": "Babul Rao K",
-         "given_name": "Babul Rao",
-         "family_name": "K",
-         "link": "https://plus.google.com/+BabulRaoK",
-         "picture": "https://lh6.googleusercontent.com/-eJnZBkacJSk/AAAAAAAAAAI/AAAAAAAALSc/BuQKPxDuKT8/photo.jpg",
-         "gender": "male",
-         "locale": "en"
-         }
-         */
         [self socialLoginSuccess:TWITTER_LOGIN userID:[proDic objectForKey:@"email"] password:[proDic objectForKey:@"given_name"]];
     }
-    //[SVProgressHUD dismiss];
-    //[self createSidePanel];
+    
 }
 
 
@@ -597,11 +545,7 @@
 - (void)didDisconnectWithError:(NSError *)error {
     
     if (error) {
-        //signInAuthStatus_.text = [NSString stringWithFormat:@"Status: Failed to disconnect: %@", error];
     } else {
-        //signInAuthStatus_.text = [NSString stringWithFormat:@"Status: Disconnected"];
-        //signInDisplayName_.text = @"";
-        // [self enableSignInSettings:YES];
     }
     [self reportAuthStatus];
 }
@@ -610,10 +554,7 @@
 
 - (void)reportAuthStatus {
     if ([GPPSignIn sharedInstance].authentication) {
-        //signInAuthStatus_.text = @"Status: Authenticated";
-        //        [self retrieveUserInfo];
-        //[self enableSignInSettings:NO];
-        // NSString *userEmail = [result valueForKey:@"email"];
+        
         [[GPPSignIn sharedInstance] disconnect];
         [[GPPSignIn sharedInstance] signOut];
         
@@ -630,7 +571,6 @@
             }
         }
         
-        //        [self loginWithOtherSites:googleEmailId];
         
     }
     else
@@ -728,20 +668,8 @@
 #pragma mark - IBAction
 
 - (IBAction)ooVooLogin{
-    
-//    if ([self isUserIdEmpty])
-//        return;
-    
-//    [UserDefaults setObject:[Utility_Shared_Instance readStringUserPreference:KUID_W] ForKey:UserDefault_UserId];
-//    [UserDefaults setObject:[Utility_Shared_Instance readStringUserPreference:KUID_W] ForKey:UserDefault_DisplayName];
-    //[UserDefaults setObject:_txtDisplayName.text ForKey:UserDefault_DisplayName];
-    //[UserDefaults setObject:@"user1454389915259" ForKey:UserDefault_DisplayName];
-//    [sender setEnabled:false];
-//    [spinner startAnimating];
-    
     [self.sdk.Account login:[Utility_Shared_Instance readStringUserPreference:KUID_W]
-   //[self.sdk.Account login:@"babul123"
-    //[self.sdk.Account login:self.txt_userId.text
+   
                  completion:^(SdkResult *result) {
                      
                      dispatch_async(dispatch_get_main_queue(), ^{
@@ -803,7 +731,6 @@
         
         [ActiveUserManager activeUser].displayName = [Utility_Shared_Instance readStringUserPreference:KUID_W];
         
-        ///NSString * uuid = [[NSUUID UUID] UUIDString] ;
         NSString * token = [ActiveUserManager activeUser].token;
         if(token && token.length > 0){
             [self.sdk.PushService subscribe:token deviceUid:[ActiveUserManager activeUser].userId completion:^(SdkResult *result){
@@ -811,20 +738,8 @@
             }];
         }
         
-        //        NSString * uuid = [[NSUUID UUID] UUIDString] ;
-        //        NSString * token = [ActiveUserManager activeUser].token;
-        //        if(token && token.length > 0){
-        //        [self.sdk.PushService subscribe:token deviceUid:uuid completion:^(SdkResult *result){
-        //        [ActiveUserManager activeUser].isSubscribed = true;
-        //            [self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
-        //        }];
-        //        }
-        //
-        //        else
-        //        {
-                [self createSidePanel];
-        //[self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
-        //        }
+        
+        [self createSidePanel];
         
     }else{
         [self.loginButton setEnabled:true];

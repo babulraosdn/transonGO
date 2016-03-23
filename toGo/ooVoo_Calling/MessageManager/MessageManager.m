@@ -20,7 +20,6 @@ static MessageManager *message = nil;
 + (MessageManager *)sharedMessage {
     if (message == nil) {
         message = [[MessageManager alloc] init];
-        //   [MessageManager initSdkMessage];
         
     }
     return message;
@@ -140,23 +139,6 @@ static MessageManager *message = nil;
     
   
     CNMessage *messageLocal  =[[CNMessage alloc]initMessageWithResponse:message];
-    NSLog(@"message %d recieved from %@",messageLocal.type,messageLocal.fromUseriD);
-    
-    NSLog(@"--didMessageReceive--from-%@",message.from);
-    NSLog(@"---to--%@",message.to);
-    NSLog(@"---body--%@",message.body);
-    NSLog(@"--messageId---%@",message.messageId);
-    NSLog(@"--timestamp---%llu",message.timestamp);
-    
-    /*
-     Calling,
-     AnswerAccept,
-     AnswerDecline,
-     Cancel,
-     Busy,
-     EndCall,
-     Unknown
-     */
     
     switch (messageLocal.type) {
         case 0: // calling
@@ -202,8 +184,7 @@ static MessageManager *message = nil;
         
         if (result.Result !=0 ) // bad send message result
         {
-            //UIAlertView *alert =[[UIAlertView alloc]initWithTitle:@"Call Error" message:[NSString stringWithFormat:@"Couldn't send message %@",[VideoConferenceVC getErrorDescription:result.Result]] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-            // [alert show];
+            
             
         }
         
@@ -212,32 +193,7 @@ static MessageManager *message = nil;
 }
 
 -(void)loadAudioFileList{
-    //    audioFileList = [[NSMutableArray alloc] init];
-    //
-    //    NSFileManager *fileManager = [[NSFileManager alloc] init];
-    //    NSURL *directoryURL = [NSURL URLWithString:@"/System/Library/Audio/UISounds"];
-    //    NSArray *keys = [NSArray arrayWithObject:NSURLIsDirectoryKey];
-    //
-    //    NSDirectoryEnumerator *enumerator = [fileManager
-    //                                         enumeratorAtURL:directoryURL
-    //                                         includingPropertiesForKeys:keys
-    //                                         options:0
-    //                                         errorHandler:^(NSURL *url, NSError *error) {
-    //                                             // Handle the error.
-    //                                             // Return YES if the enumeration should continue after the error.
-    //                                             return YES;
-    //                                         }];
-    //
-    //    for (NSURL *url in enumerator) {
-    //        NSError *error;
-    //        NSNumber *isDirectory = nil;
-    //        if (! [url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:&error]) {
-    //            // handle error
-    //        }
-    //        else if (! [isDirectory boolValue]) {
-    //            [audioFileList addObject:url];
-    //        }
-    //    }
+    
 }
 
 -(void)playSystemSound{

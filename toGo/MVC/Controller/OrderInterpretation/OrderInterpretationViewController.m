@@ -64,7 +64,6 @@
     
     [App_Delegate UnSetNotificationObserversForCallMessaging];
     [App_Delegate SetNotificationObserversForCallMessaging];
-    //[App_Delegate orderInterpreattionObservers];
     
     isViewDidLoad = YES;
     
@@ -162,8 +161,6 @@
 -(IBAction)confirmCancelButtonPressed:(UIButton *)sender{
     
     if (sender.tag==1) {
-        //appDelegate.callingUsers = arrFriends;
-        
         NSString *alertString;
         if ([self.fromDetailLabel.text isEqualToString:NSLOCALIZEDSTRING(@"LANGUAGE")]) {
             alertString = [NSString messageWithSelectString:NSLOCALIZEDSTRING(@"FROM_LANGUAGE")];
@@ -239,7 +236,6 @@
         [UserDefaults setObject:[ActiveUserManager activeUser].token ForKey:[ActiveUserManager activeUser].userId];
         
         [ActiveUserManager activeUser].displayName = [Utility_Shared_Instance readStringUserPreference:KUID_W];
-        ///NSString * uuid = [[NSUUID UUID] UUIDString] ;
         NSString * token = [ActiveUserManager activeUser].token;
         if(token && token.length > 0){
             [self.sdk.PushService subscribe:token deviceUid:[ActiveUserManager activeUser].userId completion:^(SdkResult *result){
@@ -249,6 +245,9 @@
     }
 }
 
+/*
+ Retrieve the pool of members from data base whose status is "0". It means those interpreters are availale
+*/
 -(void)getPoolOfInterpreters
 {
     App_Delegate.isConnected = NO;
@@ -292,9 +291,6 @@
                     if(result.Result == sdk_error_OK)
                     {
                         NSLog(@"Send succeeded");
-                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sent Msg" message:@"Your msg has been sent ,Thanks ! " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-                        //[alert show];
-                        
                     }
                 }];
 
@@ -416,21 +412,6 @@
     }
 
     
-//    NSMutableArray *array = [NSMutableArray new];
-//    [array addObject:@"Test123"];
-//    ooVooPushNotificationMessage * msg = [[ooVooPushNotificationMessage alloc] initMessageWithUsersArray:array message:@"Callinggggg" property:@"Im optional" timeToLeave:1000];
-//    
-//    [self.sdk.PushService sendPushMessage:msg completion:^(SdkResult *result){
-//        
-//        if(result.Result == sdk_error_OK)
-//        {
-//            NSLog(@"Send succeeded");
-//            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sent Msg" message:@"Your msg has been sent ,Thanks ! " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-//            //[alert show];
-//            
-//        }
-//    }];
-    
 }
 
 
@@ -448,9 +429,7 @@
                 NSMutableDictionary *userDict = [responseDict objectForKey:@"user"];
                 [Utility_Shared_Instance writeStringUserPreference:KID_W value:[userDict objectForKey:KID_W]];
                 ;
-                /////////// Languages
-               // NSLog(@"--langArray -->%@",App_Delegate.languagesArray);
-                NSArray *langArray = [userDict objectForKey:KMYLANGUAGES_W];//[ componentsSeparatedByString:@","];
+                NSArray *langArray = [userDict objectForKey:KMYLANGUAGES_W];
                 if (langArray.count) {
                     fromLanguageKeyString = [langArray lastObject];
                     NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageID like[c] %@",[langArray objectAtIndex:0]];
@@ -462,21 +441,6 @@
                                               placeholderImage:[UIImage defaultPicImage]];
                     }
                 }
-//                else{
-//                    NSString *str = [userDict objectForKey:KMYLANGUAGES_W];
-//                    if (str.length) {
-//                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageID beginswith[c] %@",str];
-//                        NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
-//                        if (sortedArray.count) {
-//                            LanguageObject *lObj = [sortedArray lastObject];
-//                            self.fromDetailLabel.text = lObj.languageName;
-//                            [self.fromImageView sd_setImageWithURL:[NSURL URLWithString:lObj.imagePathString]
-//                                                  placeholderImage:[UIImage defaultPicImage]];
-//                        }
-//                    }
-//                }
-                /////////////////
-            
             });
         }
     } FailedCallBack:^(id responseObject, NSInteger responseCode, NSError *error) {
@@ -495,7 +459,6 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
     App_Delegate.callingUsers = arrFriends;
     __block index=0;
     
-    //  for (int i=0; i<[arrFriends count]; i++)
     {
         //  NSString *userName = arrFriends[i];
         
@@ -527,11 +490,6 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
     NSLog(@"msg = %@",message);
     
     //no need for sending push for each user becuase message receives array of users and send the push to all of them
-    //for (NSString *userName in arrFriends) {
-    
-    //NSMutableArray *array = [NSMutableArray new];
-   //[array addObject:@"babul123"];
-
     self.sdk = [ooVooClient sharedInstance];
     ooVooPushNotificationMessage * msg = [[ooVooPushNotificationMessage alloc] initMessageWithUsersArray:arrFriends message:message property:@"Im optional" timeToLeave:1000];
     
@@ -539,18 +497,14 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
         if(result.Result == sdk_error_OK)
         {
             NSLog(@"Send succeeded");
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sent Msg" message:@"Your msg has been sent ,Thanks ! " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-            //[alert show];
+            
             
         }
         else{
             NSLog(@"---------------$$$$$$$$$$$$$$$  ERROR ***********************");
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Sent FAILED" message:@"Your msg has been sent ,Thanks ! " delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
-            //[alert show];
         }
         
     }];
-    //}
 }
 
 -(void)timer_Tick:(NSTimer*)timer{
@@ -581,18 +535,13 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
     else{
         
     }
-    // for (NSString *userName in arrFriends) {
-    //     NSLog(@"Calling friend %@",userName);
-//    [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Cancel WithConfID:[ActiveUserManager activeUser].randomConference Compelition:^(BOOL CallSuccess) {
-//        
-//    }];
+    
     
     [[MessageManager sharedMessage]messageOtherUsers:arrFriends WithMessageType:Cancel WithConfID:App_Delegate.conferenceIDString Compelition:^(BOOL CallSuccess) {
         
     }];
     
     
-    //  }
 }
 
 
@@ -747,22 +696,14 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
                                    [SVProgressHUD dismiss];
                                });
                                NSLog(@"fail  autorization");
-                               //                           self.btn_Authorizate.hidden = false;
-                               //                           self.lbl_Status.font=[UIFont systemFontOfSize:13];
-                               //                           self.lbl_Status.text = @"Authorization Failed.";
                                
                                if (err == sdk_error_InvalidToken) {
                                    double delayInSeconds = 0.75;
                                    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
                                    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                                        [SVProgressHUD dismiss];
-                                       //                                   [[[UIAlertView alloc] initWithTitle:@"ooVoo Sdk"
-                                       //                                                               message:[NSString stringWithFormat:NSLocalizedString(@"Error: %@", nil), @"App Token probably invalid or might be empty.\n\nGet your App Token at http://developer.oovoo.com.\nGo to Settings->ooVooSample screen and set the values, or set @APP_TOKEN constants in code."]
-                                       //                                                              delegate:nil
-                                       //                                                     cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                       //                                                     otherButtonTitles:nil] show];
+                                       
                                    });
-                                   // [_spinner stopAnimating];
                                    
                                }
                                else if (err != sdk_error_InvalidToken)
@@ -772,13 +713,7 @@ int callAmount1 = 0 ; // saving the calling amount so if one of then rejects , t
                                    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
                                    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                                        [SVProgressHUD dismiss];
-                                       //                                   [[[UIAlertView alloc] initWithTitle:@"ooVoo Sdk"
-                                       //                                                               message:[NSString stringWithFormat:NSLocalizedString(@"Error: %@", nil), [result description]]
-                                       //                                                              delegate:nil
-                                       //                                                     cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                       //                                                     otherButtonTitles:nil] show];
                                    });
-                                   //[_spinner stopAnimating];
                                }
                            }
                            

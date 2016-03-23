@@ -29,7 +29,6 @@
     [self setSlideMenuButtonFornavigation];
     [self setLogoutButtonForNavigation];
     [self setLabelButtonNames];
-    //[self setRoundCorners];
     [self setColors];
     [self setFonts];
     
@@ -44,11 +43,6 @@
     self.emailFeddBackLabel.text = NSLOCALIZEDSTRING(@"EMAIL_FEEDBACK");
     [self.languagesButton setTitle:NSLOCALIZEDSTRING(@"LANGUAGES") forState:UIControlStateNormal];
 }
-
--(void)setRoundCorners{
-    [UIButton roundedCornerButton:self.languagesButton];
-}
-
 
 -(void)setColors{
     [self.setYourPrefferedlanguageLabel setTextColor:[UIColor textColorBlackColor]];

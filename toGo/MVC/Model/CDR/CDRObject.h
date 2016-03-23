@@ -25,5 +25,6 @@
 ////////Additional Fields to show in CallHistory
 @property(nonatomic,strong) NSString *imageURLString;
 @property(nonatomic,strong) NSString *nickNameString;
+@property(nonatomic,strong) NSString *createdString;
 @property(nonatomic,strong) NSString *durationString;
 @end

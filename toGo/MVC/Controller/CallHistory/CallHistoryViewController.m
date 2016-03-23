@@ -54,14 +54,17 @@
     cell.descriptionLabel.font = [UIFont smallBig];
     cell.titleLabel.textColor = [UIColor textColorBlackColor];
     cell.descriptionLabel.textColor = [UIColor grayColor];
-    
+
     CDRObject *cObj = [self.cdrArray objectAtIndex:indexPath.row];
     cell.titleLabel.text = cObj.nickNameString;
+    cell.dateLabel.text = [Utility_Shared_Instance checkForNullString:cObj.createdString];
+    cell.dateLabel.font = [UIFont smallBig];
     [cell.displayImageView sd_setImageWithURL:[NSURL URLWithString:cObj.imageURLString]
                placeholderImage:[UIImage defaultPicImage]];
     cell.displayImageView.layer.cornerRadius = cell.displayImageView.frame.size.height /2;
     cell.displayImageView.layer.masksToBounds = YES;
     cell.durationLabel.text = cObj.durationString;
+    cell.durationLabel.font = [UIFont smallBig];
     cell.descriptionLabel.text = [NSString stringWithFormat:@"%@ > %@",cObj.fromLanguageString,cObj.toLanguageString];
     cell.heartButton.tag = indexPath.row;
     cell.favouriteButton.tag = indexPath.row;
@@ -98,6 +101,13 @@
                                 cObj.imageURLString = [profileImgDict objectForKey:KURL_W];
                                 
                                 cObj.nickNameString = [callFromDict objectForKey:KNICKNAME_W];
+                                
+                                cObj.createdString = [cdrJson objectForKey:@"created"];
+                                
+                                if ([Utility_Shared_Instance checkForNullString:cObj.createdString]) {
+                                    cObj.createdString = [self dateConvertion:cObj.createdString];
+                                }
+                                
                             }
                         }
                         else{
@@ -107,6 +117,10 @@
                                 NSDictionary *profileImgDict =  [callToDict objectForKey:KPROFILE_IMAGE_W];
                                 cObj.imageURLString = [profileImgDict objectForKey:KURL_W];
                                 cObj.nickNameString = [callToDict objectForKey:KNICKNAME_W];
+                                cObj.createdString = [cdrJson objectForKey:@"created"];
+                                if ([Utility_Shared_Instance checkForNullString:cObj.createdString]) {
+                                    cObj.createdString = [self dateConvertion:cObj.createdString];
+                                }
                             }
                         }
                         
@@ -165,6 +179,17 @@
             [AlertViewCustom showAlertViewWithMessage:[responseObject objectForKey:KMESSAGE_W] headingLabel:NSLOCALIZEDSTRING(APPLICATION_NAME) confirmButtonName:NSLOCALIZEDSTRING(@"") cancelButtonName:NSLOCALIZEDSTRING(@"OK") viewIs:self];
         });
     }];
+}
+
+-(NSString *)dateConvertion :(NSString *)callDateString
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+    NSDate *strTempDate = [dateFormatter dateFromString:callDateString];
+    
+    [dateFormatter setDateFormat:@"MM-dd-yyyy HH:mm"];
+    NSString *str=[dateFormatter stringFromDate:strTempDate];
+    return str;
 }
 
 -(void)favouriteButtonPressed : (id) sender{

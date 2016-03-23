@@ -35,7 +35,6 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    //[self viewWillAppear:animated];
     [_scrollView setShowsHorizontalScrollIndicator:NO];
     [_scrollView setShowsVerticalScrollIndicator:NO];
 }

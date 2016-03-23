@@ -196,32 +196,6 @@
                     self.countryLabel.text = [NSString stringWithFormat:@"@%@",self.countryLabel.text];
                 }
                 
-                /*
-                /////////// Languages
-               // NSLog(@"--langArray -->%@",App_Delegate.languagesArray);
-                 
-                NSArray *langArray = [userDict objectForKey:KMYLANGUAGES_W];//[ componentsSeparatedByString:@","];
-                if (langArray.count) {
-                    NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageID beginswith[c] %@",[langArray objectAtIndex:0]];
-                    NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
-                    if (sortedArray.count) {
-                        LanguageObject *lObj = [sortedArray lastObject];
-                        self.myLanguageDetailLabel.text = lObj.languageName;
-                    }
-                }
-                else{
-                    NSString *str = [userDict objectForKey:KMYLANGUAGES_W];
-                    if (str.length) {
-                        NSPredicate *predicate  = [NSPredicate predicateWithFormat:@"languageID beginswith[c] %@",str];
-                        NSArray *sortedArray = [App_Delegate.languagesArray filteredArrayUsingPredicate:predicate];
-                        if (sortedArray.count) {
-                            LanguageObject *lObj = [sortedArray lastObject];
-                            self.myLanguageDetailLabel.text = lObj.languageName;
-                        }
-                    }
-                }
-                /////////////////
-                */
                 self.myLanguageDetailLabel.text = [responseDict objectForKey:KLANGUAGE_NAME_W];
             });
         }
